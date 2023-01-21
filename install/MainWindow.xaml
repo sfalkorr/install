@@ -26,8 +26,7 @@
         Activated="MainWindow_OnActivated"
         Loaded="MainWindow_OnLoaded"
         MouseLeftButtonDown="MainWindow_OnMouseLeftButtonDown"
-        SizeChanged="MainWindow_OnSizeChanged"
-        WindowStyle="None" KeyDown="MainWin_KeyDown">
+        WindowStyle="None" KeyDown="MainWin_KeyDown" >
 
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="30" CornerRadius="8,8,8,8" ResizeBorderThickness="8,5,8,8" />
@@ -35,7 +34,12 @@
 
     <Window.Resources>
         <ResourceDictionary>
-
+            <Storyboard x:Key="OpenTextBox">
+                <ThicknessAnimation DecelerationRatio="1" Storyboard.TargetProperty="Margin" From="0,0,0,-45" To="0,0,0,0" Duration="0:0:0.6" />
+            </Storyboard>
+            <Storyboard x:Key="CloseTextBox">
+                <ThicknessAnimation DecelerationRatio="1" Storyboard.TargetProperty="Margin" From="0,0,0,0" To="0,0,0,-45" Duration="0:0:0.6" />
+            </Storyboard>
             <Style x:Key="ButtonStyleTest" TargetType="{x:Type Button}">
                 <Setter Property="Foreground" Value="#FFBBBBBB" />
                 <Setter Property="Background" Value="#00AAAAAA" />
@@ -295,7 +299,21 @@
                 </Setter>
             </Style>
 
-
+            <ControlTemplate x:Key="TextBoxTemplate1" TargetType="{x:Type TextBoxBase}">
+                <Border x:Name="Bd" Margin="1,0,1,0" BorderBrush="{DynamicResource ResourceKey=Tittle.Border.Color}" BorderThickness="0,0.6,0,0.6" CornerRadius="6,6,6,6">
+                    <ScrollViewer x:Name="PART_ContentHost" />
+                </Border>
+                <ControlTemplate.Triggers>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter TargetName="Bd" Property="Background" Value="{DynamicResource ResourceKey=Textbox.Color}" />
+                        <Setter Property="Foreground" Value="{DynamicResource ResourceKey=ControlButton.Text.Color}" />
+                    </Trigger>
+                    <Trigger Property="IsEnabled" Value="True">
+                        <Setter TargetName="Bd" Property="Background" Value="{DynamicResource ResourceKey=Textbox.Color}" />
+                        <Setter Property="Foreground" Value="{DynamicResource ResourceKey=ControlButton.Text.Color}" />
+                    </Trigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
 
         </ResourceDictionary>
     </Window.Resources>
@@ -320,22 +338,15 @@
             <Grid Grid.Row="1">
                 <RichTextBox x:Name="rtb" Padding="5,0,5,15" AutoWordSelection="True" AcceptsReturn="False" Block.LineHeight="1" Cursor="Arrow" FontFamily="Cascadia Mono" FontSize="14" IsReadOnly="True" IsTabStop="False" IsUndoEnabled="False" MouseMove="Rtb_OnMouseMove" Style="{DynamicResource RichTextBoxStyle2}" UndoLimit="0" UseLayoutRounding="True" VerticalScrollBarVisibility="Visible" IsDocumentEnabled="True" Background="{x:Null}" />
                 <RounderProgressBar:RounderProgressBarControl x:Name="roundw" />
+                <Grid x:Name="tbox">
+                <TextBox x:Name="textBox" Height="30" Margin="0,0,0,-45" Padding="0,0,0,1" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="18" KeyDown="TextBox_OnKeyDownKeyDown" MaxLength="48" Template="{StaticResource TextBoxTemplate1}" CaretBrush="White" Background="{x:Null}" >
+                    <TextBox.Effect>
+                        <DropShadowEffect BlurRadius="15" Opacity="0.4" ShadowDepth="6" RenderingBias="Quality" Direction="90" />
+                    </TextBox.Effect>
+                </TextBox>
+                </Grid>
                 <local:MenuPanels x:Name="MenuMain" Margin="0,0,0,0" IsEnabled="True" VerticalAlignment="Top"  PreviewKeyDown="MenuMain_PreviewKeyDown"  ></local:MenuPanels>
-                <GridSplitter x:Name="gridR" Background="Black" Width="5" Margin="0,0,-6,8">
-
-                </GridSplitter>
-                <GridSplitter x:Name="gridL" Background="Black" Width="5" Margin="-6,0,0,8" HorizontalAlignment="Left">
-                    <GridSplitter.Effect>
-                        <DropShadowEffect RenderingBias="Quality" Direction="340" BlurRadius="20" ShadowDepth="4" Opacity="0.4" />
-                    </GridSplitter.Effect>
-                </GridSplitter>
-
-                <GridSplitter x:Name="gridB" Background="Black" Margin="8,0,8,-6" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="5">
-                    <GridSplitter.Effect>
-                        <DropShadowEffect RenderingBias="Quality" Direction="90" BlurRadius="20" ShadowDepth="5" Opacity="0.4" />
-                    </GridSplitter.Effect>
-                </GridSplitter>
-
+                
             </Grid>
             
             <Border Grid.Row="0" x:Name="BotderTittle" Background="{DynamicResource ResourceKey=Tittle.Background.Color}" BorderBrush="{DynamicResource ResourceKey=Tittle.Border.Color}" BorderThickness="0.6,0.6,0.6,0" CornerRadius="8,8,0,0">
@@ -344,7 +355,7 @@
                 </Border.Effect>
                 <Grid x:Name="GridTittle" Grid.Row="0" Height="30" UseLayoutRounding="False">
                     <ProgressBar x:Name="pb" Height="30" VerticalAlignment="Top" local:ProgressBarSmoother.SmoothValue="{Binding Progress}" Background="{x:Null}" Foreground="{x:Null}" Maximum="100" MouseLeftButtonDown="Pb_OnMouseLeftButtonDown" SmallChange="0.1" Style="{DynamicResource ProgressBarStyle1}" />
-                    <TextBlock x:Name="pbLabel" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" Text="{Binding ElementName=pb, Path=Value, StringFormat={}{0:0}%}" FontSize="14" />
+                    <TextBlock x:Name="pbLabel" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Transparent" Text="{Binding ElementName=pb, Path=Value, StringFormat={}{0:0}%}" FontSize="14" />
                     <StackPanel x:Name="ControlButtons" Height="30" Margin="0,0,0,0" HorizontalAlignment="Right" VerticalAlignment="Stretch" Orientation="Horizontal">
                         <Button x:Name="ThemeButton"  Content="&#xEDAB;" FontFamily="Segoe MDL2 Assets" MouseLeave="MouseLeave" Style="{DynamicResource ButtonStyleTest}" TextOptions.TextRenderingMode="Aliased" ToolTip="Theme" WindowChrome.IsHitTestVisibleInChrome="True" FontSize="11" Click="ThemeButton_OnClick"/>
                         <Button x:Name="MinimizeButton" Command="{x:Static SystemCommands.MinimizeWindowCommand}" Content="&#xE921;" FontFamily="Segoe MDL2 Assets" MouseLeave="MouseLeave" Style="{DynamicResource ButtonStyleTest}" TextOptions.TextRenderingMode="Aliased" ToolTip="Minimize" WindowChrome.IsHitTestVisibleInChrome="True" />

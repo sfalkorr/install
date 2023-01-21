@@ -46,8 +46,13 @@
 
 
     <LinearGradientBrush x:Key="MessageBox.Background" EndPoint="0.5,1" StartPoint="0.5,0">
-        <GradientStop Offset="1" Color="#FF32506E" />
+        <GradientStop Offset="1" Color="#FF304E6C" />
         <GradientStop Offset="0.180" Color="#FF1E3C5A" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="Menu.Background" EndPoint="0.5,1" StartPoint="0.5,0">
+        <GradientStop Offset="1" Color="#FF254565" />
+        <GradientStop Offset="0" Color="#FF1E3C5A" />
     </LinearGradientBrush>
 
 

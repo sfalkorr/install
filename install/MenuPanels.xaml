@@ -50,7 +50,7 @@
             <Grid.Effect>
                 <DropShadowEffect BlurRadius="15" Direction="-90" Opacity="0.4" RenderingBias="Quality" ShadowDepth="5" />
             </Grid.Effect>
-            <Border x:Name="PanelBorderMain" Background="{DynamicResource ResourceKey=MessageBox.Background}" BorderBrush="Transparent" BorderThickness="0" CornerRadius="0,0,7,7" />
+            <Border x:Name="PanelBorderMain" Background="{DynamicResource ResourceKey=Menu.Background}" BorderBrush="Transparent" BorderThickness="0" CornerRadius="0,0,7,7" />
             <StackPanel Name="sPanelTopMain" Width="Auto" Margin="0,10,0,5">
                 <Button Name="btnMenu1" Click="btnMainMenu1_OnClick" Content="1 - Полная настройка сервера (компьютер начальника)" MouseLeave="MouseLeave" Style="{DynamicResource ButtonMenuStyle1}" />
                 <Button Name="btnMenu2" Click="BtnMainMenu2_OnClick" Content="2 - Полная настройка клиента (окно оператора)" MouseLeave="MouseLeave" Style="{DynamicResource ButtonMenuStyle1}" />
@@ -63,7 +63,7 @@
             <Grid.Effect>
                 <DropShadowEffect BlurRadius="15" Direction="-90" Opacity="0.4" RenderingBias="Quality" ShadowDepth="5" />
             </Grid.Effect>
-            <Border x:Name="PanelBorder" Background="{DynamicResource ResourceKey=MessageBox.Background}" BorderThickness="0" CornerRadius="0,0,7,7" />
+            <Border x:Name="PanelBorder" Background="{DynamicResource ResourceKey=Menu.Background}" BorderThickness="0" CornerRadius="0,0,7,7" />
             <StackPanel Name="sPanelTop" Width="Auto" Margin="0,10,0,5">
                 <Button Name="btnMenuAdd1" Content="1 - Только настройка плагинов" MouseLeave="MouseLeave" Style="{DynamicResource ButtonMenuStyle1}" />
                 <Button Name="btnMenuAdd2" Content="2 - Выгрузка нулевой реплики" MouseLeave="MouseLeave" Style="{DynamicResource ButtonMenuStyle1}" />

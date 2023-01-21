@@ -100,7 +100,7 @@ namespace installEAS
                     //ProcessKill( "SqlPackage" );
                     var dacpath =  ReplicaGetSqlPackage();
                     mLog( "Публикации структуры базы данных " + DBOPSName + "... ", false );
-                    
+                    MainWindow.MainFrame.Dispatcher.InvokeOrExecute( () => { MainWindow.MainFrame.pbLabel.Foreground = Brushes.White; } );
                     ProgressBarSet( perc2, TimeSpan.FromMilliseconds( 1000 ) );
                     MainWindow.MainFrame.roundw.Start();
                     var process = new Process();
@@ -112,7 +112,7 @@ namespace installEAS
                     process.StartInfo.RedirectStandardError = true;
                     process.StartInfo.RedirectStandardInput = false;
                     process.StartInfo.RedirectStandardOutput = true;
-                    process.OutputDataReceived += ( sender, args ) =>
+                    process.OutputDataReceived += async ( sender, args ) =>
                     {
                         if (args.Data is not { Length: > 0 }) return;
                         str = args.Data.ToString();
@@ -130,6 +130,8 @@ namespace installEAS
                         perc2 = 100;
                         ProgressBarSet( perc2, TimeSpan.FromMilliseconds( 1000 ) );
                         mLog("Successfully published database", Brushes.GreenYellow )  ;
+                        await Task.Delay(1000);
+                        MainWindow.MainFrame.Dispatcher.InvokeOrExecute( () => { MainWindow.MainFrame.pbLabel.Foreground = Brushes.Transparent; } );
                         ProgressBarSet( 0, TimeSpan.FromMilliseconds( 1 ) );
                         MainWindow.MainFrame.roundw.Stop();
                     };
@@ -137,6 +139,7 @@ namespace installEAS
                     process.ErrorDataReceived += ( sender, e ) =>
                     {
                         MainWindow.MainFrame.roundw.Stop();
+                        MainWindow.MainFrame.Dispatcher.InvokeOrExecute( () => { MainWindow.MainFrame.pbLabel.Foreground = Brushes.Transparent; } );
                         Console.WriteLine( e.Data );
                     };
                     process.Start();
@@ -148,6 +151,7 @@ namespace installEAS
                 {
                     ProgressBarSet( 0, TimeSpan.FromMilliseconds( 1 ) );
                     MainWindow.MainFrame.roundw.Stop();
+                    MainWindow.MainFrame.Dispatcher.InvokeOrExecute( () => { MainWindow.MainFrame.pbLabel.Foreground = Brushes.Transparent; } );
                     Console.WriteLine(ex);
                 }
             } );

@@ -30,7 +30,7 @@ namespace installEAS
             InitializeComponent();
             PanelTopMain.IsEnabled = true;
         }
-        [STAThread]
+        
         public void btnMainMenu1_OnClick( object sender, RoutedEventArgs e )
         {
 
@@ -40,7 +40,6 @@ namespace installEAS
         {
 
         }
-
         private  void btnMainMenu3_OnClick( object sender, RoutedEventArgs e )
         {
             Animate.AnimateGridAsync( MenuMain.PanelTopMain, 400 );
@@ -74,7 +73,6 @@ namespace installEAS
 
             //}, DispatcherPriority.Normal );
         }
-
         private  void BtnMenuAdd0_OnClick( object sender, RoutedEventArgs e )
         {
             Animate.AnimateGridAsync( MenuMain.PanelTopAdd, 500 );

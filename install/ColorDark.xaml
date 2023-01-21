@@ -36,6 +36,11 @@
         <GradientStop Color="#FF303030" Offset="1"/>
     </LinearGradientBrush>
 
+    <LinearGradientBrush x:Key="Menu.Background" EndPoint="0.5,1" StartPoint="0.5,0">
+        <GradientStop Color="#FF202020"/>
+        <GradientStop Color="#FF303030" Offset="1"/>
+    </LinearGradientBrush>
+
     <!--<SolidColorBrush x:Key="Round.Progressbar.Backcolor" Color="DarkGray" />-->
 
     <LinearGradientBrush x:Key="Round.Progressbar.Backcolor" Opacity="0.8" StartPoint="0.5,0" EndPoint="0.5,1">
@@ -75,15 +80,13 @@
     <LinearGradientBrush x:Key="Textbox.Color" Opacity="0.5" StartPoint="0.5,0" EndPoint="0.5,1">
         <GradientStop Offset="0" Color="#FF151515" />
         <GradientStop Offset="1" Color="#FF404040" />
-
-
     </LinearGradientBrush>
 
     <SolidColorBrush x:Key="Editor.Foreground.Color" Color="#FFDDDDDD" />
     <SolidColorBrush x:Key="Editor.Border.Color" Color="#FF454545" />
 
 
-    <SolidColorBrush x:Key="Editor.Background.Color" Color="#FA101010" />
+    <SolidColorBrush x:Key="Editor.Background.Color" Color="#FA151515" />
     <SolidColorBrush x:Key="Shadow.Color" Color="#FFFFFFFF" />
 
     <!--<SolidColorBrush x:Key="Editor.Background.Color" Color="#FF101010" />-->
