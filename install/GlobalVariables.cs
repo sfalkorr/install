@@ -1,74 +1,73 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
+using installEAS.Helpers;
+using installEAS.MessageBoxCustom;
 
-using static installEAS.LogHelper;
-#pragma warning disable CS0414
-#pragma warning disable CS0649
+namespace installEAS;
 
-namespace installEAS
+public static class Variables
 {
-    internal abstract class GlobalVariables
+    public static void CreateVariablesInstance()
     {
-        public static RegistryHelper reg = new();
-        public static bool TestPath( string path ) { return File.Exists( path ) || Directory.Exists( path ) ? true : false; }
-        public static string SetVarPath( string path )
-        {
-            if (!TestPath( path ))
-            {
-                clog( "Не найден путь " + path, ConsoleColor.Red);
-            }
-            return path;
-        }
-
-        public static string ObjToString( object obj ) { return obj?.ToString(); }
-        public static string path_temp = Path.GetTempPath().TrimEnd( '\\' );
-        public static string AppRegPath = @"HKLM:\SOFTWARE\Microsoft\Sharp";
-
-        public static string path_appexe = Assembly.GetExecutingAssembly().GetName().CodeBase.Replace( "/", "\\" ).Replace( "file:\\\\\\", "" );
-        public static string path_apppath = Path.GetDirectoryName( path_appexe );
-        public static string path_import = SetVarPath( path_apppath + "\\import" );
-        public static string path_certs = SetVarPath( path_apppath + "\\espp" );
-
-        public static string path_package = SetVarPath( path_apppath + "\\package" );
-        public static string path_packagelib = SetVarPath( path_apppath + "\\lib" );
-        public static string path_temp_sqllib = (path_temp + "\\sqlpackage");
-
-        public static string zgPath = SetVarPath( @"C:\Program Files\7-Zip\7zG.exe" );
-        public static string zPath = SetVarPath( @"C:\Program Files\7-Zip\7z.exe" );
-
-        public static string sver = "7.0";
-        public static string OSVer = Environment.OSVersion.VersionString;
-        public static object OSName = reg.Read( @"HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "ProductName" );
-        public static object OSBuild = reg.Read( @"HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "CurrentBuild" );
-        public static object OSRelease = reg.Read( @"HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "ReleaseId" );
-
-        public static string Username = Environment.UserName;
-        public static string Domainname = Environment.UserDomainName;
-        //public static string Computername = Environment.MachineName;
-        public const string Computername = "C01-160024-N";
-        public static string DBOPSName = "DB" + Computername.Split( '-' )[1].ToString();
-        public static string SQLInitcatalog = "master";
-        public static string SQLPass = "JHertg76#$%g8";
-        public static string SQLServername = "C01-160024-N";
-        public static string SQLUsername = "sa";
-        public static string SQLInstance = "MSSQLSERVER";
-        public static int SQLTimeout = 5;
-        public static object SQLDir_RegPath = reg.Read( @"HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server\MSSQL11.MSSQLSERVER\MSSQLServer\Parameters" );
-
-        public static object POSInstalledVer = reg.Read( @"HKLM:\SOFTWARE\Wow6432Node\GMCS\POS", "Version" );
-
-        public static string meta_filepath, meta_num = "", meta_sec = "", meta_ver = "", archive, arcmeta, package;
-        public static string espp_num, espp_user, espp_pass, espp_zcx_pass;
-        public static string sp = " ";
-
-        public static string path_zcs = Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData ) + @"\zcs";
-        public static string path_plugins = Environment.GetFolderPath( Environment.SpecialFolder.CommonApplicationData ) + @"\Pos\Plugins";
-
-
+        var variablesInstance = CreateVariablesInstance;
+        Console.WriteLine( variablesInstance.GetMethodInfo() );
     }
+
+    public static bool TestPath( string path )
+    {
+        return File.Exists( path ) || Directory.Exists( path );
+    }
+
+    public static object GetRegValue( string path, string key )
+    {
+        var value = Reg.Read( path, key );
+        if ( value != null ) return value;
+        //Log.log( $"Не найден ключ реестра {key} в {path}", Brushes.OrangeRed );
+        CustomMessageBox.ShowOK( $"Не найдено значение {key} в {path}\nПродолжение работы невозможно", "Ошибка инициализации", "Выход", MessageBoxImage.Error );
+        Process.GetCurrentProcess().Kill();
+
+        return "";
+    }
+
+    public static string GetVarPath( string path )
+    {
+        if ( TestPath( path ) ) return path;
+        //Log.log( $"Не найден путь {path}", Brushes.OrangeRed );
+        CustomMessageBox.ShowOK( $"Не найден путь {path}\nПродолжение работы невозможно", "Ошибка инициализации", "Выход", MessageBoxImage.Error );
+        Process.GetCurrentProcess().Kill();
+
+        return null;
+    }
+
+    public static string AppVersion     { get; }      = "7.01";
+    public static string Username       { get; }      = Environment.UserName;
+    public static string Domainname     { get; }      = Environment.UserDomainName;
+    public static string Computername   { get; }      = "C01-160024-N";
+    public static object SevenZReg      { get; }      = GetRegValue( @"HKLM:\SOFTWARE\7-Zip", "Path" );
+    public static string SevenZgPath    { get; }      = GetVarPath( SevenZReg + "7zG.exe" );
+    public static string SevenZPath     { get; }      = GetVarPath( SevenZReg + "7z.exe" );
+    public static string AppExe         { get; }      = Process.GetCurrentProcess().MainModule?.FileName;
+    public static string AppPath        { get; }      = Environment.CurrentDirectory;
+    public static string TempPath       { get; }      = Path.GetTempPath();
+    public static string ImportPath     { get; }      = GetVarPath( AppPath + @"\import" );
+    public static string EsppPath       { get; }      = GetVarPath( AppPath + @"\Espp" );
+    public static string CertsPath      { get; }      = GetVarPath( AppPath + @"\Certs" );
+    public static string SqlPackPath    { get; }      = GetVarPath( AppPath + @"\SqlPackage" );
+    public static string SqlPackLib     { get; }      = GetVarPath( AppPath + @"\SqlPackageLib" );
+    public static string SqlPackTemp    { get; }      = TempPath + "sqlpackage";
+    public static string DBOPSName      { get; set; } = "DB" + Computername.Split( '-' )[1];
+    public static string SqlInitcatalog { get; set; } = "master";
+    public static string SqlPass        { get; set; } = "QWEasd123*";
+    public static string SQLServername  { get; set; } = "C01-160024-N";
+    public static string SQLUsername    { get; set; } = "sa";
+    public static string SQLInstance    { get; set; } = "MSSQLSERVER";
+    public static int    SQLTimeout     { get; set; } = 5;
+    public static object POSRegPath     { get; }      = GetRegValue( @"HKLM:\SOFTWARE\Wow6432Node\GMCS\POS", "InstallDir" );
+    public static object POSVer         { get; }      = GetRegValue( @"HKLM:\SOFTWARE\Wow6432Node\GMCS\POS", "Version" );
+    public static string POSPath        { get; }      = GetVarPath( POSRegPath.ToString() );
+    public static string POSConfig      { get; }      = GetVarPath( POSRegPath + "POS.exe.config" );
+    public static string meta_num, meta_sec, meta_ver, archive, arcmeta, package;
 }

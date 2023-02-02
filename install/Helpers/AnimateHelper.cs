@@ -1,136 +1,87 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Media.Animation;
 using System.Windows;
-using System.ComponentModel;
-using System.Runtime.InteropServices;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Windows.Media.Animation;
 using System.Windows.Threading;
-using static System.Net.Mime.MediaTypeNames;
 
+namespace installEAS.Helpers;
 
-namespace installEAS
+public class InClassName
 {
-    public class InClassName
+    public InClassName(FrameworkElement Obj, string From, string To, int msecond)
     {
-        public InClassName( FrameworkElement Obj, string From, string To, int Milliseconds )
-        {
-            this.Obj = Obj;
-            this.From = From;
-            this.To = To;
-            this.Milliseconds = Milliseconds;
-        }
-
-        public FrameworkElement Obj { get; private set; }
-        public string From { get; private set; }
-        public string To { get; private set; }
-        public int Milliseconds { get; private set; }
+        this.Obj  = Obj;
+        this.From = From;
+        this.To   = To;
+        Msecond   = msecond;
     }
 
-    public static class Animate
+    public FrameworkElement Obj     { get; }
+    public string           From    { get; }
+    public string           To      { get; }
+    public int              Msecond { get; }
+}
+
+public abstract class Animate
+{
+    private static Func<string, object> _convertFromString;
+    public static  string               controlFrom, controlTo, closeFrom, closeTo;
+
+    public static void ColorAnimation(InClassName inClassName)
     {
-        private static Func<string, object> _convertFromString;
-        public static string controlFrom, controlTo, closeFrom, closeTo;
-        public static void ColorAnimation( InClassName inClassName )
+        _convertFromString = ColorConverter.ConvertFromString;
+        var from = (Color)_convertFromString(inClassName.From);
+        var to   = (Color)_convertFromString(inClassName.To);
         {
-            _convertFromString = ColorConverter.ConvertFromString;
-            var from = (Color)_convertFromString( inClassName.From );
-            var to = (Color)_convertFromString( inClassName.To );
-            {
-                ColorAnimation animation = new()
-                {
-                    From = from,
-                    To = to,
-                    Duration = new Duration( TimeSpan.FromMilliseconds( inClassName.Milliseconds ) )
-                };
-                Storyboard.SetTargetProperty( animation, new PropertyPath( "(Grid.Background).(SolidColorBrush.Color)", null ) );
-                var storyboard = new Storyboard();
-                storyboard.Children.Add( animation );
-                storyboard.Begin( inClassName.Obj );
-            }
+            ColorAnimation animation = new() { From = from, To = to, Duration = new Duration(TimeSpan.FromMilliseconds(inClassName.Msecond)) };
+            Storyboard.SetTargetProperty(animation, new PropertyPath("(Grid.Background).(SolidColorBrush.Color)", null!));
+            var storyboard = new Storyboard();
+            storyboard.Children.Add(animation);
+            storyboard.Begin(inClassName.Obj);
+        }
+    }
+
+    [STAThread]
+    public static async Task AnimateFrameworkElement(FrameworkElement Target, int Duration)
+    {
+        //var rPoint = Convert.ToInt32( Target.TransformToAncestor( MainWindow.MainFrame ).Transform( new Point( 0, 0 ) ).Y );
+
+        var sb = new Storyboard();
+        var ta = new ThicknessAnimation
+        {
+            BeginTime         = new TimeSpan(1000),
+            Duration          = new Duration(TimeSpan.FromMilliseconds(Duration)),
+            DecelerationRatio = 0.5,
+            AccelerationRatio = 0,
+            SpeedRatio        = 1,
+            IsCumulative      = false
+        };
+        Timeline.SetDesiredFrameRate(ta, 5);
+        switch (Target.IsEnabled)
+        {
+            case false:
+                ta.From          = new Thickness(0, -Target.ActualHeight - 30, 0, 0);
+                ta.To            = new Thickness(0, 0, 0, 0);
+                Target.Opacity   = 1;
+                Target.IsEnabled = true;
+                break;
+            case true:
+                ta.From          = new Thickness(0, 0, 0, 0);
+                ta.To            = new Thickness(0, -Target.ActualHeight - 30, 0, 0);
+                Target.Opacity   = 0.5;
+                Target.IsEnabled = false;
+                break;
         }
 
-
-
-        public class CustomSeventhPowerEasingFunction :EasingFunctionBase
+        Storyboard.SetTargetProperty(ta, new PropertyPath(FrameworkElement.MarginProperty));
+        sb.FillBehavior = FillBehavior.HoldEnd;
+        sb.Children.Add(ta);
+        await Target.Dispatcher.InvokeAsync(() =>
         {
-            public CustomSeventhPowerEasingFunction()
-                : base()
-            {
-            }
+            sb.Begin(Target, HandoffBehavior.SnapshotAndReplace);
+        }, DispatcherPriority.Send);
 
-            // Specify your own logic for the easing function by overriding
-            // the EaseInCore method. Note that this logic applies to the "EaseIn"
-            // mode of interpolation.
-            protected override double EaseInCore( double normalizedTime )
-            {
-                // applies the formula of time to the seventh power.
-                return Math.Pow( normalizedTime, 17 );
-            }
-
-            // Typical implementation of CreateInstanceCore
-            protected override Freezable CreateInstanceCore()
-            {
-
-                return new CustomSeventhPowerEasingFunction();
-            }
-        }
-
-
-        public static Task AnimateGridAsync( Grid Target, int Duration)
-        {
-            if (Target.Children != null)
-            {
-                var PanelTopPos = -((Target.Children.OfType<StackPanel>().FirstOrDefault()).Children.Count * 40);
-                var relativePoint = Convert.ToInt32( Target.TransformToAncestor( MainWindow.MainFrame ).Transform( new Point( 0, 0 ) ).Y ) - 30;
-                var sb = new Storyboard();
-                
-                var ta = new ThicknessAnimation
-                {
-                    BeginTime = new TimeSpan( 0 ),
-                    Duration = new Duration( TimeSpan.FromMilliseconds( Duration ) ),
-                    DecelerationRatio = 0,
-                    AccelerationRatio = 0,
-                    SpeedRatio = 0.5,
-                    EasingFunction = new BounceEase()
-                    //EasingFunction = new CustomSeventhPowerEasingFunction()
-
-                    //EasingFunction = new CircleEase()
-                    //EasingFunction  = new ElasticEase()
-
-                };
-
-                Storyboard.SetTargetProperty( ta, new PropertyPath( FrameworkElement.MarginProperty ) );
-
-                sb.Children.Add( ta );
-                if (Target.IsEnabled == false)
-                {
-                    ta.From = new Thickness( 0, PanelTopPos, 0, 0 );
-                    ta.To = new Thickness( 0, 0, 0, 0 );
-                    sb.Begin( Target );
-                    Target.Opacity = 1;
-                    Target.IsEnabled = true;
-                }
-                else
-                {
-
-                    ta.From = new Thickness( 0, relativePoint, 0, 0 );
-                    ta.To = new Thickness( 0, PanelTopPos, 0, 0 );
-                    sb.Begin( Target );
-                    Target.Opacity = 0.8;
-                    Target.IsEnabled = false;
-                }
-            }
-            return  Task.CompletedTask;
-        }
+        //sb.Begin( Target, HandoffBehavior.SnapshotAndReplace );
     }
 }

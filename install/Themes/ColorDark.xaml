@@ -1,0 +1,61 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <SolidColorBrush x:Key="Tittle.Background.Color" Color="#FF161b22" />
+    <SolidColorBrush x:Key="Tittle.Border.Color" Color="#FF30363d" />
+
+    <SolidColorBrush x:Key="Panel.Background.Color" Color="#F5202020" />
+
+    <SolidColorBrush x:Key="ControlButton.Text.Color" Color="#FFDDDDDD" />
+
+    <SolidColorBrush x:Key="Button.Close.Foreground.Color" Color="#FFBBBBBB" />
+    <SolidColorBrush x:Key="Button.Close.MouseOver.Foreground.Color" Color="LightGray" />
+    <SolidColorBrush x:Key="Button.Close.Background.Color" Color="#00333333" />
+    <SolidColorBrush x:Key="Button.Close.Mouseover.Color" Color="#FF902020" />
+    <SolidColorBrush x:Key="Button.Close.Pressed.Color" Color="#FF801010" />
+
+    <LinearGradientBrush x:Key="MessageBox.Button.Default" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Color="#FF363b42" />
+        <GradientStop Offset="1" Color="#FF444a51" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="MessageBox.Button.Over" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Color="#FF464b52" />
+        <GradientStop Offset="1" Color="#FF545a61" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="MessageBox.Button.Pressed" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Color="#AA464b52" />
+        <GradientStop Offset="1" Color="#AA545a61" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="MessageBox.Background" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Color="#FF202020" />
+        <GradientStop Offset="1" Color="#FF303030" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="Menu.Background" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Color="#FF161b22" />
+        <GradientStop Offset="1" Color="#FF242a31" />
+    </LinearGradientBrush>
+
+    <SolidColorBrush x:Key="ControlButton.MouseOver.Color" Color="#FF242a31" />
+    <SolidColorBrush x:Key="ControlButton.IsPressed.Color" Color="#A0242a31" />
+
+    <LinearGradientBrush x:Key="ProgressBar.Color" Opacity="0.8" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="#FF545a61" />
+        <GradientStop Offset="0.5" Color="#FF646a71" />
+        <GradientStop Offset="0" Color="#FF545a61" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="Textbox.Color" Opacity="0.5" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="#FF151515" />
+        <GradientStop Offset="1" Color="#FF404040" />
+    </LinearGradientBrush>
+
+    <SolidColorBrush x:Key="Editor.Foreground.Color" Color="#FFDDDDDD" />
+    <SolidColorBrush x:Key="Editor.Background.Color" Color="#FF050509" />
+
+    <SolidColorBrush x:Key="ScrollBarThumbKey.Color" Color="#FF959595" />
+    <SolidColorBrush x:Key="ScrollBarThumbKey.BackColor" Color="#09959595" />
+
+</ResourceDictionary>

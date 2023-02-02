@@ -1,7 +1,4 @@
-﻿<UserControl x:Class="InstallEAS.RounderProgressBarControl"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Name="roundwindow" Width="160" Height="160" Opacity="1">
+﻿<UserControl x:Class="installEAS.Controls.RounderProgressBarControl" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Name="roundwindow" Width="160" Height="160" Opacity="1">
     <UserControl.Resources>
 
         <Style x:Key="canvasStyle" TargetType="{x:Type Canvas}">
@@ -22,7 +19,7 @@
         <Style x:Key="percents" TargetType="{x:Type TextBox}">
             <Setter Property="FontSize" Value="20" />
             <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BrderBrush" Value="Transparent" />
             <Setter Property="IsReadOnly" Value="true" />
         </Style>
 
