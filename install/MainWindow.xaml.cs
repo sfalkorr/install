@@ -21,9 +21,9 @@ namespace installEAS;
 
 public partial class MainWindow
 {
-    public static   MainWindow      MainFrame;
-    public readonly DoubleAnimation MainOpen;
-    public readonly DoubleAnimation MainClos;
+    public static MainWindow      MainFrame;
+    public static DoubleAnimation MainOpen;
+    public static DoubleAnimation MainClos;
 
     private          Timer      _timer;
     private readonly Storyboard textBoxClos;
@@ -57,12 +57,20 @@ public partial class MainWindow
                 closeTo     = "#0032506E";
                 break;
             }
+            case ThemesController.ThemeTypes.ColorGray:
+            {
+                controlFrom = "#FF333333";
+                controlTo   = "#00202020";
+                closeFrom   = "#FF902020";
+                closeTo     = "#00202020";
+                break;
+            }
             default:
                 throw new ArgumentOutOfRangeException();
         }
 
-        MainOpen    = new DoubleAnimation { From = 0.1, To  = 0.98, Duration = new Duration(TimeSpan.FromMilliseconds(400)) };
-        MainClos    = new DoubleAnimation { From = 0.97, To = 0.1, Duration  = new Duration(TimeSpan.FromMilliseconds(400)) };
+        MainOpen    = new DoubleAnimation { From = 0.1, To  = 0.96, Duration = new Duration(TimeSpan.FromMilliseconds(400)) };
+        MainClos    = new DoubleAnimation { From = 0.96, To = 0.1, Duration  = new Duration(TimeSpan.FromMilliseconds(400)) };
         textBoxOpen = Resources["OpenTextBox"] as Storyboard;
         textBoxClos = Resources["CloseTextBox"] as Storyboard;
         //shake       = Resources[ "ShakeWindow" ] as Storyboard;
@@ -216,7 +224,6 @@ public partial class MainWindow
     {
         CreateVariablesInstance();
         UIControlSlidePanels.CreateSlidePanelsInstance();
-
         BeginAnimation(OpacityProperty, MainOpen);
     }
 
@@ -250,7 +257,7 @@ public partial class MainWindow
         {
             var element = (FrameworkElement)sender;
             ColorAnimation(element.Name == "CloseButton" ? new InClassName(element, closeFrom, closeTo, 120) : new InClassName(element, controlFrom, controlTo, 120));
-        }, DispatcherPriority.Background);
+        }, DispatcherPriority.Normal);
     }
 
 

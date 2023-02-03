@@ -35,11 +35,11 @@
 
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="true">
-                                <Setter TargetName="border" Property="Background" Value="{DynamicResource ResourceKey=MessageBox.Button.Over}" />
+                                <Setter TargetName="border" Property="Background" Value="{DynamicResource ResourceKey=ControlButton.MouseOver.Color}" />
                                 <Setter Property="Foreground" Value="#FFFFFFFF" />
                             </Trigger>
                             <Trigger Property="IsPressed" Value="true">
-                                <Setter TargetName="border" Property="Background" Value="{DynamicResource ResourceKey=MessageBox.Button.Pressed}" />
+                                <Setter TargetName="border" Property="Background" Value="{DynamicResource ResourceKey=ControlButton.IsPressed.Color}" />
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="false">
                                 <Setter TargetName="border" Property="Opacity" Value="0.4" />

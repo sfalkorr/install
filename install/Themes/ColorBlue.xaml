@@ -36,8 +36,8 @@
     </LinearGradientBrush>
 
     <LinearGradientBrush x:Key="Menu.Background" StartPoint="0.5,0" EndPoint="0.5,1">
-        <GradientStop Offset="1" Color="#FF254565" />
-        <GradientStop Offset="0" Color="#FF1E3C5A" />
+        <GradientStop Offset="0" Color="#FF32506E" />
+        <GradientStop Offset="1" Color="#701E3C5A" />
     </LinearGradientBrush>
 
 

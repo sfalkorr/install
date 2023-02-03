@@ -10,7 +10,8 @@ public static class ThemesController
     public enum ThemeTypes
     {
         ColorBlue,
-        ColorDark
+        ColorDark,
+        ColorGray
     }
 
     public static ThemeTypes CurrentTheme { get; set; }
@@ -36,6 +37,10 @@ public static class ThemesController
                 themeName    = "ColorDark";
                 CurrentTheme = theme;
                 break;
+            case ThemeTypes.ColorGray:
+                themeName    = "ColorGray";
+                CurrentTheme = theme;
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(theme), theme, null);
         }
@@ -54,20 +59,28 @@ public static class ThemesController
     {
         switch (CurrentTheme)
         {
-            case ThemeTypes.ColorBlue:
-                SetTheme(ThemeTypes.ColorDark);
-                controlFrom = "#FF242A31";
-                controlTo   = "#00242A31";
-                closeFrom   = "#FF902020";
-                closeTo     = "#00902020";
-                if (MainFrame.textBox.IsEnabled) MainFrame.textBox.Focus();
-                break;
             case ThemeTypes.ColorDark:
                 SetTheme(ThemeTypes.ColorBlue);
                 controlFrom = "#FF32506E";
                 controlTo   = "#0032506E";
                 closeFrom   = "#FF902020";
-                closeTo     = "#00902020";
+                closeTo     = "#0032506E";
+                if (MainFrame.textBox.IsEnabled) MainFrame.textBox.Focus();
+                break;
+            case ThemeTypes.ColorBlue:
+                SetTheme(ThemeTypes.ColorGray);
+                controlFrom = "#FF333333";
+                controlTo   = "#00202020";
+                closeFrom   = "#FF902020";
+                closeTo     = "#00202020";
+                if (MainFrame.textBox.IsEnabled) MainFrame.textBox.Focus();
+                break;
+            case ThemeTypes.ColorGray:
+                SetTheme(ThemeTypes.ColorDark);
+                controlFrom = "#FF242A31";
+                controlTo   = "#00242A31";
+                closeFrom   = "#FF902020";
+                closeTo     = "#00202020";
                 if (MainFrame.textBox.IsEnabled) MainFrame.textBox.Focus();
                 break;
             default:

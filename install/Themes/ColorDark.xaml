@@ -34,8 +34,8 @@
     </LinearGradientBrush>
 
     <LinearGradientBrush x:Key="Menu.Background" StartPoint="0.5,0" EndPoint="0.5,1">
-        <GradientStop Color="#FF161b22" />
-        <GradientStop Offset="1" Color="#FF242a31" />
+        <GradientStop Color="#DF161b22" />
+        <GradientStop Offset="1" Color="#9F060b12" />
     </LinearGradientBrush>
 
     <SolidColorBrush x:Key="ControlButton.MouseOver.Color" Color="#FF242a31" />
@@ -48,14 +48,14 @@
     </LinearGradientBrush>
 
     <LinearGradientBrush x:Key="Textbox.Color" Opacity="0.5" StartPoint="0.5,0" EndPoint="0.5,1">
-        <GradientStop Offset="0" Color="#FF151515" />
-        <GradientStop Offset="1" Color="#FF404040" />
+        <GradientStop Offset="1" Color="#FF444a51" />
+        <GradientStop Offset="0" Color="#FF161b22" />
     </LinearGradientBrush>
 
     <SolidColorBrush x:Key="Editor.Foreground.Color" Color="#FFDDDDDD" />
     <SolidColorBrush x:Key="Editor.Background.Color" Color="#FF050509" />
 
-    <SolidColorBrush x:Key="ScrollBarThumbKey.Color" Color="#FF959595" />
-    <SolidColorBrush x:Key="ScrollBarThumbKey.BackColor" Color="#09959595" />
+    <SolidColorBrush x:Key="ScrollBarThumbKey.Color" Color="#FF565b72" />
+    <SolidColorBrush x:Key="ScrollBarThumbKey.BackColor" Color="#20565b72" />
 
 </ResourceDictionary>

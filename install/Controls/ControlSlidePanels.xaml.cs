@@ -62,8 +62,8 @@ public partial class UIControlSlidePanels
         Dispatcher.InvokeAsync(() =>
         {
             var element = (FrameworkElement)sender;
-            ColorAnimation(new InClassName(element, controlFrom, controlTo, 150));
-        }, DispatcherPriority.Background);
+            ColorAnimation(new InClassName(element, controlFrom, controlTo, 120));
+        }, DispatcherPriority.Normal);
     }
 
     private void BtnMenuAdd0_OnClick(object sender, RoutedEventArgs e)

@@ -9,7 +9,7 @@ namespace installEAS;
 
 public partial class App
 {
-    [STAThread]
+    //[STAThread]
     [DllImport("User32")]
     private static extern int ShowWindow(IntPtr hwnd, int nCmdShow);
 

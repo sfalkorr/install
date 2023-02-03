@@ -316,7 +316,6 @@
                              Padding="5,0,5,15"
                              AcceptsReturn="False"
                              AutoWordSelection="True"
-                             Background="{x:Null}"
                              Block.LineHeight="1"
                              Cursor="Arrow"
                              FontFamily="Consolas"
@@ -330,7 +329,8 @@
                              Style="{DynamicResource RichTextBoxStyle2}"
                              UndoLimit="0"
                              UseLayoutRounding="True"
-                             VerticalScrollBarVisibility="Auto" />
+                             VerticalScrollBarVisibility="Auto" >
+                </RichTextBox>
 
                 <controls:UIControlRoundedProgressBar x:Name="waitProgress" Width="70" Height="70" Margin="0,0,0,30" HorizontalAlignment="Center" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="{x:Null}" />
 
