@@ -10,7 +10,7 @@ using static installEAS.Helpers.Animate;
 
 namespace installEAS.Controls;
 
-public partial class UIControlSlidePanels
+public partial class SlidePanelsControl
 {
     public static void CreateSlidePanelsInstance()
     {
@@ -18,7 +18,7 @@ public partial class UIControlSlidePanels
         Console.WriteLine(variablesInstance.Method);
     }
 
-    public UIControlSlidePanels()
+    public SlidePanelsControl()
     {
         InitializeComponent();
         PanelTopMain.IsEnabled = false;
@@ -30,7 +30,7 @@ public partial class UIControlSlidePanels
     {
         Dispatcher.InvokeOrExecute(() =>
         {
-            var unused = AnimateFrameworkElement(MenuMain.PanelTopMain, 300);
+            var unused = AnimateFrameworkElement(MenuMain.PanelTopMain, 400);
         }, DispatcherPriority.Send);
     }
 

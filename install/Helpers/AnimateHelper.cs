@@ -69,7 +69,7 @@ public abstract class Animate
             case true:
                 ta.From          = new Thickness(0, 0, 0, 0);
                 ta.To            = new Thickness(0, -Target.ActualHeight - 30, 0, 0);
-                Target.Opacity   = 0.5;
+                Target.Opacity   = 1;
                 Target.IsEnabled = false;
                 break;
         }
@@ -81,7 +81,5 @@ public abstract class Animate
         {
             sb.Begin(Target, HandoffBehavior.SnapshotAndReplace);
         }, DispatcherPriority.Send);
-
-        //sb.Begin( Target, HandoffBehavior.SnapshotAndReplace );
     }
 }

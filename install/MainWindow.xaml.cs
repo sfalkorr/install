@@ -78,7 +78,7 @@ public partial class MainWindow
         textBox.IsEnabled                            = false;
         waitProgress.sprocketControl.IsIndeterminate = false;
         waitProgress.IsEnabled                       = false;
-
+        //MainFrame.pb.pbLabel.Foreground   = Brushes.Transparent;
         labelVer.Content = $"InstallEAS v{AppVersion}";
     }
 
@@ -154,6 +154,15 @@ public partial class MainWindow
 
     private void MainWin_KeyDown(object sender, KeyEventArgs e)
     {
+        if (Keyboard.IsKeyDown(Key.F1)) tempButtons.btn1.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+        if (Keyboard.IsKeyDown(Key.F2)) tempButtons.btn2.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+        if (Keyboard.IsKeyDown(Key.F3)) tempButtons.btn3.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+        if (Keyboard.IsKeyDown(Key.F4)) tempButtons.btn4.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+        if (Keyboard.IsKeyDown(Key.F5)) tempButtons.btn5.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+        if (Keyboard.IsKeyDown(Key.F6)) tempButtons.btn6.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+        if (Keyboard.IsKeyDown(Key.F7)) tempButtons.btn7.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+        if (Keyboard.IsKeyDown(Key.F8)) tempButtons.btn8.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+
         if (Keyboard.IsKeyDown(Key.X) && Keyboard.IsKeyDown(Key.LeftAlt)) Close();
         if (Keyboard.IsKeyDown(Key.OemTilde) && Keyboard.IsKeyDown(Key.LeftAlt))
             MainFrame.Dispatcher.InvokeAsync(() =>
@@ -223,7 +232,8 @@ public partial class MainWindow
     private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
     {
         CreateVariablesInstance();
-        UIControlSlidePanels.CreateSlidePanelsInstance();
+        SlidePanelsControl.CreateSlidePanelsInstance();
+        tempControl.CreatetempControlInstance();
         BeginAnimation(OpacityProperty, MainOpen);
     }
 

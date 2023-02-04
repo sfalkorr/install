@@ -1,0 +1,36 @@
+<UserControl x:Class="installEAS.Controls.RoundedProgressBarControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:installEAS.Controls"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             x:Name="waitProgressCanvas"
+             d:DesignHeight="70"
+             d:DesignWidth="70"
+             mc:Ignorable="d">
+    <Grid>
+        <local:SprocketControl x:Name="sprocketControl"
+                               Width="70"
+                               Height="70"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               HorizontalContentAlignment="Center"
+                               VerticalContentAlignment="Center"
+                               Focusable="False"
+                               InnerRadius="0.3"
+                               Interval="120"
+                               IsEnabled="False"
+                               IsHitTestVisible="False"
+                               IsTabStop="False"
+                               OuterRadius="0.2"
+                               StartAngle="30"
+                               TickColor="#64C7C7C7"
+                               TickCount="9"
+                               TickWidth="5"
+                               UseLayoutRounding="False">
+            <local:SprocketControl.Effect>
+                <DropShadowEffect BlurRadius="1" Opacity="0.5" RenderingBias="Quality" ShadowDepth="1" Color="White" />
+            </local:SprocketControl.Effect>
+        </local:SprocketControl>
+    </Grid>
+</UserControl>

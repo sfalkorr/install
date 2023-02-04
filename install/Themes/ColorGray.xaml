@@ -38,17 +38,15 @@
 
     <LinearGradientBrush x:Key="Menu.Background" StartPoint="0.5,0" EndPoint="0.5,1">
         <GradientStop Color="#FF202020" />
-        <GradientStop Offset="1" Color="#1F303030" />
+        <GradientStop Offset="1" Color="#6F303030" />
     </LinearGradientBrush>
 
-    <!--<SolidColorBrush x:Key="Round.Progressbar.Backcolor" Color="DarkGray" />-->
 
     <LinearGradientBrush x:Key="Round.Progressbar.Backcolor" Opacity="0.8" StartPoint="0.5,0" EndPoint="0.5,1">
         <GradientStop Offset="1" Color="#FF909090" />
         <GradientStop Offset="0" Color="LightGray" />
     </LinearGradientBrush>
 
-    <SolidColorBrush x:Key="MainWindow.Border.Color" Color="#FF003150" />
 
     <LinearGradientBrush x:Key="ControlButton.MouseOver.Color" StartPoint="0.5,0" EndPoint="0.5,1">
         <GradientStop Offset="1" Color="#FF303030" />
@@ -57,20 +55,6 @@
 
 
     <SolidColorBrush x:Key="ControlButton.IsPressed.Color" Color="#2A2A2A" />
-
-    <SolidColorBrush x:Key="Menu.Background.Color1" Color="#9F020713" />
-    <SolidColorBrush x:Key="Menu.Background.Color2" Color="#7950535B" />
-
-    <SolidColorBrush x:Key="ListView.BorderBrush.Color" Color="Gray" />
-    <SolidColorBrush x:Key="ListView.Foreground.Color" Color="#FFDDDDDD" />
-    <LinearGradientBrush x:Key="ListView.Enabled.Background.Color" Opacity="0.8" StartPoint="0.5,0" EndPoint="0.5,1">
-        <GradientStop Offset="1" Color="#FF101010" />
-        <GradientStop Offset="0" Color="#F023272b" />
-    </LinearGradientBrush>
-    <LinearGradientBrush x:Key="ListView.Disabled.Background.Color" Opacity="0" StartPoint="0.5,0" EndPoint="0.5,1">
-        <GradientStop Offset="1" Color="#FF101010" />
-        <GradientStop Offset="0" Color="#FF303040" />
-    </LinearGradientBrush>
 
     <LinearGradientBrush x:Key="ProgressBar.Color" Opacity="0.8" StartPoint="0.5,0" EndPoint="0.5,1">
         <GradientStop Offset="1" Color="#FF909090" />

@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{B0DEBE57-E828-4BF4-B76A-DD032F8E4715}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>installEAS</RootNamespace>
     <AssemblyName>installEAS</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
@@ -103,18 +103,21 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Common\Replica.cs" />
-    <Compile Include="Controls\ControlSlidePanels.xaml.cs">
-      <DependentUpon>ControlSlidePanels.xaml</DependentUpon>
+    <Compile Include="Controls\FluidProgressBar.xaml.cs">
+      <DependentUpon>FluidProgressBar.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ControlProgressBar.xaml.cs">
-      <DependentUpon>ControlProgressBar.xaml</DependentUpon>
+    <Compile Include="Controls\SlidePanels.xaml.cs">
+      <DependentUpon>SlidePanels.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProgressBar.xaml.cs">
+      <DependentUpon>ProgressBar.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\SprocketControl.cs" />
     <Compile Include="Controls\tempControl.xaml.cs">
       <DependentUpon>tempControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ControlRoundProgressBar.xaml.cs">
-      <DependentUpon>ControlRoundProgressBar.xaml</DependentUpon>
+    <Compile Include="Controls\RoundProgressBar.xaml.cs">
+      <DependentUpon>RoundProgressBar.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\AnimateHelper.cs" />
     <Compile Include="Helpers\ArchiveHelper.cs" />
@@ -131,13 +134,14 @@
     </Compile>
     <Compile Include="Helpers\RegistryHelper.cs" />
     <Compile Include="Themes\ThemesController.cs" />
-    <Page Include="Controls\ControlSlidePanels.xaml">
+    <Page Include="Controls\FluidProgressBar.xaml" />
+    <Page Include="Controls\SlidePanels.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ControlProgressBar.xaml" />
+    <Page Include="Controls\ProgressBar.xaml" />
     <Page Include="Controls\tempControl.xaml" />
-    <Page Include="Controls\ControlRoundProgressBar.xaml" />
+    <Page Include="Controls\RoundProgressBar.xaml" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -1,18 +1,25 @@
 using System;
 using System.Windows;
+using System.Windows.Input;
 using installEAS.Common;
 using installEAS.Helpers;
 using installEAS.MessageBoxCustom;
 using static installEAS.Variables;
 using static installEAS.MainWindow;
 using static installEAS.Helpers.Log;
-using static installEAS.Controls.UIControlSlidePanels;
+using static installEAS.Controls.SlidePanelsControl;
 
 
 namespace installEAS.Controls;
 
 public partial class tempControl
 {
+    public static void CreatetempControlInstance()
+    {
+        var variablesInstance = CreatetempControlInstance;
+        Console.WriteLine(variablesInstance.Method);
+    }
+
     public tempControl()
     {
         InitializeComponent();
@@ -20,24 +27,20 @@ public partial class tempControl
 
     private void Btn1_OnClick(object sender, RoutedEventArgs e)
     {
-        log(POSVer.ToString());
-        log(SevenZgPath);
-        log(POSPath);
-        Replica.ReplicaGetSqlPackage();
+        //Console.WriteLine(
+        //Replica.ReplicaGetSqlPackage());
+        Replica.ReplicaSqlPackageStartAsync();
     }
 
 
     private void Btn2_OnClick(object sender, RoutedEventArgs e)
     {
-        //MainFrame.pb.progressBar.SetPercentDuration(0,1000);
-        //UIControlRoundedProgressBar.Start();
-        UIControlRoundedProgressBar.Start();
-        //Progress.pbLabel.Visibility = Visibility.Visible;
+        //MainFrame.fluidProgressBar.StartFluidAnimation();
     }
 
     private void Btn3_OnClick(object sender, RoutedEventArgs e)
     {
-        UIControlRoundedProgressBar.Stop();
+        RoundedProgressBarControl.Stop();
     }
 
 
@@ -55,7 +58,6 @@ public partial class tempControl
 
     private void Btn6_OnClick(object sender, RoutedEventArgs e)
     {
-        CustomMessageBox.ShowOK("Не найден путь ", "Ошибка инициализации", "Жопа!", MessageBoxImage.Error);
     }
 
 

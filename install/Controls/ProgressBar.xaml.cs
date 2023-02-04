@@ -3,14 +3,15 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 using installEAS.Helpers;
 
 namespace installEAS.Controls;
 
-public partial class UIControlProgressBar
+public partial class ProgressBarControl
 {
-    public UIControlProgressBar()
+    public ProgressBarControl()
     {
         InitializeComponent();
         pbLabel.Visibility = Visibility.Hidden;
@@ -19,7 +20,7 @@ public partial class UIControlProgressBar
 
 public static class ProgressBarExtensions
 {
-    private static UIControlProgressBar _uiControlProgress = new();
+    private static ProgressBarControl _progressBarControlProgress = new();
     public static  DoubleAnimation      animStop           = new(0, TimeSpan.FromMilliseconds(1));
 
     public static void SetPercent(this ProgressBar progressBar, double percentage, TimeSpan span)
@@ -31,21 +32,22 @@ public static class ProgressBarExtensions
     public static void ProgressBarSet(double percentage, int timespan)
     {
         var span = TimeSpan.FromMilliseconds(timespan);
-        _uiControlProgress.progressBar.SetPercent(percentage, span);
+        _progressBarControlProgress.progressBar.SetPercent(percentage, span);
     }
 
     [STAThread]
     public static void SetPercentDuration(this ProgressBar progressBar, double percentage, int timespan)
     {
+        MainWindow.MainFrame.pb.pbLabel.Foreground = Brushes.White;
         MainWindow.MainFrame.pb.pbLabel.Visibility = Visibility.Visible;
         var span = TimeSpan.FromMilliseconds(timespan);
         var anim = new DoubleAnimation(percentage, span);
-        anim.Completed += async (_, _) =>
-        {
-            await Task.Delay(250).ConfigureAwait(false);
-            MainWindow.MainFrame.Dispatcher.InvokeOrExecute(() => { MainWindow.MainFrame.pb.pbLabel.Visibility = Visibility.Hidden; });
-            progressBar.Dispatcher.InvokeOrExecute(() => { progressBar.BeginAnimation(RangeBase.ValueProperty, animStop); });
-        };
+        //anim.Completed += async (_, _) =>
+        //{
+        //await Task.Delay(250).ConfigureAwait(false);
+        //MainWindow.MainFrame.Dispatcher.InvokeOrExecute(() => { MainWindow.MainFrame.pb.pbLabel.Visibility = Visibility.Hidden; });
+        //progressBar.Dispatcher.InvokeOrExecute(() => { progressBar.BeginAnimation(RangeBase.ValueProperty, animStop); });
+        //};
         progressBar.Dispatcher.InvokeOrExecute(() => { progressBar.BeginAnimation(RangeBase.ValueProperty, anim); });
     }
 }

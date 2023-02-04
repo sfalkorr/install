@@ -1,0 +1,97 @@
+<UserControl x:Class="installEAS.Controls.FluidProgressBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:wpfspark="clr-namespace:installEAS.Controls"
+             d:DesignHeight="300"
+             d:DesignWidth="300"
+             x:ClassModifier="internal"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <ExponentialEase x:Key="ProgressBarEaseOut" EasingMode="EaseOut" Exponent="2" />
+        <ExponentialEase x:Key="ProgressBarEaseIn" EasingMode="EaseIn" Exponent="2" />
+    </UserControl.Resources>
+    <Grid>
+        <Rectangle x:Name="Dot1"
+                   Width="{Binding Path=DotWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type wpfspark:FluidProgressBar}}}"
+                   Height="{Binding Path=DotHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type wpfspark:FluidProgressBar}}}"
+                   HorizontalAlignment="Left"
+                   Fill="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type wpfspark:FluidProgressBar}}}"
+                   IsHitTestVisible="False"
+                   Opacity="0"
+                   RadiusX="{Binding Path=DotRadiusX, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type wpfspark:FluidProgressBar}}}"
+                   RadiusY="{Binding Path=DotRadiusY, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type wpfspark:FluidProgressBar}}}">
+            <Rectangle.RenderTransform>
+                <TranslateTransform x:Name="TransDot1" />
+            </Rectangle.RenderTransform>
+            <Rectangle.CacheMode>
+                <BitmapCache EnableClearType="False" RenderAtScale="1" SnapsToDevicePixels="False" />
+            </Rectangle.CacheMode>
+        </Rectangle>
+        <Rectangle x:Name="Dot2"
+                   Width="{Binding Path=DotWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type wpfspark:FluidProgressBar}}}"
+                   Height="{Binding Path=DotHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type wpfspark:FluidProgressBar}}}"
+                   HorizontalAlignment="Left"
+                   Fill="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type wpfspark:FluidProgressBar}}}"
+                   IsHitTestVisible="False"
+                   Opacity="0"
+                   RadiusX="{Binding Path=DotRadiusX, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type wpfspark:FluidProgressBar}}}"
+                   RadiusY="{Binding Path=DotRadiusY, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type wpfspark:FluidProgressBar}}}">
+            <Rectangle.RenderTransform>
+                <TranslateTransform x:Name="TransDot2" />
+            </Rectangle.RenderTransform>
+            <Rectangle.CacheMode>
+                <BitmapCache EnableClearType="False" RenderAtScale="1" SnapsToDevicePixels="False" />
+            </Rectangle.CacheMode>
+        </Rectangle>
+        <Rectangle x:Name="Dot3"
+                   Width="{Binding Path=DotWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type wpfspark:FluidProgressBar}}}"
+                   Height="{Binding Path=DotHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type wpfspark:FluidProgressBar}}}"
+                   HorizontalAlignment="Left"
+                   Fill="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type wpfspark:FluidProgressBar}}}"
+                   IsHitTestVisible="False"
+                   Opacity="0"
+                   RadiusX="{Binding Path=DotRadiusX, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type wpfspark:FluidProgressBar}}}"
+                   RadiusY="{Binding Path=DotRadiusY, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type wpfspark:FluidProgressBar}}}">
+            <Rectangle.RenderTransform>
+                <TranslateTransform x:Name="TransDot3" />
+            </Rectangle.RenderTransform>
+            <Rectangle.CacheMode>
+                <BitmapCache EnableClearType="False" RenderAtScale="1" SnapsToDevicePixels="False" />
+            </Rectangle.CacheMode>
+        </Rectangle>
+        <Rectangle x:Name="Dot4"
+                   Width="{Binding Path=DotWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type wpfspark:FluidProgressBar}}}"
+                   Height="{Binding Path=DotHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type wpfspark:FluidProgressBar}}}"
+                   HorizontalAlignment="Left"
+                   Fill="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type wpfspark:FluidProgressBar}}}"
+                   IsHitTestVisible="False"
+                   Opacity="0"
+                   RadiusX="{Binding Path=DotRadiusX, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type wpfspark:FluidProgressBar}}}"
+                   RadiusY="{Binding Path=DotRadiusY, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type wpfspark:FluidProgressBar}}}">
+            <Rectangle.RenderTransform>
+                <TranslateTransform x:Name="TransDot4" />
+            </Rectangle.RenderTransform>
+            <Rectangle.CacheMode>
+                <BitmapCache EnableClearType="False" RenderAtScale="1" SnapsToDevicePixels="False" />
+            </Rectangle.CacheMode>
+        </Rectangle>
+        <Rectangle x:Name="Dot5"
+                   Width="{Binding Path=DotWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type wpfspark:FluidProgressBar}}}"
+                   Height="{Binding Path=DotHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type wpfspark:FluidProgressBar}}}"
+                   HorizontalAlignment="Left"
+                   Fill="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type wpfspark:FluidProgressBar}}}"
+                   IsHitTestVisible="False"
+                   Opacity="0"
+                   RadiusX="{Binding Path=DotRadiusX, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type wpfspark:FluidProgressBar}}}"
+                   RadiusY="{Binding Path=DotRadiusY, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type wpfspark:FluidProgressBar}}}">
+            <Rectangle.RenderTransform>
+                <TranslateTransform x:Name="TransDot5" />
+            </Rectangle.RenderTransform>
+            <Rectangle.CacheMode>
+                <BitmapCache EnableClearType="False" RenderAtScale="1" SnapsToDevicePixels="False" />
+            </Rectangle.CacheMode>
+        </Rectangle>
+    </Grid>
+</UserControl>
