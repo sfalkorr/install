@@ -10,10 +10,10 @@ using installEAS.Controls;
 using installEAS.Helpers;
 using static installEAS.Variables;
 using static installEAS.MainWindow;
-using static installEAS.Helpers.FileHelper;
+using static installEAS.Helpers.Files;
 using static installEAS.Helpers.Log;
 using static installEAS.Helpers.Functions;
-using static installEAS.Helpers.ArchiveHelper;
+using static installEAS.Helpers.Archive;
 
 namespace installEAS.Common;
 
@@ -151,7 +151,7 @@ public abstract class Replica
                     RoundedProgressBarControl.RoundedProgressBarControlRounded.Dispatcher.InvokeOrExecute(RoundedProgressBarControl.Stop);
                     MainFrame.pb.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.progressBar.SetPercentDuration(0, 1); });
                     MainFrame.pb.pbLabel.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.pbLabel.Foreground = Brushes.Transparent; });
-                    log(e.Data, Brushes.Red);
+                    log(e.Data, Brushes.OrangeRed);
                     Console.WriteLine(e.Data);
                 };
                 process.Start();
@@ -164,7 +164,7 @@ public abstract class Replica
                 RoundedProgressBarControl.RoundedProgressBarControlRounded.Dispatcher.InvokeOrExecute(RoundedProgressBarControl.Stop);
                 MainFrame.pb.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.progressBar.SetPercentDuration(0, 1); });
                 MainFrame.pb.pbLabel.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.pbLabel.Foreground = Brushes.Transparent; });
-                log(ex.Message, Brushes.Red);
+                log(ex.Message, Brushes.OrangeRed);
                 Console.WriteLine(ex);
             }
         });

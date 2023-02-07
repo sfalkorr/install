@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows.Media;
+using installEAS.Helpers;
 using static installEAS.Helpers.Log;
+using static installEAS.Variables;
 
 namespace installEAS.Helpers;
 
-internal class Password
+internal static class Password
 {
     internal static readonly Random random = new();
 
-    public string Generate(int Cap, int Sml, int Num, int Spe)
+    public static string GeneratePass(int Cap, int Sml, int Num, int Spe)
     {
         {
             string rand;
@@ -19,7 +22,7 @@ internal class Password
             {
                 rand = new string(str.ToCharArray().OrderBy(_ => r.Next(2) % 2 == 0).ToArray());
             }
-            while (ValidateGen(rand));
+            while (ValidateGenPass(rand));
 
             return rand;
         }
@@ -49,7 +52,7 @@ internal class Password
         }
     }
 
-    public bool Validate(string password)
+    public static bool ValidatePass(string password)
     {
         var hasNumberChar = new Regex(@"[0-9]");
         var hasUpperChar  = new Regex(@"[A-Z]");
@@ -111,10 +114,24 @@ internal class Password
         return true;
     }
 
-    public static bool ValidateGen(string password)
+    public static bool ValidateGenPass(string password)
     {
         var validateChars = new Regex("^(?=.*?[A-Z]).{3,}(?=.*?[a-z])(?=.*?[0-9])(?!.*?[\\s])(?!.*?[а-яА-Я])(?=.*?[!@#$%^&*()_+=?-]).{10,}$");
         var hasRepeatChar = new Regex("([a-zA-Z0-9!@#$%^&*()_+=?-])\\1{" + (3 - 1) + "}");
         return validateChars.IsMatch(password) && !hasRepeatChar.IsMatch(password);
+    }
+
+    public static void SaveSqlPassToReg(string pass)
+    {
+        if (pass == null) return;
+        Reg.Write(AppRegPath, "CRC", Crypt.EncryptString(pass));
+    }
+
+    public static string ReadSqlPassFromReg()
+    {
+        var regpass = Reg.Read(AppRegPath, "CRC");
+        if (regpass != null) return Crypt.DecryptString(regpass.ToString());
+        log("Не найден сохраненный пароль для sa", Brushes.OrangeRed);
+        return null;
     }
 }

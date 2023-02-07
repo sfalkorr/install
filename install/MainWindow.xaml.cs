@@ -1,11 +1,13 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
@@ -21,6 +23,16 @@ namespace installEAS;
 
 public partial class MainWindow
 {
+    [DllImport("user32.dll")]
+    public static extern IntPtr SendMessage(IntPtr hWnd, int wMsg, int wParam, int lParam);
+
+    public static void StartDrag(Window window)
+    {
+        var helper = new WindowInteropHelper(window);
+        SendMessage(helper.Handle, 161, 2, 0);
+    }
+
+
     public static MainWindow      MainFrame;
     public static DoubleAnimation MainOpen;
     public static DoubleAnimation MainClos;
@@ -69,8 +81,8 @@ public partial class MainWindow
                 throw new ArgumentOutOfRangeException();
         }
 
-        MainOpen    = new DoubleAnimation { From = 0.1, To  = 0.96, Duration = new Duration(TimeSpan.FromMilliseconds(400)) };
-        MainClos    = new DoubleAnimation { From = 0.96, To = 0.1, Duration  = new Duration(TimeSpan.FromMilliseconds(400)) };
+        MainOpen    = new DoubleAnimation { From = 0.1, To  = 0.97, Duration = new Duration(TimeSpan.FromMilliseconds(400)) };
+        MainClos    = new DoubleAnimation { From = 0.97, To = 0.1, Duration  = new Duration(TimeSpan.FromMilliseconds(400)) };
         textBoxOpen = Resources["OpenTextBox"] as Storyboard;
         textBoxClos = Resources["CloseTextBox"] as Storyboard;
         //shake       = Resources[ "ShakeWindow" ] as Storyboard;
@@ -78,8 +90,7 @@ public partial class MainWindow
         textBox.IsEnabled                            = false;
         waitProgress.sprocketControl.IsIndeterminate = false;
         waitProgress.IsEnabled                       = false;
-        //MainFrame.pb.pbLabel.Foreground   = Brushes.Transparent;
-        labelVer.Content = $"InstallEAS v{AppVersion}";
+        labelVer.Content                             = $"InstallEAS v{AppVersion}";
     }
 
 
@@ -164,7 +175,7 @@ public partial class MainWindow
         if (Keyboard.IsKeyDown(Key.F8)) tempButtons.btn8.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
 
         if (Keyboard.IsKeyDown(Key.X) && Keyboard.IsKeyDown(Key.LeftAlt)) Close();
-        if (Keyboard.IsKeyDown(Key.OemTilde) && Keyboard.IsKeyDown(Key.LeftAlt))
+        if (Keyboard.IsKeyDown(Key.F12))
             MainFrame.Dispatcher.InvokeAsync(() =>
             {
                 var unused = AnimateFrameworkElement(MenuMain.PanelTopMain, 400);
@@ -203,6 +214,9 @@ public partial class MainWindow
         {
             _timer.Dispose();
             _timer = null;
+            //sv.Focus();
+            //sv.ScrollToEnd();
+            if (textBox.IsEnabled) textBox.Focus();
         }
 
         _timer = new Timer(_ =>
@@ -211,6 +225,8 @@ public partial class MainWindow
             {
                 rtb.Document.PageWidth = double.NaN;
                 rtb.ScrollToEnd();
+                //sv.Focus();
+                if (textBox.IsEnabled) textBox.Focus();
             }, DispatcherPriority.Send);
         }, null, 200, Timeout.Infinite);
     }
@@ -281,6 +297,9 @@ public partial class MainWindow
                 try
                 {
                     ToClip();
+                    //sv.Focus();
+
+                    if (textBox.IsEnabled) textBox.Focus();
                 }
                 catch (Exception ex)
                 {
@@ -290,7 +309,10 @@ public partial class MainWindow
                 break;
             case MouseButtonState.Pressed when PosCursor == "":
                 DragMove();
+                //StartDrag(MainWin);
                 if (e.LeftButton != MouseButtonState.Released) return;
+                //sv.Focus();
+                if (textBox.IsEnabled) textBox.Focus();
                 var startPos = rtb.Document.ContentStart.GetPositionAtOffset(0);
                 var endPos   = rtb.Document.ContentStart.GetPositionAtOffset(0);
                 if (startPos != null)

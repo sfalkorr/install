@@ -52,6 +52,7 @@ public static class Variables
     public static string AppExe         { get; }      = Process.GetCurrentProcess().MainModule?.FileName;
     public static string AppPath        { get; }      = Environment.CurrentDirectory;
     public static string TempPath       { get; }      = Path.GetTempPath();
+    public static string AppRegPath     { get; }      = @"HKLM:\SOFTWARE\Microsoft\Sharp";
     public static string ImportPath     { get; }      = GetVarPath(AppPath + @"\import");
     public static string EsppPath       { get; }      = GetVarPath(AppPath + @"\Espp");
     public static string CertsPath      { get; }      = GetVarPath(AppPath + @"\Certs");

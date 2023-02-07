@@ -121,13 +121,13 @@
     </Compile>
     <Compile Include="Helpers\AnimateHelper.cs" />
     <Compile Include="Helpers\ArchiveHelper.cs" />
-    <Compile Include="Helpers\CryptoHelper.cs" />
+    <Compile Include="Helpers\CryptpHelper.cs" />
     <Compile Include="Helpers\DispatcherEx.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="GlobalVariables.cs" />
     <Compile Include="Helpers\Functions.cs" />
     <Compile Include="Helpers\LogHelper.cs" />
-    <Compile Include="Helpers\PasswordHelper.cs" />
+    <Compile Include="Helpers\PassHelper.cs" />
     <Compile Include="Helpers\SqlHelper.cs" />
     <Compile Include="MessageBoxCustom\CustomMessageBoxWindow.xaml.cs">
       <DependentUpon>CustomMessageBoxWindow.xaml</DependentUpon>
@@ -164,6 +164,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Themes\ColorGray.xaml" />
+    <Page Include="Themes\Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

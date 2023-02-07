@@ -5,9 +5,9 @@ using System.Text;
 
 namespace installEAS.Helpers;
 
-internal class CryptoHelper
+public static class Crypt
 {
-    public string Decrypt(string cipherText)
+    public static string DecryptString(string cipherText)
     {
         var initVectorBytes = Encoding.ASCII.GetBytes("7BGF9$5tbgf23bhn1");
         var saltValueBytes  = Encoding.ASCII.GetBytes("S@lyanka");
@@ -27,7 +27,7 @@ internal class CryptoHelper
         return plainText;
     }
 
-    public string Encrypt(string plainText)
+    public static string EncryptString(string plainText)
     {
         var initVectorBytes = Encoding.ASCII.GetBytes("7BGF9$5tbgf23bhn1");
         var saltValueBytes  = Encoding.ASCII.GetBytes("S@lyanka");
