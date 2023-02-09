@@ -52,10 +52,11 @@ public abstract class Animate
         {
             BeginTime         = new TimeSpan(1000),
             Duration          = new Duration(TimeSpan.FromMilliseconds(Duration)),
-            DecelerationRatio = 0.5,
+            DecelerationRatio = 0.9,
             AccelerationRatio = 0,
             SpeedRatio        = 1,
-            IsCumulative      = false
+            IsCumulative      = false,
+            IsAdditive = false
         };
         Timeline.SetDesiredFrameRate(ta, 5);
         switch (Target.IsEnabled)
