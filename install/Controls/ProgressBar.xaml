@@ -4,7 +4,9 @@
              xmlns:control="clr-namespace:installEAS.Controls"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DesignWidth="300"
              x:Name="pbControl"
+
              mc:Ignorable="d">
     <UserControl.Resources>
         <Style x:Key="ProgressBarStyle1" TargetType="{x:Type ProgressBar}">
@@ -54,6 +56,7 @@
                      Foreground="{x:Null}"
                      Maximum="100"
                      SmallChange="0.1"
+                     Value="50"
                      Style="{DynamicResource ProgressBarStyle1}" />
         <TextBlock x:Name="pbLabel"
                    HorizontalAlignment="Center"

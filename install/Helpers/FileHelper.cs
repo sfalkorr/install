@@ -8,7 +8,7 @@ using System.Windows.Documents;
 
 namespace installEAS.Helpers;
 
-internal abstract class FileHelper
+internal abstract class Files
 {
     public static string GetFilesEx(string path, string Partname, SearchOption Option = SearchOption.AllDirectories)
     {

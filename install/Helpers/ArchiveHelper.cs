@@ -8,7 +8,7 @@ using static installEAS.Helpers.Log;
 
 namespace installEAS.Helpers;
 
-public abstract class ArchiveHelper
+public abstract class Archive
 {
     public static ProcessStartInfo _processStartInfo = new();
     public static Match            _match;

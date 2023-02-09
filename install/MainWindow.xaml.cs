@@ -38,7 +38,7 @@ public partial class MainWindow
         Top                           =  5;
         StateChanged                  += MainWindowStateChangeRaised;
         SizeChanged                   += MainWin_SizeChanged;
-        ThemesController.CurrentTheme =  ThemesController.ThemeTypes.ColorDark;
+        ThemesController.CurrentTheme =  ThemesController.ThemeTypes.ColorGray;
         switch (ThemesController.CurrentTheme)
         {
             case ThemesController.ThemeTypes.ColorDark:
@@ -59,18 +59,19 @@ public partial class MainWindow
             }
             case ThemesController.ThemeTypes.ColorGray:
             {
-                controlFrom = "#FF333333";
-                controlTo   = "#00202020";
+                controlFrom = "#FF50565D";
+                controlTo   = "#0050565D";
                 closeFrom   = "#FF902020";
                 closeTo     = "#00202020";
-                break;
+                    break;
             }
+
             default:
                 throw new ArgumentOutOfRangeException();
         }
 
-        MainOpen    = new DoubleAnimation { From = 0.1, To  = 0.96, Duration = new Duration(TimeSpan.FromMilliseconds(400)) };
-        MainClos    = new DoubleAnimation { From = 0.96, To = 0.1, Duration  = new Duration(TimeSpan.FromMilliseconds(400)) };
+        MainOpen    = new DoubleAnimation { From = 0.1, To = 0.97, Duration   = new Duration(TimeSpan.FromMilliseconds(400)) };
+        MainClos    = new DoubleAnimation { From = 0.97, To   = 0.1, Duration = new Duration(TimeSpan.FromMilliseconds(400)) };
         textBoxOpen = Resources["OpenTextBox"] as Storyboard;
         textBoxClos = Resources["CloseTextBox"] as Storyboard;
         //shake       = Resources[ "ShakeWindow" ] as Storyboard;
@@ -78,8 +79,7 @@ public partial class MainWindow
         textBox.IsEnabled                            = false;
         waitProgress.sprocketControl.IsIndeterminate = false;
         waitProgress.IsEnabled                       = false;
-        //MainFrame.pb.pbLabel.Foreground   = Brushes.Transparent;
-        labelVer.Content = $"InstallEAS v{AppVersion}";
+        labelVer.Content                             = $"InstallEAS v{AppVersion}";
     }
 
 
@@ -203,6 +203,9 @@ public partial class MainWindow
         {
             _timer.Dispose();
             _timer = null;
+            //sv.Focus();
+            //sv.ScrollToEnd();
+            if (textBox.IsEnabled) textBox.Focus();
         }
 
         _timer = new Timer(_ =>
@@ -211,6 +214,8 @@ public partial class MainWindow
             {
                 rtb.Document.PageWidth = double.NaN;
                 rtb.ScrollToEnd();
+                //sv.Focus();
+                if (textBox.IsEnabled) textBox.Focus();
             }, DispatcherPriority.Send);
         }, null, 200, Timeout.Infinite);
     }
@@ -266,7 +271,7 @@ public partial class MainWindow
         Dispatcher.InvokeAsync(() =>
         {
             var element = (FrameworkElement)sender;
-            ColorAnimation(element.Name == "CloseButton" ? new InClassName(element, closeFrom, closeTo, 120) : new InClassName(element, controlFrom, controlTo, 120));
+            ColorAnimation(element.Name == "CloseButton" ? new InClassName(element, closeFrom, closeTo, 100) : new InClassName(element, controlFrom, controlTo, 100));
         }, DispatcherPriority.Normal);
     }
 
@@ -281,6 +286,8 @@ public partial class MainWindow
                 try
                 {
                     ToClip();
+                    //sv.Focus();
+                    if (textBox.IsEnabled) textBox.Focus();
                 }
                 catch (Exception ex)
                 {
@@ -291,6 +298,8 @@ public partial class MainWindow
             case MouseButtonState.Pressed when PosCursor == "":
                 DragMove();
                 if (e.LeftButton != MouseButtonState.Released) return;
+                //sv.Focus();
+                if (textBox.IsEnabled) textBox.Focus();
                 var startPos = rtb.Document.ContentStart.GetPositionAtOffset(0);
                 var endPos   = rtb.Document.ContentStart.GetPositionAtOffset(0);
                 if (startPos != null)

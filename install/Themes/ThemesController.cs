@@ -59,6 +59,14 @@ public static class ThemesController
     {
         switch (CurrentTheme)
         {
+            case ThemeTypes.ColorGray:
+                SetTheme( ThemeTypes.ColorDark );
+                controlFrom = "#FF242A31";
+                controlTo   = "#00242A31";
+                closeFrom   = "#FF902020";
+                closeTo     = "#00202020";
+                if (MainFrame.textBox.IsEnabled) MainFrame.textBox.Focus();
+                break;
             case ThemeTypes.ColorDark:
                 SetTheme(ThemeTypes.ColorBlue);
                 controlFrom = "#FF32506E";
@@ -69,20 +77,16 @@ public static class ThemesController
                 break;
             case ThemeTypes.ColorBlue:
                 SetTheme(ThemeTypes.ColorGray);
-                controlFrom = "#FF333333";
-                controlTo   = "#00202020";
+                controlFrom = "#FF50565D";
+                controlTo   = "#0050565D";
                 closeFrom   = "#FF902020";
                 closeTo     = "#00202020";
+
+
+
                 if (MainFrame.textBox.IsEnabled) MainFrame.textBox.Focus();
                 break;
-            case ThemeTypes.ColorGray:
-                SetTheme(ThemeTypes.ColorDark);
-                controlFrom = "#FF242A31";
-                controlTo   = "#00242A31";
-                closeFrom   = "#FF902020";
-                closeTo     = "#00202020";
-                if (MainFrame.textBox.IsEnabled) MainFrame.textBox.Focus();
-                break;
+
             default:
                 throw new ArgumentOutOfRangeException();
         }

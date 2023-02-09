@@ -23,7 +23,7 @@
         MouseLeftButtonDown="MainWindow_OnMouseLeftButtonDown"
         Opacity="0.97"
         ResizeMode="CanResize"
-        Topmost="False"
+        Topmost="True"
         UseLayoutRounding="True"
         WindowStyle="None"
         mc:Ignorable="d">
@@ -31,8 +31,8 @@
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="30" CornerRadius="8,8,8,8" ResizeBorderThickness="8,5,8,8" />
     </WindowChrome.WindowChrome>
-
     <Window.Resources>
+
         <ResourceDictionary>
             <!--  ReSharper disable once Xaml.RedundantResource  -->
             <Storyboard x:Key="OpenTextBox">
@@ -44,411 +44,51 @@
                 <ThicknessAnimation DecelerationRatio="1" Storyboard.TargetProperty="Margin" From="0,0,0,0" To="0,0,0,-45" Duration="0:0:0.6" />
             </Storyboard>
 
-            <Style x:Key="ButtonStyleTest" TargetType="{x:Type Button}">
-                <Setter Property="Foreground" Value="#FFBBBBBB" />
-                <Setter Property="Background" Value="#00AAAAAA" />
-                <Setter Property="BorderThickness" Value="0" />
-                <Setter Property="HorizontalContentAlignment" Value="Center" />
-                <Setter Property="VerticalContentAlignment" Value="Center" />
-                <Setter Property="Padding" Value="1" />
-                <Setter Property="FontSize" Value="10" />
-                <Setter Property="Width" Value="40" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type Button}">
-                            <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
-                                <ContentPresenter x:Name="contentPresenter"
-                                                  Margin="{TemplateBinding Padding}"
-                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                                  Focusable="False"
-                                                  RecognizesAccessKey="True"
-                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter TargetName="border" Property="Background" Value="{DynamicResource ResourceKey=ControlButton.MouseOver.Color}" />
-                                </Trigger>
-                                <Trigger Property="IsPressed" Value="true">
-                                    <Setter TargetName="border" Property="Background" Value="{DynamicResource ResourceKey=ControlButton.IsPressed.Color}" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-
-            <Style x:Key="CloseButtonStyle2" TargetType="{x:Type Button}">
-                <Setter Property="Foreground" Value="{DynamicResource ResourceKey=Button.Close.Foreground.Color}" />
-                <Setter Property="Background" Value="Transparent" />
-                <Setter Property="BorderThickness" Value="0" />
-                <Setter Property="Width" Value="40" />
-                <Setter Property="HorizontalContentAlignment" Value="Center" />
-                <Setter Property="VerticalContentAlignment" Value="Center" />
-                <Setter Property="Padding" Value="0" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type Button}">
-                            <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
-                                <ContentPresenter x:Name="contentPresenter"
-                                                  Margin="{TemplateBinding Padding}"
-                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                                  Focusable="False"
-                                                  RecognizesAccessKey="True" />
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter TargetName="border" Property="Background" Value="{DynamicResource ResourceKey=Button.Close.Mouseover.Color}" />
-                                </Trigger>
-                                <Trigger Property="IsPressed" Value="true">
-                                    <Setter TargetName="border" Property="Background" Value="{StaticResource ResourceKey=Button.Close.Pressed.Color}" />
-                                </Trigger>
-                                <Trigger Property="IsEnabled" Value="false" />
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-
-            <Style x:Key="ScrollThumbs" TargetType="{x:Type Thumb}">
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type Thumb}">
-                            <Grid x:Name="Grid" Width="7" Background="Transparent" Opacity="0.6">
-                                <Border x:Name="ScrollBarRectangle"
-                                        Width="Auto"
-                                        Height="Auto"
-                                        HorizontalAlignment="Stretch"
-                                        VerticalAlignment="Stretch"
-                                        Background="{DynamicResource ResourceKey=ScrollBarThumbKey.Color}"
-                                        CornerRadius="3"
-                                        Focusable="True"
-                                        Opacity="0.8" />
-                            </Grid>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsFocused" Value="True" />
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Trigger.EnterActions>
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <DoubleAnimation Storyboard.TargetName="Grid" Storyboard.TargetProperty="Width" To="18" Duration="00:00:00.2" />
-                                                <DoubleAnimation Storyboard.TargetName="Grid" Storyboard.TargetProperty="Opacity" To="1" Duration="00:00:00.2" />
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </Trigger.EnterActions>
-                                    <Trigger.ExitActions>
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <DoubleAnimation Storyboard.TargetName="Grid" Storyboard.TargetProperty="Width" To="7" Duration="00:00:00.2" />
-                                                <DoubleAnimation Storyboard.TargetName="Grid" Storyboard.TargetProperty="Opacity" To="0.8" Duration="00:00:00.2" />
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </Trigger.ExitActions>
-                                </Trigger>
-                                <Trigger Property="IsEnabled" Value="False">
-                                    <Setter TargetName="Grid" Property="Opacity" Value="0.5" />
-                                </Trigger>
-                                <Trigger Property="IsDragging" Value="True" />
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-
-            <Style TargetType="{x:Type ScrollBar}">
-                <Setter Property="Margin" Value="0,0,0,1" />
-                <Setter Property="Width" Value="18" />
-                <Setter Property="IsHitTestVisible" Value="True" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type ScrollBar}">
-                            <Grid x:Name="GridRoot" Width="18" Background="{DynamicResource ResourceKey=ScrollBarThumbKey.BackColor}" Focusable="False" Opacity="1">
-                                <Track x:Name="PART_Track" Focusable="True" IsDirectionReversed="true">
-                                    <Track.Thumb>
-                                        <Thumb x:Name="ScrollBarThumb" Background="Transparent" BorderThickness="0" Focusable="True" Style="{StaticResource ScrollThumbs}">
-                                            <Thumb.Effect>
-                                                <DropShadowEffect BlurRadius="10" Direction="180" Opacity="0.5" ShadowDepth="3" />
-                                            </Thumb.Effect>
-                                        </Thumb>
-                                    </Track.Thumb>
-
-                                    <Track.IncreaseRepeatButton>
-                                        <RepeatButton x:Name="PageUp"
-                                                      Background="Transparent"
-                                                      BorderThickness="0"
-                                                      Command="ScrollBar.PageDownCommand"
-                                                      Focusable="True"
-                                                      Opacity="0" />
-                                    </Track.IncreaseRepeatButton>
-                                    <Track.DecreaseRepeatButton>
-                                        <RepeatButton x:Name="PageDown"
-                                                      Background="Transparent"
-                                                      BorderThickness="0"
-                                                      Command="ScrollBar.PageUpCommand"
-                                                      Focusable="True"
-                                                      Opacity="0" />
-                                    </Track.DecreaseRepeatButton>
-                                </Track>
-                            </Grid>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsFocused" Value="True" />
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Trigger.EnterActions>
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <DoubleAnimation Storyboard.TargetName="ScrollBarThumb" Storyboard.TargetProperty="Opacity" To="1" Duration="00:00:00.2" />
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </Trigger.EnterActions>
-                                    <Trigger.ExitActions>
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <DoubleAnimation Storyboard.TargetName="ScrollBarThumb" Storyboard.TargetProperty="Opacity" To="0.6" Duration="00:00:00.2" />
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </Trigger.ExitActions>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-            <Style TargetType="{x:Type TextBoxBase}">
-                <Setter Property="Background" Value="{DynamicResource ResourceKey=Editor.Background.Color}" />
-                <Setter Property="BorderBrush" Value="{DynamicResource ResourceKey=Tittle.Border.Color}" />
-                <Setter Property="Foreground" Value="{DynamicResource ResourceKey=Editor.Foreground.Color}" />
-                <Setter Property="BorderThickness" Value="0.51,0,0.51,0.51" />
-                <Setter Property="KeyboardNavigation.TabNavigation" Value="None" />
-                <Setter Property="HorizontalContentAlignment" Value="Left" />
-                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-                <Setter Property="AllowDrop" Value="False" />
-                <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type TextBoxBase}">
-                            <Border x:Name="border" Background="{DynamicResource ResourceKey=Editor.Background.Color}" BorderThickness="0.51,0,0.51,0.51" CornerRadius="0,0,8,8" SnapsToDevicePixels="True">
-                                <ScrollViewer x:Name="PART_ContentHost" Focusable="False" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" />
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsEnabled" Value="false">
-                                    <Setter TargetName="border" Property="Opacity" Value="1" />
-                                </Trigger>
-                                <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource ResourceKey=Tittle.Border.Color}" />
-                                </Trigger>
-                                <Trigger Property="IsMouseOver" Value="False">
-                                    <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource ResourceKey=Tittle.Border.Color}" />
-                                </Trigger>
-                                <Trigger Property="IsKeyboardFocused" Value="true">
-                                    <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource ResourceKey=Tittle.Border.Color}" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-                <Style.Triggers>
-                    <MultiTrigger>
-                        <MultiTrigger.Conditions>
-                            <Condition Property="IsInactiveSelectionHighlightEnabled" Value="true" />
-                            <Condition Property="IsSelectionActive" Value="false" />
-                        </MultiTrigger.Conditions>
-                        <Setter Property="SelectionBrush" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}" />
-                    </MultiTrigger>
-                </Style.Triggers>
-            </Style>
-
-            <Style x:Key="RichTextBoxStyle2" TargetType="{x:Type RichTextBox}">
-
-                <Style.Resources />
-                <Setter Property="MinWidth" Value="10" />
-                <Style.BasedOn>
-                    <StaticResource ResourceKey="{x:Type TextBoxBase}" />
-                </Style.BasedOn>
-
-            </Style>
-
-            <ControlTemplate x:Key="TextBoxTemplate1" TargetType="{x:Type TextBoxBase}">
-                <Border x:Name="Bd" Margin="1,0,1,0" BorderBrush="{DynamicResource ResourceKey=Tittle.Border.Color}" BorderThickness="0,0.6,0,0.6" CornerRadius="0,0,6,6">
-                    <ScrollViewer x:Name="PART_ContentHost" />
-                </Border>
-                <ControlTemplate.Triggers>
-                    <Trigger Property="IsEnabled" Value="False">
-                        <Setter TargetName="Bd" Property="Background" Value="{DynamicResource ResourceKey=Textbox.Color}" />
-                        <Setter Property="Foreground" Value="{DynamicResource ResourceKey=ControlButton.Text.Color}" />
-                    </Trigger>
-                    <Trigger Property="IsEnabled" Value="True">
-                        <Setter TargetName="Bd" Property="Background" Value="{DynamicResource ResourceKey=Textbox.Color}" />
-                        <Setter Property="Foreground" Value="{DynamicResource ResourceKey=ControlButton.Text.Color}" />
-                    </Trigger>
-
-                </ControlTemplate.Triggers>
-            </ControlTemplate>
-
-
-            <Style x:Key="LabelStyle1" TargetType="{x:Type Label}">
-                <Setter Property="Foreground" Value="Silver" />
-                <Setter Property="Background" Value="Transparent" />
-                <Setter Property="HorizontalContentAlignment" Value="Left" />
-                <Setter Property="VerticalAlignment" Value="Center" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type Label}">
-                            <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
-                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Foreground" Value="LightGray" />
-                                </Trigger>
-                                <Trigger Property="IsMouseOver" Value="False">
-                                    <Setter Property="Foreground" Value="Silver" />
-                                </Trigger>
-
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-
         </ResourceDictionary>
     </Window.Resources>
-
     <Window.CommandBindings>
         <CommandBinding Command="{x:Static SystemCommands.CloseWindowCommand}" Executed="CommandBinding_Executed_Close" />
         <CommandBinding Command="{x:Static SystemCommands.MaximizeWindowCommand}" Executed="CommandBinding_Executed_Maximize" />
         <CommandBinding Command="{x:Static SystemCommands.MinimizeWindowCommand}" Executed="CommandBinding_Executed_Minimize" />
         <CommandBinding Command="{x:Static SystemCommands.RestoreWindowCommand}" Executed="CommandBinding_Executed_Restore" />
     </Window.CommandBindings>
-
     <Border x:Name="MainWindowBorder" Padding="0" Background="Transparent" BorderThickness="0.5,0.5,0.5,0.5" CornerRadius="8,8,8,8">
         <Border.InputBindings>
             <MouseBinding Command="{x:Static SystemCommands.MaximizeWindowCommand}" MouseAction="LeftDoubleClick" />
         </Border.InputBindings>
-
         <Grid x:Name="parentContainer">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Grid Grid.Row="1">
-                <RichTextBox x:Name="rtb"
-                             Padding="5,0,5,15"
-                             AcceptsReturn="False"
-                             AutoWordSelection="True"
-                             Block.LineHeight="1"
-                             Cursor="Arrow"
-                             FontFamily="Consolas"
-                             FontSize="15"
-                             IsDocumentEnabled="True"
-                             IsReadOnly="True"
-                             IsTabStop="False"
-                             IsUndoEnabled="False"
-                             MouseMove="Rtb_OnMouseMove"
-                             RenderOptions.ClearTypeHint="Enabled"
-                             Style="{DynamicResource RichTextBoxStyle2}"
-                             UndoLimit="0"
-                             UseLayoutRounding="True"
-                             VerticalScrollBarVisibility="Auto" />
 
-                <controls:RoundedProgressBarControl x:Name="waitProgress"
-                                                    Width="70"
-                                                    Height="70"
-                                                    Margin="0,0,0,30"
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Bottom"
-                                                    HorizontalContentAlignment="Center"
-                                                    VerticalContentAlignment="Center"
-                                                    Foreground="{x:Null}" />
+                <RichTextBox x:Name="rtb" Padding="5,0,5,15" AcceptsReturn="False" AutoWordSelection="True" Block.LineHeight="1" Cursor="Arrow" FontFamily="Consolas" FontSize="15" IsDocumentEnabled="True" IsReadOnly="True" IsTabStop="False" IsUndoEnabled="False" MouseMove="Rtb_OnMouseMove" RenderOptions.ClearTypeHint="Enabled" Style="{DynamicResource RichTextBoxStyle2}" UndoLimit="0" UseLayoutRounding="True" VerticalScrollBarVisibility="Auto" />
+                <controls:RoundedProgressBarControl x:Name="waitProgress" Width="70" Height="70" Margin="0,0,0,30" HorizontalAlignment="Center" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="{x:Null}" />
                 <Grid x:Name="tbox">
-                    <TextBox x:Name="textBox"
-                             Height="30"
-                             Margin="0,0,0,-45"
-                             Padding="0,0,0,1"
-                             VerticalAlignment="Bottom"
-                             HorizontalContentAlignment="Center"
-                             VerticalContentAlignment="Center"
-                             Background="{x:Null}"
-                             CaretBrush="White"
-                             FontSize="18"
-                             KeyDown="TextBox_OnKeyDownKeyDown"
-                             MaxLength="48"
-                             Template="{StaticResource TextBoxTemplate1}">
+                    <TextBox x:Name="textBox" Height="30" Margin="0,0,0,-45" Padding="0,0,0,1" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="{x:Null}" CaretBrush="White" FontSize="18" KeyDown="TextBox_OnKeyDownKeyDown" MaxLength="48" Template="{StaticResource TextBoxTemplate1}">
                         <TextBox.Effect>
-                            <DropShadowEffect BlurRadius="15" Direction="90" Opacity="0.4" RenderingBias="Quality" ShadowDepth="6" />
+                            <DropShadowEffect BlurRadius="10" Direction="90" Opacity="0.5" RenderingBias="Quality" ShadowDepth="5" />
                         </TextBox.Effect>
                     </TextBox>
                 </Grid>
-
                 <controls:SlidePanelsControl x:Name="MenuMain" Margin="0,0,0,0" VerticalAlignment="Top" IsEnabled="True" />
 
 
                 <!-- <controls:FluidProgressBar x:Name="fluidProgressBar" Height="25" VerticalAlignment="Bottom" DotHeight="5" DotRadiusX="4" DotRadiusY="4" DotWidth="5" Foreground="White" TotalDuration="00:00:03" /> -->
             </Grid>
-
-            <Border x:Name="BotderTittle"
-                    Grid.Row="0"
-                    Background="{DynamicResource ResourceKey=Tittle.Background.Color}"
-                    BorderBrush="{DynamicResource ResourceKey=Tittle.Border.Color}"
-                    BorderThickness="0.6,0.6,0.6,0"
-                    CornerRadius="8,8,0,0">
+            <Border x:Name="BotderTittle" Grid.Row="0" Background="{DynamicResource ResourceKey=Tittle.Background.Color}" BorderBrush="{DynamicResource ResourceKey=Tittle.Border.Color}" BorderThickness="0.6,0.6,0.6,0" CornerRadius="8,8,0,0">
                 <Border.Effect>
-                    <DropShadowEffect BlurRadius="10"
-                                      Direction="270"
-                                      Opacity="0.3"
-                                      RenderingBias="Quality"
-                                      ShadowDepth="5"
-                                      Color="Black" />
+                    <DropShadowEffect BlurRadius="10" Direction="270" Opacity="0.3" RenderingBias="Quality" ShadowDepth="5" Color="Black" />
                 </Border.Effect>
                 <Grid x:Name="GridTittle" Height="30" UseLayoutRounding="False">
-                    <controls:ProgressBarControl x:Name="pb" Height="30" VerticalAlignment="Top" />
-                    <StackPanel x:Name="ControlButtons"
-                                Height="30"
-                                Margin="0,0,0,1"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Stretch"
-                                Orientation="Horizontal">
+                    <controls:ProgressBarControl x:Name="pb"  Height="30" VerticalAlignment="Top" />
+                    <StackPanel x:Name="ControlButtons" Height="30" Margin="0,0,0,1" HorizontalAlignment="Right" VerticalAlignment="Stretch" Orientation="Horizontal">
                         <!-- <Button x:Name="ThemeButton" Click="ThemeButton_OnClick" Content="&#xEDAB;" FontFamily="Segoe MDL2 Assets" FontSize="11" MouseLeave="MouseLeave" Style="{DynamicResource ButtonStyleTest}" TextOptions.TextRenderingMode="Aliased" ToolTip="Theme" WindowChrome.IsHitTestVisibleInChrome="True" /> -->
-                        <Button x:Name="MinimizeButton"
-                                Command="{x:Static SystemCommands.MinimizeWindowCommand}"
-                                Content="&#xE921;"
-                                FontFamily="Segoe MDL2 Assets"
-                                MouseLeave="MouseLeave"
-                                Style="{DynamicResource ButtonStyleTest}"
-                                TextOptions.TextRenderingMode="Aliased"
-                                ToolTip="Minimize"
-                                WindowChrome.IsHitTestVisibleInChrome="True" />
-                        <Button x:Name="RestoreButton"
-                                Command="{x:Static SystemCommands.RestoreWindowCommand}"
-                                Content="&#xE923;"
-                                FontFamily="Segoe MDL2 Assets"
-                                MouseLeave="MouseLeave"
-                                Style="{StaticResource ButtonStyleTest}"
-                                TextOptions.TextRenderingMode="Aliased"
-                                ToolTip="Restore"
-                                Visibility="Collapsed"
-                                WindowChrome.IsHitTestVisibleInChrome="True" />
-                        <Button x:Name="MaximizeButton"
-                                Command="{x:Static SystemCommands.MaximizeWindowCommand}"
-                                Content="&#xE922;"
-                                FontFamily="Segoe MDL2 Assets"
-                                MouseLeave="MouseLeave"
-                                Style="{DynamicResource ButtonStyleTest}"
-                                TextOptions.TextRenderingMode="Aliased"
-                                ToolTip="Maximize"
-                                Visibility="Visible"
-                                WindowChrome.IsHitTestVisibleInChrome="True" />
-                        <Button x:Name="CloseButton"
-                                Command="{x:Static SystemCommands.CloseWindowCommand}"
-                                Content="&#xE8BB; "
-                                FontFamily="Segoe MDL2 Assets"
-                                FontSize="10"
-                                MouseLeave="MouseLeave"
-                                RenderOptions.ClearTypeHint="Enabled"
-                                Style="{DynamicResource CloseButtonStyle2}"
-                                TextOptions.TextRenderingMode="Aliased"
-                                ToolTip="Close"
-                                WindowChrome.IsHitTestVisibleInChrome="True">
+                        <Button x:Name="MinimizeButton" Command="{x:Static SystemCommands.MinimizeWindowCommand}" Content="&#xE921;" FontFamily="Segoe MDL2 Assets" MouseLeave="MouseLeave" Style="{DynamicResource ButtonStyleTest}" TextOptions.TextRenderingMode="Aliased" ToolTip="Minimize" WindowChrome.IsHitTestVisibleInChrome="True" />
+                        <Button x:Name="RestoreButton" Command="{x:Static SystemCommands.RestoreWindowCommand}" Content="&#xE923;" FontFamily="Segoe MDL2 Assets" MouseLeave="MouseLeave" Style="{StaticResource ButtonStyleTest}" TextOptions.TextRenderingMode="Aliased" ToolTip="Restore" Visibility="Collapsed" WindowChrome.IsHitTestVisibleInChrome="True" />
+                        <Button x:Name="MaximizeButton" Command="{x:Static SystemCommands.MaximizeWindowCommand}" Content="&#xE922;" FontFamily="Segoe MDL2 Assets" MouseLeave="MouseLeave" Style="{DynamicResource ButtonStyleTest}" TextOptions.TextRenderingMode="Aliased" ToolTip="Maximize" Visibility="Visible" WindowChrome.IsHitTestVisibleInChrome="True" />
+                        <Button x:Name="CloseButton" Command="{x:Static SystemCommands.CloseWindowCommand}" Content="&#xE8BB; " FontFamily="Segoe MDL2 Assets" FontSize="10" MouseLeave="MouseLeave" RenderOptions.ClearTypeHint="Enabled" Style="{DynamicResource CloseButtonStyle2}" TextOptions.TextRenderingMode="Aliased" ToolTip="Close" WindowChrome.IsHitTestVisibleInChrome="True">
                             <Button.Resources>
                                 <Style TargetType="{x:Type Border}">
                                     <Setter Property="CornerRadius" Value="0,7,0,0" />
@@ -457,17 +97,7 @@
                         </Button>
                     </StackPanel>
                     <temp:tempControl x:Name="tempButtons" HorizontalAlignment="Left" />
-
-                    <Label x:Name="labelVer"
-                           Margin="3,0,0,0"
-                           HorizontalAlignment="Left"
-                           Content="InstallEAS v7.0"
-                           FontFamily="Consolas"
-                           FontSize="11"
-                           IsHitTestVisible="True"
-                           MouseLeftButtonDown="LabelVer_OnMouseLeftButtonDown"
-                           Style="{DynamicResource LabelStyle1}"
-                           WindowChrome.IsHitTestVisibleInChrome="True" />
+                    <Label x:Name="labelVer" Margin="3,0,0,0" HorizontalAlignment="Left" Content="InstallEAS v7.0" FontFamily="Consolas" FontSize="11" IsHitTestVisible="True" MouseLeftButtonDown="LabelVer_OnMouseLeftButtonDown" Style="{DynamicResource LabelStyle1}" WindowChrome.IsHitTestVisibleInChrome="True" />
                 </Grid>
             </Border>
         </Grid>

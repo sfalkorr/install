@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Drawing;
+using System.Windows.Media;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -36,6 +38,7 @@ public partial class SlidePanelsControl
 
     private void BtnMainMenu2_OnClick(object sender, RoutedEventArgs e)
     {
+
     }
 
 

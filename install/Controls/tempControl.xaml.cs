@@ -1,13 +1,19 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using installEAS.Common;
 using installEAS.Helpers;
 using installEAS.MessageBoxCustom;
 using static installEAS.Variables;
 using static installEAS.MainWindow;
 using static installEAS.Helpers.Log;
+using static installEAS.Helpers.Functions;
 using static installEAS.Controls.SlidePanelsControl;
+using Timer = System.Timers.Timer;
 
 
 namespace installEAS.Controls;
@@ -35,29 +41,42 @@ public partial class tempControl
 
     private void Btn2_OnClick(object sender, RoutedEventArgs e)
     {
-        //MainFrame.fluidProgressBar.StartFluidAnimation();
+        Password.SaveSqlPassToReg("QWEasd123*");
     }
 
     private void Btn3_OnClick(object sender, RoutedEventArgs e)
     {
-        RoundedProgressBarControl.Stop();
+        log(Password.ReadSqlPassFromReg());
     }
 
 
-    private void Btn4_OnClick(object sender, RoutedEventArgs e)
+    private  void Btn4_OnClick(object sender, RoutedEventArgs e)
     {
-        MainFrame.pb.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.progressBar.SetPercentDuration(100, 5000); });
+        Log.log( "Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)", Brushes.OrangeRed );
+        Log.log( "Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)" );
+        Log.log( "Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)", Brushes.GreenYellow );
     }
 
-
-    private void Btn5_OnClick(object sender, RoutedEventArgs e)
+    private static async Task _Btn4_OnClick()
     {
-        CreateVariablesInstance();
-        CreateSlidePanelsInstance();
+        
+        log("a");
+        await Sleep(3000).ConfigureAwait(false);
+        log("b");
     }
+
+    private  void Btn5_OnClick(object sender, RoutedEventArgs e)
+    {
+        MainFrame.rtb.Document.Blocks.Clear();
+    }
+
 
     private void Btn6_OnClick(object sender, RoutedEventArgs e)
     {
+        log("a");
+
+        mLogAsync("хуй");
+        log("b");
     }
 
 

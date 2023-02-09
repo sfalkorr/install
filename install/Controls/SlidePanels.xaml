@@ -11,18 +11,9 @@
              mc:Ignorable="d">
     <UserControl.Resources>
         <Style x:Key="ButtonMenuStyle1" TargetType="{x:Type Button}">
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="Foreground" Value="#FFDDDDDD" />
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="BorderBrush" Value="{DynamicResource ResourceKey=Tittle.Border.Color}" />
-            <Setter Property="FontSize" Value="16" />
-            <Setter Property="FontFamily" Value="Segue UI" />
-            <Setter Property="Height" Value="27" />
-            <Setter Property="Margin" Value="1,0,1,0" />
-            <Setter Property="Padding" Value="20,1,20,1" />
-            <Setter Property="HorizontalAlignment" Value="Stretch" />
-            <Setter Property="HorizontalContentAlignment" Value="Left" />
-            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Background" Value="Transparent" /> <Setter Property="BorderBrush" Value="{DynamicResource ResourceKey=Tittle.Border.Color}" /> <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="FontFamily" Value="Segue UI" /> <Setter Property="FontSize" Value="16" /> <Setter Property="Foreground" Value="#FFDDDDDD" /> <Setter Property="Height" Value="27" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" /> <Setter Property="HorizontalContentAlignment" Value="Left" /> <Setter Property="Margin" Value="1,0,1,0" /> <Setter Property="Padding" Value="20,1,20,1" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
@@ -39,36 +30,28 @@
                                               Focusable="False"
                                               RecognizesAccessKey="True"
                                               SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                        </Border>
-                        <ControlTemplate.Triggers>
+                        </Border> <ControlTemplate.Triggers>
                             <Trigger Property="IsDefaulted" Value="true">
                                 <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
 
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="true">
-                                <Setter TargetName="border" Property="Background" Value="{DynamicResource ResourceKey=ControlButton.MouseOver.Color}" />
-                                <Setter Property="Foreground" Value="#FFFFFFFF" />
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="true">
+                            </Trigger> <Trigger Property="IsMouseOver" Value="true">
+                                <Setter TargetName="border" Property="Background" Value="{DynamicResource ResourceKey=ControlButton.MouseOver.Color}" /> <Setter Property="Foreground" Value="#FFFFFFFF" />
+                            </Trigger> <Trigger Property="IsPressed" Value="true">
                                 <Setter TargetName="border" Property="Background" Value="{DynamicResource ResourceKey=ControlButton.IsPressed.Color}" />
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="false">
-                                <Setter TargetName="border" Property="Opacity" Value="0.4" />
-                                <Setter TargetName="border" Property="Background" Value="{DynamicResource ResourceKey=Panel.Background.Color}" />
+                            </Trigger> <Trigger Property="IsEnabled" Value="false">
+                                <Setter TargetName="border" Property="Background" Value="{DynamicResource ResourceKey=Panel.Background.Color}" /> <Setter TargetName="border" Property="Opacity" Value="0.4" />
                                 <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="#FFAAAAAA" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
-            </Setter>
+            </Setter> <Setter Property="VerticalContentAlignment" Value="Center" />
         </Style>
 
-    </UserControl.Resources>
-
-    <Grid x:Name="parentContainer">
+    </UserControl.Resources> <Grid x:Name="parentContainer">
         <Grid x:Name="PanelTopMain" Margin="0,-160,0,0" HorizontalAlignment="Center" VerticalAlignment="Top">
             <Grid.Effect>
-                <DropShadowEffect BlurRadius="15" Direction="-90" Opacity="0.4" RenderingBias="Quality" ShadowDepth="5" />
+                <DropShadowEffect BlurRadius="10" Direction="-90" Opacity="0.5" RenderingBias="Quality" ShadowDepth="2"  />
             </Grid.Effect>
             <Border x:Name="PanelBorderMain" Background="{DynamicResource ResourceKey=Menu.Background}" BorderBrush="{DynamicResource ResourceKey=Tittle.Border.Color}" BorderThickness="0.51,0,0.51,0.51" CornerRadius="0,0,7,7" />
             <StackPanel Name="sPanelTopMain" Width="450" Margin="0,10,0,5">
@@ -77,13 +60,10 @@
                 <Button Name="btnMenu3" Click="btnMainMenu3_OnClick" Content="3 - Дополнительные функции (опционально)" MouseLeave="MouseLeave" Style="{DynamicResource ButtonMenuStyle1}" />
                 <Button Name="btnMenu4" Click="BtnMainMenu4_OnClick" Content="4 - Выход из приложения" MouseLeave="MouseLeave" Style="{DynamicResource ButtonMenuStyle1}" />
             </StackPanel>
-        </Grid>
-
-        <Grid x:Name="PanelTopAdd" Margin="0,-325,0,0" HorizontalAlignment="Center" VerticalAlignment="Top">
+        </Grid> <Grid x:Name="PanelTopAdd" Margin="0,-325,0,0" HorizontalAlignment="Center" VerticalAlignment="Top">
             <Grid.Effect>
-                <DropShadowEffect BlurRadius="15" Direction="-90" Opacity="0.4" RenderingBias="Quality" ShadowDepth="5" />
-            </Grid.Effect>
-            <Border x:Name="PanelBorder" Background="{DynamicResource ResourceKey=Menu.Background}" BorderBrush="{DynamicResource ResourceKey=Tittle.Border.Color}" BorderThickness="0.51,0,0.51,0.51" CornerRadius="0,0,7,7" />
+                <DropShadowEffect BlurRadius="10" Direction="-90" Opacity="0.5" RenderingBias="Quality" ShadowDepth="2" />
+            </Grid.Effect> <Border x:Name="PanelBorder" Background="{DynamicResource ResourceKey=Menu.Background}" BorderBrush="{DynamicResource ResourceKey=Tittle.Border.Color}" BorderThickness="0.51,0,0.51,0.51" CornerRadius="0,0,7,7" />
             <StackPanel Name="sPanelTop" Width="450" Margin="0,10,0,5">
                 <Button Name="btnMenuAdd1" Content="1 - Только настройка плагинов" MouseLeave="MouseLeave" Style="{DynamicResource ButtonMenuStyle1}" />
                 <Button Name="btnMenuAdd2" Content="2 - Выгрузка нулевой реплики" MouseLeave="MouseLeave" Style="{DynamicResource ButtonMenuStyle1}" />

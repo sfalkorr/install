@@ -25,9 +25,8 @@ public static class Variables
     {
         var value = Reg.Read(path, key);
         if (value != null) return value;
-        //Log.log( $"Не найден ключ реестра {key} в {path}", Brushes.OrangeRed );
-        CustomMessageBox.ShowOK($"Не найдено значение {key} в {path}\nПродолжение работы невозможно", "Ошибка инициализации", "Выход", MessageBoxImage.Error);
-        Process.GetCurrentProcess().Kill();
+        //CustomMessageBox.ShowOK($"Не найдено значение {key} в {path}\nПродолжение работы невозможно", "Ошибка инициализации", "Выход", MessageBoxImage.Error);
+        //Process.GetCurrentProcess().Kill();
 
         return "";
     }
@@ -35,9 +34,8 @@ public static class Variables
     public static string GetVarPath(string path)
     {
         if (TestPath(path)) return path;
-        //Log.log( $"Не найден путь {path}", Brushes.OrangeRed );
-        CustomMessageBox.ShowOK($"Не найден путь {path}\nПродолжение работы невозможно", "Ошибка инициализации", "Выход", MessageBoxImage.Error);
-        Process.GetCurrentProcess().Kill();
+        //CustomMessageBox.ShowOK($"Не найден путь {path}\nПродолжение работы невозможно", "Ошибка инициализации", "Выход", MessageBoxImage.Error);
+        //Process.GetCurrentProcess().Kill();
 
         return null;
     }
@@ -52,6 +50,7 @@ public static class Variables
     public static string AppExe         { get; }      = Process.GetCurrentProcess().MainModule?.FileName;
     public static string AppPath        { get; }      = Environment.CurrentDirectory;
     public static string TempPath       { get; }      = Path.GetTempPath();
+    public static string AppRegPath     { get; }      = @"HKLM:\SOFTWARE\Microsoft\Sharp";
     public static string ImportPath     { get; }      = GetVarPath(AppPath + @"\import");
     public static string EsppPath       { get; }      = GetVarPath(AppPath + @"\Espp");
     public static string CertsPath      { get; }      = GetVarPath(AppPath + @"\Certs");

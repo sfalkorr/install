@@ -25,7 +25,7 @@
     <Window.Resources>
         <Style x:Key="ButtonMenuStyle1" TargetType="{x:Type Button}">
             <Setter Property="Background" Value="{DynamicResource ResourceKey=MessageBox.Button.Default}" />
-            <Setter Property="Foreground" Value="#FFEEEEEE" />
+            <Setter Property="Foreground" Value="#FFAAAAAA" />
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="BorderBrush" Value="{DynamicResource ResourceKey=Tittle.Border.Color}" />
             <Setter Property="FontSize" Value="16" />
@@ -49,6 +49,10 @@
                             <ContentPresenter x:Name="contentPresenter" Margin="{TemplateBinding Padding}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Focusable="False" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                         </Border>
                         <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="Background" Value="{DynamicResource ResourceKey=MessageBox.Button.Default}" />
+                                <Setter Property="Foreground" Value="#FFAAAAAA" />
+                            </Trigger>
                             <Trigger Property="IsMouseOver" Value="true">
                                 <Setter Property="Background" Value="{DynamicResource ResourceKey=MessageBox.Button.Over}" />
                                 <Setter Property="Foreground" Value="#FFFFFFFF" />
@@ -62,11 +66,39 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="LabelStyle1" TargetType="{x:Type Label}">
+            <Setter Property="Foreground" Value="#FFCCCCCC" />
+            <Setter Property="Background" Value="#00000000" />
+            <Setter Property="Padding" Value="5" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Top" />
+            <Setter Property="Height" Value="30" />
+            <Setter Property="MinWidth" Value="90" />
+            <Setter Property="MaxWidth" Value="160" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Label}">
+                        <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="#FFFFFFFF" />
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
     </Window.Resources>
 
 
-    <Border x:Name="MainWindowBorder" Margin="10,10,10,10" Background="{DynamicResource ResourceKey=Menu.Background}" BorderBrush="{DynamicResource ResourceKey=Tittle.Border.Color}" BorderThickness="0" CornerRadius="12">
+    <Border x:Name="MainWindowBorder" Margin="10,10,10,10" Background="{DynamicResource ResourceKey=Menu.Background}" BorderBrush="{DynamicResource ResourceKey=Tittle.Border.Color}" BorderThickness="0.51" CornerRadius="12">
         <Border.Effect>
             <DropShadowEffect BlurRadius="10" Direction="-90" Opacity="0.5" RenderingBias="Quality" ShadowDepth="2" Color="Black" />
         </Border.Effect>
@@ -87,33 +119,20 @@
             </Grid>
 
             <Image x:Name="Image_MessageBox" Grid.Row="1" Width="32" Height="32" Margin="20,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" />
-            <TextBlock x:Name="TextBlock_Message"
-                       Grid.Row="1"
-                       Width="Auto"
-                       MaxWidth="500"
-                       MaxHeight="300"
-                       Margin="65,0,20,0"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       FontSize="16"
-                       Foreground="White"
-                       ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                       Text="Text"
-                       TextWrapping="Wrap"
-                       UseLayoutRounding="False" />
+            <TextBlock x:Name="TextBlock_Message" Grid.Row="1" Width="Auto" MaxWidth="500" MaxHeight="300" Margin="65,0,20,0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Foreground="White" ScrollViewer.VerticalScrollBarVisibility="Disabled" Text="Text" TextWrapping="Wrap" UseLayoutRounding="False" />
 
             <StackPanel Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
                 <Button Name="Button_OK" Click="Button_OK_Click" Style="{DynamicResource ButtonMenuStyle1}" Visibility="Visible">
-                    <Label Name="Label_Ok" Foreground="White">Да</Label>
+                    <Label Name="Label_Ok" Style="{DynamicResource LabelStyle1}">Да</Label>
                 </Button>
                 <Button Name="Button_Yes" Click="Button_Yes_Click" Style="{DynamicResource ButtonMenuStyle1}" Visibility="Visible">
-                    <Label Name="Label_Yes" Foreground="White">Да</Label>
+                    <Label Name="Label_Yes" Style="{DynamicResource LabelStyle1}">Да</Label>
                 </Button>
                 <Button Name="Button_No" Click="Button_No_Click" Style="{DynamicResource ButtonMenuStyle1}" Visibility="Visible">
-                    <Label Name="Label_No" Foreground="White">Нет</Label>
+                    <Label Name="Label_No" Style="{DynamicResource LabelStyle1}">Нет</Label>
                 </Button>
                 <Button Name="Button_Cancel" Click="Button_Cancel_Click" IsCancel="True" Style="{DynamicResource ButtonMenuStyle1}" Visibility="Visible">
-                    <Label Name="Label_Cancel" Foreground="White">Отмена</Label>
+                    <Label Name="Label_Cancel" Style="{DynamicResource LabelStyle1}">Отмена</Label>
                 </Button>
             </StackPanel>
         </Grid>
