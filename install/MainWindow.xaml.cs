@@ -9,6 +9,13 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
+using ICSharpCode.AvalonEdit;
+using ICSharpCode.AvalonEdit.Editing;
+using ICSharpCode.AvalonEdit.Utils;
+using ICSharpCode.AvalonEdit.Highlighting;
+using ICSharpCode.AvalonEdit.Highlighting.Xshd;
+using ICSharpCode.AvalonEdit.Rendering;
+using ICSharpCode.AvalonEdit.Document;
 using installEAS.Helpers;
 using installEAS.MessageBoxCustom;
 using installEAS.Themes;
@@ -16,16 +23,20 @@ using installEAS.Controls;
 using static installEAS.Helpers.Log;
 using static installEAS.Helpers.Animate;
 using static installEAS.Variables;
+using System.Windows.Controls;
+using System.Windows.Shapes;
+using ICSharpCode.AvalonEdit.Indentation.CSharp;
 
 namespace installEAS;
 
 public partial class MainWindow
 {
-    public static MainWindow      MainFrame;
+    public static MainWindow MainFrame;
+
     public static DoubleAnimation MainOpen;
     public static DoubleAnimation MainClos;
 
-    private          Timer      _timer;
+    //private          Timer      _timer;
     private readonly Storyboard textBoxClos;
     private readonly Storyboard textBoxOpen;
     //private readonly Storyboard shake;
@@ -63,23 +74,44 @@ public partial class MainWindow
                 controlTo   = "#0050565D";
                 closeFrom   = "#FF902020";
                 closeTo     = "#00202020";
-                    break;
+                break;
             }
 
             default:
                 throw new ArgumentOutOfRangeException();
         }
 
-        MainOpen    = new DoubleAnimation { From = 0.1, To = 0.97, Duration   = new Duration(TimeSpan.FromMilliseconds(400)) };
-        MainClos    = new DoubleAnimation { From = 0.97, To   = 0.1, Duration = new Duration(TimeSpan.FromMilliseconds(400)) };
+        MainOpen    = new DoubleAnimation { From = 0.1, To  = 0.97, Duration = new Duration(TimeSpan.FromMilliseconds(400)) };
+        MainClos    = new DoubleAnimation { From = 0.97, To = 0.1, Duration  = new Duration(TimeSpan.FromMilliseconds(400)) };
         textBoxOpen = Resources["OpenTextBox"] as Storyboard;
         textBoxClos = Resources["CloseTextBox"] as Storyboard;
-        //shake       = Resources[ "ShakeWindow" ] as Storyboard;
 
         textBox.IsEnabled                            = false;
         waitProgress.sprocketControl.IsIndeterminate = false;
         waitProgress.IsEnabled                       = false;
         labelVer.Content                             = $"InstallEAS v{AppVersion}";
+
+        var SelectionBorder = new Pen();
+        rtb.TextArea.Cursor                     = Cursors.Arrow;
+        rtb.IsReadOnly                          = true;
+        rtb.TextArea.MouseSelectionMode         = MouseSelectionMode.Drag;
+        rtb.TextArea.Caret.CaretBrush           = Brushes.Transparent;
+        rtb.TextArea.SelectionCornerRadius      = 1;
+        rtb.TextArea.SelectionBorder            = SelectionBorder;
+        rtb.Options.InheritWordWrapIndentation  = false;
+        rtb.WordWrap                            = true;
+        rtb.TextArea.SelectionBrush             = new SolidColorBrush(Color.FromArgb(200, 100, 100, 100));
+        rtb.Options.EnableTextDragDrop          = false;
+        rtb.Options.AllowScrollBelowDocument    = false;
+        rtb.Options.HighlightCurrentLine        = false;
+        rtb.Options.EnableHyperlinks            = false;
+        rtb.Options.EnableRectangularSelection  = true;
+        rtb.Options.EnableEmailHyperlinks       = false;
+        rtb.Options.ShowBoxForControlCharacters = false;
+        rtb.TextArea.OverstrikeMode             = false;
+
+        //rtb.TextArea.DefaultInputHandler.NestedInputHandlers.Remove(rtb.TextArea.DefaultInputHandler.CaretNavigation );
+        //rtb.IsHitTestVisible = false;
     }
 
 
@@ -109,15 +141,6 @@ public partial class MainWindow
     {
         if (textBox.IsEnabled) textBox.Focus();
         SystemCommands.RestoreWindow(this);
-    }
-
-    [STAThread]
-    public void ToClip()
-    {
-        var text = rtb.Selection.Text;
-        Clipboard.SetText(text);
-        rtb.Selection.Select(rtb.CaretPosition, rtb.CaretPosition);
-        if (textBox.IsEnabled) textBox.Focus();
     }
 
 
@@ -167,7 +190,7 @@ public partial class MainWindow
         if (Keyboard.IsKeyDown(Key.OemTilde) && Keyboard.IsKeyDown(Key.LeftAlt))
             MainFrame.Dispatcher.InvokeAsync(() =>
             {
-                var unused = AnimateFrameworkElement(MenuMain.PanelTopMain, 400);
+                var _ = AnimateFrameworkElement(MenuMain.PanelTopAdd, 400);
             }, DispatcherPriority.Send);
 
         if (Keyboard.IsKeyDown(Key.OemTilde) && Keyboard.IsKeyDown(Key.LeftCtrl))
@@ -198,26 +221,26 @@ public partial class MainWindow
     [STAThread]
     private void MainWin_SizeChanged(object sender, SizeChangedEventArgs e)
     {
-        rtb.Document.PageWidth = 10000;
-        if (_timer != null)
-        {
-            _timer.Dispose();
-            _timer = null;
-            //sv.Focus();
-            //sv.ScrollToEnd();
-            if (textBox.IsEnabled) textBox.Focus();
-        }
+        //rtb.Document.PageWidth = 10000;
+        //if (_timer != null)
+        //{
+        //    _timer.Dispose();
+        //    _timer = null;
+        //    //sv.Focus();
+        //    //sv.ScrollToEnd();
+        //    if (textBox.IsEnabled) textBox.Focus();
+        //}
 
-        _timer = new Timer(_ =>
-        {
-            Dispatcher.InvokeOrExecute(() =>
-            {
-                rtb.Document.PageWidth = double.NaN;
-                rtb.ScrollToEnd();
-                //sv.Focus();
-                if (textBox.IsEnabled) textBox.Focus();
-            }, DispatcherPriority.Send);
-        }, null, 200, Timeout.Infinite);
+        //_timer = new Timer(_ =>
+        //{
+        //    Dispatcher.InvokeOrExecute(() =>
+        //    {
+        //        rtb.Document.PageWidth = double.NaN;
+        //        rtb.ScrollToEnd();
+        //        //sv.Focus();
+        //        if (textBox.IsEnabled) textBox.Focus();
+        //    }, DispatcherPriority.Send);
+        //}, null, 200, Timeout.Infinite);
     }
 
     private void MainWindow_OnActivated(object sender, EventArgs e)
@@ -268,48 +291,41 @@ public partial class MainWindow
     [STAThread]
     private new void MouseLeave(object sender, MouseEventArgs e)
     {
-        Dispatcher.InvokeAsync(() =>
-        {
-            var element = (FrameworkElement)sender;
-            ColorAnimation(element.Name == "CloseButton" ? new InClassName(element, closeFrom, closeTo, 100) : new InClassName(element, controlFrom, controlTo, 100));
-        }, DispatcherPriority.Normal);
+        var element = (FrameworkElement)sender;
+        ColorAnimation(element.Name == "CloseButton" ? new InClassName(element, closeFrom, closeTo, 100) : new InClassName(element, controlFrom, controlTo, 100));
     }
 
 
-    [STAThread]
-    private void Rtb_OnMouseMove(object sender, MouseEventArgs e)
-    {
-        var PosCursor = rtb.CaretPosition.GetTextInRun(LogicalDirection.Forward);
-        switch (e.LeftButton)
-        {
-            case MouseButtonState.Released when !rtb.Selection.IsEmpty:
-                try
-                {
-                    ToClip();
-                    //sv.Focus();
-                    if (textBox.IsEnabled) textBox.Focus();
-                }
-                catch (Exception ex)
-                {
-                    log(ex.Message);
-                }
+    //private void Rtb_OnMouseMove(object sender, MouseEventArgs e)
+    //{
+    //var PosCursor = rtb.CaretPosition.GetTextInRun(LogicalDirection.Forward);
+    //if (e.LeftButton == MouseButtonState.Pressed) MainFrame.DragMove();
+    //case MouseButtonState.Released when !rtb.Selection.IsEmpty:
+    //    try
+    //    {
+    //        ToClip();
+    //        //sv.Focus();
+    //        if (textBox.IsEnabled) textBox.Focus();
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        log(ex.Message);
+    //    }
+    //    break;
+    //case MouseButtonState.Pressed when PosCursor == "":
 
-                break;
-            case MouseButtonState.Pressed when PosCursor == "":
-                DragMove();
-                if (e.LeftButton != MouseButtonState.Released) return;
-                //sv.Focus();
-                if (textBox.IsEnabled) textBox.Focus();
-                var startPos = rtb.Document.ContentStart.GetPositionAtOffset(0);
-                var endPos   = rtb.Document.ContentStart.GetPositionAtOffset(0);
-                if (startPos != null)
-                    if (endPos != null)
-                        rtb.Selection.Select(startPos, endPos);
-                if (textBox.IsEnabled) textBox.Focus();
-                rtb.ScrollToEnd();
-                break;
-        }
-    }
+    //    if (e.LeftButton != MouseButtonState.Released) return;
+    //    //sv.Focus();
+    //    if (textBox.IsEnabled) textBox.Focus();
+    //        //var startPos = rtb.Document.ContentStart.GetPositionAtOffset(0);
+    //        //var endPos   = rtb.Document.ContentStart.GetPositionAtOffset(0);
+    //    //if (startPos != null)
+    //        //if (endPos != null)
+    //            //rtb.Selection.Select(startPos, endPos);
+    //    if (textBox.IsEnabled) textBox.Focus();
+    //    rtb.ScrollToEnd();
+    //    break;
+    //}
 
     private void TextBox_OnKeyDownKeyDown(object sender, KeyEventArgs e)
     {
@@ -326,5 +342,101 @@ public partial class MainWindow
     private void LabelVer_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
         ThemesController.ChangeTheme();
+    }
+
+
+    public static bool IsEmpty;
+
+    private void rtb_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        var pt                  = e.GetPosition((UIElement)sender);
+        var result              = VisualTreeHelper.HitTest(this, pt);
+        if (result != null) obj = result.VisualHit.ToString();
+        try
+        {
+            var pos          = rtb.GetPositionFromPoint(e.GetPosition(rtb));
+            var PosCol       = pos.Value.Column;
+            var PosVisualCol = pos.Value.VisualColumn;
+
+            if (PosCol == 1 && PosVisualCol == 0) IsEmpty = true;
+        }
+        catch (Exception)
+        {
+            IsEmpty = true;
+        }
+
+        if (e.LeftButton != MouseButtonState.Pressed || obj != "ICSharpCode.AvalonEdit.Rendering.TextView" || !IsEmpty) return;
+        DragMove();
+        IsEmpty = false;
+    }
+
+    [STAThread]
+    public void ToClip()
+    {
+        var text = rtb.SelectedText;
+        Clipboard.SetText(text);
+        rtb.TextArea.ClearSelection();
+        //rtb.Selection.Select(rtb.CaretPosition, rtb.CaretPosition);
+        //if (textBox.IsEnabled) textBox.Focus();
+    }
+
+
+    public static string obj = "";
+
+    private void rtb_PreviewMouseMove(object sender, MouseEventArgs e)
+    {
+        //var  pt = e.GetPosition( (UIElement)sender );
+        //var result    = VisualTreeHelper.HitTest( this, pt );
+        //if (result != null) obj = result.VisualHit.ToString();
+        //var PosCol       = rtb.TextArea.Caret.Position.Column;
+        //var PosVisualCol = rtb.TextArea.Caret.Position.VisualColumn;
+        //var Sel          = rtb.SelectedText;
+
+        //if (e.LeftButton == MouseButtonState.Pressed)
+        //{
+        //DragMove();
+        //rtb.TextArea.MouseSelectionMode = MouseSelectionMode.None;
+
+        //}
+
+        //if (e.LeftButton == MouseButtonState.Pressed && PosCol == 1 && PosVisualCol == 0 && Sel == "" && obj == "ICSharpCode.AvalonEdit.Rendering.TextView")
+        //Console.WriteLine( $"{PosCol} {PosVisualCol} {obj}" );
+        //{
+
+        //    this.DragMove();
+        //    //rtb.LineDown();
+        //    //rtb.TextArea.ClearSelection();
+
+        //}
+        //if (e.LeftButton == MouseButtonState.Released && Sel != "")
+        //    ToClip();
+        //Console.WriteLine( $"{PosCol} {PosVisualCol} {obj}");
+    }
+
+    private void rtb_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+        var Sel = rtb.SelectedText;
+        if (e.LeftButton == MouseButtonState.Released && Sel != "") ToClip();
+    }
+
+    private void rtb_MouseHover(object sender, MouseEventArgs e)
+    {
+        //var  pt = e.GetPosition( (UIElement)sender );
+        //var result    = VisualTreeHelper.HitTest( this, pt );
+        //if (result != null) obj = result.VisualHit.ToString();
+        //var PosCol       = rtb.TextArea.Caret.Position.Column;
+        //var PosVisualCol = rtb.TextArea.Caret.Position.VisualColumn;
+        //var Sel          = rtb.SelectedText;
+
+        //if (result != null) obj = result.VisualHit.ToString();
+        //var pos = rtb.GetPositionFromPoint( e.GetPosition( rtb ) );
+
+        //if (e.LeftButton == MouseButtonState.Pressed) // && PosCol == 1 && PosVisualCol == 0 && Sel == "" && obj == "ICSharpCode.AvalonEdit.Rendering.TextView")
+        //{
+        //    //Console.WriteLine( $"{PosCol} {PosVisualCol} {obj}" );
+        //    MainFrame.DragMove();
+        //}
+
+        //Console.WriteLine($"{pos} {obj}");
     }
 }

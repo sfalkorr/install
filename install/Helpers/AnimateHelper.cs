@@ -42,45 +42,46 @@ public abstract class Animate
         }
     }
 
-    [STAThread]
-    public static async Task AnimateFrameworkElement(FrameworkElement Target, int Duration)
+
+    public static Task AnimateFrameworkElement(FrameworkElement Target, int Duration)
     {
         //var rPoint = Convert.ToInt32( Target.TransformToAncestor( MainWindow.MainFrame ).Transform( new Point( 0, 0 ) ).Y );
 
         var sb = new Storyboard();
         var ta = new ThicknessAnimation
         {
-            BeginTime         = new TimeSpan(1000),
+            BeginTime         = new TimeSpan(0),
             Duration          = new Duration(TimeSpan.FromMilliseconds(Duration)),
             DecelerationRatio = 0.9,
             AccelerationRatio = 0,
-            SpeedRatio        = 1,
+            SpeedRatio        = 0.8,
             IsCumulative      = false,
-            IsAdditive = false
+            IsAdditive        = true
         };
-        Timeline.SetDesiredFrameRate(ta, 5);
         switch (Target.IsEnabled)
         {
             case false:
-                ta.From          = new Thickness(0, -Target.ActualHeight - 30, 0, 0);
+                //ta.From          = new Thickness(0, -Target.ActualHeight - 30, 0, 0);
                 ta.To            = new Thickness(0, 0, 0, 0);
                 Target.Opacity   = 1;
                 Target.IsEnabled = true;
                 break;
             case true:
-                ta.From          = new Thickness(0, 0, 0, 0);
+                //ta.From          = new Thickness(0, 0, 0, 0);
                 ta.To            = new Thickness(0, -Target.ActualHeight - 30, 0, 0);
                 Target.Opacity   = 1;
                 Target.IsEnabled = false;
                 break;
         }
 
+        Timeline.SetDesiredFrameRate(ta, 60);
         Storyboard.SetTargetProperty(ta, new PropertyPath(FrameworkElement.MarginProperty));
         sb.FillBehavior = FillBehavior.HoldEnd;
         sb.Children.Add(ta);
-        await Target.Dispatcher.InvokeAsync(() =>
+        Target.Dispatcher.InvokeAsync(() =>
         {
-            sb.Begin(Target, HandoffBehavior.SnapshotAndReplace);
+            sb.Begin(Target, HandoffBehavior.Compose);
         }, DispatcherPriority.Send);
+        return Task.CompletedTask;
     }
 }
