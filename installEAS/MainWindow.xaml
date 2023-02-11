@@ -24,6 +24,9 @@
      MouseLeftButtonDown="MainWindow_OnMouseLeftButtonDown"
      Opacity="0.97"
      ResizeMode="CanResize"
+    TextOptions.TextFormattingMode="Display"
+     TextOptions.TextHintingMode="Fixed"
+     TextOptions.TextRenderingMode="Auto"
      Topmost="True"
      UseLayoutRounding="True"
      WindowStyle="None"
@@ -66,16 +69,18 @@
             <Grid Grid.Row="1">
 
                 <avalonedit:TextEditor x:Name="rtb"
-                     Padding="8,5,0,10"
+                     Padding="10,5,10,10"
                      BorderBrush="#FF454C56"
                      BorderThickness="0.51,0,0.51,0.51"
                      Cursor="Arrow"
-                     FontSize="16"
-                     Foreground="White"
+                     FontSize="15"
+                     Foreground="#FFDDDDDD"
                      HorizontalScrollBarVisibility="Disabled"
                      IsReadOnly="True"
                      IsTabStop="False"
+
                      MouseHover="rtb_MouseHover"
+                     SyntaxHighlighting="Custom Highlighting"
                      PreviewMouseLeftButtonDown="rtb_PreviewMouseLeftButtonDown"
                      PreviewMouseLeftButtonUp="rtb_PreviewMouseLeftButtonUp"
                      PreviewMouseMove="rtb_PreviewMouseMove"
@@ -83,9 +88,11 @@
                      ScrollViewer.VerticalScrollBarVisibility="Auto"
                      Style="{DynamicResource TextEditorStyle1}"
                      VerticalScrollBarVisibility="Auto"
-                     WordWrap="True" />
+                     WordWrap="True" Text="У жены началось бешенство матки. Ушла из дома и бросила дочку 9 лет. Трахается со всеми подряд. Во всех секс чатах она есть. Как можно излечить её от этой болезни!? Я ей готов всё простить, но ей ничего не нужно, кроме беспорядочных связей. Ребенок родной не нужен даже!" FontFamily="Microsoft YaHei UI" >
 
-                <!--  SyntaxHighlighting="C#"  -->
+                </avalonedit:TextEditor>
+
+                <!--  SyntaxHighlighting="Custom Highlighting"  -->
 
                 <!--<RichTextBox x:Name="rtb"
                      Padding="5,0,5,15"
@@ -114,6 +121,9 @@
                      HorizontalContentAlignment="Center"
                      VerticalContentAlignment="Center"
                      Foreground="{x:Null}" />
+
+
+
                 <Grid x:Name="tbox">
                     <TextBox x:Name="textBox"
                          Height="30"
@@ -213,12 +223,16 @@
                          Margin="3,0,0,0"
                          HorizontalAlignment="Left"
                          Content="InstallEAS v7.0"
-                         FontFamily="Consolas"
+                         FontFamily="Microsoft YaHei UI"
                          FontSize="11"
                          IsHitTestVisible="True"
                          MouseLeftButtonDown="LabelVer_OnMouseLeftButtonDown"
                          Style="{DynamicResource LabelStyle1}"
-                         WindowChrome.IsHitTestVisibleInChrome="True" />
+                         WindowChrome.IsHitTestVisibleInChrome="True" >
+                        <Label.Effect>
+                            <DropShadowEffect ShadowDepth="2" Opacity="0.5"/>
+                        </Label.Effect>
+                    </Label>
                 </Grid>
             </Border>
         </Grid>

@@ -31,7 +31,7 @@ namespace ICSharpCode.AvalonEdit.Highlighting
 	/// Manages a list of syntax highlighting definitions.
 	/// </summary>
 	/// <remarks>
-	/// All memers on this class (including instance members) are thread-safe.
+	/// All members on this class (including instance members) are thread-safe.
 	/// </remarks>
 	public class HighlightingManager : IHighlightingDefinitionReferenceResolver
 	{
@@ -222,7 +222,7 @@ namespace ICSharpCode.AvalonEdit.Highlighting
 
 		internal sealed class DefaultHighlightingManager : HighlightingManager
 		{
-			public new static DefaultHighlightingManager Instance = new DefaultHighlightingManager();
+			public new static readonly DefaultHighlightingManager Instance = new DefaultHighlightingManager();
 
 			public DefaultHighlightingManager()
 			{

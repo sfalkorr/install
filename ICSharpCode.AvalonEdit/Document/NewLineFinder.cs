@@ -23,9 +23,9 @@ namespace ICSharpCode.AvalonEdit.Document
 {
 	static class NewLineFinder
 	{
-		static char[] newline = { '\r', '\n' };
+		static readonly char[] newline = { '\r', '\n' };
 
-		internal static string[] NewlineStrings = { "\r\n", "\r", "\n" };
+		internal static readonly string[] NewlineStrings = { "\r\n", "\r", "\n" };
 
 		/// <summary>
 		/// Gets the location of the next new line character, or SimpleSegment.Invalid

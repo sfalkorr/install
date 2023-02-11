@@ -216,8 +216,11 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="CustomHighlighting.xshd" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\ICSharpCode.AvalonEdit\ICSharpCode.AvalonEdit.csproj">
-      <Project>{770898bd-ff9c-44b5-8b07-734f9e60031b}</Project>
+      <Project>{843ba9b5-75b9-46ec-afb8-d791bd296b15}</Project>
       <Name>ICSharpCode.AvalonEdit</Name>
     </ProjectReference>
   </ItemGroup>

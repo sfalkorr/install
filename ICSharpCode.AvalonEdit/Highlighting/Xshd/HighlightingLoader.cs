@@ -29,13 +29,13 @@ namespace ICSharpCode.AvalonEdit.Highlighting.Xshd
 	{
 		#region XSHD loading
 		/// <summary>
-		/// Lodas a syntax definition from the xml reader.
+		/// Loads a syntax definition from the xml reader.
 		/// </summary>
 		public static XshdSyntaxDefinition LoadXshd(XmlReader reader)
 		{
 			return LoadXshd(reader, false);
 		}
-
+		 
 		internal static XshdSyntaxDefinition LoadXshd(XmlReader reader, bool skipValidation)
 		{
 			if (reader == null)

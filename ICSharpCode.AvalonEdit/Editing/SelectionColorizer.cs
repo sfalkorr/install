@@ -22,7 +22,7 @@ using ICSharpCode.AvalonEdit.Rendering;
 
 namespace ICSharpCode.AvalonEdit.Editing
 {
-	public class SelectionColorizer : ColorizingTransformer
+	sealed class SelectionColorizer : ColorizingTransformer
 	{
 		TextArea textArea;
 

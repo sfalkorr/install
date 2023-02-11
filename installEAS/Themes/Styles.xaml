@@ -177,7 +177,10 @@
 		<Setter Property="Background" Value="{DynamicResource ResourceKey=Editor.Background.Color}" />
 		<Setter Property="BorderBrush" Value="{DynamicResource ResourceKey=Tittle.Border.Color}" />
 		<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
-		<Setter Property="Template">
+        <Setter Property="TextOptions.TextFormattingMode" Value="Ideal" />
+        <Setter Property="TextOptions.TextHintingMode" Value="Auto" />
+        <Setter Property="TextOptions.TextRenderingMode" Value="Aliased" />
+        <Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type avalonedit:TextEditor}">
 					<Border x:Name="border"
@@ -197,7 +200,7 @@
 						     VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}" />
 					</Border>
 					<ControlTemplate.Triggers>
-						<Trigger Property="WordWrap" Value="True">
+						<Trigger Property="WordWrap" Value="False">
 							<Setter TargetName="PART_ScrollViewer" Property="HorizontalScrollBarVisibility" Value="Disabled" />
 						</Trigger>
 					</ControlTemplate.Triggers>

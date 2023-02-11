@@ -61,7 +61,7 @@ namespace ICSharpCode.AvalonEdit.Document
 	{
 		#region GetControlCharacterName
 		// the names of the first 32 ASCII characters = Unicode C0 block
-		static string[] c0Table = {
+		static readonly string[] c0Table = {
 			"NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK", "BEL", "BS", "HT",
 			"LF", "VT", "FF", "CR", "SO", "SI", "DLE", "DC1", "DC2", "DC3",
 			"DC4", "NAK", "SYN", "ETB", "CAN", "EM", "SUB", "ESC", "FS", "GS",
@@ -70,7 +70,7 @@ namespace ICSharpCode.AvalonEdit.Document
 
 		// DEL (ASCII 127) and
 		// the names of the control characters in the C1 block (Unicode 128 to 159)
-		static string[] delAndC1Table = {
+		static readonly string[] delAndC1Table = {
 			"DEL",
 			"PAD", "HOP", "BPH", "NBH", "IND", "NEL", "SSA", "ESA", "HTS", "HTJ",
 			"VTS", "PLD", "PLU", "RI", "SS2", "SS3", "DCS", "PU1", "PU2", "STS",

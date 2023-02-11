@@ -37,7 +37,7 @@ namespace ICSharpCode.AvalonEdit.Editing
 		/// <summary>
 		/// TextView property.
 		/// </summary>
-		public static DependencyProperty TextViewProperty =
+		public static readonly DependencyProperty TextViewProperty =
 			DependencyProperty.Register("TextView", typeof(TextView), typeof(AbstractMargin),
 										new FrameworkPropertyMetadata(OnTextViewChanged));
 

@@ -5,72 +5,60 @@
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <DefineConstants>TRACE</DefineConstants>
-    <SignAssembly>False</SignAssembly>
     <AssemblyOriginatorKeyFile>ICSharpCode.AvalonEdit.snk</AssemblyOriginatorKeyFile>
     <Company>ic#code</Company>
-    <Copyright>Saray Team</Copyright>
-    <Description>AvalonEdit Custom</Description>
-    <Version>6.1</Version>
-    <AssemblyVersion>6.6.6.6</AssemblyVersion>
-    <FileVersion>6.6.6.6</FileVersion>
+    <Copyright></Copyright>
+    <Description></Description>
+    <Version></Version>
+    <AssemblyVersion>6.2.0.0</AssemblyVersion>
+    <FileVersion>6.2.0.0</FileVersion>
     <GenerateDocumentationFile>False</GenerateDocumentationFile>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageId>AvalonEdit</PackageId>
-    <IncludeSymbols>False</IncludeSymbols>
+    <PackageId></PackageId>
+    <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <RepositoryUrl>https://github.com/icsharpcode/AvalonEdit.git</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <Authors>AvalonEdit Contributors</Authors>
-    <PackageProjectUrl>http://www.avalonedit.net</PackageProjectUrl>
-    <PackageIcon>images\AvalonEditNuGetPackageIcon.png</PackageIcon>
-    <PackageTags>WPF Text Editor SharpDevelop AvalonEdit</PackageTags>
-    <PackageReleaseNotes>Changes are detailed at https://github.com/icsharpcode/AvalonEdit/blob/master/ChangeLog.md</PackageReleaseNotes>
+    <RepositoryUrl></RepositoryUrl>
+    <RepositoryType></RepositoryType>
+    <Authors></Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl></PackageProjectUrl>
+    <PackageTags></PackageTags>
+    <PackageReleaseNotes></PackageReleaseNotes>
+    <PackageReadmeFile>PackageReadme.md</PackageReadmeFile>
     <AutoGenerateBindingRedirects>True</AutoGenerateBindingRedirects>
-    <NoWin32Manifest>true</NoWin32Manifest>
     <IsPublishable>False</IsPublishable>
-    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
-    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
-    <Title>AvalonEdit</Title>
-    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net6.0-windows' ">
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' ">
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net7.0-windows' ">
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net462' ">
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net462|AnyCPU'">
-    <Optimize>False</Optimize>
-    <DebugType>none</DebugType>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net472|AnyCPU'">
-    <Optimize>True</Optimize>
-    <DebugType>none</DebugType>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net462|AnyCPU'">
-    <DebugType>none</DebugType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net472|AnyCPU'">
-    <DebugType>none</DebugType>
-  </PropertyGroup>
-  
+
   <ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="themes\RightArrow.cur" />
-    <None Include="AvalonEditNuGetPackageIcon.png">
-      <Pack>True</Pack>
-      <PackagePath>images</PackagePath>
-    </None>
+    <None Include="AvalonEditNuGetPackageIcon.png" />
     <Resource Include="themes\RightArrow.cur" />
   </ItemGroup>
   <ItemGroup>
@@ -78,9 +66,5 @@
     <EmbeddedResource Include="Highlighting\Resources\*" />
     <EmbeddedResource Remove="Highlighting\Resources\Resources.cs" />
     <Resource Include="Highlighting\Resources\Resources.cs" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
   </ItemGroup>
 </Project>

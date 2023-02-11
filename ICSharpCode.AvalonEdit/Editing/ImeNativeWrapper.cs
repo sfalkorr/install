@@ -166,7 +166,7 @@ namespace ICSharpCode.AvalonEdit.Editing
 				.TransformToDevice(source.RootVisual); // rect on HWND
 		}
 
-		static Rect EMPTY_RECT = new Rect(0, 0, 0, 0);
+		static readonly Rect EMPTY_RECT = new Rect(0, 0, 0, 0);
 
 		static Rect GetCharacterBounds(this TextView textView, TextViewPosition pos, HwndSource source)
 		{

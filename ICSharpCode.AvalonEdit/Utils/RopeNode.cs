@@ -34,7 +34,7 @@ namespace ICSharpCode.AvalonEdit.Utils
 	{
 		internal const int NodeSize = 256;
 
-		internal static RopeNode<T> emptyRopeNode = new RopeNode<T> { isShared = true, contents = new T[RopeNode<T>.NodeSize] };
+		internal static readonly RopeNode<T> emptyRopeNode = new RopeNode<T> { isShared = true, contents = new T[RopeNode<T>.NodeSize] };
 
 		// Fields for pointers to sub-nodes. Only non-null for concat nodes (height>=1)
 		internal RopeNode<T> left, right;

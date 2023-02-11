@@ -203,7 +203,7 @@ namespace ICSharpCode.AvalonEdit.Utils
 			else
 				return pos + startIndex;
 		}
-
+		 
 		/// <summary>
 		/// Gets the index of the last occurrence of the search text.
 		/// </summary>

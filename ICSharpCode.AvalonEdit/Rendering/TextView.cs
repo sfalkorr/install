@@ -88,7 +88,7 @@ namespace ICSharpCode.AvalonEdit.Rendering
 		/// <summary>
 		/// Document property.
 		/// </summary>
-		public static DependencyProperty DocumentProperty =
+		public static readonly DependencyProperty DocumentProperty =
 			DependencyProperty.Register("Document", typeof(TextDocument), typeof(TextView),
 										new FrameworkPropertyMetadata(OnDocumentChanged));
 
@@ -194,7 +194,7 @@ namespace ICSharpCode.AvalonEdit.Rendering
 		/// <summary>
 		/// Options property.
 		/// </summary>
-		public static DependencyProperty OptionsProperty =
+		public static readonly DependencyProperty OptionsProperty =
 			DependencyProperty.Register("Options", typeof(TextEditorOptions), typeof(TextView),
 										new FrameworkPropertyMetadata(OnOptionsChanged));
 
@@ -554,7 +554,7 @@ namespace ICSharpCode.AvalonEdit.Rendering
 		/// <summary>
 		/// NonPrintableCharacterBrush dependency property.
 		/// </summary>
-		public static DependencyProperty NonPrintableCharacterBrushProperty =
+		public static readonly DependencyProperty NonPrintableCharacterBrushProperty =
 			DependencyProperty.Register("NonPrintableCharacterBrush", typeof(Brush), typeof(TextView),
 										new FrameworkPropertyMetadata(Brushes.LightGray));
 
@@ -569,7 +569,7 @@ namespace ICSharpCode.AvalonEdit.Rendering
 		/// <summary>
 		/// LinkTextForegroundBrush dependency property.
 		/// </summary>
-		public static  DependencyProperty LinkTextForegroundBrushProperty =
+		public static readonly DependencyProperty LinkTextForegroundBrushProperty =
 			DependencyProperty.Register("LinkTextForegroundBrush", typeof(Brush), typeof(TextView),
 										new FrameworkPropertyMetadata(Brushes.Blue));
 
@@ -584,7 +584,7 @@ namespace ICSharpCode.AvalonEdit.Rendering
 		/// <summary>
 		/// LinkTextBackgroundBrush dependency property.
 		/// </summary>
-		public static  DependencyProperty LinkTextBackgroundBrushProperty =
+		public static readonly DependencyProperty LinkTextBackgroundBrushProperty =
 			DependencyProperty.Register("LinkTextBackgroundBrush", typeof(Brush), typeof(TextView),
 										new FrameworkPropertyMetadata(Brushes.Transparent));
 
@@ -600,7 +600,7 @@ namespace ICSharpCode.AvalonEdit.Rendering
 		/// <summary>
 		/// LinkTextUnderlinedBrush dependency property.
 		/// </summary>
-		public static  DependencyProperty LinkTextUnderlineProperty =
+		public static readonly DependencyProperty LinkTextUnderlineProperty =
 			DependencyProperty.Register("LinkTextUnderline", typeof(bool), typeof(TextView),
 										new FrameworkPropertyMetadata(true));
 
@@ -978,7 +978,7 @@ namespace ICSharpCode.AvalonEdit.Rendering
 
 			// number of pixels clipped from the first visual line(s)
 			clippedPixelsOnTop = scrollOffset.Y - heightTree.GetVisualPosition(firstLineInView);
-			// clippedPixelsOnTop should be >= 0, except for floating point inaccurracy.
+			// clippedPixelsOnTop should be >= 0, except for floating point inaccuracy.
 			Debug.Assert(clippedPixelsOnTop >= -ExtensionMethods.Epsilon);
 
 			newVisualLines = new List<VisualLine>();
@@ -1887,26 +1887,26 @@ namespace ICSharpCode.AvalonEdit.Rendering
 		/// <summary>
 		/// The PreviewMouseHover event.
 		/// </summary>
-		public static RoutedEvent PreviewMouseHoverEvent =
+		public static readonly RoutedEvent PreviewMouseHoverEvent =
 			EventManager.RegisterRoutedEvent("PreviewMouseHover", RoutingStrategy.Tunnel,
 											 typeof(MouseEventHandler), typeof(TextView));
 		/// <summary>
 		/// The MouseHover event.
 		/// </summary>
-		public static RoutedEvent MouseHoverEvent =
+		public static readonly RoutedEvent MouseHoverEvent =
 			EventManager.RegisterRoutedEvent("MouseHover", RoutingStrategy.Bubble,
 											 typeof(MouseEventHandler), typeof(TextView));
 
 		/// <summary>
 		/// The PreviewMouseHoverStopped event.
 		/// </summary>
-		public static RoutedEvent PreviewMouseHoverStoppedEvent =
+		public static readonly RoutedEvent PreviewMouseHoverStoppedEvent =
 			EventManager.RegisterRoutedEvent("PreviewMouseHoverStopped", RoutingStrategy.Tunnel,
 											 typeof(MouseEventHandler), typeof(TextView));
 		/// <summary>
 		/// The MouseHoverStopped event.
 		/// </summary>
-		public static RoutedEvent MouseHoverStoppedEvent =
+		public static readonly RoutedEvent MouseHoverStoppedEvent =
 			EventManager.RegisterRoutedEvent("MouseHoverStopped", RoutingStrategy.Bubble,
 											 typeof(MouseEventHandler), typeof(TextView));
 
@@ -2056,7 +2056,7 @@ namespace ICSharpCode.AvalonEdit.Rendering
 		/// The pen used to draw the column ruler.
 		/// <seealso cref="TextEditorOptions.ShowColumnRuler"/>
 		/// </summary>
-		public static DependencyProperty ColumnRulerPenProperty =
+		public static readonly DependencyProperty ColumnRulerPenProperty =
 			DependencyProperty.Register("ColumnRulerPen", typeof(Pen), typeof(TextView),
 										new FrameworkPropertyMetadata(CreateFrozenPen(Brushes.LightGray)));
 
@@ -2079,7 +2079,7 @@ namespace ICSharpCode.AvalonEdit.Rendering
 		/// <summary>
 		/// The <see cref="CurrentLineBackground"/> property.
 		/// </summary>
-		public static DependencyProperty CurrentLineBackgroundProperty =
+		public static readonly DependencyProperty CurrentLineBackgroundProperty =
 			DependencyProperty.Register("CurrentLineBackground", typeof(Brush), typeof(TextView));
 
 		/// <summary>
@@ -2093,7 +2093,7 @@ namespace ICSharpCode.AvalonEdit.Rendering
 		/// <summary>
 		/// The <see cref="CurrentLineBorder"/> property.
 		/// </summary>
-		public static DependencyProperty CurrentLineBorderProperty =
+		public static readonly DependencyProperty CurrentLineBorderProperty =
 			DependencyProperty.Register("CurrentLineBorder", typeof(Pen), typeof(TextView));
 
 		/// <summary>

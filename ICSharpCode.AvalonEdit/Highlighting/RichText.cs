@@ -36,7 +36,7 @@ namespace ICSharpCode.AvalonEdit.Highlighting
 		/// <summary>
 		/// The empty string without any formatting information.
 		/// </summary>
-		public static RichText Empty = new RichText(string.Empty);
+		public static readonly RichText Empty = new RichText(string.Empty);
 
 		readonly string text;
 		internal readonly int[] stateChangeOffsets;

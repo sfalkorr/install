@@ -23,7 +23,7 @@ namespace ICSharpCode.AvalonEdit.Utils
 	/// </summary>
 	static class Empty<T>
 	{
-		public static T[] Array = new T[0];
-		//public static ReadOnlyCollection<T> ReadOnlyCollection = new ReadOnlyCollection<T>(Array);
+		public static readonly T[] Array = new T[0];
+		//public static readonly ReadOnlyCollection<T> ReadOnlyCollection = new ReadOnlyCollection<T>(Array);
 	}
 }

@@ -33,7 +33,7 @@ namespace ICSharpCode.AvalonEdit.Rendering
 		int column;
 		TextView textView;
 
-		public static Color DefaultForeground = Colors.LightGray;
+		public static readonly Color DefaultForeground = Colors.LightGray;
 
 		public ColumnRulerRenderer(TextView textView)
 		{

@@ -187,7 +187,7 @@ namespace ICSharpCode.AvalonEdit.Editing
 		/// <summary>
 		/// Document property.
 		/// </summary>
-		public static DependencyProperty DocumentProperty
+		public static readonly DependencyProperty DocumentProperty
 			= TextView.DocumentProperty.AddOwner(typeof(TextArea), new FrameworkPropertyMetadata(OnDocumentChanged));
 
 		/// <summary>
@@ -235,7 +235,7 @@ namespace ICSharpCode.AvalonEdit.Editing
 		/// <summary>
 		/// Options property.
 		/// </summary>
-		public static DependencyProperty OptionsProperty
+		public static readonly DependencyProperty OptionsProperty
 			= TextView.OptionsProperty.AddOwner(typeof(TextArea), new FrameworkPropertyMetadata(OnOptionsChanged));
 
 		/// <summary>
@@ -450,7 +450,7 @@ namespace ICSharpCode.AvalonEdit.Editing
 		/// <summary>
 		/// The <see cref="SelectionBrush"/> property.
 		/// </summary>
-		public static DependencyProperty SelectionBrushProperty =
+		public static readonly DependencyProperty SelectionBrushProperty =
 			DependencyProperty.Register("SelectionBrush", typeof(Brush), typeof(TextArea));
 
 		/// <summary>
@@ -464,7 +464,7 @@ namespace ICSharpCode.AvalonEdit.Editing
 		/// <summary>
 		/// The <see cref="SelectionForeground"/> property.
 		/// </summary>
-		public static DependencyProperty SelectionForegroundProperty =
+		public static readonly DependencyProperty SelectionForegroundProperty =
 			DependencyProperty.Register("SelectionForeground", typeof(Brush), typeof(TextArea));
 
 		/// <summary>
@@ -478,7 +478,7 @@ namespace ICSharpCode.AvalonEdit.Editing
 		/// <summary>
 		/// The <see cref="SelectionBorder"/> property.
 		/// </summary>
-		public static DependencyProperty SelectionBorderProperty =
+		public static readonly DependencyProperty SelectionBorderProperty =
 			DependencyProperty.Register("SelectionBorder", typeof(Pen), typeof(TextArea));
 
 		/// <summary>
@@ -492,7 +492,7 @@ namespace ICSharpCode.AvalonEdit.Editing
 		/// <summary>
 		/// The <see cref="SelectionCornerRadius"/> property.
 		/// </summary>
-		public static DependencyProperty SelectionCornerRadiusProperty =
+		public static readonly DependencyProperty SelectionCornerRadiusProperty =
 			DependencyProperty.Register("SelectionCornerRadius", typeof(double), typeof(TextArea),
 										new FrameworkPropertyMetadata(3.0));
 
@@ -981,7 +981,7 @@ namespace ICSharpCode.AvalonEdit.Editing
 		/// <summary>
 		/// IndentationStrategy property.
 		/// </summary>
-		public static DependencyProperty IndentationStrategyProperty =
+		public static readonly DependencyProperty IndentationStrategyProperty =
 			DependencyProperty.Register("IndentationStrategy", typeof(IIndentationStrategy), typeof(TextArea),
 										new FrameworkPropertyMetadata(new DefaultIndentationStrategy()));
 
@@ -1071,7 +1071,7 @@ namespace ICSharpCode.AvalonEdit.Editing
 		/// <summary>
 		/// The <see cref="OverstrikeMode"/> dependency property.
 		/// </summary>
-		public static DependencyProperty OverstrikeModeProperty =
+		public static readonly DependencyProperty OverstrikeModeProperty =
 			DependencyProperty.Register("OverstrikeMode", typeof(bool), typeof(TextArea),
 										new FrameworkPropertyMetadata(Boxes.False));
 

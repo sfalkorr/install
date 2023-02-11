@@ -176,7 +176,7 @@ namespace ICSharpCode.AvalonEdit.Document
 	/// Represents a version identifier for a text source.
 	/// </summary>
 	/// <remarks>
-	/// Verions can be used to efficiently detect whether a document has changed and needs reparsing;
+	/// Versions can be used to efficiently detect whether a document has changed and needs reparsing;
 	/// or even to implement incremental parsers.
 	/// It is a separate class from ITextSource to allow the GC to collect the text source while
 	/// the version checkpoint is still in use.
@@ -225,7 +225,7 @@ namespace ICSharpCode.AvalonEdit.Document
 		/// <summary>
 		/// Gets a text source containing the empty string.
 		/// </summary>
-		public static StringTextSource Empty = new StringTextSource(string.Empty);
+		public static readonly StringTextSource Empty = new StringTextSource(string.Empty);
 
 		readonly string text;
 		readonly ITextSourceVersion version;

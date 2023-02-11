@@ -61,8 +61,8 @@ namespace ICSharpCode.AvalonEdit.Editing
 			return handler;
 		}
 
-		static List<CommandBinding> CommandBindings = new List<CommandBinding>();
-		static List<InputBinding> InputBindings = new List<InputBinding>();
+		static readonly List<CommandBinding> CommandBindings = new List<CommandBinding>();
+		static readonly List<InputBinding> InputBindings = new List<InputBinding>();
 
 		static void AddBinding(ICommand command, ModifierKeys modifiers, Key key, ExecutedRoutedEventHandler handler)
 		{

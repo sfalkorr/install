@@ -26,28 +26,28 @@ using ICSharpCode.AvalonEdit.Rendering;
 
 namespace ICSharpCode.AvalonEdit.Highlighting
 {
-
-    public class LineColorizer:DocumentColorizingTransformer
+    public class LineColorizer :DocumentColorizingTransformer
 
     {
-        int lineNumber;
+        int          lineNumber;
         public Brush LineColor { get; set; }
-        public LineColorizer(int lineNumber)
+        public LineColorizer( int lineNumber )
         {
             this.lineNumber = lineNumber;
         }
-        protected override void ColorizeLine(DocumentLine line)
+        protected override void ColorizeLine( DocumentLine line )
         {
-            if(!line.IsDeleted && line.LineNumber == lineNumber)
+            if (!line.IsDeleted && line.LineNumber == lineNumber)
             {
                 ChangeLinePart( line.Offset, line.EndOffset, ApplyChanges );
             }
         }
-        void ApplyChanges(VisualLineElement element)
+        void ApplyChanges( VisualLineElement element )
         {
             element.TextRunProperties.SetForegroundBrush( LineColor );
         }
     }
+
     /// <summary>
     /// A colorizes that interprets a highlighting rule set and colors the document accordingly.
     /// </summary>

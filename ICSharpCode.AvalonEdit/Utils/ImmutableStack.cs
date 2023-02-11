@@ -37,7 +37,7 @@ namespace ICSharpCode.AvalonEdit.Utils
 		/// </summary>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Justification = "ImmutableStack is immutable")]
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1000:DoNotDeclareStaticMembersOnGenericTypes")]
-		public static ImmutableStack<T> Empty = new ImmutableStack<T>();
+		public static readonly ImmutableStack<T> Empty = new ImmutableStack<T>();
 
 		readonly T value;
 		readonly ImmutableStack<T> next;

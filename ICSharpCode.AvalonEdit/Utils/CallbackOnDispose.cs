@@ -62,7 +62,7 @@ namespace ICSharpCode.AvalonEdit.Utils
 			Justification = "Should always be used with 'var'")]
 		public struct BusyLock : IDisposable
 		{
-			public static BusyLock Failed = new BusyLock(null);
+			public static readonly BusyLock Failed = new BusyLock(null);
 
 			readonly List<object> objectList;
 

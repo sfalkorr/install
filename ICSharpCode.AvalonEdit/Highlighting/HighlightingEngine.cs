@@ -219,7 +219,7 @@ namespace ICSharpCode.AvalonEdit.Highlighting
 			position = until;
 		}
 
-		static HighlightingRuleSet emptyRuleSet = new HighlightingRuleSet() { Name = "EmptyRuleSet" };
+		static readonly HighlightingRuleSet emptyRuleSet = new HighlightingRuleSet() { Name = "EmptyRuleSet" };
 
 		HighlightingRuleSet CurrentRuleSet {
 			get {

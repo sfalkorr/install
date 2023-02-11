@@ -22,7 +22,7 @@ namespace ICSharpCode.AvalonEdit.Highlighting
 {
 	static class Resources
 	{
-		static string Prefix = typeof(Resources).FullName + ".";
+		static readonly string Prefix = typeof(Resources).FullName + ".";
 
 		public static Stream OpenStream(string name)
 		{
@@ -34,7 +34,7 @@ namespace ICSharpCode.AvalonEdit.Highlighting
 
 		internal static void RegisterBuiltInHighlightings(HighlightingManager.DefaultHighlightingManager hlm)
 		{
-			hlm.RegisterHighlighting("C#", new[] { ".cs" }, "CSharp-Mode.xshd");
+ 
 		}
 	}
 }

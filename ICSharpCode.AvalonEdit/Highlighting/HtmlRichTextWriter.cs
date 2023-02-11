@@ -108,7 +108,7 @@ namespace ICSharpCode.AvalonEdit.Highlighting
 			WriteChar(value);
 		}
 
-		static char[] specialChars = { ' ', '\t', '\r', '\n' };
+		static readonly char[] specialChars = { ' ', '\t', '\r', '\n' };
 
 		void WriteChar(char c)
 		{

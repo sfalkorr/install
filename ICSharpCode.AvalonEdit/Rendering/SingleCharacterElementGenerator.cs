@@ -243,7 +243,7 @@ namespace ICSharpCode.AvalonEdit.Rendering
 
 		sealed class SpecialCharacterTextRun : FormattedTextRun
 		{
-			static SolidColorBrush darkGrayBrush;
+			static readonly SolidColorBrush darkGrayBrush;
 
 			static SpecialCharacterTextRun()
 			{

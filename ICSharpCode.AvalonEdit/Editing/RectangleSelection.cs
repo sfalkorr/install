@@ -41,49 +41,49 @@ namespace ICSharpCode.AvalonEdit.Editing
 		/// Expands the selection left by one character, creating a rectangular selection.
 		/// Key gesture: Alt+Shift+Left
 		/// </summary>
-		public static RoutedUICommand BoxSelectLeftByCharacter = Command("BoxSelectLeftByCharacter");
+		public static readonly RoutedUICommand BoxSelectLeftByCharacter = Command("BoxSelectLeftByCharacter");
 
 		/// <summary>
 		/// Expands the selection right by one character, creating a rectangular selection.
 		/// Key gesture: Alt+Shift+Right
 		/// </summary>
-		public static RoutedUICommand BoxSelectRightByCharacter = Command("BoxSelectRightByCharacter");
+		public static readonly RoutedUICommand BoxSelectRightByCharacter = Command("BoxSelectRightByCharacter");
 
 		/// <summary>
 		/// Expands the selection left by one word, creating a rectangular selection.
 		/// Key gesture: Ctrl+Alt+Shift+Left
 		/// </summary>
-		public static RoutedUICommand BoxSelectLeftByWord = Command("BoxSelectLeftByWord");
+		public static readonly RoutedUICommand BoxSelectLeftByWord = Command("BoxSelectLeftByWord");
 
 		/// <summary>
 		/// Expands the selection right by one word, creating a rectangular selection.
 		/// Key gesture: Ctrl+Alt+Shift+Right
 		/// </summary>
-		public static RoutedUICommand BoxSelectRightByWord = Command("BoxSelectRightByWord");
+		public static readonly RoutedUICommand BoxSelectRightByWord = Command("BoxSelectRightByWord");
 
 		/// <summary>
 		/// Expands the selection up by one line, creating a rectangular selection.
 		/// Key gesture: Alt+Shift+Up
 		/// </summary>
-		public static RoutedUICommand BoxSelectUpByLine = Command("BoxSelectUpByLine");
+		public static readonly RoutedUICommand BoxSelectUpByLine = Command("BoxSelectUpByLine");
 
 		/// <summary>
 		/// Expands the selection down by one line, creating a rectangular selection.
 		/// Key gesture: Alt+Shift+Down
 		/// </summary>
-		public static RoutedUICommand BoxSelectDownByLine = Command("BoxSelectDownByLine");
+		public static readonly RoutedUICommand BoxSelectDownByLine = Command("BoxSelectDownByLine");
 
 		/// <summary>
 		/// Expands the selection to the start of the line, creating a rectangular selection.
 		/// Key gesture: Alt+Shift+Home
 		/// </summary>
-		public static RoutedUICommand BoxSelectToLineStart = Command("BoxSelectToLineStart");
+		public static readonly RoutedUICommand BoxSelectToLineStart = Command("BoxSelectToLineStart");
 
 		/// <summary>
 		/// Expands the selection to the end of the line, creating a rectangular selection.
 		/// Key gesture: Alt+Shift+End
 		/// </summary>
-		public static RoutedUICommand BoxSelectToLineEnd = Command("BoxSelectToLineEnd");
+		public static readonly RoutedUICommand BoxSelectToLineEnd = Command("BoxSelectToLineEnd");
 
 		static RoutedUICommand Command(string name)
 		{

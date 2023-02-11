@@ -52,7 +52,7 @@ namespace ICSharpCode.AvalonEdit.Highlighting
 		List<int> stateChangeOffsets = new List<int>();
 		List<HighlightingColor> stateChanges = new List<HighlightingColor>();
 
-		public int GetIndexForOffset(int offset)
+		int GetIndexForOffset(int offset)
 		{
 			if (offset < 0 || offset > text.Length)
 				throw new ArgumentOutOfRangeException("offset");

@@ -35,7 +35,6 @@ using ICSharpCode.AvalonEdit.Editing;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Rendering;
 using ICSharpCode.AvalonEdit.Utils;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace ICSharpCode.AvalonEdit
 {
@@ -55,7 +54,6 @@ namespace ICSharpCode.AvalonEdit
 											   new FrameworkPropertyMetadata(Boxes.True));
 		}
 
-		
 		/// <summary>
 		/// Creates a new TextEditor instance.
 		/// </summary>
@@ -101,7 +99,7 @@ namespace ICSharpCode.AvalonEdit
 		/// <summary>
 		/// Document property.
 		/// </summary>
-		public static DependencyProperty DocumentProperty
+		public static readonly DependencyProperty DocumentProperty
 			= TextView.DocumentProperty.AddOwner(
 				typeof(TextEditor), new FrameworkPropertyMetadata(OnDocumentChanged));
 
@@ -154,7 +152,7 @@ namespace ICSharpCode.AvalonEdit
 		/// <summary>
 		/// Options property.
 		/// </summary>
-		public static DependencyProperty OptionsProperty
+		public static readonly DependencyProperty OptionsProperty
 			= TextView.OptionsProperty.AddOwner(typeof(TextEditor), new FrameworkPropertyMetadata(OnOptionsChanged));
 
 		/// <summary>
@@ -307,7 +305,7 @@ namespace ICSharpCode.AvalonEdit
 		/// <summary>
 		/// The <see cref="SyntaxHighlighting"/> property.
 		/// </summary>
-		public static DependencyProperty SyntaxHighlightingProperty =
+		public static readonly DependencyProperty SyntaxHighlightingProperty =
 			DependencyProperty.Register("SyntaxHighlighting", typeof(IHighlightingDefinition), typeof(TextEditor),
 										new FrameworkPropertyMetadata(OnSyntaxHighlightingChanged));
 
@@ -357,7 +355,7 @@ namespace ICSharpCode.AvalonEdit
 		/// <summary>
 		/// Word wrap dependency property.
 		/// </summary>
-		public static DependencyProperty WordWrapProperty =
+		public static readonly DependencyProperty WordWrapProperty =
 			DependencyProperty.Register("WordWrap", typeof(bool), typeof(TextEditor),
 										new FrameworkPropertyMetadata(Boxes.False));
 
@@ -378,7 +376,7 @@ namespace ICSharpCode.AvalonEdit
 		/// <summary>
 		/// IsReadOnly dependency property.
 		/// </summary>
-		public static DependencyProperty IsReadOnlyProperty =
+		public static readonly DependencyProperty IsReadOnlyProperty =
 			DependencyProperty.Register("IsReadOnly", typeof(bool), typeof(TextEditor),
 										new FrameworkPropertyMetadata(Boxes.False, OnIsReadOnlyChanged));
 
@@ -413,7 +411,7 @@ namespace ICSharpCode.AvalonEdit
 		/// <summary>
 		/// Dependency property for <see cref="IsModified"/>
 		/// </summary>
-		public static DependencyProperty IsModifiedProperty =
+		public static readonly DependencyProperty IsModifiedProperty =
 			DependencyProperty.Register("IsModified", typeof(bool), typeof(TextEditor),
 										new FrameworkPropertyMetadata(Boxes.False, OnIsModifiedChanged));
 
@@ -460,7 +458,7 @@ namespace ICSharpCode.AvalonEdit
 		/// <summary>
 		/// ShowLineNumbers dependency property.
 		/// </summary>
-		public static DependencyProperty ShowLineNumbersProperty =
+		public static readonly DependencyProperty ShowLineNumbersProperty =
 			DependencyProperty.Register("ShowLineNumbers", typeof(bool), typeof(TextEditor),
 										new FrameworkPropertyMetadata(Boxes.False, OnShowLineNumbersChanged));
 
@@ -502,7 +500,7 @@ namespace ICSharpCode.AvalonEdit
 		/// <summary>
 		/// LineNumbersForeground dependency property.
 		/// </summary>
-		public static DependencyProperty LineNumbersForegroundProperty =
+		public static readonly DependencyProperty LineNumbersForegroundProperty =
 			DependencyProperty.Register("LineNumbersForeground", typeof(Brush), typeof(TextEditor),
 										new FrameworkPropertyMetadata(Brushes.Gray, OnLineNumbersForegroundChanged));
 
@@ -534,19 +532,18 @@ namespace ICSharpCode.AvalonEdit
 			var document = GetDocument();
 			document.Insert(document.TextLength, textData);
 		}
-
-        public void AppendColorLine(string textData, Brush LineColor, DependencyObject d = default)
+        public void AppendColorLine( string textData, Brush LineColor, DependencyObject d = default )
         {
-			d = this;
-			TextEditor editor = (TextEditor)d;
+            d = this;
+            TextEditor    editor       = (TextEditor)d;
             LineColorizer setlinecolor = new LineColorizer( editor.LineCount );
             setlinecolor.LineColor = LineColor;
             editor.TextArea.TextView.LineTransformers.Add( setlinecolor );
             editor.AppendText( textData );
         }
-		/// <summary>
-		/// Begins a group of document changes.
-		/// </summary>
+/// <summary>
+        /// Begins a group of document changes.
+        /// </summary>
         public void BeginChange()
 		{
 			GetDocument().BeginUpdate();
@@ -956,7 +953,7 @@ namespace ICSharpCode.AvalonEdit
 		/// <summary>
 		/// Encoding dependency property.
 		/// </summary>
-		public static DependencyProperty EncodingProperty =
+		public static readonly DependencyProperty EncodingProperty =
 			DependencyProperty.Register("Encoding", typeof(Encoding), typeof(TextEditor));
 
 		/// <summary>
@@ -1009,26 +1006,26 @@ namespace ICSharpCode.AvalonEdit
 		/// <summary>
 		/// The PreviewMouseHover event.
 		/// </summary>
-		public static RoutedEvent PreviewMouseHoverEvent =
+		public static readonly RoutedEvent PreviewMouseHoverEvent =
 			TextView.PreviewMouseHoverEvent.AddOwner(typeof(TextEditor));
 
 		/// <summary>
 		/// The MouseHover event.
 		/// </summary>
-		public static RoutedEvent MouseHoverEvent =
+		public static readonly RoutedEvent MouseHoverEvent =
 			TextView.MouseHoverEvent.AddOwner(typeof(TextEditor));
 
 
 		/// <summary>
 		/// The PreviewMouseHoverStopped event.
 		/// </summary>
-		public static RoutedEvent PreviewMouseHoverStoppedEvent =
+		public static readonly RoutedEvent PreviewMouseHoverStoppedEvent =
 			TextView.PreviewMouseHoverStoppedEvent.AddOwner(typeof(TextEditor));
 
 		/// <summary>
 		/// The MouseHoverStopped event.
 		/// </summary>
-		public static RoutedEvent MouseHoverStoppedEvent =
+		public static readonly RoutedEvent MouseHoverStoppedEvent =
 			TextView.MouseHoverStoppedEvent.AddOwner(typeof(TextEditor));
 
 
@@ -1069,7 +1066,7 @@ namespace ICSharpCode.AvalonEdit
 		/// <summary>
 		/// Dependency property for <see cref="HorizontalScrollBarVisibility"/>
 		/// </summary>
-		public static DependencyProperty HorizontalScrollBarVisibilityProperty = ScrollViewer.HorizontalScrollBarVisibilityProperty.AddOwner(typeof(TextEditor), new FrameworkPropertyMetadata(ScrollBarVisibility.Visible));
+		public static readonly DependencyProperty HorizontalScrollBarVisibilityProperty = ScrollViewer.HorizontalScrollBarVisibilityProperty.AddOwner(typeof(TextEditor), new FrameworkPropertyMetadata(ScrollBarVisibility.Visible));
 
 		/// <summary>
 		/// Gets/Sets the horizontal scroll bar visibility.
@@ -1082,7 +1079,7 @@ namespace ICSharpCode.AvalonEdit
 		/// <summary>
 		/// Dependency property for <see cref="VerticalScrollBarVisibility"/>
 		/// </summary>
-		public static DependencyProperty VerticalScrollBarVisibilityProperty = ScrollViewer.VerticalScrollBarVisibilityProperty.AddOwner(typeof(TextEditor), new FrameworkPropertyMetadata(ScrollBarVisibility.Visible));
+		public static readonly DependencyProperty VerticalScrollBarVisibilityProperty = ScrollViewer.VerticalScrollBarVisibilityProperty.AddOwner(typeof(TextEditor), new FrameworkPropertyMetadata(ScrollBarVisibility.Visible));
 
 		/// <summary>
 		/// Gets/Sets the vertical scroll bar visibility.

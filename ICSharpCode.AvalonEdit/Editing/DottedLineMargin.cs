@@ -28,7 +28,7 @@ namespace ICSharpCode.AvalonEdit.Editing
 	/// </summary>
 	public static class DottedLineMargin
 	{
-		static object tag = new object();
+		static readonly object tag = new object();
 
 		/// <summary>
 		/// Creates a vertical dotted line to separate the line numbers from the text view.

@@ -30,7 +30,7 @@ namespace ICSharpCode.AvalonEdit.Editing
 	/// </summary>
 	sealed class NoReadOnlySections : IReadOnlySectionProvider
 	{
-		public static NoReadOnlySections Instance = new NoReadOnlySections();
+		public static readonly NoReadOnlySections Instance = new NoReadOnlySections();
 
 		public bool CanInsert(int offset)
 		{
@@ -51,7 +51,7 @@ namespace ICSharpCode.AvalonEdit.Editing
 	/// </summary>
 	sealed class ReadOnlySectionDocument : IReadOnlySectionProvider
 	{
-		public static ReadOnlySectionDocument Instance = new ReadOnlySectionDocument();
+		public static readonly ReadOnlySectionDocument Instance = new ReadOnlySectionDocument();
 
 		public bool CanInsert(int offset)
 		{

@@ -8,7 +8,7 @@
 	<Color name="Preprocessor" foreground="Green" exampleText="#region Title" />
 	<Color name="Punctuation" exampleText="a(b.c);" />
 	<Color name="ValueTypeKeywords" fontWeight="bold" foreground="Red" exampleText="bool b = true;" />
-	<Color name="ReferenceTypeKeywords" foreground="Red" exampleText="object o;" />
+	<Color name="ReferenceTypeKeywords" foreground="#FF0000" exampleText="object o;" />
 	<Color name="MethodCall" foreground="MidnightBlue" fontWeight="bold" exampleText="o.ToString();"/>
 	<Color name="NumberLiteral" foreground="DarkBlue" exampleText="3.1415f"/>
 	<Color name="ThisOrBaseReference" fontWeight="bold" exampleText="this.Do(); base.Do();"/>
@@ -21,13 +21,15 @@
 	<Color name="UnsafeKeywords" foreground="Olive" exampleText="unsafe { fixed (..) {} }"/>
 	<Color name="OperatorKeywords" fontWeight="bold" foreground="Pink" exampleText="public static implicit operator..."/>
 	<Color name="ParameterModifiers" fontWeight="bold" foreground="DeepPink" exampleText="(ref int a, params int[] b)"/>
-	<Color name="Modifiers" foreground="Brown" exampleText="static int a;"/>
+	<Color name="Modifiers" foreground="Brown" exampleText="static readonly int a;"/>
 	<Color name="Visibility" fontWeight="bold" foreground="Blue" exampleText="public override void ToString();"/>
 	<Color name="NamespaceKeywords" fontWeight="bold" foreground="Green" exampleText="namespace A.B { using System; }"/>
 	<Color name="GetSetAddRemove" foreground="SaddleBrown" exampleText="int Prop { get; set; }"/>
 	<Color name="TrueFalse" fontWeight="bold" foreground="DarkCyan" exampleText="b = false; a = true;" />
 	<Color name="TypeKeywords" fontWeight="bold" foreground="DarkCyan" exampleText="if (x is int) { a = x as int; type = typeof(int); size = sizeof(int); c = new object(); }"/>
 	<Color name="SemanticKeywords" fontWeight="bold" foreground="DarkCyan" exampleText="if (args == null) throw new ArgumentNullException(nameof(args));" />
+		<Color name="MyColors" foreground="green" />
+				<Color name="MyColors2" foreground="blue" fontWeight="bold"/>
 
 	<Property name="DocCommentMarker" value="///" />
 	
@@ -125,7 +127,21 @@
 		<Rule>
 			@[\w\d_]+
 		</Rule>
+
+
+		<Keywords color="MyColors">
+			<Word>OK</Word>
+
+
+		</Keywords>
 		
+		
+				<Keywords color="MyColors2">
+
+        			<Word>заебись</Word>
+        
+        		</Keywords>
+				
 		<Keywords color="ThisOrBaseReference">
 			<Word>this</Word>
 			<Word>base</Word>
@@ -138,6 +154,7 @@
 			<Word>sizeof</Word>
 			<Word>typeof</Word>
 			<Word>stackalloc</Word>
+						
 		</Keywords>
 		
 		<Keywords color="TrueFalse">
@@ -230,9 +247,8 @@
 			<Word>object</Word>
 			<Word>string</Word>
 			<Word>void</Word>
+			<Word>cololo</Word>
 			<Word>хуй</Word>
-			<Word>пизда</Word>
-			<Word>OK</Word>
 		</Keywords>
 		
 		<Keywords color="OperatorKeywords">
@@ -259,6 +275,7 @@
 			<Word>virtual</Word>
 			<Word>volatile</Word>
 			<Word>async</Word>
+			<Word>заебись</Word>
 		</Keywords>
 		
 		<Keywords color="Visibility">

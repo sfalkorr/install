@@ -88,7 +88,7 @@ namespace ICSharpCode.AvalonEdit.Document
 		/// </summary>
 		[SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes",
 						 Justification = "The Empty instance is immutable")]
-		public static OffsetChangeMap Empty = new OffsetChangeMap(Empty<OffsetChangeMapEntry>.Array, true);
+		public static readonly OffsetChangeMap Empty = new OffsetChangeMap(Empty<OffsetChangeMapEntry>.Array, true);
 
 		/// <summary>
 		/// Creates a new OffsetChangeMap with a single element.

@@ -34,7 +34,7 @@ namespace ICSharpCode.AvalonEdit.Highlighting
 	[Serializable]
 	public class HighlightingColor : ISerializable, IFreezable, ICloneable, IEquatable<HighlightingColor>
 	{
-		internal static HighlightingColor Empty = FreezableHelper.FreezeAndReturn(new HighlightingColor());
+		internal static readonly HighlightingColor Empty = FreezableHelper.FreezeAndReturn(new HighlightingColor());
 
 		string name;
 		FontFamily fontFamily = null;

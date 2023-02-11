@@ -30,7 +30,7 @@ namespace ICSharpCode.AvalonEdit.Document
 	/// </summary>
 	struct SimpleSegment : IEquatable<SimpleSegment>, ISegment
 	{
-		public static SimpleSegment Invalid = new SimpleSegment(-1, -1);
+		public static readonly SimpleSegment Invalid = new SimpleSegment(-1, -1);
 
 		/// <summary>
 		/// Gets the overlapping portion of the segments.

@@ -25,8 +25,8 @@ public static class Variables
     {
         var value = Reg.Read(path, key);
         if (value != null) return value;
-        //CustomMessageBox.ShowOK($"Не найдено значение {key} в {path}\nПродолжение работы невозможно", "Ошибка инициализации", "Выход", MessageBoxImage.Error);
-        //Process.GetCurrentProcess().Kill();
+        CustomMessageBox.ShowOK($"Не найдено значение {key} в {path}\nПродолжение работы невозможно", "Ошибка инициализации", "Выход", MessageBoxImage.Error);
+        Process.GetCurrentProcess().Kill();
 
         return "";
     }
@@ -34,8 +34,8 @@ public static class Variables
     public static string GetVarPath(string path)
     {
         if (TestPath(path)) return path;
-        //CustomMessageBox.ShowOK($"Не найден путь {path}\nПродолжение работы невозможно", "Ошибка инициализации", "Выход", MessageBoxImage.Error);
-        //Process.GetCurrentProcess().Kill();
+        CustomMessageBox.ShowOK($"Не найден путь {path}\nПродолжение работы невозможно", "Ошибка инициализации", "Выход", MessageBoxImage.Error);
+        Process.GetCurrentProcess().Kill();
 
         return null;
     }

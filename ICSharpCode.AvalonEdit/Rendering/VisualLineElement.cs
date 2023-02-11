@@ -76,13 +76,12 @@ namespace ICSharpCode.AvalonEdit.Rendering
 		/// <see cref="VisualLineElementTextRunProperties"/> will affect only this
 		/// <see cref="VisualLineElement"/>.
 		/// </summary>
-		public VisualLineElementTextRunProperties TextRunProperties { get;  set; }
+		public VisualLineElementTextRunProperties TextRunProperties { get; private set; }
 
 		/// <summary>
 		/// Gets/sets the brush used for the background of this <see cref="VisualLineElement" />.
 		/// </summary>
 		public Brush BackgroundBrush { get; set; }
-		public Brush ForegroundBrush { get; set; }
 
 		internal void SetTextRunProperties(VisualLineElementTextRunProperties p)
 		{
@@ -169,9 +168,7 @@ namespace ICSharpCode.AvalonEdit.Rendering
 				secondPart.TextRunProperties = TextRunProperties.Clone();
 			firstPart.BackgroundBrush = BackgroundBrush;
 			secondPart.BackgroundBrush = BackgroundBrush;
-            firstPart.ForegroundBrush = ForegroundBrush;
-            secondPart.ForegroundBrush = ForegroundBrush;
-        }
+		}
 
 		/// <summary>
 		/// Gets the visual column of a text location inside this element.

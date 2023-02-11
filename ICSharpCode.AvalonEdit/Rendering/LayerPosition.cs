@@ -72,7 +72,7 @@ namespace ICSharpCode.AvalonEdit.Rendering
 
 	sealed class LayerPosition : IComparable<LayerPosition>
 	{
-		internal static DependencyProperty LayerPositionProperty =
+		internal static readonly DependencyProperty LayerPositionProperty =
 			DependencyProperty.RegisterAttached("LayerPosition", typeof(LayerPosition), typeof(LayerPosition));
 
 		public static void SetLayerPosition(UIElement layer, LayerPosition value)
