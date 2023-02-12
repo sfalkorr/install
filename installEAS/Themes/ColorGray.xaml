@@ -9,16 +9,16 @@
     <SolidColorBrush x:Key="Button.Close.Mouseover.Color" Color="#FF902020" />
     <SolidColorBrush x:Key="Button.Close.Pressed.Color" Color="#FF801010" />
     <LinearGradientBrush x:Key="MessageBox.Button.Default" StartPoint="0.5,0" EndPoint="0.5,1">
-        <GradientStop Color="#FF444a51" />
-        <GradientStop Offset="0.5" Color="#FF545a61" />
+        <GradientStop Color="#FF545a61" />
+        <GradientStop Offset="1" Color="#FF545a61" />
     </LinearGradientBrush>
     <LinearGradientBrush x:Key="MessageBox.Button.Over" StartPoint="0.5,0" EndPoint="0.5,1">
         <GradientStop Color="#FF545a61" />
-        <GradientStop Offset="0.5" Color="#FF646a71" />
+        <GradientStop Offset="0.5" Color="#FF60666D" />
     </LinearGradientBrush>
     <LinearGradientBrush x:Key="MessageBox.Button.Pressed" StartPoint="0.5,0" EndPoint="0.5,1">
-        <GradientStop Color="#7F545a61" />
-        <GradientStop Offset="0.5" Color="#7F646a71" />
+        <GradientStop Color="#CF545a61" />
+        <GradientStop Offset="0.5" Color="#CF60666D" />
     </LinearGradientBrush>
     <LinearGradientBrush x:Key="MessageBox.Background" StartPoint="0.5,0" EndPoint="0.5,1">
         <GradientStop Color="#FF202020" />
@@ -31,9 +31,9 @@
     <SolidColorBrush x:Key="ControlButton.MouseOver.Color" Color="#FF50565D" />
     <SolidColorBrush x:Key="ControlButton.IsPressed.Color" Color="#7050565D" />
     <LinearGradientBrush x:Key="ProgressBar.Color" Opacity="0.8" StartPoint="0.5,0" EndPoint="0.5,1">
-        <GradientStop Offset="0" Color="#FF545a61" />
-        <GradientStop Offset="0.5" Color="#FF646a71" />
-        <GradientStop Offset="0" Color="#FF545a61" />
+        <GradientStop Offset="0" Color="#FA616D7B" />
+        <GradientStop Offset="0.5" Color="#FA656F7F" />
+        <GradientStop Offset="0" Color="#FA616D7B" />
     </LinearGradientBrush>
     <LinearGradientBrush x:Key="Textbox.Color" Opacity="0.5" StartPoint="0.5,0" EndPoint="0.5,1">
         <GradientStop Offset="1" Color="#FF747a81" />

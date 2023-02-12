@@ -18,35 +18,31 @@
 
 using System;
 using System.Collections.Generic;
-
 using ICSharpCode.AvalonEdit.Utils;
 
-namespace ICSharpCode.AvalonEdit.Highlighting.Xshd
+namespace ICSharpCode.AvalonEdit.Highlighting.Xshd;
+
+/// <summary>
+///     A list of keywords.
+/// </summary>
+[Serializable]
+public class XshdKeywords : XshdElement
 {
-	/// <summary>
-	/// A list of keywords.
-	/// </summary>
-	[Serializable]
-	public class XshdKeywords : XshdElement
-	{
-		/// <summary>
-		/// The color.
-		/// </summary>
-		public XshdReference<XshdColor> ColorReference { get; set; }
+    /// <summary>
+    ///     The color.
+    /// </summary>
+    public XshdReference<XshdColor> ColorReference { get; set; }
 
-		readonly NullSafeCollection<string> words = new NullSafeCollection<string>();
+    private readonly NullSafeCollection<string> words = new();
 
-		/// <summary>
-		/// Gets the list of key words.
-		/// </summary>
-		public IList<string> Words {
-			get { return words; }
-		}
+    /// <summary>
+    ///     Gets the list of key words.
+    /// </summary>
+    public IList<string> Words => words;
 
-		/// <inheritdoc/>
-		public override object AcceptVisitor(IXshdVisitor visitor)
-		{
-			return visitor.VisitKeywords(this);
-		}
-	}
+    /// <inheritdoc />
+    public override object AcceptVisitor(IXshdVisitor visitor)
+    {
+        return visitor.VisitKeywords(this);
+    }
 }

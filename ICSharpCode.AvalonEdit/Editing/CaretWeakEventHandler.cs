@@ -16,32 +16,32 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
+using System.Diagnostics.CodeAnalysis;
 using ICSharpCode.AvalonEdit.Utils;
 
-namespace ICSharpCode.AvalonEdit.Editing
-{
-	/// <summary>
-	/// Contains classes for handling weak events on the Caret class.
-	/// </summary>
-	public static class CaretWeakEventManager
-	{
-		/// <summary>
-		/// Handles the Caret.PositionChanged event.
-		/// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible")]
-		public sealed class PositionChanged : WeakEventManagerBase<PositionChanged, Caret>
-		{
-			/// <inheritdoc/>
-			protected override void StartListening(Caret source)
-			{
-				source.PositionChanged += DeliverEvent;
-			}
+namespace ICSharpCode.AvalonEdit.Editing;
 
-			/// <inheritdoc/>
-			protected override void StopListening(Caret source)
-			{
-				source.PositionChanged -= DeliverEvent;
-			}
-		}
-	}
+/// <summary>
+///     Contains classes for handling weak events on the Caret class.
+/// </summary>
+public static class CaretWeakEventManager
+{
+    /// <summary>
+    ///     Handles the Caret.PositionChanged event.
+    /// </summary>
+    [SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible")]
+    public sealed class PositionChanged : WeakEventManagerBase<PositionChanged, Caret>
+    {
+        /// <inheritdoc />
+        protected override void StartListening(Caret source)
+        {
+            source.PositionChanged += DeliverEvent;
+        }
+
+        /// <inheritdoc />
+        protected override void StopListening(Caret source)
+        {
+            source.PositionChanged -= DeliverEvent;
+        }
+    }
 }

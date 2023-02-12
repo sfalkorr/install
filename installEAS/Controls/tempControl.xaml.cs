@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using ICSharpCode.AvalonEdit.Rendering;
 using installEAS.Common;
 using installEAS.Helpers;
 using installEAS.MessageBoxCustom;
@@ -59,7 +60,7 @@ public partial class tempControl
         MainFrame.rtb.ScrollToEnd();
         MainFrame.rtb.AppendColorLine(" Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)\n\n", Brushes.Bisque);
         MainFrame.rtb.ScrollToEnd();
-        MainFrame.rtb.AppendColorLine(" Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)\n\n", Brushes.Crimson);
+        MainFrame.rtb.AppendColorLine(" Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)\n\n", Brushes.OrangeRed);
         MainFrame.rtb.ScrollToEnd();
         MainFrame.rtb.AppendColorLine(" Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)\n", Brushes.Chartreuse);
         MainFrame.rtb.ScrollToEnd();
@@ -79,21 +80,26 @@ public partial class tempControl
 
     private void Btn6_OnClick(object sender, RoutedEventArgs e)
     {
-        log("a");
 
-        mLogAsync("хуй");
-        log("b");
+        log("Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)");
+
+        log("Новая цветная строка\n", Brushes.Lime);
+
+        log("Этот ваш пароль полное говно");
+
+        log("Странный хуй летит по небу сам ты хуй пердячий");
+        
     }
 
 
     private void Btn7_OnClick(object sender, RoutedEventArgs e)
     {
-        log(Sql.IsServerConnected().ToString());
+
+
     }
 
     private void Btn8_OnClick(object sender, RoutedEventArgs e)
     {
-        log(Sql.IsPasswordOK("QWEasd123*").ToString());
-        log(Sql.IsPasswordOK("QWEasd123*1").ToString());
+
     }
 }

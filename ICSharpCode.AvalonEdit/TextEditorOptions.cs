@@ -18,479 +18,543 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
-namespace ICSharpCode.AvalonEdit
+namespace ICSharpCode.AvalonEdit;
+
+/// <summary>
+///     A container for the text editor options.
+/// </summary>
+[Serializable]
+public class TextEditorOptions : INotifyPropertyChanged
 {
-	/// <summary>
-	/// A container for the text editor options.
-	/// </summary>
-	[Serializable]
-	public class TextEditorOptions : INotifyPropertyChanged
-	{
-		#region ctor
-		/// <summary>
-		/// Initializes an empty instance of TextEditorOptions.
-		/// </summary>
-		public TextEditorOptions()
-		{
-		}
+    #region ctor
 
-		/// <summary>
-		/// Initializes a new instance of TextEditorOptions by copying all values
-		/// from <paramref name="options"/> to the new instance.
-		/// </summary>
-		public TextEditorOptions(TextEditorOptions options)
-		{
-			// get all the fields in the class
-			FieldInfo[] fields = typeof(TextEditorOptions).GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+    /// <summary>
+    ///     Initializes an empty instance of TextEditorOptions.
+    /// </summary>
+    public TextEditorOptions()
+    {
+    }
 
-			// copy each value over to 'this'
-			foreach (FieldInfo fi in fields) {
-				if (!fi.IsNotSerialized)
-					fi.SetValue(this, fi.GetValue(options));
-			}
-		}
-		#endregion
+    /// <summary>
+    ///     Initializes a new instance of TextEditorOptions by copying all values
+    ///     from <paramref name="options" /> to the new instance.
+    /// </summary>
+    public TextEditorOptions(TextEditorOptions options)
+    {
+        // get all the fields in the class
+        var fields = typeof(TextEditorOptions).GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
 
-		#region PropertyChanged handling
-		/// <inheritdoc/>
-		[field: NonSerialized]
-		public event PropertyChangedEventHandler PropertyChanged;
+        // copy each value over to 'this'
+        foreach (var fi in fields)
+            if (!fi.IsNotSerialized)
+                fi.SetValue(this, fi.GetValue(options));
+    }
 
-		/// <summary>
-		/// Raises the PropertyChanged event.
-		/// </summary>
-		/// <param name="propertyName">The name of the changed property.</param>
-		protected void OnPropertyChanged(string propertyName)
-		{
-			OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
-		}
+    #endregion
 
-		/// <summary>
-		/// Raises the PropertyChanged event.
-		/// </summary>
-		protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
-		{
-			if (PropertyChanged != null) {
-				PropertyChanged(this, e);
-			}
-		}
-		#endregion
+    #region PropertyChanged handling
 
-		#region ShowSpaces / ShowTabs / ShowEndOfLine / ShowBoxForControlCharacters
-		bool showSpaces;
+    /// <inheritdoc />
+    [field: NonSerialized]
+    public event PropertyChangedEventHandler PropertyChanged;
 
-		/// <summary>
-		/// Gets/Sets whether to show · for spaces.
-		/// </summary>
-		/// <remarks>The default value is <c>false</c>.</remarks>
-		[DefaultValue(false)]
-		public virtual bool ShowSpaces {
-			get { return showSpaces; }
-			set {
-				if (showSpaces != value) {
-					showSpaces = value;
-					OnPropertyChanged("ShowSpaces");
-				}
-			}
-		}
+    /// <summary>
+    ///     Raises the PropertyChanged event.
+    /// </summary>
+    /// <param name="propertyName">The name of the changed property.</param>
+    protected void OnPropertyChanged(string propertyName)
+    {
+        OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
+    }
 
-		bool showTabs;
+    /// <summary>
+    ///     Raises the PropertyChanged event.
+    /// </summary>
+    protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
+    {
+        if (PropertyChanged != null) PropertyChanged(this, e);
+    }
 
-		/// <summary>
-		/// Gets/Sets whether to show » for tabs.
-		/// </summary>
-		/// <remarks>The default value is <c>false</c>.</remarks>
-		[DefaultValue(false)]
-		public virtual bool ShowTabs {
-			get { return showTabs; }
-			set {
-				if (showTabs != value) {
-					showTabs = value;
-					OnPropertyChanged("ShowTabs");
-				}
-			}
-		}
+    #endregion
 
-		bool showEndOfLine;
+    #region ShowSpaces / ShowTabs / ShowEndOfLine / ShowBoxForControlCharacters
 
-		/// <summary>
-		/// Gets/Sets whether to show ¶ at the end of lines.
-		/// </summary>
-		/// <remarks>The default value is <c>false</c>.</remarks>
-		[DefaultValue(false)]
-		public virtual bool ShowEndOfLine {
-			get { return showEndOfLine; }
-			set {
-				if (showEndOfLine != value) {
-					showEndOfLine = value;
-					OnPropertyChanged("ShowEndOfLine");
-				}
-			}
-		}
+    private bool showSpaces;
 
-		bool showBoxForControlCharacters = true;
+    /// <summary>
+    ///     Gets/Sets whether to show · for spaces.
+    /// </summary>
+    /// <remarks>The default value is <c>false</c>.</remarks>
+    [DefaultValue(false)]
+    public virtual bool ShowSpaces
+    {
+        get => showSpaces;
+        set
+        {
+            if (showSpaces != value)
+            {
+                showSpaces = value;
+                OnPropertyChanged("ShowSpaces");
+            }
+        }
+    }
 
-		/// <summary>
-		/// Gets/Sets whether to show a box with the hex code for control characters.
-		/// </summary>
-		/// <remarks>The default value is <c>true</c>.</remarks>
-		[DefaultValue(true)]
-		public virtual bool ShowBoxForControlCharacters {
-			get { return showBoxForControlCharacters; }
-			set {
-				if (showBoxForControlCharacters != value) {
-					showBoxForControlCharacters = value;
-					OnPropertyChanged("ShowBoxForControlCharacters");
-				}
-			}
-		}
-		#endregion
+    private bool showTabs;
 
-		#region EnableHyperlinks
-		bool enableHyperlinks = true;
+    /// <summary>
+    ///     Gets/Sets whether to show » for tabs.
+    /// </summary>
+    /// <remarks>The default value is <c>false</c>.</remarks>
+    [DefaultValue(false)]
+    public virtual bool ShowTabs
+    {
+        get => showTabs;
+        set
+        {
+            if (showTabs != value)
+            {
+                showTabs = value;
+                OnPropertyChanged("ShowTabs");
+            }
+        }
+    }
 
-		/// <summary>
-		/// Gets/Sets whether to enable clickable hyperlinks in the editor.
-		/// </summary>
-		/// <remarks>The default value is <c>true</c>.</remarks>
-		[DefaultValue(true)]
-		public virtual bool EnableHyperlinks {
-			get { return enableHyperlinks; }
-			set {
-				if (enableHyperlinks != value) {
-					enableHyperlinks = value;
-					OnPropertyChanged("EnableHyperlinks");
-				}
-			}
-		}
+    private bool showEndOfLine;
 
-		bool enableEmailHyperlinks = true;
+    /// <summary>
+    ///     Gets/Sets whether to show ¶ at the end of lines.
+    /// </summary>
+    /// <remarks>The default value is <c>false</c>.</remarks>
+    [DefaultValue(false)]
+    public virtual bool ShowEndOfLine
+    {
+        get => showEndOfLine;
+        set
+        {
+            if (showEndOfLine != value)
+            {
+                showEndOfLine = value;
+                OnPropertyChanged("ShowEndOfLine");
+            }
+        }
+    }
 
-		/// <summary>
-		/// Gets/Sets whether to enable clickable hyperlinks for e-mail addresses in the editor.
-		/// </summary>
-		/// <remarks>The default value is <c>true</c>.</remarks>
-		[DefaultValue(true)]
-		public virtual bool EnableEmailHyperlinks {
-			get { return enableEmailHyperlinks; }
-			set {
-				if (enableEmailHyperlinks != value) {
-					enableEmailHyperlinks = value;
-					OnPropertyChanged("EnableEMailHyperlinks");
-				}
-			}
-		}
+    private bool showBoxForControlCharacters = true;
 
-		bool requireControlModifierForHyperlinkClick = true;
+    /// <summary>
+    ///     Gets/Sets whether to show a box with the hex code for control characters.
+    /// </summary>
+    /// <remarks>The default value is <c>true</c>.</remarks>
+    [DefaultValue(true)]
+    public virtual bool ShowBoxForControlCharacters
+    {
+        get => showBoxForControlCharacters;
+        set
+        {
+            if (showBoxForControlCharacters != value)
+            {
+                showBoxForControlCharacters = value;
+                OnPropertyChanged("ShowBoxForControlCharacters");
+            }
+        }
+    }
 
-		/// <summary>
-		/// Gets/Sets whether the user needs to press Control to click hyperlinks.
-		/// The default value is true.
-		/// </summary>
-		/// <remarks>The default value is <c>true</c>.</remarks>
-		[DefaultValue(true)]
-		public virtual bool RequireControlModifierForHyperlinkClick {
-			get { return requireControlModifierForHyperlinkClick; }
-			set {
-				if (requireControlModifierForHyperlinkClick != value) {
-					requireControlModifierForHyperlinkClick = value;
-					OnPropertyChanged("RequireControlModifierForHyperlinkClick");
-				}
-			}
-		}
-		#endregion
+    #endregion
 
-		#region TabSize / IndentationSize / ConvertTabsToSpaces / GetIndentationString
-		// I'm using '_' prefixes for the fields here to avoid confusion with the local variables
-		// in the methods below.
-		// The fields should be accessed only by their property - the fields might not be used
-		// if someone overrides the property.
+    #region EnableHyperlinks
 
-		int indentationSize = 4;
+    private bool enableHyperlinks = true;
 
-		/// <summary>
-		/// Gets/Sets the width of one indentation unit.
-		/// </summary>
-		/// <remarks>The default value is 4.</remarks>
-		[DefaultValue(4)]
-		public virtual int IndentationSize {
-			get { return indentationSize; }
-			set {
-				if (value < 1)
-					throw new ArgumentOutOfRangeException("value", value, "value must be positive");
-				// sanity check; a too large value might cause WPF to crash internally much later
-				// (it only crashed in the hundred thousands for me; but might crash earlier with larger fonts)
-				if (value > 1000)
-					throw new ArgumentOutOfRangeException("value", value, "indentation size is too large");
-				if (indentationSize != value) {
-					indentationSize = value;
-					OnPropertyChanged("IndentationSize");
-					OnPropertyChanged("IndentationString");
-				}
-			}
-		}
+    /// <summary>
+    ///     Gets/Sets whether to enable clickable hyperlinks in the editor.
+    /// </summary>
+    /// <remarks>The default value is <c>true</c>.</remarks>
+    [DefaultValue(true)]
+    public virtual bool EnableHyperlinks
+    {
+        get => enableHyperlinks;
+        set
+        {
+            if (enableHyperlinks != value)
+            {
+                enableHyperlinks = value;
+                OnPropertyChanged("EnableHyperlinks");
+            }
+        }
+    }
 
-		bool convertTabsToSpaces;
+    private bool enableEmailHyperlinks = true;
 
-		/// <summary>
-		/// Gets/Sets whether to use spaces for indentation instead of tabs.
-		/// </summary>
-		/// <remarks>The default value is <c>false</c>.</remarks>
-		[DefaultValue(false)]
-		public virtual bool ConvertTabsToSpaces {
-			get { return convertTabsToSpaces; }
-			set {
-				if (convertTabsToSpaces != value) {
-					convertTabsToSpaces = value;
-					OnPropertyChanged("ConvertTabsToSpaces");
-					OnPropertyChanged("IndentationString");
-				}
-			}
-		}
+    /// <summary>
+    ///     Gets/Sets whether to enable clickable hyperlinks for e-mail addresses in the editor.
+    /// </summary>
+    /// <remarks>The default value is <c>true</c>.</remarks>
+    [DefaultValue(true)]
+    public virtual bool EnableEmailHyperlinks
+    {
+        get => enableEmailHyperlinks;
+        set
+        {
+            if (enableEmailHyperlinks != value)
+            {
+                enableEmailHyperlinks = value;
+                OnPropertyChanged("EnableEMailHyperlinks");
+            }
+        }
+    }
 
-		/// <summary>
-		/// Gets the text used for indentation.
-		/// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods")]
-		[Browsable(false)]
-		public string IndentationString {
-			get { return GetIndentationString(1); }
-		}
+    private bool requireControlModifierForHyperlinkClick = true;
 
-		/// <summary>
-		/// Gets text required to indent from the specified <paramref name="column"/> to the next indentation level.
-		/// </summary>
-		public virtual string GetIndentationString(int column)
-		{
-			if (column < 1)
-				throw new ArgumentOutOfRangeException("column", column, "Value must be at least 1.");
-			int indentationSize = this.IndentationSize;
-			if (ConvertTabsToSpaces) {
-				return new string(' ', indentationSize - ((column - 1) % indentationSize));
-			} else {
-				return "\t";
-			}
-		}
-		#endregion
+    /// <summary>
+    ///     Gets/Sets whether the user needs to press Control to click hyperlinks.
+    ///     The default value is true.
+    /// </summary>
+    /// <remarks>The default value is <c>true</c>.</remarks>
+    [DefaultValue(true)]
+    public virtual bool RequireControlModifierForHyperlinkClick
+    {
+        get => requireControlModifierForHyperlinkClick;
+        set
+        {
+            if (requireControlModifierForHyperlinkClick != value)
+            {
+                requireControlModifierForHyperlinkClick = value;
+                OnPropertyChanged("RequireControlModifierForHyperlinkClick");
+            }
+        }
+    }
 
-		bool cutCopyWholeLine = true;
+    #endregion
 
-		/// <summary>
-		/// Gets/Sets whether copying without a selection copies the whole current line.
-		/// </summary>
-		[DefaultValue(true)]
-		public virtual bool CutCopyWholeLine {
-			get { return cutCopyWholeLine; }
-			set {
-				if (cutCopyWholeLine != value) {
-					cutCopyWholeLine = value;
-					OnPropertyChanged("CutCopyWholeLine");
-				}
-			}
-		}
+    #region TabSize / IndentationSize / ConvertTabsToSpaces / GetIndentationString
 
-		bool allowScrollBelowDocument;
+    // I'm using '_' prefixes for the fields here to avoid confusion with the local variables
+    // in the methods below.
+    // The fields should be accessed only by their property - the fields might not be used
+    // if someone overrides the property.
 
-		/// <summary>
-		/// Gets/Sets whether the user can scroll below the bottom of the document.
-		/// The default value is false; but it a good idea to set this property to true when using folding.
-		/// </summary>
-		[DefaultValue(false)]
-		public virtual bool AllowScrollBelowDocument {
-			get { return allowScrollBelowDocument; }
-			set {
-				if (allowScrollBelowDocument != value) {
-					allowScrollBelowDocument = value;
-					OnPropertyChanged("AllowScrollBelowDocument");
-				}
-			}
-		}
+    private int indentationSize = 4;
 
-		double wordWrapIndentation = 0;
+    /// <summary>
+    ///     Gets/Sets the width of one indentation unit.
+    /// </summary>
+    /// <remarks>The default value is 4.</remarks>
+    [DefaultValue(4)]
+    public virtual int IndentationSize
+    {
+        get => indentationSize;
+        set
+        {
+            if (value < 1) throw new ArgumentOutOfRangeException(nameof(value), value, "value must be positive");
+            // sanity check; a too large value might cause WPF to crash internally much later
+            // (it only crashed in the hundred thousands for me; but might crash earlier with larger fonts)
+            if (value > 1000) throw new ArgumentOutOfRangeException(nameof(value), value, "indentation size is too large");
+            if (indentationSize != value)
+            {
+                indentationSize = value;
+                OnPropertyChanged("IndentationSize");
+                OnPropertyChanged("IndentationString");
+            }
+        }
+    }
 
-		/// <summary>
-		/// Gets/Sets the indentation used for all lines except the first when word-wrapping.
-		/// The default value is 0.
-		/// </summary>
-		[DefaultValue(0.0)]
-		public virtual double WordWrapIndentation {
-			get { return wordWrapIndentation; }
-			set {
-				if (double.IsNaN(value) || double.IsInfinity(value))
-					throw new ArgumentOutOfRangeException("value", value, "value must not be NaN/infinity");
-				if (value != wordWrapIndentation) {
-					wordWrapIndentation = value;
-					OnPropertyChanged("WordWrapIndentation");
-				}
-			}
-		}
+    private bool convertTabsToSpaces;
 
-		bool inheritWordWrapIndentation = true;
+    /// <summary>
+    ///     Gets/Sets whether to use spaces for indentation instead of tabs.
+    /// </summary>
+    /// <remarks>The default value is <c>false</c>.</remarks>
+    [DefaultValue(false)]
+    public virtual bool ConvertTabsToSpaces
+    {
+        get => convertTabsToSpaces;
+        set
+        {
+            if (convertTabsToSpaces != value)
+            {
+                convertTabsToSpaces = value;
+                OnPropertyChanged("ConvertTabsToSpaces");
+                OnPropertyChanged("IndentationString");
+            }
+        }
+    }
 
-		/// <summary>
-		/// Gets/Sets whether the indentation is inherited from the first line when word-wrapping.
-		/// The default value is true.
-		/// </summary>
-		/// <remarks>When combined with <see cref="WordWrapIndentation"/>, the inherited indentation is added to the word wrap indentation.</remarks>
-		[DefaultValue(true)]
-		public virtual bool InheritWordWrapIndentation {
-			get { return inheritWordWrapIndentation; }
-			set {
-				if (value != inheritWordWrapIndentation) {
-					inheritWordWrapIndentation = value;
-					OnPropertyChanged("InheritWordWrapIndentation");
-				}
-			}
-		}
+    /// <summary>
+    ///     Gets the text used for indentation.
+    /// </summary>
+    [SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods")]
+    [Browsable(false)]
+    public string IndentationString => GetIndentationString(1);
 
-		bool enableRectangularSelection = true;
+    /// <summary>
+    ///     Gets text required to indent from the specified <paramref name="column" /> to the next indentation level.
+    /// </summary>
+    public virtual string GetIndentationString(int column)
+    {
+        if (column < 1) throw new ArgumentOutOfRangeException(nameof(column), column, "Value must be at least 1.");
+        var indentationSize = IndentationSize;
+        if (ConvertTabsToSpaces) return new string(' ', indentationSize - (column - 1) % indentationSize);
+        return "\t";
+    }
 
-		/// <summary>
-		/// Enables rectangular selection (press ALT and select a rectangle)
-		/// </summary>
-		[DefaultValue(true)]
-		public bool EnableRectangularSelection {
-			get { return enableRectangularSelection; }
-			set {
-				if (enableRectangularSelection != value) {
-					enableRectangularSelection = value;
-					OnPropertyChanged("EnableRectangularSelection");
-				}
-			}
-		}
+    #endregion
 
-		bool enableTextDragDrop = true;
+    private bool cutCopyWholeLine = true;
 
-		/// <summary>
-		/// Enable dragging text within the text area.
-		/// </summary>
-		[DefaultValue(true)]
-		public bool EnableTextDragDrop {
-			get { return enableTextDragDrop; }
-			set {
-				if (enableTextDragDrop != value) {
-					enableTextDragDrop = value;
-					OnPropertyChanged("EnableTextDragDrop");
-				}
-			}
-		}
+    /// <summary>
+    ///     Gets/Sets whether copying without a selection copies the whole current line.
+    /// </summary>
+    [DefaultValue(true)]
+    public virtual bool CutCopyWholeLine
+    {
+        get => cutCopyWholeLine;
+        set
+        {
+            if (cutCopyWholeLine != value)
+            {
+                cutCopyWholeLine = value;
+                OnPropertyChanged("CutCopyWholeLine");
+            }
+        }
+    }
 
-		bool enableVirtualSpace;
+    private bool allowScrollBelowDocument;
 
-		/// <summary>
-		/// Gets/Sets whether the user can set the caret behind the line ending
-		/// (into "virtual space").
-		/// Note that virtual space is always used (independent from this setting)
-		/// when doing rectangle selections.
-		/// </summary>
-		[DefaultValue(false)]
-		public virtual bool EnableVirtualSpace {
-			get { return enableVirtualSpace; }
-			set {
-				if (enableVirtualSpace != value) {
-					enableVirtualSpace = value;
-					OnPropertyChanged("EnableVirtualSpace");
-				}
-			}
-		}
+    /// <summary>
+    ///     Gets/Sets whether the user can scroll below the bottom of the document.
+    ///     The default value is false; but it a good idea to set this property to true when using folding.
+    /// </summary>
+    [DefaultValue(false)]
+    public virtual bool AllowScrollBelowDocument
+    {
+        get => allowScrollBelowDocument;
+        set
+        {
+            if (allowScrollBelowDocument != value)
+            {
+                allowScrollBelowDocument = value;
+                OnPropertyChanged("AllowScrollBelowDocument");
+            }
+        }
+    }
 
-		bool enableImeSupport = true;
+    private double wordWrapIndentation;
 
-		/// <summary>
-		/// Gets/Sets whether the support for Input Method Editors (IME)
-		/// for non-alphanumeric scripts (Chinese, Japanese, Korean, ...) is enabled.
-		/// </summary>
-		[DefaultValue(true)]
-		public virtual bool EnableImeSupport {
-			get { return enableImeSupport; }
-			set {
-				if (enableImeSupport != value) {
-					enableImeSupport = value;
-					OnPropertyChanged("EnableImeSupport");
-				}
-			}
-		}
+    /// <summary>
+    ///     Gets/Sets the indentation used for all lines except the first when word-wrapping.
+    ///     The default value is 0.
+    /// </summary>
+    [DefaultValue(0.0)]
+    public virtual double WordWrapIndentation
+    {
+        get => wordWrapIndentation;
+        set
+        {
+            if (double.IsNaN(value) || double.IsInfinity(value)) throw new ArgumentOutOfRangeException(nameof(value), value, "value must not be NaN/infinity");
+            if (value != wordWrapIndentation)
+            {
+                wordWrapIndentation = value;
+                OnPropertyChanged("WordWrapIndentation");
+            }
+        }
+    }
 
-		bool showColumnRuler = false;
+    private bool inheritWordWrapIndentation = true;
 
-		/// <summary>
-		/// Gets/Sets whether the column ruler should be shown.
-		/// </summary>
-		[DefaultValue(false)]
-		public virtual bool ShowColumnRuler {
-			get { return showColumnRuler; }
-			set {
-				if (showColumnRuler != value) {
-					showColumnRuler = value;
-					OnPropertyChanged("ShowColumnRuler");
-				}
-			}
-		}
+    /// <summary>
+    ///     Gets/Sets whether the indentation is inherited from the first line when word-wrapping.
+    ///     The default value is true.
+    /// </summary>
+    /// <remarks>When combined with <see cref="WordWrapIndentation" />, the inherited indentation is added to the word wrap indentation.</remarks>
+    [DefaultValue(true)]
+    public virtual bool InheritWordWrapIndentation
+    {
+        get => inheritWordWrapIndentation;
+        set
+        {
+            if (value != inheritWordWrapIndentation)
+            {
+                inheritWordWrapIndentation = value;
+                OnPropertyChanged("InheritWordWrapIndentation");
+            }
+        }
+    }
 
-		int columnRulerPosition = 80;
+    private bool enableRectangularSelection = true;
 
-		/// <summary>
-		/// Gets/Sets where the column ruler should be shown.
-		/// </summary>
-		[DefaultValue(80)]
-		public virtual int ColumnRulerPosition {
-			get { return columnRulerPosition; }
-			set {
-				if (columnRulerPosition != value) {
-					columnRulerPosition = value;
-					OnPropertyChanged("ColumnRulerPosition");
-				}
-			}
-		}
+    /// <summary>
+    ///     Enables rectangular selection (press ALT and select a rectangle)
+    /// </summary>
+    [DefaultValue(true)]
+    public bool EnableRectangularSelection
+    {
+        get => enableRectangularSelection;
+        set
+        {
+            if (enableRectangularSelection != value)
+            {
+                enableRectangularSelection = value;
+                OnPropertyChanged("EnableRectangularSelection");
+            }
+        }
+    }
 
-		bool highlightCurrentLine = false;
+    private bool enableTextDragDrop = true;
 
-		/// <summary>
-		/// Gets/Sets if current line should be shown.
-		/// </summary>
-		[DefaultValue(false)]
-		public virtual bool HighlightCurrentLine {
-			get { return highlightCurrentLine; }
-			set {
-				if (highlightCurrentLine != value) {
-					highlightCurrentLine = value;
-					OnPropertyChanged("HighlightCurrentLine");
-				}
-			}
-		}
+    /// <summary>
+    ///     Enable dragging text within the text area.
+    /// </summary>
+    [DefaultValue(true)]
+    public bool EnableTextDragDrop
+    {
+        get => enableTextDragDrop;
+        set
+        {
+            if (enableTextDragDrop != value)
+            {
+                enableTextDragDrop = value;
+                OnPropertyChanged("EnableTextDragDrop");
+            }
+        }
+    }
 
-		bool hideCursorWhileTyping = true;
+    private bool enableVirtualSpace;
 
-		/// <summary>
-		/// Gets/Sets if mouse cursor should be hidden while user is typing.
-		/// </summary>
-		[DefaultValue(true)]
-		public bool HideCursorWhileTyping {
-			get { return hideCursorWhileTyping; }
-			set {
-				if (hideCursorWhileTyping != value) {
-					hideCursorWhileTyping = value;
-					OnPropertyChanged("HideCursorWhileTyping");
-				}
-			}
-		}
+    /// <summary>
+    ///     Gets/Sets whether the user can set the caret behind the line ending
+    ///     (into "virtual space").
+    ///     Note that virtual space is always used (independent from this setting)
+    ///     when doing rectangle selections.
+    /// </summary>
+    [DefaultValue(false)]
+    public virtual bool EnableVirtualSpace
+    {
+        get => enableVirtualSpace;
+        set
+        {
+            if (enableVirtualSpace != value)
+            {
+                enableVirtualSpace = value;
+                OnPropertyChanged("EnableVirtualSpace");
+            }
+        }
+    }
 
-		bool allowToggleOverstrikeMode = false;
+    private bool enableImeSupport = true;
 
-		/// <summary>
-		/// Gets/Sets if the user is allowed to enable/disable overstrike mode.
-		/// </summary>
-		[DefaultValue(false)]
-		public bool AllowToggleOverstrikeMode {
-			get { return allowToggleOverstrikeMode; }
-			set {
-				if (allowToggleOverstrikeMode != value) {
-					allowToggleOverstrikeMode = value;
-					OnPropertyChanged("AllowToggleOverstrikeMode");
-				}
-			}
-		}
-	}
+    /// <summary>
+    ///     Gets/Sets whether the support for Input Method Editors (IME)
+    ///     for non-alphanumeric scripts (Chinese, Japanese, Korean, ...) is enabled.
+    /// </summary>
+    [DefaultValue(true)]
+    public virtual bool EnableImeSupport
+    {
+        get => enableImeSupport;
+        set
+        {
+            if (enableImeSupport != value)
+            {
+                enableImeSupport = value;
+                OnPropertyChanged("EnableImeSupport");
+            }
+        }
+    }
+
+    private bool showColumnRuler;
+
+    /// <summary>
+    ///     Gets/Sets whether the column ruler should be shown.
+    /// </summary>
+    [DefaultValue(false)]
+    public virtual bool ShowColumnRuler
+    {
+        get => showColumnRuler;
+        set
+        {
+            if (showColumnRuler != value)
+            {
+                showColumnRuler = value;
+                OnPropertyChanged("ShowColumnRuler");
+            }
+        }
+    }
+
+    private int columnRulerPosition = 80;
+
+    /// <summary>
+    ///     Gets/Sets where the column ruler should be shown.
+    /// </summary>
+    [DefaultValue(80)]
+    public virtual int ColumnRulerPosition
+    {
+        get => columnRulerPosition;
+        set
+        {
+            if (columnRulerPosition != value)
+            {
+                columnRulerPosition = value;
+                OnPropertyChanged("ColumnRulerPosition");
+            }
+        }
+    }
+
+    private bool highlightCurrentLine;
+
+    /// <summary>
+    ///     Gets/Sets if current line should be shown.
+    /// </summary>
+    [DefaultValue(false)]
+    public virtual bool HighlightCurrentLine
+    {
+        get => highlightCurrentLine;
+        set
+        {
+            if (highlightCurrentLine != value)
+            {
+                highlightCurrentLine = value;
+                OnPropertyChanged("HighlightCurrentLine");
+            }
+        }
+    }
+
+    private bool hideCursorWhileTyping = true;
+
+    /// <summary>
+    ///     Gets/Sets if mouse cursor should be hidden while user is typing.
+    /// </summary>
+    [DefaultValue(true)]
+    public bool HideCursorWhileTyping
+    {
+        get => hideCursorWhileTyping;
+        set
+        {
+            if (hideCursorWhileTyping != value)
+            {
+                hideCursorWhileTyping = value;
+                OnPropertyChanged("HideCursorWhileTyping");
+            }
+        }
+    }
+
+    private bool allowToggleOverstrikeMode;
+
+    /// <summary>
+    ///     Gets/Sets if the user is allowed to enable/disable overstrike mode.
+    /// </summary>
+    [DefaultValue(false)]
+    public bool AllowToggleOverstrikeMode
+    {
+        get => allowToggleOverstrikeMode;
+        set
+        {
+            if (allowToggleOverstrikeMode != value)
+            {
+                allowToggleOverstrikeMode = value;
+                OnPropertyChanged("AllowToggleOverstrikeMode");
+            }
+        }
+    }
 }

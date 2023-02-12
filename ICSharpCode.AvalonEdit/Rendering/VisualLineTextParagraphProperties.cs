@@ -19,27 +19,24 @@
 using System.Windows;
 using System.Windows.Media.TextFormatting;
 
-namespace ICSharpCode.AvalonEdit.Rendering
-{
-	sealed class VisualLineTextParagraphProperties : TextParagraphProperties
-	{
-		internal TextRunProperties defaultTextRunProperties;
-		internal TextWrapping textWrapping;
-		internal double tabSize;
-		internal double indent;
-		internal bool firstLineInParagraph;
-		internal FlowDirection flowDirection;
-		public override double DefaultIncrementalTab {
-			get { return tabSize; }
-		}
+namespace ICSharpCode.AvalonEdit.Rendering;
 
-		public override FlowDirection FlowDirection { get { return flowDirection; } }
-		public override TextAlignment TextAlignment { get { return TextAlignment.Left; } }
-		public override double LineHeight { get { return double.NaN; } }
-		public override bool FirstLineInParagraph { get { return firstLineInParagraph; } }
-		public override TextRunProperties DefaultTextRunProperties { get { return defaultTextRunProperties; } }
-		public override TextWrapping TextWrapping { get { return textWrapping; } }
-		public override TextMarkerProperties TextMarkerProperties { get { return null; } }
-		public override double Indent { get { return indent; } }
-	}
+internal sealed class VisualLineTextParagraphProperties : TextParagraphProperties
+{
+    internal        TextRunProperties defaultTextRunProperties;
+    internal        TextWrapping      textWrapping;
+    internal        double            tabSize;
+    internal        double            indent;
+    internal        bool              firstLineInParagraph;
+    internal        FlowDirection     flowDirection;
+    public override double            DefaultIncrementalTab => tabSize;
+
+    public override FlowDirection        FlowDirection            => flowDirection;
+    public override TextAlignment        TextAlignment            => TextAlignment.Left;
+    public override double               LineHeight               => double.NaN;
+    public override bool                 FirstLineInParagraph     => firstLineInParagraph;
+    public override TextRunProperties    DefaultTextRunProperties => defaultTextRunProperties;
+    public override TextWrapping         TextWrapping             => textWrapping;
+    public override TextMarkerProperties TextMarkerProperties     => null;
+    public override double               Indent                   => indent;
 }

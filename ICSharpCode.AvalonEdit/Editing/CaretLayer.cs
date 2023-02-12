@@ -21,94 +21,90 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Threading;
-
 using ICSharpCode.AvalonEdit.Rendering;
 using ICSharpCode.AvalonEdit.Utils;
 
-namespace ICSharpCode.AvalonEdit.Editing
+namespace ICSharpCode.AvalonEdit.Editing;
+
+internal sealed class CaretLayer : Layer
 {
-	sealed class CaretLayer : Layer
-	{
-		TextArea textArea;
+    private TextArea textArea;
 
-		bool isVisible;
-		Rect caretRectangle;
+    private bool isVisible;
+    private Rect caretRectangle;
 
-		DispatcherTimer caretBlinkTimer = new DispatcherTimer();
-		bool blink;
+    private DispatcherTimer caretBlinkTimer = new();
+    private bool            blink;
 
-		public CaretLayer(TextArea textArea) : base(textArea.TextView, KnownLayer.Caret)
-		{
-			this.textArea = textArea;
-			this.IsHitTestVisible = false;
-			caretBlinkTimer.Tick += new EventHandler(caretBlinkTimer_Tick);
-		}
+    public CaretLayer(TextArea textArea) : base(textArea.TextView, KnownLayer.Caret)
+    {
+        this.textArea        =  textArea;
+        IsHitTestVisible     =  false;
+        caretBlinkTimer.Tick += caretBlinkTimer_Tick;
+    }
 
-		void caretBlinkTimer_Tick(object sender, EventArgs e)
-		{
-			blink = !blink;
-			InvalidateVisual();
-		}
+    private void caretBlinkTimer_Tick(object sender, EventArgs e)
+    {
+        blink = !blink;
+        InvalidateVisual();
+    }
 
-		public void Show(Rect caretRectangle)
-		{
-			this.caretRectangle = caretRectangle;
-			this.isVisible = true;
-			StartBlinkAnimation();
-			InvalidateVisual();
-		}
+    public void Show(Rect caretRectangle)
+    {
+        this.caretRectangle = caretRectangle;
+        isVisible           = true;
+        StartBlinkAnimation();
+        InvalidateVisual();
+    }
 
-		public void Hide()
-		{
-			if (isVisible) {
-				isVisible = false;
-				StopBlinkAnimation();
-				InvalidateVisual();
-			}
-		}
+    public void Hide()
+    {
+        if (isVisible)
+        {
+            isVisible = false;
+            StopBlinkAnimation();
+            InvalidateVisual();
+        }
+    }
 
-		void StartBlinkAnimation()
-		{
-			TimeSpan blinkTime = Win32.CaretBlinkTime;
-			blink = true; // the caret should visible initially
-						  // This is important if blinking is disabled (system reports a negative blinkTime)
-			if (blinkTime.TotalMilliseconds > 0) {
-				caretBlinkTimer.Interval = blinkTime;
-				caretBlinkTimer.Start();
-			}
-		}
+    private void StartBlinkAnimation()
+    {
+        var blinkTime = Win32.CaretBlinkTime;
+        blink = true; // the caret should visible initially
+        // This is important if blinking is disabled (system reports a negative blinkTime)
+        if (blinkTime.TotalMilliseconds > 0)
+        {
+            caretBlinkTimer.Interval = blinkTime;
+            caretBlinkTimer.Start();
+        }
+    }
 
-		void StopBlinkAnimation()
-		{
-			caretBlinkTimer.Stop();
-		}
+    private void StopBlinkAnimation()
+    {
+        caretBlinkTimer.Stop();
+    }
 
-		internal Brush CaretBrush;
+    internal Brush CaretBrush;
 
-		protected override void OnRender(DrawingContext drawingContext)
-		{
-			base.OnRender(drawingContext);
-			if (isVisible && blink) {
-				Brush caretBrush = this.CaretBrush;
-				if (caretBrush == null)
-					caretBrush = (Brush)textView.GetValue(TextBlock.ForegroundProperty);
+    protected override void OnRender(DrawingContext drawingContext)
+    {
+        base.OnRender(drawingContext);
+        if (isVisible && blink)
+        {
+            var caretBrush                     = CaretBrush;
+            if (caretBrush == null) caretBrush = (Brush)textView.GetValue(TextBlock.ForegroundProperty);
 
-				if (this.textArea.OverstrikeMode) {
-					SolidColorBrush scBrush = caretBrush as SolidColorBrush;
-					if (scBrush != null) {
-						Color brushColor = scBrush.Color;
-						Color newColor = Color.FromArgb(100, brushColor.R, brushColor.G, brushColor.B);
-						caretBrush = new SolidColorBrush(newColor);
-						caretBrush.Freeze();
-					}
-				}
+            if (textArea.OverstrikeMode)
+                if (caretBrush is SolidColorBrush scBrush)
+                {
+                    var brushColor = scBrush.Color;
+                    var newColor   = Color.FromArgb(100, brushColor.R, brushColor.G, brushColor.B);
+                    caretBrush = new SolidColorBrush(newColor);
+                    caretBrush.Freeze();
+                }
 
-				Rect r = new Rect(caretRectangle.X - textView.HorizontalOffset,
-								  caretRectangle.Y - textView.VerticalOffset,
-								  caretRectangle.Width,
-								  caretRectangle.Height);
-				drawingContext.DrawRectangle(caretBrush, null, PixelSnapHelpers.Round(r, PixelSnapHelpers.GetPixelSize(this)));
-			}
-		}
-	}
+            var r = new Rect(caretRectangle.X - textView.HorizontalOffset, caretRectangle.Y - textView.VerticalOffset, caretRectangle.Width, caretRectangle.Height);
+            drawingContext.DrawRectangle(caretBrush, null, PixelSnapHelpers.Round(r, PixelSnapHelpers.GetPixelSize(this)));
+        }
+    }
 }

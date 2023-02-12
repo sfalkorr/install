@@ -18,125 +18,108 @@
 
 using System;
 
-namespace ICSharpCode.AvalonEdit.Highlighting.Xshd
+namespace ICSharpCode.AvalonEdit.Highlighting.Xshd;
+
+/// <summary>
+///     A reference to an xshd color, or an inline xshd color.
+/// </summary>
+[Serializable]
+public struct XshdReference<T> : IEquatable<XshdReference<T>> where T : XshdElement
 {
-	/// <summary>
-	/// A reference to an xshd color, or an inline xshd color.
-	/// </summary>
-	[Serializable]
-	public struct XshdReference<T> : IEquatable<XshdReference<T>> where T : XshdElement
-	{
-		string referencedDefinition;
-		string referencedElement;
-		T inlineElement;
+    /// <summary>
+    ///     Gets the reference.
+    /// </summary>
+    public string ReferencedDefinition { get; }
 
-		/// <summary>
-		/// Gets the reference.
-		/// </summary>
-		public string ReferencedDefinition {
-			get { return referencedDefinition; }
-		}
+    /// <summary>
+    ///     Gets the reference.
+    /// </summary>
+    public string ReferencedElement { get; }
 
-		/// <summary>
-		/// Gets the reference.
-		/// </summary>
-		public string ReferencedElement {
-			get { return referencedElement; }
-		}
+    /// <summary>
+    ///     Gets the inline element.
+    /// </summary>
+    public T InlineElement { get; }
 
-		/// <summary>
-		/// Gets the inline element.
-		/// </summary>
-		public T InlineElement {
-			get { return inlineElement; }
-		}
+    /// <summary>
+    ///     Creates a new XshdReference instance.
+    /// </summary>
+    public XshdReference(string referencedDefinition, string referencedElement)
+    {
+        if (referencedElement == null) throw new ArgumentNullException(nameof(referencedElement));
+        ReferencedDefinition = referencedDefinition;
+        ReferencedElement    = referencedElement;
+        InlineElement        = null;
+    }
 
-		/// <summary>
-		/// Creates a new XshdReference instance.
-		/// </summary>
-		public XshdReference(string referencedDefinition, string referencedElement)
-		{
-			if (referencedElement == null)
-				throw new ArgumentNullException("referencedElement");
-			this.referencedDefinition = referencedDefinition;
-			this.referencedElement = referencedElement;
-			this.inlineElement = null;
-		}
+    /// <summary>
+    ///     Creates a new XshdReference instance.
+    /// </summary>
+    public XshdReference(T inlineElement)
+    {
+        if (inlineElement == null) throw new ArgumentNullException(nameof(inlineElement));
+        ReferencedDefinition = null;
+        ReferencedElement    = null;
+        InlineElement        = inlineElement;
+    }
 
-		/// <summary>
-		/// Creates a new XshdReference instance.
-		/// </summary>
-		public XshdReference(T inlineElement)
-		{
-			if (inlineElement == null)
-				throw new ArgumentNullException("inlineElement");
-			this.referencedDefinition = null;
-			this.referencedElement = null;
-			this.inlineElement = inlineElement;
-		}
+    /// <summary>
+    ///     Applies the visitor to the inline element, if there is any.
+    /// </summary>
+    public object AcceptVisitor(IXshdVisitor visitor)
+    {
+        if (InlineElement != null) return InlineElement.AcceptVisitor(visitor);
+        return null;
+    }
 
-		/// <summary>
-		/// Applies the visitor to the inline element, if there is any.
-		/// </summary>
-		public object AcceptVisitor(IXshdVisitor visitor)
-		{
-			if (inlineElement != null)
-				return inlineElement.AcceptVisitor(visitor);
-			else
-				return null;
-		}
+    #region Equals and GetHashCode implementation
 
-		#region Equals and GetHashCode implementation
-		// The code in this region is useful if you want to use this structure in collections.
-		// If you don't need it, you can just remove the region and the ": IEquatable<XshdColorReference>" declaration.
+    // The code in this region is useful if you want to use this structure in collections.
+    // If you don't need it, you can just remove the region and the ": IEquatable<XshdColorReference>" declaration.
 
-		/// <inheritdoc/>
-		public override bool Equals(object obj)
-		{
-			if (obj is XshdReference<T>)
-				return Equals((XshdReference<T>)obj); // use Equals method below
-			else
-				return false;
-		}
+    /// <inheritdoc />
+    public override bool Equals(object obj)
+    {
+        if (obj is XshdReference<T>) return Equals((XshdReference<T>)obj); // use Equals method below
+        return false;
+    }
 
-		/// <summary>
-		/// Equality operator.
-		/// </summary>
-		public bool Equals(XshdReference<T> other)
-		{
-			// add comparisions for all members here
-			return this.referencedDefinition == other.referencedDefinition
-				&& this.referencedElement == other.referencedElement
-				&& this.inlineElement == other.inlineElement;
-		}
+    /// <summary>
+    ///     Equality operator.
+    /// </summary>
+    public bool Equals(XshdReference<T> other)
+    {
+        // add comparisions for all members here
+        return ReferencedDefinition == other.ReferencedDefinition && ReferencedElement == other.ReferencedElement && InlineElement == other.InlineElement;
+    }
 
-		/// <inheritdoc/>
-		public override int GetHashCode()
-		{
-			// combine the hash codes of all members here (e.g. with XOR operator ^)
-			return GetHashCode(referencedDefinition) ^ GetHashCode(referencedElement) ^ GetHashCode(inlineElement);
-		}
+    /// <inheritdoc />
+    public override int GetHashCode()
+    {
+        // combine the hash codes of all members here (e.g. with XOR operator ^)
+        return GetHashCode(ReferencedDefinition) ^ GetHashCode(ReferencedElement) ^ GetHashCode(InlineElement);
+    }
 
-		static int GetHashCode(object o)
-		{
-			return o != null ? o.GetHashCode() : 0;
-		}
+    private static int GetHashCode(object o)
+    {
+        return o != null ? o.GetHashCode() : 0;
+    }
 
-		/// <summary>
-		/// Equality operator.
-		/// </summary>
-		public static bool operator ==(XshdReference<T> left, XshdReference<T> right)
-		{
-			return left.Equals(right);
-		}
+    /// <summary>
+    ///     Equality operator.
+    /// </summary>
+    public static bool operator ==(XshdReference<T> left, XshdReference<T> right)
+    {
+        return left.Equals(right);
+    }
 
-		/// <summary>
-		/// Inequality operator.
-		/// </summary>
-		public static bool operator !=(XshdReference<T> left, XshdReference<T> right)
-		{
-			return !left.Equals(right);
-		}
-		#endregion
-	}
+    /// <summary>
+    ///     Inequality operator.
+    /// </summary>
+    public static bool operator !=(XshdReference<T> left, XshdReference<T> right)
+    {
+        return !left.Equals(right);
+    }
+
+    #endregion
 }

@@ -17,29 +17,26 @@
 // DEALINGS IN THE SOFTWARE.
 
 using System;
-
 using ICSharpCode.AvalonEdit.Document;
 
-namespace ICSharpCode.AvalonEdit.Rendering
-{
-	/// <summary>
-	/// EventArgs for the <see cref="TextView.VisualLineConstructionStarting"/> event.
-	/// </summary>
-	public class VisualLineConstructionStartEventArgs : EventArgs
-	{
-		/// <summary>
-		/// Gets/Sets the first line that is visible in the TextView.
-		/// </summary>
-		public DocumentLine FirstLineInView { get; private set; }
+namespace ICSharpCode.AvalonEdit.Rendering;
 
-		/// <summary>
-		/// Creates a new VisualLineConstructionStartEventArgs instance.
-		/// </summary>
-		public VisualLineConstructionStartEventArgs(DocumentLine firstLineInView)
-		{
-			if (firstLineInView == null)
-				throw new ArgumentNullException("firstLineInView");
-			this.FirstLineInView = firstLineInView;
-		}
-	}
+/// <summary>
+///     EventArgs for the <see cref="TextView.VisualLineConstructionStarting" /> event.
+/// </summary>
+public class VisualLineConstructionStartEventArgs : EventArgs
+{
+    /// <summary>
+    ///     Gets/Sets the first line that is visible in the TextView.
+    /// </summary>
+    public DocumentLine FirstLineInView { get; }
+
+    /// <summary>
+    ///     Creates a new VisualLineConstructionStartEventArgs instance.
+    /// </summary>
+    public VisualLineConstructionStartEventArgs(DocumentLine firstLineInView)
+    {
+        if (firstLineInView == null) throw new ArgumentNullException(nameof(firstLineInView));
+        FirstLineInView = firstLineInView;
+    }
 }

@@ -16,16 +16,15 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-namespace ICSharpCode.AvalonEdit.Highlighting
+namespace ICSharpCode.AvalonEdit.Highlighting;
+
+/// <summary>
+///     Interface for resolvers that can solve cross-definition references.
+/// </summary>
+public interface IHighlightingDefinitionReferenceResolver
 {
-	/// <summary>
-	/// Interface for resolvers that can solve cross-definition references.
-	/// </summary>
-	public interface IHighlightingDefinitionReferenceResolver
-	{
-		/// <summary>
-		/// Gets the highlighting definition by name, or null if it is not found.
-		/// </summary>
-		IHighlightingDefinition GetDefinition(string name);
-	}
+    /// <summary>
+    ///     Gets the highlighting definition by name, or null if it is not found.
+    /// </summary>
+    IHighlightingDefinition GetDefinition(string name);
 }

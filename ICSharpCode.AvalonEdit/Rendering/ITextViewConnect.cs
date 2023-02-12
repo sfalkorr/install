@@ -16,22 +16,21 @@
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-namespace ICSharpCode.AvalonEdit.Rendering
-{
-	/// <summary>
-	/// Allows <see cref="VisualLineElementGenerator"/>s, <see cref="IVisualLineTransformer"/>s and
-	/// <see cref="IBackgroundRenderer"/>s to be notified when they are added or removed from a text view.
-	/// </summary>
-	public interface ITextViewConnect
-	{
-		/// <summary>
-		/// Called when added to a text view.
-		/// </summary>
-		void AddToTextView(TextView textView);
+namespace ICSharpCode.AvalonEdit.Rendering;
 
-		/// <summary>
-		/// Called when removed from a text view.
-		/// </summary>
-		void RemoveFromTextView(TextView textView);
-	}
+/// <summary>
+///     Allows <see cref="VisualLineElementGenerator" />s, <see cref="IVisualLineTransformer" />s and
+///     <see cref="IBackgroundRenderer" />s to be notified when they are added or removed from a text view.
+/// </summary>
+public interface ITextViewConnect
+{
+    /// <summary>
+    ///     Called when added to a text view.
+    /// </summary>
+    void AddToTextView(TextView textView);
+
+    /// <summary>
+    ///     Called when removed from a text view.
+    /// </summary>
+    void RemoveFromTextView(TextView textView);
 }
