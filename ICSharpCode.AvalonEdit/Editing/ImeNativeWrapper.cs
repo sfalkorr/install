@@ -77,7 +77,7 @@ internal static class ImeNativeWrapper
 
     private const int CPS_CANCEL        = 0x4;
     private const int NI_COMPOSITIONSTR = 0x15;
-    private const int GCS_COMPSTR       = 0x0008;
+
 
     public const int WM_IME_COMPOSITION = 0x10F;
     public const int WM_IME_SETCONTEXT  = 0x281;
@@ -108,10 +108,7 @@ internal static class ImeNativeWrapper
     [return: MarshalAs(UnmanagedType.Bool)]
     private static extern bool ImmSetCompositionFont(IntPtr hIMC, ref LOGFONT font);
 
-    [DllImport("imm32.dll")]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool ImmGetCompositionFont(IntPtr hIMC, out LOGFONT font);
-
+ 
     [DllImport("msctf.dll")]
     private static extern int TF_CreateThreadMgr(out ITfThreadMgr threadMgr);
 

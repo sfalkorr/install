@@ -100,7 +100,7 @@ public class TextSourceVersionProvider
             var result = CompareAge(other);
             var o      = (Version)other;
             if (result < 0) return GetForwardChanges(o);
-            if (result > 0) return o.GetForwardChanges(this).Reverse().Select(change => change.Invert());
+            if (result > 0) return o.GetForwardChanges(this).Reverse().Select(textChangeEventArgs => textChangeEventArgs.Invert());
             return Empty<TextChangeEventArgs>.Array;
         }
 

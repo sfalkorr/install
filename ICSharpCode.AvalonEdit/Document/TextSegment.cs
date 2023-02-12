@@ -21,14 +21,9 @@ using System.Diagnostics;
 
 namespace ICSharpCode.AvalonEdit.Document;
 
-/// <summary>
-///     A segment that can be put into a <see cref="TextSegmentCollection{T}" />.
-/// </summary>
+
 /// <remarks>
-///     <para>
-///         A <see cref="TextSegment" /> can be stand-alone or part of a <see cref="TextSegmentCollection{T}" />.
-///         If the segment is stored inside a TextSegmentCollection, its Offset and Length will be updated by that collection.
-///     </para>
+
 ///     <para>
 ///         When the document changes, the offsets of all text segments in the TextSegmentCollection will be adjusted accordingly.
 ///         Start offsets move like <see cref="AnchorMovementType">AnchorMovementType.AfterInsertion</see>,
@@ -49,7 +44,7 @@ namespace ICSharpCode.AvalonEdit.Document;
 /// </remarks>
 /// <seealso cref="ISegment" />
 /// <seealso cref="AnchorSegment" />
-/// <seealso cref="TextSegmentCollection{T}" />
+
 public class TextSegment : ISegment
 {
     internal TextSegment left, right, parent;

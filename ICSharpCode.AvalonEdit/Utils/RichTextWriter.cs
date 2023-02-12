@@ -40,27 +40,12 @@ internal abstract class RichTextWriter : TextWriter
     /// <summary>
     ///     Writes the RichText instance.
     /// </summary>
-    public void Write(RichText richText)
-    {
-        Write(richText, 0, richText.Length);
-    }
+
 
     /// <summary>
     ///     Writes the RichText instance.
     /// </summary>
-    public virtual void Write(RichText richText, int offset, int length)
-    {
-        // We have to use a TextWriter reference to invoke the virtual Write(string) method.
-        // If we just call Write(richText.Text.Substring(...)) below, then the C# compiler invokes
-        // the non-virtual Write(RichText) method due to RichText's implicit conversion from string.
-        // That leads to an immediate, unconditional StackOverflowException!
-        foreach (var section in richText.GetHighlightedSections(offset, length))
-        {
-            BeginSpan(section.Color);
-            ((TextWriter)this).Write(richText.Text.Substring(section.Offset, section.Length));
-            EndSpan();
-        }
-    }
+
 
     /// <summary>
     ///     Begin a colored span.

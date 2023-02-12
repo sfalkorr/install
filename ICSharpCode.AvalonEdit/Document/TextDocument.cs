@@ -253,13 +253,7 @@ public sealed class TextDocument : IDocument, INotifyPropertyChanged
         }
     }
 
-    /// <summary>
-    ///     Is raised when one of the properties <see cref="Text" />, <see cref="TextLength" />, <see cref="LineCount" />,
-    ///     <see cref="UndoStack" /> changes.
-    /// </summary>
-    /// <remarks>
-    ///     <inheritdoc cref="Changing" />
-    /// </remarks>
+
     public event PropertyChangedEventHandler PropertyChanged;
 
     /// <summary>
@@ -335,9 +329,7 @@ public sealed class TextDocument : IDocument, INotifyPropertyChanged
     ///         There can be multiple document changes between the <c>BeginUpdate()</c> and <c>EndUpdate()</c> calls.
     ///         In this case, the events associated with EndUpdate will be raised only once after the whole document update is done.
     ///     </para>
-    ///     <para>
-    ///         The <see cref="UndoStack" /> listens to the <c>UpdateStarted</c> and <c>UpdateFinished</c> events to group all changes into a single undo step.
-    ///     </para>
+
     /// </remarks>
     public event EventHandler<DocumentChangeEventArgs> Changing;
 
@@ -466,10 +458,7 @@ public sealed class TextDocument : IDocument, INotifyPropertyChanged
 
     /// <summary>
     ///     <para>Begins a group of document changes.</para>
-    ///     <para>
-    ///         Some events are suspended until EndUpdate is called, and the <see cref="UndoStack" /> will
-    ///         group all changes into a single action.
-    ///     </para>
+
     ///     <para>
     ///         Calling BeginUpdate several times increments a counter, only after the appropriate number
     ///         of EndUpdate calls the events resume their work.
@@ -484,10 +473,7 @@ public sealed class TextDocument : IDocument, INotifyPropertyChanged
         if (inDocumentChanging) throw new InvalidOperationException("Cannot change document within another document change.");
         beginUpdateCount++;
         if (beginUpdateCount == 1)
-        {
-
             if (UpdateStarted != null) UpdateStarted(this, EventArgs.Empty);
-        }
     }
 
     /// <summary>
@@ -1040,11 +1026,6 @@ public sealed class TextDocument : IDocument, INotifyPropertyChanged
     #region UndoStack
 
 
-
-    /// <summary>
-    ///     Gets the <see cref="UndoStack" /> of the document.
-    /// </summary>
-    /// <remarks>This property can also be used to set the undo stack, e.g. for sharing a common undo stack between multiple documents.</remarks>
 
 
     #endregion

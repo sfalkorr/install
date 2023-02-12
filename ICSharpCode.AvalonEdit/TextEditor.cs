@@ -43,7 +43,7 @@ namespace ICSharpCode.AvalonEdit;
 ///     Contains a scrollable TextArea.
 /// </summary>
 [Localizability(LocalizationCategory.Text)] [ContentProperty("Text")]
-public class TextEditor : Control, ITextEditorComponent, IServiceProvider, IWeakEventListener
+public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
 {
     #region Constructors
 
@@ -127,18 +127,10 @@ public class TextEditor : Control, ITextEditorComponent, IServiceProvider, IWeak
 
     private void OnDocumentChanged(TextDocument oldValue, TextDocument newValue)
     {
-        if (oldValue != null)
-        {
-            TextDocumentWeakEventManager.TextChanged.RemoveListener(oldValue, this);
-
-        }
+        if (oldValue != null) TextDocumentWeakEventManager.TextChanged.RemoveListener(oldValue, this);
 
         TextArea.Document = newValue;
-        if (newValue != null)
-        {
-            TextDocumentWeakEventManager.TextChanged.AddListener(newValue, this);
-
-        }
+        if (newValue != null) TextDocumentWeakEventManager.TextChanged.AddListener(newValue, this);
 
         OnDocumentChanged(EventArgs.Empty);
         OnTextChanged(EventArgs.Empty);
@@ -440,23 +432,18 @@ public class TextEditor : Control, ITextEditorComponent, IServiceProvider, IWeak
         var leftMargins = editor.TextArea.LeftMargins;
         if ((bool)e.NewValue)
         {
-            var lineNumbers = new LineNumberMargin();
+
             var line        = (Line)DottedLineMargin.Create();
-            leftMargins.Insert(0, lineNumbers);
+
             leftMargins.Insert(1, line);
             var lineNumbersForeground = new Binding("LineNumbersForeground") { Source = editor };
             line.SetBinding(Shape.StrokeProperty, lineNumbersForeground);
-            lineNumbers.SetBinding(ForegroundProperty, lineNumbersForeground);
+
         }
         else
         {
-            for (var i = 0; i < leftMargins.Count; i++)
-                if (leftMargins[i] is LineNumberMargin)
-                {
-                    leftMargins.RemoveAt(i);
-                    if (i < leftMargins.Count && DottedLineMargin.IsDottedLineMargin(leftMargins[i])) leftMargins.RemoveAt(i);
-                    break;
-                }
+
+
         }
     }
 
@@ -477,10 +464,10 @@ public class TextEditor : Control, ITextEditorComponent, IServiceProvider, IWeak
     private static void OnLineNumbersForegroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var editor           = (TextEditor)d;
-        var lineNumberMargin = editor.TextArea.LeftMargins.FirstOrDefault(margin => margin is LineNumberMargin) as LineNumberMargin;
+        
         ;
 
-        if (lineNumberMargin != null) lineNumberMargin.SetValue(ForegroundProperty, e.NewValue);
+        
     }
 
     #endregion

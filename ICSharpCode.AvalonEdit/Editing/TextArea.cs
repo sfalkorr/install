@@ -39,7 +39,7 @@ namespace ICSharpCode.AvalonEdit.Editing;
 /// <summary>
 ///     Control that wraps a TextView and adds support for user input and the caret.
 /// </summary>
-public class TextArea : Control, IScrollInfo, IWeakEventListener, ITextEditorComponent, IServiceProvider
+public class TextArea : Control, IScrollInfo, IWeakEventListener, ITextEditorComponent
 {
     internal readonly ImeSupport ime;
 
@@ -346,39 +346,6 @@ public class TextArea : Control, IScrollInfo, IWeakEventListener, ITextEditorCom
     private void OnUpdateFinished()
     {
         Caret.OnDocumentUpdateFinished();
-    }
-
-    private sealed class RestoreCaretAndSelectionUndoAction : IUndoableOperation
-    {
-        // keep textarea in weak reference because the IUndoableOperation is stored with the document
-        private WeakReference    textAreaReference;
-        private TextViewPosition caretPosition;
-        private Selection        selection;
-
-        public RestoreCaretAndSelectionUndoAction(TextArea textArea)
-        {
-            textAreaReference = new WeakReference(textArea);
-            // Just save the old caret position, no need to validate here.
-            // If we restore it, we'll validate it anyways.
-            caretPosition = textArea.Caret.NonValidatedPosition;
-            selection     = textArea.Selection;
-        }
-
-        public void Undo()
-        {
-            var textArea = (TextArea)textAreaReference.Target;
-            if (textArea != null)
-            {
-                textArea.Caret.Position = caretPosition;
-                textArea.Selection      = selection;
-            }
-        }
-
-        public void Redo()
-        {
-            // redo=undo: we just restore the caret/selection state
-            Undo();
-        }
     }
 
     #endregion
@@ -936,14 +903,7 @@ public class TextArea : Control, IScrollInfo, IWeakEventListener, ITextEditorCom
 
     #region IndentationStrategy property
 
-    /// <summary>
-    ///     IndentationStrategy property.
-    /// </summary>
 
-
-    /// <summary>
-    ///     Gets/Sets the indentation strategy used when inserting new lines.
-    /// </summary>
 
     #endregion
 

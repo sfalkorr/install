@@ -26,13 +26,12 @@ namespace ICSharpCode.AvalonEdit.Editing;
 
 internal class ImeSupport
 {
-    private readonly TextArea     textArea;
-    private          IntPtr       currentContext;
-    private          IntPtr       previousContext;
-    private          IntPtr       defaultImeWnd;
-    private          HwndSource   hwndSource;
-    private          EventHandler requerySuggestedHandler; // we need to keep the event handler instance alive because CommandManager.RequerySuggested uses weak references
-    private          bool         isReadOnly;
+    private readonly TextArea   textArea;
+    private          IntPtr     currentContext;
+    private          IntPtr     previousContext;
+    private          IntPtr     defaultImeWnd;
+    private          HwndSource hwndSource;
+    private          bool       isReadOnly;
 
     public ImeSupport(TextArea textArea)
     {
@@ -42,8 +41,7 @@ internal class ImeSupport
         // We listen to CommandManager.RequerySuggested for both caret offset changes and changes to the set of read-only sections.
         // This is because there's no dedicated event for read-only section changes; but RequerySuggested needs to be raised anyways
         // to invalidate the Paste command.
-        requerySuggestedHandler         =  OnRequerySuggested;
-        CommandManager.RequerySuggested += requerySuggestedHandler;
+        CommandManager.RequerySuggested += OnRequerySuggested;
         textArea.OptionChanged          += TextAreaOptionChanged;
     }
 
@@ -68,7 +66,7 @@ internal class ImeSupport
 
     public void OnLostKeyboardFocus(KeyboardFocusChangedEventArgs e)
     {
-        if (e.OldFocus == textArea && currentContext != IntPtr.Zero) ImeNativeWrapper.NotifyIme(currentContext);
+        if (Equals(e.OldFocus, textArea) && currentContext != IntPtr.Zero) ImeNativeWrapper.NotifyIme(currentContext);
         ClearContext();
     }
 

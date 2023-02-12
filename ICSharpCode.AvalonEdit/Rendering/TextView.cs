@@ -1875,7 +1875,7 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
     ///     This method is meant for <see cref="VisualLineElementGenerator" />s that cause <see cref="VisualLine" />s to span
     ///     multiple <see cref="DocumentLine" />s. Do not call it without providing a corresponding
     ///     <see cref="VisualLineElementGenerator" />.
-    ///     If you want to create collapsible text sections, see <see cref="Folding.FoldingManager" />.
+
     ///     Note that if you want a VisualLineElement to span from line N to line M, then you need to collapse only the lines
     ///     N+1 to M. Do not collapse line N itself.
     ///     When you no longer need the section to be collapsed, call <see cref="CollapsedLineSection.Uncollapse()" /> on the

@@ -37,8 +37,7 @@ public class DocumentHighlighter : ILineTracker, IHighlighter
     ///     storedSpanStacks[0] = state at beginning of document
     ///     storedSpanStacks[i] = state after line i
     /// </summary>
-    private readonly CompressingTreeList<SpanStack> storedSpanStacks = new(ReferenceEquals);
-    private readonly CompressingTreeList<bool> isValid = new((a, b) => a == b);
+
     private readonly IHighlightingDefinition   definition;
     private readonly HighlightingEngine        engine;
     private readonly WeakLineTracker           weakLineTracker;
@@ -79,20 +78,14 @@ public class DocumentHighlighter : ILineTracker, IHighlighter
     {
         CheckIsHighlighting();
         var number = line.LineNumber;
-        storedSpanStacks.RemoveAt(number);
-        isValid.RemoveAt(number);
-        if (number < isValid.Count)
-        {
-            isValid[number] = false;
-            if (number < firstInvalidLine) firstInvalidLine = number;
-        }
+
     }
 
     void ILineTracker.SetLineLength(DocumentLine line, int newTotalLength)
     {
         CheckIsHighlighting();
         var number = line.LineNumber;
-        isValid[number] = false;
+
         if (number < firstInvalidLine) firstInvalidLine = number;
     }
 
@@ -101,8 +94,7 @@ public class DocumentHighlighter : ILineTracker, IHighlighter
         CheckIsHighlighting();
         Debug.Assert(insertionPos.LineNumber + 1 == newLine.LineNumber);
         var lineNumber = newLine.LineNumber;
-        storedSpanStacks.Insert(lineNumber, null);
-        isValid.Insert(lineNumber, false);
+
         if (lineNumber < firstInvalidLine) firstInvalidLine = lineNumber;
     }
 
@@ -147,12 +139,7 @@ public class DocumentHighlighter : ILineTracker, IHighlighter
     private void InvalidateSpanStacks()
     {
         CheckIsHighlighting();
-        storedSpanStacks.Clear();
-        storedSpanStacks.Add(initialSpanStack);
-        storedSpanStacks.InsertRange(1, Document.LineCount, null);
-        isValid.Clear();
-        isValid.Add(true);
-        isValid.InsertRange(1, Document.LineCount, false);
+
         firstInvalidLine = 1;
     }
 
@@ -190,7 +177,7 @@ public class DocumentHighlighter : ILineTracker, IHighlighter
     {
         ThrowUtil.CheckInRangeInclusive(lineNumber, "lineNumber", 0, Document.LineCount);
         if (firstInvalidLine <= lineNumber) UpdateHighlightingState(lineNumber);
-        return storedSpanStacks[lineNumber];
+        return null;
     }
 
     /// <inheritdoc />
@@ -235,50 +222,28 @@ public class DocumentHighlighter : ILineTracker, IHighlighter
                 if (firstInvalidLine <= targetLineNumber)
                 {
                     // Skip valid lines to next invalid line:
-                    engine.CurrentSpanStack = storedSpanStacks[firstInvalidLine - 1];
+
                     currentLine             = firstInvalidLine;
                 }
                 else
                 {
                     // Skip valid lines to target line:
-                    engine.CurrentSpanStack = storedSpanStacks[targetLineNumber];
+
                     break;
                 }
             }
 
-            Debug.Assert(EqualSpanStacks(engine.CurrentSpanStack, storedSpanStacks[currentLine - 1]));
+
             engine.ScanLine(Document, Document.GetLineByNumber(currentLine));
             UpdateTreeList(currentLine);
         }
 
-        Debug.Assert(EqualSpanStacks(engine.CurrentSpanStack, storedSpanStacks[targetLineNumber]));
+
     }
 
     private void UpdateTreeList(int lineNumber)
     {
-        if (!EqualSpanStacks(engine.CurrentSpanStack, storedSpanStacks[lineNumber]))
-        {
-            isValid[lineNumber] = true;
-            //Debug.WriteLine("Span stack in line " + lineNumber + " changed from " + storedSpanStacks[lineNumber] + " to " + spanStack);
-            storedSpanStacks[lineNumber] = engine.CurrentSpanStack;
-            if (lineNumber + 1 < isValid.Count)
-            {
-                isValid[lineNumber + 1] = false;
-                firstInvalidLine        = lineNumber + 1;
-            }
-            else
-            {
-                firstInvalidLine = int.MaxValue;
-            }
 
-            if (lineNumber + 1 < Document.LineCount) OnHighlightStateChanged(lineNumber + 1, lineNumber + 1);
-        }
-        else if (firstInvalidLine == lineNumber)
-        {
-            isValid[lineNumber] = true;
-            firstInvalidLine    = isValid.IndexOf(false);
-            if (firstInvalidLine < 0) firstInvalidLine = int.MaxValue;
-        }
     }
 
     private static bool EqualSpanStacks(SpanStack a, SpanStack b)

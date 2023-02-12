@@ -309,19 +309,5 @@ public class HighlightedLine
     /// <summary>
     ///     Creates a <see cref="RichTextModel" /> that stores the highlighting of this line.
     /// </summary>
-    public RichTextModel ToRichTextModel()
-    {
-        var builder     = new RichTextModel();
-        var startOffset = DocumentLine.Offset;
-        foreach (var section in Sections) builder.ApplyHighlighting(section.Offset - startOffset, section.Length, section.Color);
-        return builder;
-    }
 
-    /// <summary>
-    ///     Creates a <see cref="RichText" /> that stores the text and highlighting of this line.
-    /// </summary>
-    public RichText ToRichText()
-    {
-        return new RichText(Document.GetText(DocumentLine), ToRichTextModel());
-    }
 }

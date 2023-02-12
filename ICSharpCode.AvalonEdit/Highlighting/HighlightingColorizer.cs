@@ -99,7 +99,7 @@ public class HighlightingColorizer : DocumentColorizingTransformer
     ///     This method is called when a text view is removed from this HighlightingColorizer,
     ///     and also when the TextDocument on any associated text view changes.
     /// </summary>
-    protected virtual void DeregisterServices(TextView textView)
+    protected virtual void DeregisterServices(TextView textView_)
     {
         if (highlighter != null)
         {
@@ -111,7 +111,7 @@ public class HighlightingColorizer : DocumentColorizingTransformer
 
             highlighter.HighlightingStateChanged -= OnHighlightStateChanged;
             // remove highlighter if it is registered
-            if (textView.Services.GetService(typeof(IHighlighter)) == highlighter) textView.Services.RemoveService(typeof(IHighlighter));
+            if (textView_.Services.GetService(typeof(IHighlighter)) == highlighter) textView_.Services.RemoveService(typeof(IHighlighter));
             if (!isFixedHighlighter)
             {
                 if (highlighter != null) highlighter.Dispose();
@@ -124,15 +124,15 @@ public class HighlightingColorizer : DocumentColorizingTransformer
     ///     This method is called when a new text view is added to this HighlightingColorizer,
     ///     and also when the TextDocument on any associated text view changes.
     /// </summary>
-    protected virtual void RegisterServices(TextView textView)
+    protected virtual void RegisterServices(TextView textView_)
     {
-        if (textView.Document != null)
+        if (textView_.Document != null)
         {
-            if (!isFixedHighlighter) highlighter = textView.Document != null ? CreateHighlighter(textView, textView.Document) : null;
-            if (highlighter != null && highlighter.Document == textView.Document)
+            if (!isFixedHighlighter) highlighter = textView_.Document != null ? CreateHighlighter(textView_, textView_.Document) : null;
+            if (highlighter != null && highlighter.Document == textView_.Document)
             {
                 // add service only if it doesn't already exist
-                if (textView.Services.GetService(typeof(IHighlighter)) == null) textView.Services.AddService(typeof(IHighlighter), highlighter);
+                if (textView_.Services.GetService(typeof(IHighlighter)) == null) textView_.Services.AddService(typeof(IHighlighter), highlighter);
                 highlighter.HighlightingStateChanged += OnHighlightStateChanged;
             }
         }
@@ -141,7 +141,7 @@ public class HighlightingColorizer : DocumentColorizingTransformer
     /// <summary>
     ///     Creates the IHighlighter instance for the specified text document.
     /// </summary>
-    protected virtual IHighlighter CreateHighlighter(TextView textView, TextDocument document)
+    protected virtual IHighlighter CreateHighlighter(TextView textView_, TextDocument document)
     {
         if (definition != null) return new DocumentHighlighter(document, definition);
         throw new NotSupportedException("Cannot create a highlighter because no IHighlightingDefinition was specified, and the CreateHighlighter() method was not overridden.");

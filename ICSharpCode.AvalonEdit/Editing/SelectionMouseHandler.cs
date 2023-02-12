@@ -58,7 +58,7 @@ internal sealed class SelectionMouseHandler : ITextAreaInputHandler
     private static void OnLostMouseCapture(object sender, MouseEventArgs e)
     {
         var textArea = (TextArea)sender;
-        if (Mouse.Captured != textArea)
+        if (!Equals(Mouse.Captured, textArea))
             if (textArea.DefaultInputHandler.MouseSelection is SelectionMouseHandler handler)
                 handler.mode = MouseSelectionMode.None;
     }

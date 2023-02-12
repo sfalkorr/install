@@ -78,13 +78,7 @@ public sealed class HighlightedInlineBuilder
     /// <summary>
     ///     Creates a new HighlightedInlineBuilder instance.
     /// </summary>
-    public HighlightedInlineBuilder(RichText text)
-    {
-        if (text == null) throw new ArgumentNullException(nameof(text));
-        Text = text.Text;
-        stateChangeOffsets.AddRange(text.stateChangeOffsets);
-        stateChanges.AddRange(text.stateChanges);
-    }
+
 
     private HighlightedInlineBuilder(string text, List<int> offsets, List<HighlightingColor> states)
     {
@@ -159,18 +153,12 @@ public sealed class HighlightedInlineBuilder
     /// <summary>
     ///     Creates WPF Run instances that can be used for TextBlock.Inlines.
     /// </summary>
-    public Run[] CreateRuns()
-    {
-        return ToRichText().CreateRuns();
-    }
+
 
     /// <summary>
     ///     Creates a RichText instance.
     /// </summary>
-    public RichText ToRichText()
-    {
-        return new RichText(Text, stateChangeOffsets.ToArray(), stateChanges.Select(FreezableHelper.GetFrozenClone).ToArray());
-    }
+
 
     /// <summary>
     ///     Clones this HighlightedInlineBuilder.

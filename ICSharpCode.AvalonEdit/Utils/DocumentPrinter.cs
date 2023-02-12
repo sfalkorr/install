@@ -45,7 +45,7 @@ public static class DocumentPrinter
             if (highlighter != null)
             {
                 var highlightedLine = highlighter.HighlightLine(lineNumber);
-                p.Inlines.AddRange(highlightedLine.ToRichText().CreateRuns());
+
             }
             else
             {
@@ -59,27 +59,7 @@ public static class DocumentPrinter
     /// <summary>
     ///     Converts an IDocument to a RichText and applies the provided highlighter.
     /// </summary>
-    public static RichText ConvertTextDocumentToRichText(IDocument document, IHighlighter highlighter)
-    {
-        if (document == null) throw new ArgumentNullException(nameof(document));
-        var texts = new List<RichText>();
-        for (var lineNumber = 1; lineNumber <= document.LineCount; lineNumber++)
-        {
-            var line = document.GetLineByNumber(lineNumber);
-            if (lineNumber > 1) texts.Add(line.PreviousLine.DelimiterLength == 2 ? "\r\n" : "\n");
-            if (highlighter != null)
-            {
-                var highlightedLine = highlighter.HighlightLine(lineNumber);
-                texts.Add(highlightedLine.ToRichText());
-            }
-            else
-            {
-                texts.Add(document.GetText(line));
-            }
-        }
 
-        return RichText.Concat(texts.ToArray());
-    }
 
     /// <summary>
     ///     Creates a flow document from the editor's contents.

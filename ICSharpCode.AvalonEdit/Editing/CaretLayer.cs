@@ -49,9 +49,9 @@ internal sealed class CaretLayer : Layer
         InvalidateVisual();
     }
 
-    public void Show(Rect caretRectangle)
+    public void Show(Rect caretRectangle_)
     {
-        this.caretRectangle = caretRectangle;
+        this.caretRectangle = caretRectangle_;
         isVisible           = true;
         StartBlinkAnimation();
         InvalidateVisual();

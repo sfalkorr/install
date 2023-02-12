@@ -22,10 +22,7 @@ using ICSharpCode.AvalonEdit.Document;
 
 namespace ICSharpCode.AvalonEdit.Editing;
 
-/// <summary>
-///     Implementation for <see cref="IReadOnlySectionProvider" /> that stores the segments
-///     in a <see cref="TextSegmentCollection{T}" />.
-/// </summary>
+
 public class TextSegmentReadOnlySectionProvider<T> : IReadOnlySectionProvider where T : TextSegment
 {
     /// <summary>

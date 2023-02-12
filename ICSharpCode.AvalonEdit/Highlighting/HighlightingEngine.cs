@@ -246,7 +246,7 @@ public class HighlightingEngine
         {
             highlightedSectionStack.Push(null);
         }
-        else if (lastPoppedSection != null && lastPoppedSection.Color == color && lastPoppedSection.Offset + lastPoppedSection.Length == position + lineStartOffset)
+        else if (lastPoppedSection != null && lastPoppedSection.Color.Equals(color) && lastPoppedSection.Offset + lastPoppedSection.Length == position + lineStartOffset)
         {
             highlightedSectionStack.Push(lastPoppedSection);
             lastPoppedSection = null;

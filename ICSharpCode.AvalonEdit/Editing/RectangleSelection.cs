@@ -314,28 +314,28 @@ public sealed class RectangleSelection : Selection
         }
     }
 
-    private void ReplaceSingleLineText(TextArea textArea, SelectionSegment lineSegment, string newText, out int insertionLength)
+    private void ReplaceSingleLineText(TextArea textArea_, SelectionSegment lineSegment, string newText, out int insertionLength)
     {
         if (lineSegment.Length == 0)
         {
-            if (newText.Length > 0 && textArea.ReadOnlySectionProvider.CanInsert(lineSegment.StartOffset))
+            if (newText.Length > 0 && textArea_.ReadOnlySectionProvider.CanInsert(lineSegment.StartOffset))
             {
                 newText = AddSpacesIfRequired(newText, new TextViewPosition(document.GetLocation(lineSegment.StartOffset), lineSegment.StartVisualColumn), new TextViewPosition(document.GetLocation(lineSegment.EndOffset), lineSegment.EndVisualColumn));
-                textArea.Document.Insert(lineSegment.StartOffset, newText);
+                textArea_.Document.Insert(lineSegment.StartOffset, newText);
             }
         }
         else
         {
-            var segmentsToDelete = textArea.GetDeletableSegments(lineSegment);
+            var segmentsToDelete = textArea_.GetDeletableSegments(lineSegment);
             for (var i = segmentsToDelete.Length - 1; i >= 0; i--)
                 if (i == segmentsToDelete.Length - 1)
                 {
                     if (segmentsToDelete[i].Offset == SurroundingSegment.Offset && segmentsToDelete[i].Length == SurroundingSegment.Length) newText = AddSpacesIfRequired(newText, new TextViewPosition(document.GetLocation(lineSegment.StartOffset), lineSegment.StartVisualColumn), new TextViewPosition(document.GetLocation(lineSegment.EndOffset), lineSegment.EndVisualColumn));
-                    textArea.Document.Replace(segmentsToDelete[i], newText);
+                    textArea_.Document.Replace(segmentsToDelete[i], newText);
                 }
                 else
                 {
-                    textArea.Document.Remove(segmentsToDelete[i]);
+                    textArea_.Document.Remove(segmentsToDelete[i]);
                 }
         }
 
