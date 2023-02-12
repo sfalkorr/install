@@ -201,7 +201,7 @@ public sealed class RectangleSelection : Selection
     public override string GetText()
     {
         var b = new StringBuilder();
-        foreach (ISegment s in Segments)
+        foreach (var s in Segments)
         {
             if (b.Length > 0) b.AppendLine();
             b.Append(document.GetText(s));
@@ -351,24 +351,16 @@ public sealed class RectangleSelection : Selection
         if (text == null) throw new ArgumentNullException(nameof(text));
         var newLineCount = text.Count(c => c == '\n'); // TODO might not work in all cases, but single \r line endings are really rare today.
         var endLocation  = new TextLocation(startPosition.Line + newLineCount, startPosition.Column);
-        if (endLocation.Line <= textArea.Document.LineCount)
-        {
-            var endOffset = textArea.Document.GetOffset(endLocation);
-            if (textArea.Selection.EnableVirtualSpace || textArea.Document.GetLocation(endOffset) == endLocation)
-            {
-                var rsel = new RectangleSelection(textArea, startPosition, endLocation.Line, GetXPos(textArea, startPosition));
-                rsel.ReplaceSelectionWithText(text);
-                if (selectInsertedText && textArea.Selection is RectangleSelection)
-                {
-                    var sel = (RectangleSelection)textArea.Selection;
-                    textArea.Selection = new RectangleSelection(textArea, startPosition, sel.endLine, sel.endXPos);
-                }
+        if (endLocation.Line > textArea.Document.LineCount) return false;
+        var endOffset = textArea.Document.GetOffset(endLocation);
+        if (!textArea.Selection.EnableVirtualSpace && textArea.Document.GetLocation(endOffset) != endLocation) return false;
+        var rsel = new RectangleSelection(textArea, startPosition, endLocation.Line, GetXPos(textArea, startPosition));
+        rsel.ReplaceSelectionWithText(text);
+        if (!selectInsertedText || textArea.Selection is not RectangleSelection sel) return true;
+        textArea.Selection = new RectangleSelection(textArea, startPosition, sel.endLine, sel.endXPos);
 
-                return true;
-            }
-        }
+        return true;
 
-        return false;
     }
 
     /// <summary>
@@ -389,6 +381,6 @@ public sealed class RectangleSelection : Selection
     {
         // It's possible that ToString() gets called on old (invalid) selections, e.g. for "change from... to..." debug message
         // make sure we don't crash even when the desired locations don't exist anymore.
-        return string.Format("[RectangleSelection {0} {1} {2} to {3} {4} {5}]", startLine, topLeftOffset, startXPos, endLine, bottomRightOffset, endXPos);
+        return $"[RectangleSelection {startLine} {topLeftOffset} {startXPos} to {endLine} {bottomRightOffset} {endXPos}]";
     }
 }

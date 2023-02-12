@@ -36,10 +36,9 @@ public class HighlightedLine
     /// </summary>
     public HighlightedLine(IDocument document, IDocumentLine documentLine)
     {
-        if (document == null) throw new ArgumentNullException(nameof(document));
         //if (!document.Lines.Contains(documentLine))
         //	throw new ArgumentException("Line is null or not part of document");
-        Document     = document;
+        Document     = document ?? throw new ArgumentNullException(nameof(document));
         DocumentLine = documentLine;
         Sections     = new NullSafeCollection<HighlightedSection>();
     }
@@ -306,8 +305,6 @@ public class HighlightedLine
         return builder;
     }
 
-    /// <summary>
-    ///     Creates a <see cref="RichTextModel" /> that stores the highlighting of this line.
-    /// </summary>
+
 
 }

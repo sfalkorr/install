@@ -97,8 +97,7 @@ public sealed class SimpleHighlightingBrush : HighlightingBrush, ISerializable
     /// <inheritdoc />
     public override bool Equals(object obj)
     {
-        if (obj is not SimpleHighlightingBrush other) return false;
-        return brush.Color.Equals(other.brush.Color);
+        return obj is SimpleHighlightingBrush other && brush.Color.Equals(other.brush.Color);
     }
 
     /// <inheritdoc />
@@ -146,8 +145,7 @@ internal sealed class SystemColorHighlightingBrush : HighlightingBrush, ISeriali
 
     public override bool Equals(object obj)
     {
-        if (obj is not SystemColorHighlightingBrush other) return false;
-        return Equals(property, other.property);
+        return obj is SystemColorHighlightingBrush other && Equals(property, other.property);
     }
 
     public override int GetHashCode()

@@ -54,11 +54,9 @@ internal sealed class ColumnRulerRenderer : IBackgroundRenderer
             textView.InvalidateLayer(Layer);
         }
 
-        if (this.pen != pen)
-        {
-            this.pen = pen;
-            textView.InvalidateLayer(Layer);
-        }
+        if (this.pen == pen) return;
+        this.pen = pen;
+        textView.InvalidateLayer(Layer);
     }
 
     public void Draw(TextView textView, DrawingContext drawingContext)

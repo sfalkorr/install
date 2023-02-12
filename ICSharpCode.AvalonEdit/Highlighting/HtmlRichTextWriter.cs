@@ -51,8 +51,7 @@ internal class HtmlRichTextWriter : RichTextWriter
     /// <param name="options">Options that control the HTML output.</param>
     public HtmlRichTextWriter(TextWriter htmlWriter, HtmlOptions options = null)
     {
-        if (htmlWriter == null) throw new ArgumentNullException(nameof(htmlWriter));
-        this.htmlWriter = htmlWriter;
+        this.htmlWriter = htmlWriter ?? throw new ArgumentNullException(nameof(htmlWriter));
         this.options    = options ?? new HtmlOptions();
     }
 
@@ -75,22 +74,18 @@ internal class HtmlRichTextWriter : RichTextWriter
 
     private void FlushSpace(bool nextIsWhitespace)
     {
-        if (hasSpace)
-        {
-            if (spaceNeedsEscaping || nextIsWhitespace) htmlWriter.Write("&nbsp;");
-            else htmlWriter.Write(' ');
-            hasSpace           = false;
-            spaceNeedsEscaping = true;
-        }
+        if (!hasSpace) return;
+        if (spaceNeedsEscaping || nextIsWhitespace) htmlWriter.Write("&nbsp;");
+        else htmlWriter.Write(' ');
+        hasSpace           = false;
+        spaceNeedsEscaping = true;
     }
 
     private void WriteIndentation()
     {
-        if (needIndentation)
-        {
-            for (var i = 0; i < indentationLevel; i++) WriteChar('\t');
-            needIndentation = false;
-        }
+        if (!needIndentation) return;
+        for (var i = 0; i < indentationLevel; i++) WriteChar('\t');
+        needIndentation = false;
     }
 
     /// <inheritdoc />

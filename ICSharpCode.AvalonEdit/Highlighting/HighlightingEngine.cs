@@ -40,8 +40,7 @@ public class HighlightingEngine
     /// </summary>
     public HighlightingEngine(HighlightingRuleSet mainRuleSet)
     {
-        if (mainRuleSet == null) throw new ArgumentNullException(nameof(mainRuleSet));
-        this.mainRuleSet = mainRuleSet;
+        this.mainRuleSet = mainRuleSet ?? throw new ArgumentNullException(nameof(mainRuleSet));
     }
 
     /// <summary>
@@ -121,7 +120,7 @@ public class HighlightingEngine
             for (var i = 0; i < matches.Length; i++)
                 if (matches[i] == null || (matches[i].Success && matches[i].Index < position))
                     matches[i] = currentRuleSet.Spans[i].StartExpression.Match(lineText, position);
-            if (endSpanMatch == null && !spanStack.IsEmpty) endSpanMatch = spanStack.Peek().EndExpression.Match(lineText, position);
+            if (!spanStack.IsEmpty) endSpanMatch = spanStack.Peek().EndExpression.Match(lineText, position);
 
             var firstMatch = Minimum(matches, endSpanMatch);
             if (firstMatch == null) break;
@@ -286,20 +285,19 @@ public class HighlightingEngine
     /// <summary>
     ///     Returns the first match from the array or endSpanMatch.
     /// </summary>
-    private static Match Minimum(Match[] arr, Match endSpanMatch)
+    private static Match Minimum(IEnumerable<Match> arr, Match endSpanMatch)
     {
         Match min = null;
         foreach (var v in arr)
             if (v.Success && (min == null || v.Index < min.Index))
                 min = v;
-        if (endSpanMatch != null && endSpanMatch.Success && (min == null || endSpanMatch.Index < min.Index)) return endSpanMatch;
+        if (endSpanMatch is { Success: true } && (min == null || endSpanMatch.Index < min.Index)) return endSpanMatch;
         return min;
     }
 
     private static Match[] AllocateMatchArray(int count)
     {
-        if (count == 0) return Empty<Match>.Array;
-        return new Match[count];
+        return count == 0 ? Empty<Match>.Array : new Match[count];
     }
 
     #endregion

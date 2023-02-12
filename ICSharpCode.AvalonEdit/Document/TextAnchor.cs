@@ -53,7 +53,7 @@ namespace ICSharpCode.AvalonEdit.Document;
 /// int newOffset = anchor.Offset;
 /// </code>
 /// </example>
-public sealed class TextAnchor : ITextAnchor
+public abstract class TextAnchor : ITextAnchor
 {
     internal TextAnchorNode node;
 

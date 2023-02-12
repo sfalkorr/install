@@ -65,8 +65,7 @@ public class TextArea : Control, IScrollInfo, IWeakEventListener, ITextEditorCom
     /// </summary>
     protected TextArea(TextView textView)
     {
-        if (textView == null) throw new ArgumentNullException(nameof(textView));
-        TextView = textView;
+        TextView = textView ?? throw new ArgumentNullException(nameof(textView));
         Options  = textView.Options;
 
         selection = emptySelection = new EmptySelection(this);
@@ -433,7 +432,7 @@ public class TextArea : Control, IScrollInfo, IWeakEventListener, ITextEditorCom
     /// <summary>
     ///     The <see cref="SelectionBrush" /> property.
     /// </summary>
-    public static readonly DependencyProperty SelectionBrushProperty = DependencyProperty.Register("SelectionBrush", typeof(Brush), typeof(TextArea));
+    public static readonly DependencyProperty SelectionBrushProperty = DependencyProperty.Register(nameof(SelectionBrush), typeof(Brush), typeof(TextArea));
 
     /// <summary>
     ///     Gets/Sets the background brush used for the selection.
@@ -443,7 +442,7 @@ public class TextArea : Control, IScrollInfo, IWeakEventListener, ITextEditorCom
     /// <summary>
     ///     The <see cref="SelectionForeground" /> property.
     /// </summary>
-    public static readonly DependencyProperty SelectionForegroundProperty = DependencyProperty.Register("SelectionForeground", typeof(Brush), typeof(TextArea));
+    public static readonly DependencyProperty SelectionForegroundProperty = DependencyProperty.Register(nameof(SelectionForeground), typeof(Brush), typeof(TextArea));
 
     /// <summary>
     ///     Gets/Sets the foreground brush used for selected text.
@@ -453,7 +452,7 @@ public class TextArea : Control, IScrollInfo, IWeakEventListener, ITextEditorCom
     /// <summary>
     ///     The <see cref="SelectionBorder" /> property.
     /// </summary>
-    public static readonly DependencyProperty SelectionBorderProperty = DependencyProperty.Register("SelectionBorder", typeof(Pen), typeof(TextArea));
+    public static readonly DependencyProperty SelectionBorderProperty = DependencyProperty.Register(nameof(SelectionBorder), typeof(Pen), typeof(TextArea));
 
     /// <summary>
     ///     Gets/Sets the pen used for the border of the selection.
@@ -463,7 +462,7 @@ public class TextArea : Control, IScrollInfo, IWeakEventListener, ITextEditorCom
     /// <summary>
     ///     The <see cref="SelectionCornerRadius" /> property.
     /// </summary>
-    public static readonly DependencyProperty SelectionCornerRadiusProperty = DependencyProperty.Register("SelectionCornerRadius", typeof(double), typeof(TextArea), new FrameworkPropertyMetadata(3.0));
+    public static readonly DependencyProperty SelectionCornerRadiusProperty = DependencyProperty.Register(nameof(SelectionCornerRadius), typeof(double), typeof(TextArea), new FrameworkPropertyMetadata(3.0));
 
     /// <summary>
     ///     Gets/Sets the corner radius of the selection.
@@ -595,8 +594,7 @@ public class TextArea : Control, IScrollInfo, IWeakEventListener, ITextEditorCom
         get => readOnlySectionProvider;
         set
         {
-            if (value == null) throw new ArgumentNullException(nameof(value));
-            readOnlySectionProvider = value;
+            readOnlySectionProvider = value ?? throw new ArgumentNullException(nameof(value));
             CommandManager.InvalidateRequerySuggested(); // the read-only status effects Paste.CanExecute and the IME
         }
     }
@@ -621,7 +619,7 @@ public class TextArea : Control, IScrollInfo, IWeakEventListener, ITextEditorCom
 
     bool IScrollInfo.CanVerticallyScroll
     {
-        get => scrollInfo != null ? scrollInfo.CanVerticallyScroll : false;
+        get => scrollInfo is { CanVerticallyScroll: true };
         set
         {
             canVerticallyScroll = value;
@@ -631,7 +629,7 @@ public class TextArea : Control, IScrollInfo, IWeakEventListener, ITextEditorCom
 
     bool IScrollInfo.CanHorizontallyScroll
     {
-        get => scrollInfo != null ? scrollInfo.CanHorizontallyScroll : false;
+        get => scrollInfo is { CanHorizontallyScroll: true };
         set
         {
             canHorizontallyScroll = value;
@@ -639,21 +637,21 @@ public class TextArea : Control, IScrollInfo, IWeakEventListener, ITextEditorCom
         }
     }
 
-    double IScrollInfo.ExtentWidth => scrollInfo != null ? scrollInfo.ExtentWidth : 0;
+    double IScrollInfo.ExtentWidth => scrollInfo?.ExtentWidth ?? 0;
 
-    double IScrollInfo.ExtentHeight => scrollInfo != null ? scrollInfo.ExtentHeight : 0;
+    double IScrollInfo.ExtentHeight => scrollInfo?.ExtentHeight ?? 0;
 
-    double IScrollInfo.ViewportWidth => scrollInfo != null ? scrollInfo.ViewportWidth : 0;
+    double IScrollInfo.ViewportWidth => scrollInfo?.ViewportWidth ?? 0;
 
-    double IScrollInfo.ViewportHeight => scrollInfo != null ? scrollInfo.ViewportHeight : 0;
+    double IScrollInfo.ViewportHeight => scrollInfo?.ViewportHeight ?? 0;
 
-    double IScrollInfo.HorizontalOffset => scrollInfo != null ? scrollInfo.HorizontalOffset : 0;
+    double IScrollInfo.HorizontalOffset => scrollInfo?.HorizontalOffset ?? 0;
 
-    double IScrollInfo.VerticalOffset => scrollInfo != null ? scrollInfo.VerticalOffset : 0;
+    double IScrollInfo.VerticalOffset => scrollInfo?.VerticalOffset ?? 0;
 
     ScrollViewer IScrollInfo.ScrollOwner
     {
-        get => scrollInfo != null ? scrollInfo.ScrollOwner : null;
+        get => scrollInfo?.ScrollOwner;
         set
         {
             if (scrollInfo != null) scrollInfo.ScrollOwner = value;
@@ -828,8 +826,7 @@ public class TextArea : Control, IScrollInfo, IWeakEventListener, ITextEditorCom
     public void PerformTextInput(string text)
     {
         var textComposition = new TextComposition(InputManager.Current, this, text);
-        var e               = new TextCompositionEventArgs(Keyboard.PrimaryDevice, textComposition);
-        e.RoutedEvent = TextInputEvent;
+        var e               = new TextCompositionEventArgs(Keyboard.PrimaryDevice, textComposition) { RoutedEvent = TextInputEvent };
         PerformTextInput(e);
     }
 
@@ -843,21 +840,19 @@ public class TextArea : Control, IScrollInfo, IWeakEventListener, ITextEditorCom
         if (e == null) throw new ArgumentNullException(nameof(e));
         if (Document == null) throw ThrowUtil.NoDocumentAssigned();
         OnTextEntering(e);
-        if (!e.Handled)
+        if (e.Handled) return;
+        if (e.Text is "\n" or "\r" or "\r\n")
         {
-            if (e.Text == "\n" || e.Text == "\r" || e.Text == "\r\n")
-            {
-                ReplaceSelectionWithNewLine();
-            }
-            else
-            {
-                if (OverstrikeMode && Selection.IsEmpty && Document.GetLineByNumber(Caret.Line).EndOffset > Caret.Offset) EditingCommands.SelectRightByCharacter.Execute(null, this);
-                ReplaceSelectionWithText(e.Text);
-            }
-
-            OnTextEntered(e);
-            Caret.BringCaretToView();
+            ReplaceSelectionWithNewLine();
         }
+        else
+        {
+            if (OverstrikeMode && Selection.IsEmpty && Document.GetLineByNumber(Caret.Line).EndOffset > Caret.Offset) EditingCommands.SelectRightByCharacter.Execute(null, this);
+            ReplaceSelectionWithText(e.Text);
+        }
+
+        OnTextEntered(e);
+        Caret.BringCaretToView();
     }
 
     private void ReplaceSelectionWithNewLine()
@@ -870,9 +865,9 @@ public class TextArea : Control, IScrollInfo, IWeakEventListener, ITextEditorCom
         if (Document == null) throw ThrowUtil.NoDocumentAssigned();
         selection.ReplaceSelectionWithText(string.Empty);
 #if DEBUG
-        if (!selection.IsEmpty)
-            foreach (ISegment s in selection.Segments)
-                Debug.Assert(ReadOnlySectionProvider.GetDeletableSegments(s).Count() == 0);
+        if (selection.IsEmpty) return;
+        foreach (var s in selection.Segments)
+            Debug.Assert(!ReadOnlySectionProvider.GetDeletableSegments(s).Any());
 #endif
     }
 
@@ -889,10 +884,10 @@ public class TextArea : Control, IScrollInfo, IWeakEventListener, ITextEditorCom
         if (deletableSegments == null) throw new InvalidOperationException("ReadOnlySectionProvider.GetDeletableSegments returned null");
         var array     = deletableSegments.ToArray();
         var lastIndex = segment.Offset;
-        for (var i = 0; i < array.Length; i++)
+        foreach (var t in array)
         {
-            if (array[i].Offset < lastIndex) throw new InvalidOperationException("ReadOnlySectionProvider returned incorrect segments (outside of input segment / wrong order)");
-            lastIndex = array[i].EndOffset;
+            if (t.Offset < lastIndex) throw new InvalidOperationException("ReadOnlySectionProvider returned incorrect segments (outside of input segment / wrong order)");
+            lastIndex = t.EndOffset;
         }
 
         if (lastIndex > segment.EndOffset) throw new InvalidOperationException("ReadOnlySectionProvider returned incorrect segments (outside of input segment / wrong order)");
@@ -988,7 +983,7 @@ public class TextArea : Control, IScrollInfo, IWeakEventListener, ITextEditorCom
     /// <summary>
     ///     The <see cref="OverstrikeMode" /> dependency property.
     /// </summary>
-    public static readonly DependencyProperty OverstrikeModeProperty = DependencyProperty.Register("OverstrikeMode", typeof(bool), typeof(TextArea), new FrameworkPropertyMetadata(Boxes.False));
+    public static readonly DependencyProperty OverstrikeModeProperty = DependencyProperty.Register(nameof(OverstrikeMode), typeof(bool), typeof(TextArea), new FrameworkPropertyMetadata(Boxes.False));
 
     /// <summary>
     ///     Gets/Sets whether overstrike mode is active.
@@ -1054,7 +1049,6 @@ public class TextEventArgs : EventArgs
     /// </summary>
     public TextEventArgs(string text)
     {
-        if (text == null) throw new ArgumentNullException(nameof(text));
-        Text = text;
+        Text = text ?? throw new ArgumentNullException(nameof(text));
     }
 }

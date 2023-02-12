@@ -27,8 +27,7 @@ internal sealed class SelectionColorizer : ColorizingTransformer
 
     public SelectionColorizer(TextArea textArea)
     {
-        if (textArea == null) throw new ArgumentNullException(nameof(textArea));
-        this.textArea = textArea;
+        this.textArea = textArea ?? throw new ArgumentNullException(nameof(textArea));
     }
 
     protected override void Colorize(ITextRunConstructionContext context)
@@ -45,9 +44,7 @@ internal sealed class SelectionColorizer : ColorizingTransformer
             var segmentEnd   = segment.EndOffset;
             if (segmentEnd <= lineStartOffset) continue;
             if (segmentStart >= lineEndOffset) continue;
-            int startColumn;
-            if (segmentStart < lineStartOffset) startColumn = 0;
-            else startColumn                                = context.VisualLine.ValidateVisualColumn(segment.StartOffset, segment.StartVisualColumn, textArea.Selection.EnableVirtualSpace);
+            var startColumn = segmentStart < lineStartOffset ? 0 : context.VisualLine.ValidateVisualColumn(segment.StartOffset, segment.StartVisualColumn, textArea.Selection.EnableVirtualSpace);
 
             int endColumn;
             if (segmentEnd > lineEndOffset) endColumn = textArea.Selection.EnableVirtualSpace ? int.MaxValue : context.VisualLine.VisualLengthWithEndOfLineMarker;

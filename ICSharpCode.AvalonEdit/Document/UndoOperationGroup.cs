@@ -43,7 +43,7 @@ internal sealed class UndoOperationGroup : IUndoableOperationWithContext
 
     public void Undo()
     {
-        for (var i = 0; i < undolist.Length; ++i) undolist[i].Undo();
+        foreach (var t in undolist) t.Undo();
     }
 
 

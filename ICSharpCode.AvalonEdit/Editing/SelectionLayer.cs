@@ -38,13 +38,10 @@ internal sealed class SelectionLayer : Layer, IWeakEventListener
 
     bool IWeakEventListener.ReceiveWeakEvent(Type managerType, object sender, EventArgs e)
     {
-        if (managerType == typeof(TextViewWeakEventManager.VisualLinesChanged) || managerType == typeof(TextViewWeakEventManager.ScrollOffsetChanged))
-        {
-            InvalidateVisual();
-            return true;
-        }
+        if (managerType != typeof(TextViewWeakEventManager.VisualLinesChanged) && managerType != typeof(TextViewWeakEventManager.ScrollOffsetChanged)) return false;
+        InvalidateVisual();
+        return true;
 
-        return false;
     }
 
     protected override void OnRender(DrawingContext drawingContext)
@@ -53,11 +50,7 @@ internal sealed class SelectionLayer : Layer, IWeakEventListener
 
         var selectionBorder = textArea.SelectionBorder;
 
-        var geoBuilder = new BackgroundGeometryBuilder();
-        geoBuilder.AlignToWholePixels         = true;
-        geoBuilder.BorderThickness            = selectionBorder != null ? selectionBorder.Thickness : 0;
-        geoBuilder.ExtendToFullWidthAtLineEnd = textArea.Selection.EnableVirtualSpace;
-        geoBuilder.CornerRadius               = textArea.SelectionCornerRadius;
+        var geoBuilder = new BackgroundGeometryBuilder { AlignToWholePixels = true, BorderThickness = selectionBorder?.Thickness ?? 0, ExtendToFullWidthAtLineEnd = textArea.Selection.EnableVirtualSpace, CornerRadius = textArea.SelectionCornerRadius };
         foreach (var segment in textArea.Selection.Segments) geoBuilder.AddSegment(textView, segment);
         var geometry = geoBuilder.CreateGeometry();
         if (geometry != null) drawingContext.DrawGeometry(textArea.SelectionBrush, selectionBorder, geometry);

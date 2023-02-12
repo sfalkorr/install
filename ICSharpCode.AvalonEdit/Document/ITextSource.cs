@@ -245,8 +245,7 @@ public class StringTextSource : ITextSource
     /// </summary>
     public StringTextSource(string text)
     {
-        if (text == null) throw new ArgumentNullException(nameof(text));
-        Text = text;
+        Text = text ?? throw new ArgumentNullException(nameof(text));
     }
 
     /// <summary>
@@ -254,8 +253,7 @@ public class StringTextSource : ITextSource
     /// </summary>
     public StringTextSource(string text, ITextSourceVersion version)
     {
-        if (text == null) throw new ArgumentNullException(nameof(text));
-        Text    = text;
+        Text    = text ?? throw new ArgumentNullException(nameof(text));
         Version = version;
     }
 

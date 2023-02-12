@@ -45,6 +45,6 @@ public class HighlightedSection : ISegment
     /// <inheritdoc />
     public override string ToString()
     {
-        return string.Format("[HighlightedSection ({0}-{1})={2}]", Offset, Offset + Length, Color);
+        return $"[HighlightedSection ({Offset}-{Offset + Length})={Color}]";
     }
 }

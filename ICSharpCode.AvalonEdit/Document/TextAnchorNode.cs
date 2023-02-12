@@ -25,14 +25,14 @@ namespace ICSharpCode.AvalonEdit.Document;
 ///     It describes a section of text with a text anchor at the end of the section.
 ///     A weak reference is used to refer to the TextAnchor. (to save memory, we derive from WeakReference instead of referencing it)
 /// </summary>
-internal sealed class TextAnchorNode : WeakReference
+internal abstract class TextAnchorNode : WeakReference
 {
     internal TextAnchorNode left, right, parent;
     internal bool           color;
     internal int            length;
     internal int            totalLength; // totalLength = length + left.totalLength + right.totalLength
 
-    public TextAnchorNode(TextAnchor anchor) : base(anchor)
+    protected TextAnchorNode(TextAnchor anchor) : base(anchor)
     {
     }
 

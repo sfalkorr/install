@@ -127,9 +127,8 @@ public sealed class BackgroundGeometryBuilder
         TextViewPosition start;
         TextViewPosition end;
 
-        if (segment is SelectionSegment)
+        if (segment is SelectionSegment sel)
         {
-            var sel = (SelectionSegment)segment;
             start = new TextViewPosition(textView.Document.GetLocation(sel.StartOffset), sel.StartVisualColumn);
             end   = new TextViewPosition(textView.Document.GetLocation(sel.EndOffset), sel.EndVisualColumn);
         }
@@ -146,9 +145,7 @@ public sealed class BackgroundGeometryBuilder
             var vlEndOffset = vl.LastDocumentLine.Offset + vl.LastDocumentLine.Length;
             if (vlEndOffset < segmentStart) continue;
 
-            int segmentStartVC;
-            if (segmentStart < vlStartOffset) segmentStartVC = 0;
-            else segmentStartVC                              = vl.ValidateVisualColumn(start, extendToFullWidthAtLineEnd);
+            var segmentStartVC = segmentStart < vlStartOffset ? 0 : vl.ValidateVisualColumn(start, extendToFullWidthAtLineEnd);
 
             int segmentEndVC;
             if (segmentEnd > vlEndOffset) segmentEndVC = extendToFullWidthAtLineEnd ? int.MaxValue : vl.VisualLengthWithEndOfLineMarker;
@@ -283,8 +280,7 @@ public sealed class BackgroundGeometryBuilder
         if (!top.IsClose(lastBottom)) CloseFigure();
         if (figure == null)
         {
-            figure            = new PathFigure();
-            figure.StartPoint = new Point(left, top + CornerRadius);
+            figure            = new PathFigure { StartPoint = new Point(left, top + CornerRadius) };
             if (Math.Abs(left - right) > CornerRadius)
             {
                 figure.Segments.Add(MakeArc(left + CornerRadius, top, SweepDirection.Clockwise));

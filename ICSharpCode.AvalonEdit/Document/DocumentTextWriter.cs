@@ -25,7 +25,7 @@ namespace ICSharpCode.AvalonEdit.Document;
 /// <summary>
 ///     A TextWriter implementation that directly inserts into a document.
 /// </summary>
-public class DocumentTextWriter : TextWriter
+public sealed class DocumentTextWriter : TextWriter
 {
     private readonly IDocument document;
 
@@ -35,8 +35,7 @@ public class DocumentTextWriter : TextWriter
     public DocumentTextWriter(IDocument document, int insertionOffset)
     {
         InsertionOffset = insertionOffset;
-        if (document == null) throw new ArgumentNullException(nameof(document));
-        this.document = document;
+        this.document   = document ?? throw new ArgumentNullException(nameof(document));
         var line                            = document.GetLineByOffset(insertionOffset);
         if (line.DelimiterLength == 0) line = line.PreviousLine;
         if (line != null) NewLine           = document.GetText(line.EndOffset, line.DelimiterLength);

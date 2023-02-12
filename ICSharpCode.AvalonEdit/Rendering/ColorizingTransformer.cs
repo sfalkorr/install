@@ -39,9 +39,8 @@ public abstract class ColorizingTransformer : IVisualLineTransformer, ITextViewC
     /// </summary>
     public void Transform(ITextRunConstructionContext context, IList<VisualLineElement> elements)
     {
-        if (elements == null) throw new ArgumentNullException(nameof(elements));
         if (CurrentElements != null) throw new InvalidOperationException("Recursive Transform() call");
-        CurrentElements = elements;
+        CurrentElements = elements ?? throw new ArgumentNullException(nameof(elements));
         try
         {
             Colorize(context);

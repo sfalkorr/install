@@ -36,7 +36,7 @@ internal struct HeightTreeLineNode
 
     internal void AddDirectlyCollapsed(CollapsedLineSection section)
     {
-        if (collapsedSections == null) collapsedSections = new List<CollapsedLineSection>();
+        collapsedSections ??= new List<CollapsedLineSection>();
         collapsedSections.Add(section);
     }
 

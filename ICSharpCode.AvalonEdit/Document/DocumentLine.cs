@@ -207,7 +207,7 @@ public sealed partial class DocumentLine : IDocumentLine
         }
         internal set
         {
-            Debug.Assert(value >= 0 && value <= 2);
+            Debug.Assert(value is >= 0 and <= 2);
             delimiterLength = (byte)value;
         }
     }

@@ -49,7 +49,7 @@ internal class TextRangeProvider : ITextRangeProvider
         segment       = new AnchorSegment(doc, offset, length);
     }
 
-    private string ID => string.Format("({0}: {1})", GetHashCode().ToString("x8"), segment);
+    private string ID => $"({GetHashCode():x8}: {segment})";
 
     [Conditional("DEBUG")]
     private static void Log(string format, params object[] args)
@@ -173,7 +173,7 @@ internal class TextRangeProvider : ITextRangeProvider
     public IRawElementProviderSimple[] GetChildren()
     {
         Log("{0}.GetChildren()", ID);
-        return new IRawElementProviderSimple[0];
+        return Array.Empty<IRawElementProviderSimple>();
     }
 
     public IRawElementProviderSimple GetEnclosingElement()

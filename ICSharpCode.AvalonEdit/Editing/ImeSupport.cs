@@ -35,8 +35,7 @@ internal class ImeSupport
 
     public ImeSupport(TextArea textArea)
     {
-        if (textArea == null) throw new ArgumentNullException(nameof(textArea));
-        this.textArea = textArea;
+        this.textArea = textArea ?? throw new ArgumentNullException(nameof(textArea));
         InputMethod.SetIsInputMethodSuspended(this.textArea, textArea.Options.EnableImeSupport);
         // We listen to CommandManager.RequerySuggested for both caret offset changes and changes to the set of read-only sections.
         // This is because there's no dedicated event for read-only section changes; but RequerySuggested needs to be raised anyways
@@ -52,11 +51,9 @@ internal class ImeSupport
 
     private void TextAreaOptionChanged(object sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == "EnableImeSupport")
-        {
-            InputMethod.SetIsInputMethodSuspended(textArea, textArea.Options.EnableImeSupport);
-            UpdateImeEnabled();
-        }
+        if (e.PropertyName != "EnableImeSupport") return;
+        InputMethod.SetIsInputMethodSuspended(textArea, textArea.Options.EnableImeSupport);
+        UpdateImeEnabled();
     }
 
     public void OnGotKeyboardFocus(KeyboardFocusChangedEventArgs e)
@@ -75,12 +72,10 @@ internal class ImeSupport
         if (textArea.Options.EnableImeSupport && textArea.IsKeyboardFocused)
         {
             var newReadOnly = !textArea.ReadOnlySectionProvider.CanInsert(textArea.Caret.Offset);
-            if (hwndSource == null || isReadOnly != newReadOnly)
-            {
-                ClearContext(); // clear existing context (on read-only change)
-                isReadOnly = newReadOnly;
-                CreateContext();
-            }
+            if (hwndSource != null && isReadOnly == newReadOnly) return;
+            ClearContext(); // clear existing context (on read-only change)
+            isReadOnly = newReadOnly;
+            CreateContext();
         }
         else
         {
@@ -90,43 +85,39 @@ internal class ImeSupport
 
     private void ClearContext()
     {
-        if (hwndSource != null)
-        {
-            ImeNativeWrapper.ImmAssociateContext(hwndSource.Handle, previousContext);
-            ImeNativeWrapper.ImmReleaseContext(defaultImeWnd, currentContext);
-            currentContext = IntPtr.Zero;
-            defaultImeWnd  = IntPtr.Zero;
-            hwndSource.RemoveHook(WndProc);
-            hwndSource = null;
-        }
+        if (hwndSource == null) return;
+        ImeNativeWrapper.ImmAssociateContext(hwndSource.Handle, previousContext);
+        ImeNativeWrapper.ImmReleaseContext(defaultImeWnd, currentContext);
+        currentContext = IntPtr.Zero;
+        defaultImeWnd  = IntPtr.Zero;
+        hwndSource.RemoveHook(WndProc);
+        hwndSource = null;
     }
 
     private void CreateContext()
     {
         hwndSource = (HwndSource)PresentationSource.FromVisual(textArea);
-        if (hwndSource != null)
+        if (hwndSource == null) return;
+        if (isReadOnly)
         {
-            if (isReadOnly)
-            {
-                defaultImeWnd  = IntPtr.Zero;
-                currentContext = IntPtr.Zero;
-            }
-            else
-            {
-                defaultImeWnd  = ImeNativeWrapper.ImmGetDefaultIMEWnd(IntPtr.Zero);
-                currentContext = ImeNativeWrapper.ImmGetContext(defaultImeWnd);
-            }
-
-            previousContext = ImeNativeWrapper.ImmAssociateContext(hwndSource.Handle, currentContext);
-            hwndSource.AddHook(WndProc);
-            // UpdateCompositionWindow() will be called by the caret becoming visible
-
-            var threadMgr = ImeNativeWrapper.GetTextFrameworkThreadManager();
-            if (threadMgr != null)
-                // Even though the docs says passing null is invalid, this seems to help
-                // activating the IME on the default input context that is shared with WPF
-                threadMgr.SetFocus(IntPtr.Zero);
+            defaultImeWnd  = IntPtr.Zero;
+            currentContext = IntPtr.Zero;
         }
+        else
+        {
+            defaultImeWnd  = ImeNativeWrapper.ImmGetDefaultIMEWnd(IntPtr.Zero);
+            currentContext = ImeNativeWrapper.ImmGetContext(defaultImeWnd);
+        }
+
+        previousContext = ImeNativeWrapper.ImmAssociateContext(hwndSource.Handle, currentContext);
+        hwndSource.AddHook(WndProc);
+        // UpdateCompositionWindow() will be called by the caret becoming visible
+
+        var threadMgr = ImeNativeWrapper.GetTextFrameworkThreadManager();
+        if (threadMgr != null)
+            // Even though the docs says passing null is invalid, this seems to help
+            // activating the IME on the default input context that is shared with WPF
+            threadMgr.SetFocus(IntPtr.Zero);
     }
 
     private IntPtr WndProc(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
@@ -155,10 +146,8 @@ internal class ImeSupport
 
     public void UpdateCompositionWindow()
     {
-        if (currentContext != IntPtr.Zero)
-        {
-            ImeNativeWrapper.SetCompositionFont(hwndSource, currentContext, textArea);
-            ImeNativeWrapper.SetCompositionWindow(hwndSource, currentContext, textArea);
-        }
+        if (currentContext == IntPtr.Zero) return;
+        ImeNativeWrapper.SetCompositionFont(hwndSource, currentContext, textArea);
+        ImeNativeWrapper.SetCompositionWindow(hwndSource, currentContext, textArea);
     }
 }

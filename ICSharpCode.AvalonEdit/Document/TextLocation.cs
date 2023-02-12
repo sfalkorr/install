@@ -179,25 +179,17 @@ public class TextLocationConverter : TypeConverter
     /// <inheritdoc />
     public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
     {
-        if (value is string)
-        {
-            var parts = ((string)value).Split(';', ',');
-            if (parts.Length == 2) return new TextLocation(int.Parse(parts[0], culture), int.Parse(parts[1], culture));
-        }
-
-        return base.ConvertFrom(context, culture, value);
+        if (value is not string s) return base.ConvertFrom(context, culture, value);
+        var parts = s.Split(';', ',');
+        return parts.Length == 2 ? new TextLocation(int.Parse(parts[0], culture), int.Parse(parts[1], culture)) : base.ConvertFrom(context, culture, value);
     }
 
     /// <inheritdoc />
     public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
     {
-        if (value is TextLocation && destinationType == typeof(string))
-        {
-            var loc = (TextLocation)value;
-            return loc.Line.ToString(culture) + ";" + loc.Column.ToString(culture);
-        }
+        if (value is not TextLocation loc || destinationType != typeof(string)) return base.ConvertTo(context, culture, value, destinationType);
+        return loc.Line.ToString(culture) + ";" + loc.Column.ToString(culture);
 
-        return base.ConvertTo(context, culture, value, destinationType);
     }
 }
 

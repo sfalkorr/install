@@ -71,8 +71,7 @@ public abstract class TextAreaStackedInputHandler : ITextAreaInputHandler
     /// </summary>
     protected TextAreaStackedInputHandler(TextArea textArea)
     {
-        if (textArea == null) throw new ArgumentNullException(nameof(textArea));
-        TextArea = textArea;
+        TextArea = textArea ?? throw new ArgumentNullException(nameof(textArea));
     }
 
     /// <inheritdoc />
@@ -117,8 +116,7 @@ public class TextAreaInputHandler : ITextAreaInputHandler
     /// </summary>
     public TextAreaInputHandler(TextArea textArea)
     {
-        if (textArea == null) throw new ArgumentNullException(nameof(textArea));
-        TextArea            = textArea;
+        TextArea            = textArea ?? throw new ArgumentNullException(nameof(textArea));
         commandBindings     = new ObserveAddRemoveCollection<CommandBinding>(CommandBinding_Added, CommandBinding_Removed);
         inputBindings       = new ObserveAddRemoveCollection<InputBinding>(InputBinding_Added, InputBinding_Removed);
         nestedInputHandlers = new ObserveAddRemoveCollection<ITextAreaInputHandler>(NestedInputHandler_Added, NestedInputHandler_Removed);

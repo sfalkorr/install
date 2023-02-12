@@ -79,17 +79,15 @@ public static class HtmlClipboard
         if (document == null) throw new ArgumentNullException(nameof(document));
         if (options == null) throw new ArgumentNullException(nameof(options));
         if (highlighter != null && highlighter.Document != document) throw new ArgumentException("Highlighter does not belong to the specified document.");
-        if (segment == null) segment = new SimpleSegment(0, document.TextLength);
+        segment ??= new SimpleSegment(0, document.TextLength);
 
         var html             = new StringBuilder();
         var segmentEndOffset = segment.EndOffset;
         var line             = document.GetLineByOffset(segment.Offset);
         while (line != null && line.Offset < segmentEndOffset)
         {
-            HighlightedLine highlightedLine;
-            if (highlighter != null) highlightedLine = highlighter.HighlightLine(line.LineNumber);
-            else highlightedLine                     = new HighlightedLine(document, line);
-            var s = SimpleSegment.GetOverlap(segment, line);
+            var highlightedLine = highlighter != null ? highlighter.HighlightLine(line.LineNumber) : new HighlightedLine(document, line);
+            var             s               = SimpleSegment.GetOverlap(segment, line);
             if (html.Length > 0) html.AppendLine("<br>");
             html.Append(highlightedLine.ToHtml(s.Offset, s.EndOffset, options));
             line = line.NextLine;

@@ -68,5 +68,10 @@ public static class Variables
     public static object POSVer         { get; }      = GetRegValue(@"HKLM:\SOFTWARE\Wow6432Node\GMCS\POS", "Version");
     public static string POSPath        { get; }      = GetVarPath(POSRegPath.ToString());
     public static string POSConfig      { get; }      = GetVarPath(POSRegPath + "POS.exe.config");
-    public static string meta_num, meta_sec, meta_ver, archive, arcmeta, package;
+    public static string meta_num       { get; set; }
+    public static string meta_sec       { get; set; }
+    public static string meta_ver       { get; set; }
+    public static string archive        { get; set; }
+    public static string arcmeta        { get; set; }
+    public static string package        { get; set; }
 }

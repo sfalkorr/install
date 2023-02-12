@@ -37,8 +37,7 @@ public abstract class Selection
     public static Selection Create(TextArea textArea, int startOffset, int endOffset)
     {
         if (textArea == null) throw new ArgumentNullException(nameof(textArea));
-        if (startOffset == endOffset) return textArea.emptySelection;
-        return new SimpleSelection(textArea, new TextViewPosition(textArea.Document.GetLocation(startOffset)), new TextViewPosition(textArea.Document.GetLocation(endOffset)));
+        return startOffset == endOffset ? textArea.emptySelection : new SimpleSelection(textArea, new TextViewPosition(textArea.Document.GetLocation(startOffset)), new TextViewPosition(textArea.Document.GetLocation(endOffset)));
     }
 
     internal static Selection Create(TextArea textArea, TextViewPosition start, TextViewPosition end)
@@ -64,8 +63,7 @@ public abstract class Selection
     /// </summary>
     protected Selection(TextArea textArea)
     {
-        if (textArea == null) throw new ArgumentNullException(nameof(textArea));
-        this.textArea = textArea;
+        this.textArea = textArea ?? throw new ArgumentNullException(nameof(textArea));
     }
 
     /// <summary>
@@ -188,7 +186,7 @@ public abstract class Selection
         if (document == null) throw ThrowUtil.NoDocumentAssigned();
         StringBuilder b    = null;
         string        text = null;
-        foreach (ISegment s in Segments)
+        foreach (var s in Segments)
         {
             if (text != null)
             {
@@ -199,13 +197,10 @@ public abstract class Selection
             text = document.GetText(s);
         }
 
-        if (b != null)
-        {
-            if (text != null) b.Append(text);
-            return b.ToString();
-        }
+        if (b == null) return text ?? string.Empty;
+        if (text != null) b.Append(text);
+        return b.ToString();
 
-        return text ?? string.Empty;
     }
 
     /// <summary>
@@ -217,7 +212,7 @@ public abstract class Selection
         var highlighter = textArea.GetService(typeof(IHighlighter)) as IHighlighter;
         var html        = new StringBuilder();
         var first       = true;
-        foreach (ISegment selectedSegment in Segments)
+        foreach (var selectedSegment in Segments)
         {
             if (first) first = false;
             else html.AppendLine("<br>");

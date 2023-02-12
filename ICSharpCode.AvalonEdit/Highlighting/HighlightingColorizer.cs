@@ -63,9 +63,9 @@ public class HighlightingColorizer : DocumentColorizingTransformer
     /// <param name="definition">The highlighting definition.</param>
     public HighlightingColorizer(IHighlightingDefinition definition)
     {
-        if (definition == null) throw new ArgumentNullException(nameof(definition));
-        this.definition = definition;
+        this.definition = definition ?? throw new ArgumentNullException(nameof(definition));
     }
+    
 
     /// <summary>
     ///     Creates a new HighlightingColorizer instance that uses a fixed highlighter instance.
@@ -75,8 +75,7 @@ public class HighlightingColorizer : DocumentColorizingTransformer
     /// <param name="highlighter">The highlighter to be used.</param>
     public HighlightingColorizer(IHighlighter highlighter)
     {
-        if (highlighter == null) throw new ArgumentNullException(nameof(highlighter));
-        this.highlighter   = highlighter;
+        this.highlighter   = highlighter ?? throw new ArgumentNullException(nameof(highlighter));
         isFixedHighlighter = true;
     }
 
@@ -101,23 +100,19 @@ public class HighlightingColorizer : DocumentColorizingTransformer
     /// </summary>
     protected virtual void DeregisterServices(TextView textView_)
     {
-        if (highlighter != null)
+        if (highlighter == null) return;
+        if (isInHighlightingGroup)
         {
-            if (isInHighlightingGroup)
-            {
-                highlighter.EndHighlighting();
-                isInHighlightingGroup = false;
-            }
-
-            highlighter.HighlightingStateChanged -= OnHighlightStateChanged;
-            // remove highlighter if it is registered
-            if (textView_.Services.GetService(typeof(IHighlighter)) == highlighter) textView_.Services.RemoveService(typeof(IHighlighter));
-            if (!isFixedHighlighter)
-            {
-                if (highlighter != null) highlighter.Dispose();
-                highlighter = null;
-            }
+            highlighter.EndHighlighting();
+            isInHighlightingGroup = false;
         }
+
+        highlighter.HighlightingStateChanged -= OnHighlightStateChanged;
+        // remove highlighter if it is registered
+        if (textView_.Services.GetService(typeof(IHighlighter)) == highlighter) textView_.Services.RemoveService(typeof(IHighlighter));
+        if (isFixedHighlighter) return;
+        highlighter?.Dispose();
+        highlighter = null;
     }
 
     /// <summary>
@@ -126,16 +121,12 @@ public class HighlightingColorizer : DocumentColorizingTransformer
     /// </summary>
     protected virtual void RegisterServices(TextView textView_)
     {
-        if (textView_.Document != null)
-        {
-            if (!isFixedHighlighter) highlighter = textView_.Document != null ? CreateHighlighter(textView_, textView_.Document) : null;
-            if (highlighter != null && highlighter.Document == textView_.Document)
-            {
-                // add service only if it doesn't already exist
-                if (textView_.Services.GetService(typeof(IHighlighter)) == null) textView_.Services.AddService(typeof(IHighlighter), highlighter);
-                highlighter.HighlightingStateChanged += OnHighlightStateChanged;
-            }
-        }
+        if (textView_.Document == null) return;
+        if (!isFixedHighlighter) highlighter = textView_.Document != null ? CreateHighlighter(textView_, textView_.Document) : null;
+        if (highlighter == null || highlighter.Document != textView_.Document) return;
+        // add service only if it doesn't already exist
+        if (textView_.Services.GetService(typeof(IHighlighter)) == null) textView_.Services.AddService(typeof(IHighlighter), highlighter);
+        highlighter.HighlightingStateChanged += OnHighlightStateChanged;
     }
 
     /// <summary>

@@ -41,8 +41,7 @@ public class InlineObjectElement : VisualLineElement
     /// <param name="element">The element to display.</param>
     public InlineObjectElement(int documentLength, UIElement element) : base(1, documentLength)
     {
-        if (element == null) throw new ArgumentNullException(nameof(element));
-        Element = element;
+        Element = element ?? throw new ArgumentNullException(nameof(element));
     }
 
     /// <inheritdoc />
@@ -70,12 +69,10 @@ public class InlineObjectRun : TextEmbeddedObject
     public InlineObjectRun(int length, TextRunProperties properties, UIElement element)
     {
         if (length <= 0) throw new ArgumentOutOfRangeException(nameof(length), length, "Value must be positive");
-        if (properties == null) throw new ArgumentNullException(nameof(properties));
-        if (element == null) throw new ArgumentNullException(nameof(element));
 
         Length     = length;
-        Properties = properties;
-        Element    = element;
+        Properties = properties ?? throw new ArgumentNullException(nameof(properties));
+        Element    = element ?? throw new ArgumentNullException(nameof(element));
     }
 
     /// <summary>

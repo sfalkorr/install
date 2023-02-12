@@ -55,10 +55,8 @@ public class DocumentHighlighter : ILineTracker, IHighlighter
     /// </summary>
     public DocumentHighlighter(TextDocument document, IHighlightingDefinition definition)
     {
-        if (document == null) throw new ArgumentNullException(nameof(document));
-        if (definition == null) throw new ArgumentNullException(nameof(definition));
-        Document        = document;
-        this.definition = definition;
+        Document        = document ?? throw new ArgumentNullException(nameof(document));
+        this.definition = definition ?? throw new ArgumentNullException(nameof(definition));
         engine          = new HighlightingEngine(definition.MainRuleSet);
         document.VerifyAccess();
         weakLineTracker = WeakLineTracker.Register(document, this);
@@ -70,7 +68,7 @@ public class DocumentHighlighter : ILineTracker, IHighlighter
     /// </summary>
     public void Dispose()
     {
-        if (weakLineTracker != null) weakLineTracker.Deregister();
+        weakLineTracker?.Deregister();
         isDisposed = true;
     }
 
@@ -220,17 +218,11 @@ public class DocumentHighlighter : ILineTracker, IHighlighter
                 // (this branch is always taken on the first loop iteration, as firstInvalidLine > 0)
 
                 if (firstInvalidLine <= targetLineNumber)
-                {
                     // Skip valid lines to next invalid line:
-
-                    currentLine             = firstInvalidLine;
-                }
+                    currentLine = firstInvalidLine;
                 else
-                {
                     // Skip valid lines to target line:
-
                     break;
-                }
             }
 
 

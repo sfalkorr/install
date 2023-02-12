@@ -40,8 +40,7 @@ public class MouseHoverLogic : IDisposable
     /// </summary>
     public MouseHoverLogic(UIElement target)
     {
-        if (target == null) throw new ArgumentNullException(nameof(target));
-        this.target            =  target;
+        this.target            =  target ?? throw new ArgumentNullException(nameof(target));
         this.target.MouseLeave += MouseHoverLogicMouseLeave;
         this.target.MouseMove  += MouseHoverLogicMouseMove;
         this.target.MouseEnter += MouseHoverLogicMouseEnter;

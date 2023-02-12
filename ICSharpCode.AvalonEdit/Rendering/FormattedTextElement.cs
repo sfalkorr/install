@@ -41,8 +41,7 @@ public class FormattedTextElement : VisualLineElement
     /// </summary>
     public FormattedTextElement(string text, int documentLength) : base(1, documentLength)
     {
-        if (text == null) throw new ArgumentNullException(nameof(text));
-        this.text   = text;
+        this.text   = text ?? throw new ArgumentNullException(nameof(text));
         BreakBefore = LineBreakCondition.BreakPossible;
         BreakAfter  = LineBreakCondition.BreakPossible;
     }
@@ -53,8 +52,7 @@ public class FormattedTextElement : VisualLineElement
     /// </summary>
     public FormattedTextElement(TextLine text, int documentLength) : base(1, documentLength)
     {
-        if (text == null) throw new ArgumentNullException(nameof(text));
-        textLine    = text;
+        textLine    = text ?? throw new ArgumentNullException(nameof(text));
         BreakBefore = LineBreakCondition.BreakPossible;
         BreakAfter  = LineBreakCondition.BreakPossible;
     }
@@ -65,8 +63,7 @@ public class FormattedTextElement : VisualLineElement
     /// </summary>
     public FormattedTextElement(FormattedText text, int documentLength) : base(1, documentLength)
     {
-        if (text == null) throw new ArgumentNullException(nameof(text));
-        formattedText = text;
+        formattedText = text ?? throw new ArgumentNullException(nameof(text));
         BreakBefore   = LineBreakCondition.BreakPossible;
         BreakAfter    = LineBreakCondition.BreakPossible;
     }
@@ -86,12 +83,10 @@ public class FormattedTextElement : VisualLineElement
     /// <inheritdoc />
     public override TextRun CreateTextRun(int startVisualColumn, ITextRunConstructionContext context)
     {
-        if (textLine == null)
-        {
-            var formatter = TextFormatterFactory.Create(context.TextView);
-            textLine = PrepareText(formatter, text, TextRunProperties);
-            text     = null;
-        }
+        if (textLine != null) return new FormattedTextRun(this, TextRunProperties);
+        var formatter = TextFormatterFactory.Create(context.TextView);
+        textLine = PrepareText(formatter, text, TextRunProperties);
+        text     = null;
 
         return new FormattedTextRun(this, TextRunProperties);
     }
@@ -118,10 +113,8 @@ public class FormattedTextRun : TextEmbeddedObject
     /// </summary>
     public FormattedTextRun(FormattedTextElement element, TextRunProperties properties)
     {
-        if (element == null) throw new ArgumentNullException(nameof(element));
-        if (properties == null) throw new ArgumentNullException(nameof(properties));
-        Properties = properties;
-        Element    = element;
+        Properties = properties ?? throw new ArgumentNullException(nameof(properties));
+        Element    = element ?? throw new ArgumentNullException(nameof(element));
     }
 
     /// <summary>

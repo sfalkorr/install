@@ -138,8 +138,7 @@ internal static class ImeNativeWrapper
         if (textArea == null) throw new ArgumentNullException(nameof(textArea));
         var textViewBounds  = textArea.TextView.GetBounds(source);
         var characterBounds = textArea.TextView.GetCharacterBounds(textArea.Caret.Position, source);
-        var form            = new CompositionForm();
-        form.dwStyle        = 0x0020;
+        var form            = new CompositionForm { dwStyle = 0x0020 };
         form.ptCurrentPos.x = (int)Math.Max(characterBounds.Left, textViewBounds.Left);
         form.ptCurrentPos.y = (int)Math.Max(characterBounds.Top, textViewBounds.Top);
         form.rcArea.left    = (int)textViewBounds.Left;
@@ -159,7 +158,7 @@ internal static class ImeNativeWrapper
         return ImmSetCompositionFont(hIMC, ref lf);
     }
 
-    private static Rect GetBounds(this TextView textView, HwndSource source)
+    private static Rect GetBounds(this FrameworkElement textView, PresentationSource source)
     {
         // this may happen during layout changes in AvalonDock, so we just return an empty rectangle
         // in those cases. It should be refreshed immediately.

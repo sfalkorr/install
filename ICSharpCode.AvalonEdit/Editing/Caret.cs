@@ -245,7 +245,7 @@ public sealed class Caret
 
     private void RaisePositionChanged()
     {
-        if (textArea.Document != null && textArea.Document.IsInUpdate)
+        if (textArea.Document is { IsInUpdate: true })
         {
             raisePositionChangedOnUpdateFinished = true;
         }
@@ -402,13 +402,10 @@ public sealed class Caret
     /// </summary>
     public Rect CalculateCaretRectangle()
     {
-        if (textView != null && textView.Document != null)
-        {
-            var visualLine = textView.GetOrConstructVisualLine(textView.Document.GetLineByNumber(position.Line));
-            return textArea.OverstrikeMode ? CalcCaretOverstrikeRectangle(visualLine) : CalcCaretRectangle(visualLine);
-        }
+        if (textView is not { Document: { } }) return Rect.Empty;
+        var visualLine = textView.GetOrConstructVisualLine(textView.Document.GetLineByNumber(position.Line));
+        return textArea.OverstrikeMode ? CalcCaretOverstrikeRectangle(visualLine) : CalcCaretRectangle(visualLine);
 
-        return Rect.Empty;
     }
 
     /// <summary>
@@ -427,11 +424,9 @@ public sealed class Caret
     internal void BringCaretToView(double border)
     {
         var caretRectangle = CalculateCaretRectangle();
-        if (!caretRectangle.IsEmpty)
-        {
-            caretRectangle.Inflate(border, border);
-            textView.MakeVisible(caretRectangle);
-        }
+        if (caretRectangle.IsEmpty) return;
+        caretRectangle.Inflate(border, border);
+        textView.MakeVisible(caretRectangle);
     }
 
     /// <summary>
@@ -441,11 +436,9 @@ public sealed class Caret
     {
         Log("Caret.Show()");
         visible = true;
-        if (!showScheduled)
-        {
-            showScheduled = true;
-            textArea.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(ShowInternal));
-        }
+        if (showScheduled) return;
+        showScheduled = true;
+        textArea.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(ShowInternal));
     }
 
     private bool showScheduled;
@@ -458,23 +451,21 @@ public sealed class Caret
         // if show was scheduled but caret hidden in the meantime
         if (!visible) return;
 
-        if (caretAdorner != null && textView != null)
+        if (caretAdorner == null || textView == null) return;
+        var visualLine = textView.GetVisualLine(position.Line);
+        if (visualLine != null)
         {
-            var visualLine = textView.GetVisualLine(position.Line);
-            if (visualLine != null)
-            {
-                var caretRect = textArea.OverstrikeMode ? CalcCaretOverstrikeRectangle(visualLine) : CalcCaretRectangle(visualLine);
-                // Create Win32 caret so that Windows knows where our managed caret is. This is necessary for
-                // features like 'Follow text editing' in the Windows Magnifier.
-                if (!hasWin32Caret) hasWin32Caret = Win32.CreateCaret(textView, caretRect.Size);
-                if (hasWin32Caret) Win32.SetCaretPosition(textView, caretRect.Location - textView.ScrollOffset);
-                caretAdorner.Show(caretRect);
-                textArea.ime.UpdateCompositionWindow();
-            }
-            else
-            {
-                caretAdorner.Hide();
-            }
+            var caretRect = textArea.OverstrikeMode ? CalcCaretOverstrikeRectangle(visualLine) : CalcCaretRectangle(visualLine);
+            // Create Win32 caret so that Windows knows where our managed caret is. This is necessary for
+            // features like 'Follow text editing' in the Windows Magnifier.
+            if (!hasWin32Caret) hasWin32Caret = Win32.CreateCaret(textView, caretRect.Size);
+            if (hasWin32Caret) Win32.SetCaretPosition(textView, caretRect.Location - textView.ScrollOffset);
+            caretAdorner.Show(caretRect);
+            textArea.ime.UpdateCompositionWindow();
+        }
+        else
+        {
+            caretAdorner.Hide();
         }
     }
 

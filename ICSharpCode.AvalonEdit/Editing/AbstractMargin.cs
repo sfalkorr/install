@@ -36,7 +36,7 @@ public abstract class AbstractMargin : FrameworkElement, ITextViewConnect
     /// <summary>
     ///     TextView property.
     /// </summary>
-    public static readonly DependencyProperty TextViewProperty = DependencyProperty.Register("TextView", typeof(TextView), typeof(AbstractMargin), new FrameworkPropertyMetadata(OnTextViewChanged));
+    public static readonly DependencyProperty TextViewProperty = DependencyProperty.Register(nameof(TextView), typeof(TextView), typeof(AbstractMargin), new FrameworkPropertyMetadata(OnTextViewChanged));
 
     /// <summary>
     ///     Gets/sets the text view for which line numbers are displayed.
@@ -93,7 +93,7 @@ public abstract class AbstractMargin : FrameworkElement, ITextViewConnect
 
     private void TextViewDocumentChanged(object sender, EventArgs e)
     {
-        OnDocumentChanged(Document, TextView != null ? TextView.Document : null);
+        OnDocumentChanged(Document, TextView?.Document);
     }
 
     /// <summary>

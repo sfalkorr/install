@@ -46,8 +46,7 @@ internal sealed class SelectionMouseHandler : ITextAreaInputHandler
 
     internal SelectionMouseHandler(TextArea textArea)
     {
-        if (textArea == null) throw new ArgumentNullException(nameof(textArea));
-        this.textArea = textArea;
+        this.textArea = textArea ?? throw new ArgumentNullException(nameof(textArea));
     }
 
     static SelectionMouseHandler()
@@ -58,9 +57,9 @@ internal sealed class SelectionMouseHandler : ITextAreaInputHandler
     private static void OnLostMouseCapture(object sender, MouseEventArgs e)
     {
         var textArea = (TextArea)sender;
-        if (!Equals(Mouse.Captured, textArea))
-            if (textArea.DefaultInputHandler.MouseSelection is SelectionMouseHandler handler)
-                handler.mode = MouseSelectionMode.None;
+        if (Equals(Mouse.Captured, textArea)) return;
+        if (textArea.DefaultInputHandler.MouseSelection is SelectionMouseHandler handler)
+            handler.mode = MouseSelectionMode.None;
     }
 
     TextArea ITextAreaInputHandler.TextArea => textArea;
@@ -117,12 +116,10 @@ internal sealed class SelectionMouseHandler : ITextAreaInputHandler
     private void textArea_OptionChanged(object sender, PropertyChangedEventArgs e)
     {
         var newEnableTextDragDrop = textArea.Options.EnableTextDragDrop;
-        if (newEnableTextDragDrop != enableTextDragDrop)
-        {
-            enableTextDragDrop = newEnableTextDragDrop;
-            if (newEnableTextDragDrop) AttachDragDrop();
-            else DetachDragDrop();
-        }
+        if (newEnableTextDragDrop == enableTextDragDrop) return;
+        enableTextDragDrop = newEnableTextDragDrop;
+        if (newEnableTextDragDrop) AttachDragDrop();
+        else DetachDragDrop();
     }
 
     private void textArea_DocumentChanged(object sender, EventArgs e)
@@ -169,25 +166,16 @@ internal sealed class SelectionMouseHandler : ITextAreaInputHandler
 
     private DragDropEffects GetEffect(DragEventArgs e)
     {
-        if (e.Data.GetDataPresent(DataFormats.UnicodeText, true))
-        {
-            e.Handled = true;
-            int  visualColumn;
-            bool isAtEndOfLine;
-            var  offset = GetOffsetFromMousePosition(e.GetPosition(textArea.TextView), out visualColumn, out isAtEndOfLine);
-            if (offset >= 0)
-            {
-                textArea.Caret.Position    = new TextViewPosition(textArea.Document.GetLocation(offset), visualColumn) { IsAtEndOfLine = isAtEndOfLine };
-                textArea.Caret.DesiredXPos = double.NaN;
-                if (textArea.ReadOnlySectionProvider.CanInsert(offset))
-                {
-                    if ((e.AllowedEffects & DragDropEffects.Move) == DragDropEffects.Move && (e.KeyStates & DragDropKeyStates.ControlKey) != DragDropKeyStates.ControlKey) return DragDropEffects.Move;
-                    return e.AllowedEffects & DragDropEffects.Copy;
-                }
-            }
-        }
+        if (!e.Data.GetDataPresent(DataFormats.UnicodeText, true)) return DragDropEffects.None;
+        e.Handled = true;
+        var  offset = GetOffsetFromMousePosition(e.GetPosition(textArea.TextView), out var visualColumn, out var isAtEndOfLine);
+        if (offset < 0) return DragDropEffects.None;
+        textArea.Caret.Position    = new TextViewPosition(textArea.Document.GetLocation(offset), visualColumn) { IsAtEndOfLine = isAtEndOfLine };
+        textArea.Caret.DesiredXPos = double.NaN;
+        if (!textArea.ReadOnlySectionProvider.CanInsert(offset)) return DragDropEffects.None;
+        if ((e.AllowedEffects & DragDropEffects.Move) == DragDropEffects.Move && (e.KeyStates & DragDropKeyStates.ControlKey) != DragDropKeyStates.ControlKey) return DragDropEffects.Move;
+        return e.AllowedEffects & DragDropEffects.Copy;
 
-        return DragDropEffects.None;
     }
 
     [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
@@ -232,14 +220,6 @@ internal sealed class SelectionMouseHandler : ITextAreaInputHandler
                     // Mark the undo group with the currentDragDescriptor, if the drag
                     // is originating from the same control. This allows combining
                     // the undo groups when text is moved.
-
-                    try
-                    {
-                    }
-                    finally
-                    {
-
-                    }
                 }
 
                 e.Handled = true;
@@ -256,10 +236,7 @@ internal sealed class SelectionMouseHandler : ITextAreaInputHandler
         // WPF swallows exceptions during drag'n'drop or reports them incorrectly, so
         // we re-throw them later to allow the application's unhandled exception handler
         // to catch them
-        textArea.Dispatcher.BeginInvoke(DispatcherPriority.Send, new Action(delegate
-        {
-            throw new DragDropException("Exception during drag'n'drop", ex);
-        }));
+        textArea.Dispatcher.BeginInvoke(DispatcherPriority.Send, new Action(() => throw new DragDropException("Exception during drag'n'drop", ex)));
     }
 
     [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
@@ -296,8 +273,6 @@ internal sealed class SelectionMouseHandler : ITextAreaInputHandler
 
     #region Start Drag
 
-    private object currentDragDescriptor;
-
     private void StartDrag()
     {
         // mouse capture and Drag'n'Drop doesn't mix
@@ -308,20 +283,12 @@ internal sealed class SelectionMouseHandler : ITextAreaInputHandler
 
         var dataObject = textArea.Selection.CreateDataObject(textArea);
 
-        var allowedEffects = DragDropEffects.All;
         var deleteOnMove   = textArea.Selection.Segments.Select(s => new AnchorSegment(textArea.Document, s)).ToList();
-        foreach (ISegment s in deleteOnMove)
-        {
-            var result                                                                                                   = textArea.GetDeletableSegments(s);
-            if (result.Length != 1 || result[0].Offset != s.Offset || result[0].EndOffset != s.EndOffset) allowedEffects &= ~DragDropEffects.Move;
-        }
+        var allowedEffects = (from s in deleteOnMove let result = textArea.GetDeletableSegments(s) where result.Length != 1 || result[0].Offset != s.Offset || result[0].EndOffset != s.EndOffset select s).Aggregate(DragDropEffects.All, (current, s) => current & ~DragDropEffects.Move);
 
         var copyingEventArgs = new DataObjectCopyingEventArgs(dataObject, true);
         textArea.RaiseEvent(copyingEventArgs);
         if (copyingEventArgs.CommandCancelled) return;
-
-        var dragDescriptor = new object();
-        currentDragDescriptor = dragDescriptor;
 
         DragDropEffects resultEffect;
         using (textArea.AllowCaretOutsideSelection())
@@ -345,20 +312,16 @@ internal sealed class SelectionMouseHandler : ITextAreaInputHandler
                 textArea.Caret.Position = oldCaretPosition;
         }
 
-        currentDragDescriptor = null;
-
-        if (deleteOnMove != null && resultEffect == DragDropEffects.Move && (allowedEffects & DragDropEffects.Move) == DragDropEffects.Move)
+        if (resultEffect != DragDropEffects.Move || (allowedEffects & DragDropEffects.Move) != DragDropEffects.Move) return;
         {
-
             textArea.Document.BeginUpdate();
             try
             {
-                foreach (ISegment s in deleteOnMove) textArea.Document.Remove(s.Offset, s.Length);
+                foreach (var s in deleteOnMove) textArea.Document.Remove(s.Offset, s.Length);
             }
             finally
             {
                 textArea.Document.EndUpdate();
-
             }
         }
     }
@@ -370,30 +333,24 @@ internal sealed class SelectionMouseHandler : ITextAreaInputHandler
     // provide the IBeam Cursor for the text area
     private void textArea_QueryCursor(object sender, QueryCursorEventArgs e)
     {
-        if (!e.Handled)
+        if (e.Handled) return;
+        if (mode != MouseSelectionMode.None)
         {
-            if (mode != MouseSelectionMode.None)
-            {
-                // during selection, use IBeam cursor even outside the text area
-                e.Cursor  = Cursors.IBeam;
-                e.Handled = true;
-            }
-            else if (textArea.TextView.VisualLinesValid)
-            {
-                // Only query the cursor if the visual lines are valid.
-                // If they are invalid, the cursor will get re-queried when the visual lines
-                // get refreshed.
-                var p = e.GetPosition(textArea.TextView);
-                if (p.X >= 0 && p.Y >= 0 && p.X <= textArea.TextView.ActualWidth && p.Y <= textArea.TextView.ActualHeight)
-                {
-                    int  visualColumn;
-                    bool isAtEndOfLine;
-                    var  offset = GetOffsetFromMousePosition(e, out visualColumn, out isAtEndOfLine);
-                    if (enableTextDragDrop && textArea.Selection.Contains(offset)) e.Cursor = Cursors.Arrow;
-                    else e.Cursor                                                           = Cursors.IBeam;
-                    e.Handled = true;
-                }
-            }
+            // during selection, use IBeam cursor even outside the text area
+            e.Cursor  = Cursors.IBeam;
+            e.Handled = true;
+        }
+        else if (textArea.TextView.VisualLinesValid)
+        {
+            // Only query the cursor if the visual lines are valid.
+            // If they are invalid, the cursor will get re-queried when the visual lines
+            // get refreshed.
+            var p = e.GetPosition(textArea.TextView);
+            if (p is not { X: >= 0, Y: >= 0 } || !(p.X <= textArea.TextView.ActualWidth) || !(p.Y <= textArea.TextView.ActualHeight)) return;
+            var  offset = GetOffsetFromMousePosition(e, out _, out _);
+            if (enableTextDragDrop && textArea.Selection.Contains(offset)) e.Cursor = Cursors.Arrow;
+            else e.Cursor                                                           = Cursors.IBeam;
+            e.Handled = true;
         }
     }
 
@@ -413,9 +370,7 @@ internal sealed class SelectionMouseHandler : ITextAreaInputHandler
             var shift     = (modifiers & ModifierKeys.Shift) == ModifierKeys.Shift;
             if (enableTextDragDrop && e.ClickCount == 1 && !shift)
             {
-                int  visualColumn;
-                bool isAtEndOfLine;
-                var  offset = GetOffsetFromMousePosition(e, out visualColumn, out isAtEndOfLine);
+                var  offset = GetOffsetFromMousePosition(e, out _, out _);
                 if (textArea.Selection.Contains(offset))
                 {
                     if (textArea.CaptureMouse())
@@ -624,12 +579,7 @@ internal sealed class SelectionMouseHandler : ITextAreaInputHandler
 
     #region ExtendSelection
 
-    private void SetCaretOffsetToMousePosition(MouseEventArgs e)
-    {
-        SetCaretOffsetToMousePosition(e, null);
-    }
-
-    private void SetCaretOffsetToMousePosition(MouseEventArgs e, ISegment allowedSegment)
+    private void SetCaretOffsetToMousePosition(MouseEventArgs e, ISegment allowedSegment = null)
     {
         int  visualColumn;
         bool isAtEndOfLine;
@@ -645,33 +595,47 @@ internal sealed class SelectionMouseHandler : ITextAreaInputHandler
         }
 
         if (allowedSegment != null) offset = offset.CoerceValue(allowedSegment.Offset, allowedSegment.EndOffset);
-        if (offset >= 0)
-        {
-            textArea.Caret.Position    = new TextViewPosition(textArea.Document.GetLocation(offset), visualColumn) { IsAtEndOfLine = isAtEndOfLine };
-            textArea.Caret.DesiredXPos = double.NaN;
-        }
+        if (offset < 0) return;
+        textArea.Caret.Position    = new TextViewPosition(textArea.Document.GetLocation(offset), visualColumn) { IsAtEndOfLine = isAtEndOfLine };
+        textArea.Caret.DesiredXPos = double.NaN;
     }
 
     private void ExtendSelectionToMouse(MouseEventArgs e)
     {
         var oldPosition = textArea.Caret.Position;
-        if (mode == MouseSelectionMode.Normal || mode == MouseSelectionMode.Rectangular)
+        switch (mode)
         {
-            SetCaretOffsetToMousePosition(e);
-            if (mode == MouseSelectionMode.Normal && textArea.Selection is RectangleSelection) textArea.Selection              = new SimpleSelection(textArea, oldPosition, textArea.Caret.Position);
-            else if (mode == MouseSelectionMode.Rectangular && !(textArea.Selection is RectangleSelection)) textArea.Selection = new RectangleSelection(textArea, oldPosition, textArea.Caret.Position);
-            else textArea.Selection                                                                                            = textArea.Selection.StartSelectionOrSetEndpoint(oldPosition, textArea.Caret.Position);
-        }
-        else if (mode == MouseSelectionMode.WholeWord || mode == MouseSelectionMode.WholeLine)
-        {
-            var newWord = mode == MouseSelectionMode.WholeLine ? GetLineAtMousePosition(e) : GetWordAtMousePosition(e);
-            if (newWord != SimpleSegment.Invalid)
+            case MouseSelectionMode.Normal:
+            case MouseSelectionMode.Rectangular:
+                SetCaretOffsetToMousePosition(e);
+                textArea.Selection = mode switch
+                                     {
+                                         MouseSelectionMode.Normal when textArea.Selection is RectangleSelection          => new SimpleSelection(textArea, oldPosition, textArea.Caret.Position),
+                                         MouseSelectionMode.Rectangular when textArea.Selection is not RectangleSelection => new RectangleSelection(textArea, oldPosition, textArea.Caret.Position),
+                                         _                                                                                => textArea.Selection.StartSelectionOrSetEndpoint(oldPosition, textArea.Caret.Position)
+                                     };
+                break;
+            case MouseSelectionMode.WholeWord:
+            case MouseSelectionMode.WholeLine:
             {
-                textArea.Selection = Selection.Create(textArea, Math.Min(newWord.Offset, startWord.Offset), Math.Max(newWord.EndOffset, startWord.EndOffset));
-                // moves caret to start or end of selection
-                if (newWord.Offset < startWord.Offset) textArea.Caret.Offset = newWord.Offset;
-                else textArea.Caret.Offset                                   = Math.Max(newWord.EndOffset, startWord.EndOffset);
+                var newWord = mode == MouseSelectionMode.WholeLine ? GetLineAtMousePosition(e) : GetWordAtMousePosition(e);
+                if (newWord != SimpleSegment.Invalid)
+                {
+                    textArea.Selection = Selection.Create(textArea, Math.Min(newWord.Offset, startWord.Offset), Math.Max(newWord.EndOffset, startWord.EndOffset));
+                    // moves caret to start or end of selection
+                    textArea.Caret.Offset = newWord.Offset < startWord.Offset ? newWord.Offset : Math.Max(newWord.EndOffset, startWord.EndOffset);
+                }
+
+                break;
             }
+            case MouseSelectionMode.None:
+                break;
+            case MouseSelectionMode.PossibleDragStart:
+                break;
+            case MouseSelectionMode.Drag:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
 
         textArea.Caret.BringCaretToView(5.0);

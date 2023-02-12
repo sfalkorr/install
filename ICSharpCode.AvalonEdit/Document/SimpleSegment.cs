@@ -27,7 +27,7 @@ namespace ICSharpCode.AvalonEdit.Document;
 ///     Represents a simple segment (Offset,Length pair) that is not automatically updated
 ///     on document changes.
 /// </summary>
-internal struct SimpleSegment : IEquatable<SimpleSegment>, ISegment
+internal readonly struct SimpleSegment : IEquatable<SimpleSegment>, ISegment
 {
     public static readonly SimpleSegment Invalid = new(-1, -1);
 

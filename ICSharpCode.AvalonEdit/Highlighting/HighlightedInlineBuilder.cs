@@ -51,15 +51,11 @@ public sealed class HighlightedInlineBuilder
     {
         if (offset < 0 || offset > Text.Length) throw new ArgumentOutOfRangeException(nameof(offset));
         var index = stateChangeOffsets.BinarySearch(offset);
-        if (index < 0)
-        {
-            index = ~index;
-            if (offset < Text.Length)
-            {
-                stateChanges.Insert(index, stateChanges[index - 1].Clone());
-                stateChangeOffsets.Insert(index, offset);
-            }
-        }
+        if (index >= 0) return index;
+        index = ~index;
+        if (offset >= Text.Length) return index;
+        stateChanges.Insert(index, stateChanges[index - 1].Clone());
+        stateChangeOffsets.Insert(index, offset);
 
         return index;
     }
@@ -69,8 +65,7 @@ public sealed class HighlightedInlineBuilder
     /// </summary>
     public HighlightedInlineBuilder(string text)
     {
-        if (text == null) throw new ArgumentNullException(nameof(text));
-        Text = text;
+        Text = text ?? throw new ArgumentNullException(nameof(text));
         stateChangeOffsets.Add(0);
         stateChanges.Add(new HighlightingColor());
     }

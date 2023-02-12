@@ -211,9 +211,7 @@ internal sealed class HeightTree : ILineTracker, IDisposable
             if (node.lineNode.collapsedSections != null)
                 // we are inserting directly after node - so copy all collapsedSections
                 // that do not end at node.
-                foreach (var cs in node.lineNode.collapsedSections)
-                    if (cs.End != node.documentLine)
-                        newNode.AddDirectlyCollapsed(cs);
+                foreach (var cs in node.lineNode.collapsedSections.Where(cs => cs.End != node.documentLine)) newNode.AddDirectlyCollapsed(cs);
 
             InsertAsRight(node, newNode);
         }
@@ -376,8 +374,8 @@ internal sealed class HeightTree : ILineTracker, IDisposable
     private void BeginRemoval()
     {
         Debug.Assert(!inRemoval);
-        if (nodesToCheckForMerging == null) nodesToCheckForMerging = new List<HeightTreeNode>();
-        inRemoval = true;
+        nodesToCheckForMerging ??= new List<HeightTreeNode>();
+        inRemoval              =   true;
     }
 
     private void EndRemoval()
@@ -490,7 +488,7 @@ internal sealed class HeightTree : ILineTracker, IDisposable
 
     private static double GetVisualPositionFromNode(HeightTreeNode node)
     {
-        var position = node.left != null ? node.left.totalHeight : 0;
+        var position = node.left?.totalHeight ?? 0;
         while (node.parent != null)
         {
             if (node.IsDirectlyCollapsed) position = 0;
@@ -592,7 +590,7 @@ internal sealed class HeightTree : ILineTracker, IDisposable
     internal IEnumerable<CollapsedLineSection> GetAllCollapsedSections()
     {
         var emptyCSList = new List<CollapsedLineSection>();
-        return Enumerable.Distinct(Enumerable.SelectMany(AllNodes, node => Enumerable.Concat(node.lineNode.collapsedSections ?? emptyCSList, node.collapsedSections ?? emptyCSList)));
+        return AllNodes.SelectMany(node => (node.lineNode.collapsedSections ?? emptyCSList).Concat(node.collapsedSections ?? emptyCSList)).Distinct();
     }
 
     #endregion
@@ -657,8 +655,8 @@ internal sealed class HeightTree : ILineTracker, IDisposable
         if (node.left != null && node.right != null)
             if (node.left.collapsedSections != null && node.right.collapsedSections != null)
             {
-                var intersection = Enumerable.Intersect(node.left.collapsedSections, node.right.collapsedSections);
-                Debug.Assert(Enumerable.Count(intersection) == 0);
+                var intersection = node.left.collapsedSections.Intersect(node.right.collapsedSections);
+                Debug.Assert(!intersection.Any());
             }
 
         if (node.IsDirectlyCollapsed)
@@ -676,8 +674,8 @@ internal sealed class HeightTree : ILineTracker, IDisposable
     /// </summary>
     private static void CheckAllContainedIn(IEnumerable<CollapsedLineSection> list1, ICollection<CollapsedLineSection> list2)
     {
-        if (list1 == null) list1 = new List<CollapsedLineSection>();
-        if (list2 == null) list2 = new List<CollapsedLineSection>();
+        list1 ??= new List<CollapsedLineSection>();
+        list2 ??= new List<CollapsedLineSection>();
         foreach (var cs in list1) Debug.Assert(list2.Contains(cs));
     }
 
@@ -690,21 +688,27 @@ internal sealed class HeightTree : ILineTracker, IDisposable
      */
     private void CheckNodeProperties(HeightTreeNode node, HeightTreeNode parentNode, bool parentColor, int blackCount, ref int expectedBlackCount)
     {
-        if (node == null) return;
-
-        Debug.Assert(node.parent == parentNode);
-
-        if (parentColor == RED) Debug.Assert(node.color == BLACK);
-        if (node.color == BLACK) blackCount++;
-        if (node.left == null && node.right == null)
+        while (true)
         {
-            // node is a leaf node:
-            if (expectedBlackCount == -1) expectedBlackCount = blackCount;
-            else Debug.Assert(expectedBlackCount == blackCount);
-        }
+            if (node == null) return;
 
-        CheckNodeProperties(node.left, node, node.color, blackCount, ref expectedBlackCount);
-        CheckNodeProperties(node.right, node, node.color, blackCount, ref expectedBlackCount);
+            Debug.Assert(node.parent == parentNode);
+
+            if (parentColor == RED) Debug.Assert(node.color == BLACK);
+            if (node.color == BLACK) blackCount++;
+            if (node.left == null && node.right == null)
+            {
+                // node is a leaf node:
+                if (expectedBlackCount == -1) expectedBlackCount = blackCount;
+                else Debug.Assert(expectedBlackCount == blackCount);
+            }
+
+            CheckNodeProperties(node.left, node, node.color, blackCount, ref expectedBlackCount);
+            var node1 = node;
+            node        = node.right;
+            parentNode  = node1;
+            parentColor = node1.color;
+        }
     }
 
     [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
@@ -717,22 +721,22 @@ internal sealed class HeightTree : ILineTracker, IDisposable
 
     private static void AppendTreeToString(HeightTreeNode node, StringBuilder b, int indent)
     {
-        if (node.color == RED) b.Append("RED   ");
-        else b.Append("BLACK ");
-        b.AppendLine(node.ToString());
-        indent += 2;
-        if (node.left != null)
+        while (true)
         {
-            b.Append(' ', indent);
-            b.Append("L: ");
-            AppendTreeToString(node.left, b, indent);
-        }
+            b.Append(node.color == RED ? "RED   " : "BLACK ");
+            b.AppendLine(node.ToString());
+            indent += 2;
+            if (node.left != null)
+            {
+                b.Append(' ', indent);
+                b.Append("L: ");
+                AppendTreeToString(node.left, b, indent);
+            }
 
-        if (node.right != null)
-        {
+            if (node.right == null) return;
             b.Append(' ', indent);
             b.Append("R: ");
-            AppendTreeToString(node.right, b, indent);
+            node = node.right;
         }
     }
 #endif
@@ -766,70 +770,72 @@ internal sealed class HeightTree : ILineTracker, IDisposable
 
     private void FixTreeOnInsert(HeightTreeNode node)
     {
-        Debug.Assert(node != null);
-        Debug.Assert(node.color == RED);
-        Debug.Assert(node.left == null || node.left.color == BLACK);
-        Debug.Assert(node.right == null || node.right.color == BLACK);
-
-        var parentNode = node.parent;
-        if (parentNode == null)
+        while (true)
         {
-            // we inserted in the root -> the node must be black
-            // since this is a root node, making the node black increments the number of black nodes
-            // on all paths by one, so it is still the same for all paths.
-            node.color = BLACK;
-            return;
-        }
+            Debug.Assert(node != null);
+            Debug.Assert(node.color == RED);
+            Debug.Assert(node.left == null || node.left.color == BLACK);
+            Debug.Assert(node.right == null || node.right.color == BLACK);
 
-        if (parentNode.color == BLACK)
-            // if the parent node where we inserted was black, our red node is placed correctly.
-            // since we inserted a red node, the number of black nodes on each path is unchanged
-            // -> the tree is still balanced
-            return;
-        // parentNode is red, so there is a conflict here!
+            var parentNode = node.parent;
+            if (parentNode == null)
+            {
+                // we inserted in the root -> the node must be black
+                // since this is a root node, making the node black increments the number of black nodes
+                // on all paths by one, so it is still the same for all paths.
+                node.color = BLACK;
+                return;
+            }
 
-        // because the root is black, parentNode is not the root -> there is a grandparent node
-        var grandparentNode = parentNode.parent;
-        var uncleNode       = Sibling(parentNode);
-        if (uncleNode != null && uncleNode.color == RED)
-        {
+            if (parentNode.color == BLACK)
+                // if the parent node where we inserted was black, our red node is placed correctly.
+                // since we inserted a red node, the number of black nodes on each path is unchanged
+                // -> the tree is still balanced
+                return;
+            // parentNode is red, so there is a conflict here!
+
+            // because the root is black, parentNode is not the root -> there is a grandparent node
+            var grandparentNode = parentNode.parent;
+            var uncleNode       = Sibling(parentNode);
+            if (uncleNode is { color: RED })
+            {
+                parentNode.color      = BLACK;
+                uncleNode.color       = BLACK;
+                grandparentNode.color = RED;
+                node                  = grandparentNode;
+                continue;
+            }
+
+            // now we know: parent is red but uncle is black
+            // First rotation:
+            if (node == parentNode.right && parentNode == grandparentNode.left)
+            {
+                RotateLeft(parentNode);
+                node = node.left;
+            }
+            else if (node == parentNode.left && parentNode == grandparentNode.right)
+            {
+                RotateRight(parentNode);
+                node = node.right;
+            }
+
+            // because node might have changed, reassign variables:
+            parentNode      = node.parent;
+            grandparentNode = parentNode.parent;
+
+            // Now recolor a bit:
             parentNode.color      = BLACK;
-            uncleNode.color       = BLACK;
             grandparentNode.color = RED;
-            FixTreeOnInsert(grandparentNode);
-            return;
-        }
+            // Second rotation:
+            if (node == parentNode.left && parentNode == grandparentNode.left) { RotateRight(grandparentNode); }
+            else
+            {
+                // because of the first rotation, this is guaranteed:
+                Debug.Assert(node == parentNode.right && parentNode == grandparentNode.right);
+                RotateLeft(grandparentNode);
+            }
 
-        // now we know: parent is red but uncle is black
-        // First rotation:
-        if (node == parentNode.right && parentNode == grandparentNode.left)
-        {
-            RotateLeft(parentNode);
-            node = node.left;
-        }
-        else if (node == parentNode.left && parentNode == grandparentNode.right)
-        {
-            RotateRight(parentNode);
-            node = node.right;
-        }
-
-        // because node might have changed, reassign variables:
-        parentNode      = node.parent;
-        grandparentNode = parentNode.parent;
-
-        // Now recolor a bit:
-        parentNode.color      = BLACK;
-        grandparentNode.color = RED;
-        // Second rotation:
-        if (node == parentNode.left && parentNode == grandparentNode.left)
-        {
-            RotateRight(grandparentNode);
-        }
-        else
-        {
-            // because of the first rotation, this is guaranteed:
-            Debug.Assert(node == parentNode.right && parentNode == grandparentNode.right);
-            RotateLeft(grandparentNode);
+            break;
         }
     }
 
@@ -864,11 +870,9 @@ internal sealed class HeightTree : ILineTracker, IDisposable
         BeforeNodeRemove(removedNode);
         ReplaceNode(removedNode, childNode);
         if (parentNode != null) UpdateAfterChildrenChange(parentNode);
-        if (removedNode.color == BLACK)
-        {
-            if (childNode != null && childNode.color == RED) childNode.color = BLACK;
-            else FixTreeOnDelete(childNode, parentNode);
-        }
+        if (removedNode.color != BLACK) return;
+        if (childNode is { color: RED }) childNode.color = BLACK;
+        else FixTreeOnDelete(childNode, parentNode);
     }
 
     private void FixTreeOnDelete(HeightTreeNode node, HeightTreeNode parentNode)
@@ -888,18 +892,16 @@ internal sealed class HeightTree : ILineTracker, IDisposable
             sibling = Sibling(node, parentNode); // update value of sibling after rotation
         }
 
-        if (parentNode.color == BLACK && sibling.color == BLACK && GetColor(sibling.left) == BLACK && GetColor(sibling.right) == BLACK)
+        switch (parentNode.color)
         {
-            sibling.color = RED;
-            FixTreeOnDelete(parentNode, parentNode.parent);
-            return;
-        }
-
-        if (parentNode.color == RED && sibling.color == BLACK && GetColor(sibling.left) == BLACK && GetColor(sibling.right) == BLACK)
-        {
-            sibling.color    = RED;
-            parentNode.color = BLACK;
-            return;
+            case BLACK when sibling.color == BLACK && GetColor(sibling.left) == BLACK && GetColor(sibling.right) == BLACK:
+                sibling.color = RED;
+                FixTreeOnDelete(parentNode, parentNode.parent);
+                return;
+            case RED when sibling.color == BLACK && GetColor(sibling.left) == BLACK && GetColor(sibling.right) == BLACK:
+                sibling.color    = RED;
+                parentNode.color = BLACK;
+                return;
         }
 
         if (node == parentNode.left && sibling.color == BLACK && GetColor(sibling.left) == RED && GetColor(sibling.right) == BLACK)
@@ -996,20 +998,18 @@ internal sealed class HeightTree : ILineTracker, IDisposable
 
     private static HeightTreeNode Sibling(HeightTreeNode node)
     {
-        if (node == node.parent.left) return node.parent.right;
-        return node.parent.left;
+        return node == node.parent.left ? node.parent.right : node.parent.left;
     }
 
     private static HeightTreeNode Sibling(HeightTreeNode node, HeightTreeNode parentNode)
     {
         Debug.Assert(node == null || node.parent == parentNode);
-        if (node == parentNode.left) return parentNode.right;
-        return parentNode.left;
+        return node == parentNode.left ? parentNode.right : parentNode.left;
     }
 
     private static bool GetColor(HeightTreeNode node)
     {
-        return node != null ? node.color : BLACK;
+        return node?.color ?? BLACK;
     }
 
     #endregion

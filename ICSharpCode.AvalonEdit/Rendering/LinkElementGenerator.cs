@@ -60,8 +60,7 @@ public class LinkElementGenerator : VisualLineElementGenerator, IBuiltinElementG
     /// </summary>
     protected LinkElementGenerator(Regex regex) : this()
     {
-        if (regex == null) throw new ArgumentNullException(nameof(regex));
-        linkRegex = regex;
+        linkRegex = regex ?? throw new ArgumentNullException(nameof(regex));
     }
 
     void IBuiltinElementGenerator.FetchOptions(TextEditorOptions options)
@@ -104,9 +103,7 @@ public class LinkElementGenerator : VisualLineElementGenerator, IBuiltinElementG
     {
         var uri = GetUriFromMatch(m);
         if (uri == null) return null;
-        var linkText = new VisualLineLinkText(CurrentContext.VisualLine, m.Length);
-        linkText.NavigateUri                    = uri;
-        linkText.RequireControlModifierForClick = RequireControlModifierForClick;
+        var linkText = new VisualLineLinkText(CurrentContext.VisualLine, m.Length) { NavigateUri = uri, RequireControlModifierForClick = RequireControlModifierForClick };
         return linkText;
     }
 
@@ -117,9 +114,7 @@ public class LinkElementGenerator : VisualLineElementGenerator, IBuiltinElementG
     {
         var targetUrl                                                         = match.Value;
         if (targetUrl.StartsWith("www.", StringComparison.Ordinal)) targetUrl = "http://" + targetUrl;
-        if (Uri.IsWellFormedUriString(targetUrl, UriKind.Absolute)) return new Uri(targetUrl);
-
-        return null;
+        return Uri.IsWellFormedUriString(targetUrl, UriKind.Absolute) ? new Uri(targetUrl) : null;
     }
 }
 
@@ -144,8 +139,6 @@ internal sealed class MailLinkElementGenerator : LinkElementGenerator
     protected override Uri GetUriFromMatch(Match match)
     {
         var targetUrl = "mailto:" + match.Value;
-        if (Uri.IsWellFormedUriString(targetUrl, UriKind.Absolute)) return new Uri(targetUrl);
-
-        return null;
+        return Uri.IsWellFormedUriString(targetUrl, UriKind.Absolute) ? new Uri(targetUrl) : null;
     }
 }

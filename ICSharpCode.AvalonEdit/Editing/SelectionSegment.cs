@@ -86,6 +86,6 @@ public class SelectionSegment : ISegment
     /// <inheritdoc />
     public override string ToString()
     {
-        return string.Format("[SelectionSegment StartOffset={0}, EndOffset={1}, StartVC={2}, EndVC={3}]", StartOffset, EndOffset, StartVisualColumn, EndVisualColumn);
+        return $"[SelectionSegment StartOffset={StartOffset}, EndOffset={EndOffset}, StartVC={StartVisualColumn}, EndVC={EndVisualColumn}]";
     }
 }

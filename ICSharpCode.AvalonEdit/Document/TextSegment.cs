@@ -45,7 +45,7 @@ namespace ICSharpCode.AvalonEdit.Document;
 /// <seealso cref="ISegment" />
 /// <seealso cref="AnchorSegment" />
 
-public class TextSegment : ISegment
+public abstract class TextSegment : ISegment
 {
     internal TextSegment left, right, parent;
 

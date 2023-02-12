@@ -41,8 +41,7 @@ public abstract class DocumentColorizingTransformer : ColorizingTransformer
     /// <inheritdoc />
     protected override void Colorize(ITextRunConstructionContext context)
     {
-        if (context == null) throw new ArgumentNullException(nameof(context));
-        CurrentContext = context;
+        CurrentContext = context ?? throw new ArgumentNullException(nameof(context));
 
         currentDocumentLine          = context.VisualLine.FirstDocumentLine;
         firstLineStart               = currentDocumentLineStartOffset = currentDocumentLine.Offset;
@@ -60,14 +59,12 @@ public abstract class DocumentColorizingTransformer : ColorizingTransformer
             foreach (var e in context.VisualLine.Elements.ToArray())
             {
                 var elementOffset = firstLineStart + e.RelativeTextOffset;
-                if (elementOffset >= currentDocumentLineTotalEndOffset)
-                {
-                    currentDocumentLine               = context.Document.GetLineByOffset(elementOffset);
-                    currentDocumentLineStartOffset    = currentDocumentLine.Offset;
-                    currentDocumentLineEndOffset      = currentDocumentLineStartOffset + currentDocumentLine.Length;
-                    currentDocumentLineTotalEndOffset = currentDocumentLineStartOffset + currentDocumentLine.TotalLength;
-                    ColorizeLine(currentDocumentLine);
-                }
+                if (elementOffset < currentDocumentLineTotalEndOffset) continue;
+                currentDocumentLine               = context.Document.GetLineByOffset(elementOffset);
+                currentDocumentLineStartOffset    = currentDocumentLine.Offset;
+                currentDocumentLineEndOffset      = currentDocumentLineStartOffset + currentDocumentLine.Length;
+                currentDocumentLineTotalEndOffset = currentDocumentLineStartOffset + currentDocumentLine.TotalLength;
+                ColorizeLine(currentDocumentLine);
             }
         }
 
@@ -80,9 +77,6 @@ public abstract class DocumentColorizingTransformer : ColorizingTransformer
     /// </summary>
     protected abstract void ColorizeLine(DocumentLine line);
 
-    public static void ColorizeMy(DocumentLine line)
-    {
-    }
 
     /// <summary>
     ///     Changes a part of the current document line.

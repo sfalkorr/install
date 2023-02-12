@@ -171,7 +171,7 @@ internal sealed class DocumentLineTree : IList<DocumentLine>
 
     internal static int GetIndexFromNode(LineNode node)
     {
-        var index = node.left != null ? node.left.nodeTotalCount : 0;
+        var index = node.left?.nodeTotalCount ?? 0;
         while (node.parent != null)
         {
             if (node == node.parent.right)
@@ -208,7 +208,7 @@ internal sealed class DocumentLineTree : IList<DocumentLine>
 
     internal static int GetOffsetFromNode(LineNode node)
     {
-        var offset = node.left != null ? node.left.nodeTotalLength : 0;
+        var offset = node.left?.nodeTotalLength ?? 0;
         while (node.parent != null)
         {
             if (node == node.parent.right)
@@ -317,8 +317,7 @@ internal sealed class DocumentLineTree : IList<DocumentLine>
 
     private static void AppendTreeToString(LineNode node, StringBuilder b, int indent)
     {
-        if (node.color == RED) b.Append("RED   ");
-        else b.Append("BLACK ");
+        b.Append(node.color == RED ? "RED   " : "BLACK ");
         b.AppendLine(node.ToString());
         indent += 2;
         if (node.left != null)
@@ -349,8 +348,7 @@ internal sealed class DocumentLineTree : IList<DocumentLine>
 
     public DocumentLine InsertLineAfter(DocumentLine line, int totalLength)
     {
-        var newLine = new DocumentLine(document);
-        newLine.TotalLength = totalLength;
+        var newLine = new DocumentLine(document) { TotalLength = totalLength };
 
         InsertAfter(line, newLine);
         return newLine;
@@ -392,70 +390,72 @@ internal sealed class DocumentLineTree : IList<DocumentLine>
 
     private void FixTreeOnInsert(LineNode node)
     {
-        Debug.Assert(node != null);
-        Debug.Assert(node.color == RED);
-        Debug.Assert(node.left == null || node.left.color == BLACK);
-        Debug.Assert(node.right == null || node.right.color == BLACK);
-
-        var parentNode = node.parent;
-        if (parentNode == null)
+        while (true)
         {
-            // we inserted in the root -> the node must be black
-            // since this is a root node, making the node black increments the number of black nodes
-            // on all paths by one, so it is still the same for all paths.
-            node.color = BLACK;
-            return;
-        }
+            Debug.Assert(node != null);
+            Debug.Assert(node.color == RED);
+            Debug.Assert(node.left == null || node.left.color == BLACK);
+            Debug.Assert(node.right == null || node.right.color == BLACK);
 
-        if (parentNode.color == BLACK)
-            // if the parent node where we inserted was black, our red node is placed correctly.
-            // since we inserted a red node, the number of black nodes on each path is unchanged
-            // -> the tree is still balanced
-            return;
-        // parentNode is red, so there is a conflict here!
+            var parentNode = node.parent;
+            if (parentNode == null)
+            {
+                // we inserted in the root -> the node must be black
+                // since this is a root node, making the node black increments the number of black nodes
+                // on all paths by one, so it is still the same for all paths.
+                node.color = BLACK;
+                return;
+            }
 
-        // because the root is black, parentNode is not the root -> there is a grandparent node
-        var grandparentNode = parentNode.parent;
-        var uncleNode       = Sibling(parentNode);
-        if (uncleNode != null && uncleNode.color == RED)
-        {
+            if (parentNode.color == BLACK)
+                // if the parent node where we inserted was black, our red node is placed correctly.
+                // since we inserted a red node, the number of black nodes on each path is unchanged
+                // -> the tree is still balanced
+                return;
+            // parentNode is red, so there is a conflict here!
+
+            // because the root is black, parentNode is not the root -> there is a grandparent node
+            var grandparentNode = parentNode.parent;
+            var uncleNode       = Sibling(parentNode);
+            if (uncleNode is { color: RED })
+            {
+                parentNode.color      = BLACK;
+                uncleNode.color       = BLACK;
+                grandparentNode.color = RED;
+                node                  = grandparentNode;
+                continue;
+            }
+
+            // now we know: parent is red but uncle is black
+            // First rotation:
+            if (node == parentNode.right && parentNode == grandparentNode.left)
+            {
+                RotateLeft(parentNode);
+                node = node.left;
+            }
+            else if (node == parentNode.left && parentNode == grandparentNode.right)
+            {
+                RotateRight(parentNode);
+                node = node.right;
+            }
+
+            // because node might have changed, reassign variables:
+            parentNode      = node.parent;
+            grandparentNode = parentNode.parent;
+
+            // Now recolor a bit:
             parentNode.color      = BLACK;
-            uncleNode.color       = BLACK;
             grandparentNode.color = RED;
-            FixTreeOnInsert(grandparentNode);
-            return;
-        }
+            // Second rotation:
+            if (node == parentNode.left && parentNode == grandparentNode.left) { RotateRight(grandparentNode); }
+            else
+            {
+                // because of the first rotation, this is guaranteed:
+                Debug.Assert(node == parentNode.right && parentNode == grandparentNode.right);
+                RotateLeft(grandparentNode);
+            }
 
-        // now we know: parent is red but uncle is black
-        // First rotation:
-        if (node == parentNode.right && parentNode == grandparentNode.left)
-        {
-            RotateLeft(parentNode);
-            node = node.left;
-        }
-        else if (node == parentNode.left && parentNode == grandparentNode.right)
-        {
-            RotateRight(parentNode);
-            node = node.right;
-        }
-
-        // because node might have changed, reassign variables:
-        parentNode      = node.parent;
-        grandparentNode = parentNode.parent;
-
-        // Now recolor a bit:
-        parentNode.color      = BLACK;
-        grandparentNode.color = RED;
-        // Second rotation:
-        if (node == parentNode.left && parentNode == grandparentNode.left)
-        {
-            RotateRight(grandparentNode);
-        }
-        else
-        {
-            // because of the first rotation, this is guaranteed:
-            Debug.Assert(node == parentNode.right && parentNode == grandparentNode.right);
-            RotateLeft(grandparentNode);
+            break;
         }
     }
 
@@ -489,7 +489,7 @@ internal sealed class DocumentLineTree : IList<DocumentLine>
         if (parentNode != null) UpdateAfterChildrenChange(parentNode);
         if (removedNode.color == BLACK)
         {
-            if (childNode != null && childNode.color == RED) childNode.color = BLACK;
+            if (childNode is { color: RED }) childNode.color = BLACK;
             else FixTreeOnDelete(childNode, parentNode);
         }
     }
@@ -619,20 +619,18 @@ internal sealed class DocumentLineTree : IList<DocumentLine>
 
     private static LineNode Sibling(LineNode node)
     {
-        if (node == node.parent.left) return node.parent.right;
-        return node.parent.left;
+        return node == node.parent.left ? node.parent.right : node.parent.left;
     }
 
     private static LineNode Sibling(LineNode node, LineNode parentNode)
     {
         Debug.Assert(node == null || node.parent == parentNode);
-        if (node == parentNode.left) return parentNode.right;
-        return parentNode.left;
+        return node == parentNode.left ? parentNode.right : parentNode.left;
     }
 
     private static bool GetColor(LineNode node)
     {
-        return node != null ? node.color : BLACK;
+        return node is { color: true };
     }
 
     #endregion

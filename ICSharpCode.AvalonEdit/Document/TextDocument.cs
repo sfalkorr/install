@@ -216,7 +216,7 @@ public sealed class TextDocument : IDocument, INotifyPropertyChanged
         get
         {
             VerifyAccess();
-            var completeText = cachedText != null ? cachedText.Target as string : null;
+            var completeText = cachedText?.Target as string;
             if (completeText == null)
             {
                 completeText = rope.ToString();
@@ -747,9 +747,7 @@ public sealed class TextDocument : IDocument, INotifyPropertyChanged
                 }
                 else
                 {
-                    var map = new OffsetChangeMap(2);
-                    map.Add(new OffsetChangeMapEntry(offset, length, 0));
-                    map.Add(new OffsetChangeMapEntry(offset, 0, text.TextLength));
+                    var map = new OffsetChangeMap(2) { new OffsetChangeMapEntry(offset, length, 0), new OffsetChangeMapEntry(offset, 0, text.TextLength) };
                     map.Freeze();
                     Replace(offset, length, text, map);
                 }
@@ -1130,8 +1128,7 @@ public sealed class TextDocument : IDocument, INotifyPropertyChanged
         set
         {
             VerifyAccess();
-            if (value == null) throw new ArgumentNullException();
-            serviceProvider = value;
+            serviceProvider = value ?? throw new ArgumentNullException();
         }
     }
 

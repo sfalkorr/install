@@ -135,9 +135,7 @@ public class HighlightingManager : IHighlightingDefinitionReferenceResolver
     {
         lock (lockObj)
         {
-            IHighlightingDefinition rh;
-            if (highlightingsByName.TryGetValue(name, out rh)) return rh;
-            return null;
+            return highlightingsByName.TryGetValue(name, out var rh) ? rh : null;
         }
     }
 
@@ -163,9 +161,7 @@ public class HighlightingManager : IHighlightingDefinitionReferenceResolver
     {
         lock (lockObj)
         {
-            IHighlightingDefinition rh;
-            if (highlightingsByExtension.TryGetValue(extension, out rh)) return rh;
-            return null;
+            return highlightingsByExtension.TryGetValue(extension, out var rh) ? rh : null;
         }
     }
 
@@ -233,7 +229,7 @@ public class HighlightingManager : IHighlightingDefinitionReferenceResolver
                 }
 
                 Debug.Assert(name == xshd.Name);
-                if (extensions != null) Debug.Assert(Enumerable.SequenceEqual(extensions, xshd.Extensions));
+                if (extensions != null) Debug.Assert(extensions.SequenceEqual(xshd.Extensions));
                 else Debug.Assert(xshd.Extensions.Count == 0);
 
                 // round-trip xshd:

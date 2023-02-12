@@ -59,16 +59,11 @@ internal sealed class SimpleSelection : Selection
                 {
                     if (segmentsToDelete[i].Offset == SurroundingSegment.Offset && segmentsToDelete[i].Length == SurroundingSegment.Length) newText = AddSpacesIfRequired(newText, StartPosition, EndPosition);
                     if (string.IsNullOrEmpty(newText))
-                    {
                         // place caret at the beginning of the selection
-                        if (StartPosition.CompareTo(EndPosition) <= 0) textArea.Caret.Position = StartPosition;
-                        else textArea.Caret.Position                                           = EndPosition;
-                    }
+                        textArea.Caret.Position = StartPosition.CompareTo(EndPosition) <= 0 ? StartPosition : EndPosition;
                     else
-                    {
                         // place caret so that it ends up behind the new text
-                        textArea.Caret.Offset = segmentsToDelete[i].EndOffset;
-                    }
+                        textArea.Caret.Offset  = segmentsToDelete[i].EndOffset;
 
                     textArea.Document.Replace(segmentsToDelete[i], newText);
                 }

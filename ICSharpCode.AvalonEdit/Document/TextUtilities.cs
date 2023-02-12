@@ -77,8 +77,7 @@ public static partial class TextUtilities
     {
         var num = (int)controlCharacter;
         if (num < c0Table.Length) return c0Table[num];
-        if (num >= 127 && num <= 159) return delAndC1Table[num - 127];
-        return num.ToString("x4", CultureInfo.InvariantCulture);
+        return num is >= 127 and <= 159 ? delAndC1Table[num - 127] : num.ToString("x4", CultureInfo.InvariantCulture);
     }
 
     #endregion
