@@ -96,7 +96,7 @@ internal sealed class HeightTree : ILineTracker, IDisposable
         }
     }
 
-    private HeightTreeNode GetNode(DocumentLine ls)
+    private HeightTreeNode GetNode(IDocumentLine ls)
     {
         return GetNodeByIndex(ls.LineNumber - 1);
     }
@@ -211,7 +211,8 @@ internal sealed class HeightTree : ILineTracker, IDisposable
             if (node.lineNode.collapsedSections != null)
                 // we are inserting directly after node - so copy all collapsedSections
                 // that do not end at node.
-                foreach (var cs in node.lineNode.collapsedSections.Where(cs => cs.End != node.documentLine)) newNode.AddDirectlyCollapsed(cs);
+                foreach (var cs in node.lineNode.collapsedSections.Where(cs => cs.End != node.documentLine))
+                    newNode.AddDirectlyCollapsed(cs);
 
             InsertAsRight(node, newNode);
         }
@@ -631,13 +632,13 @@ internal sealed class HeightTree : ILineTracker, IDisposable
 
     private void CheckProperties(HeightTreeNode node)
     {
-        var totalCount  = 1;
+        var totalCount = 1;
         var totalHeight = node.lineNode.TotalHeight;
         if (node.lineNode.IsDirectlyCollapsed) Debug.Assert(node.lineNode.collapsedSections.Count > 0);
         if (node.left != null)
         {
             CheckProperties(node.left);
-            totalCount  += node.left.totalCount;
+            totalCount += node.left.totalCount;
             totalHeight += node.left.totalHeight;
 
             CheckAllContainedIn(node.left.collapsedSections, node.lineNode.collapsedSections);
@@ -646,7 +647,7 @@ internal sealed class HeightTree : ILineTracker, IDisposable
         if (node.right != null)
         {
             CheckProperties(node.right);
-            totalCount  += node.right.totalCount;
+            totalCount += node.right.totalCount;
             totalHeight += node.right.totalHeight;
 
             CheckAllContainedIn(node.right.collapsedSections, node.lineNode.collapsedSections);
@@ -705,8 +706,8 @@ internal sealed class HeightTree : ILineTracker, IDisposable
 
             CheckNodeProperties(node.left, node, node.color, blackCount, ref expectedBlackCount);
             var node1 = node;
-            node        = node.right;
-            parentNode  = node1;
+            node = node.right;
+            parentNode = node1;
             parentColor = node1.color;
         }
     }

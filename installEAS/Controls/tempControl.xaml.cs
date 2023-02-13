@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
@@ -79,10 +80,9 @@ public partial class tempControl
 
     private void Btn6_OnClick(object sender, RoutedEventArgs e)
     {
-        log("a");
+        var output = DateTime.Now.ToString("hh:MM:ss") + ": " +  Environment.NewLine + Environment.StackTrace[0];
+        Console.WriteLine(output);
 
-        mLogAsync("хуй");
-        log("b");
     }
 
 

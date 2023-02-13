@@ -14,7 +14,6 @@
      MinHeight="350"
      Activated="MainWindow_OnActivated"
      AllowsTransparency="True"
-     Background="{x:Null}"
      BorderThickness="0.5,0.5,0.5,0.5"
      Closing="MainWindow_OnClosing"
      Foreground="{x:Null}"
@@ -30,7 +29,7 @@
      Topmost="False"
      UseLayoutRounding="True"
      WindowStyle="None"
-     mc:Ignorable="d">
+     mc:Ignorable="d" Background="{x:Null}">
 
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="30" CornerRadius="8,8,8,8" ResizeBorderThickness="8,5,8,8" />
@@ -75,8 +74,7 @@
                      BorderBrush="#FF454C56"
                      BorderThickness="0.51,0,0.51,0.51"
                      Cursor="Arrow"
-                     FontFamily="Microsoft YaHei UI"
-                     FontSize="15"
+                     FontSize="16"
                      Foreground="#FFCCCCCC"
                      HorizontalScrollBarVisibility="Disabled"
                      IsReadOnly="True"
@@ -87,8 +85,9 @@
                      ScrollViewer.VerticalScrollBarVisibility="Auto"
                      Style="{DynamicResource TextEditorStyle1}"
                      SyntaxHighlighting="Custom Highlighting"
+                     Text="Виртуальная кинопремия в формате опроса на гугл-формах, в голосовании которой участвует любой желающий. Единственное условие – любить фильмы! В скором времени вам представится шанс самому оставить голос за своего фаворита в нашем ежегодном киноопросе. Цель опроса – развлекательная, ну и повод напомнить о хороших фильмах, которые вы могли пропустить"
                      VerticalScrollBarVisibility="Auto"
-                     WordWrap="True" />
+                     WordWrap="True" Background="{x:Null}" />
 
                 <!--  SyntaxHighlighting="Custom Highlighting"  -->
 

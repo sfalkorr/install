@@ -35,10 +35,8 @@ internal sealed class ObserveAddRemoveCollection<T> : Collection<T>
     /// </summary>
     public ObserveAddRemoveCollection(Action<T> onAdd, Action<T> onRemove)
     {
-        if (onAdd == null) throw new ArgumentNullException(nameof(onAdd));
-        if (onRemove == null) throw new ArgumentNullException(nameof(onRemove));
-        this.onAdd    = onAdd;
-        this.onRemove = onRemove;
+        this.onAdd    = onAdd ?? throw new ArgumentNullException(nameof(onAdd));
+        this.onRemove = onRemove ?? throw new ArgumentNullException(nameof(onRemove));
     }
 
     /// <inheritdoc />
@@ -53,24 +51,24 @@ internal sealed class ObserveAddRemoveCollection<T> : Collection<T>
     /// <inheritdoc />
     protected override void InsertItem(int index, T item)
     {
-        if (onAdd != null) onAdd(item);
+        onAdd?.Invoke(item);
         base.InsertItem(index, item);
     }
 
     /// <inheritdoc />
     protected override void RemoveItem(int index)
     {
-        if (onRemove != null) onRemove(this[index]);
+        onRemove?.Invoke(this[index]);
         base.RemoveItem(index);
     }
 
     /// <inheritdoc />
     protected override void SetItem(int index, T item)
     {
-        if (onRemove != null) onRemove(this[index]);
+        onRemove?.Invoke(this[index]);
         try
         {
-            if (onAdd != null) onAdd(item);
+            onAdd?.Invoke(item);
         }
         catch
         {

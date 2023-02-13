@@ -35,8 +35,7 @@ public abstract class VisualLineElementGenerator
     /// </summary>
     public virtual void StartGeneration(ITextRunConstructionContext context)
     {
-        if (context == null) throw new ArgumentNullException(nameof(context));
-        CurrentContext = context;
+        CurrentContext = context ?? throw new ArgumentNullException(nameof(context));
     }
 
     /// <summary>

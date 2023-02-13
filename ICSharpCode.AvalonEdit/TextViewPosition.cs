@@ -70,7 +70,7 @@ public struct TextViewPosition : IEquatable<TextViewPosition>, IComparable<TextV
     /// <summary>
     ///     Creates a new TextViewPosition instance.
     /// </summary>
-    public TextViewPosition(int line, int column, int visualColumn)
+    public TextViewPosition(int line, int column, int visualColumn = -1)
     {
         Line          = line;
         Column        = column;
@@ -81,26 +81,12 @@ public struct TextViewPosition : IEquatable<TextViewPosition>, IComparable<TextV
     /// <summary>
     ///     Creates a new TextViewPosition instance.
     /// </summary>
-    public TextViewPosition(int line, int column) : this(line, column, -1)
-    {
-    }
-
-    /// <summary>
-    ///     Creates a new TextViewPosition instance.
-    /// </summary>
-    public TextViewPosition(TextLocation location, int visualColumn)
+    public TextViewPosition(TextLocation location, int visualColumn = -1)
     {
         Line          = location.Line;
         Column        = location.Column;
         VisualColumn  = visualColumn;
         IsAtEndOfLine = false;
-    }
-
-    /// <summary>
-    ///     Creates a new TextViewPosition instance.
-    /// </summary>
-    public TextViewPosition(TextLocation location) : this(location, -1)
-    {
     }
 
     /// <inheritdoc />
@@ -117,8 +103,7 @@ public struct TextViewPosition : IEquatable<TextViewPosition>, IComparable<TextV
     /// <inheritdoc />
     public override bool Equals(object obj)
     {
-        if (obj is TextViewPosition) return Equals((TextViewPosition)obj); // use Equals method below
-        return false;
+        return obj is TextViewPosition position && Equals(position); // use Equals method below
     }
 
     /// <inheritdoc />
@@ -168,8 +153,11 @@ public struct TextViewPosition : IEquatable<TextViewPosition>, IComparable<TextV
         if (r != 0) return r;
         r = VisualColumn.CompareTo(other.VisualColumn);
         if (r != 0) return r;
-        if (IsAtEndOfLine && !other.IsAtEndOfLine) return -1;
-        if (!IsAtEndOfLine && other.IsAtEndOfLine) return 1;
-        return 0;
+        return IsAtEndOfLine switch
+               {
+                   true when !other.IsAtEndOfLine => -1,
+                   false when other.IsAtEndOfLine => 1,
+                   _                              => 0
+               };
     }
 }

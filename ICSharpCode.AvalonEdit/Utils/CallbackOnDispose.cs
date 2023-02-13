@@ -36,14 +36,13 @@ internal sealed class CallbackOnDispose : IDisposable
 
     public CallbackOnDispose(Action action)
     {
-        if (action == null) throw new ArgumentNullException(nameof(action));
-        this.action = action;
+        this.action = action ?? throw new ArgumentNullException(nameof(action));
     }
 
     public void Dispose()
     {
         var a = Interlocked.Exchange(ref action, null);
-        if (a != null) a();
+        a?.Invoke();
     }
 }
 
@@ -72,7 +71,7 @@ internal static class BusyManager
 
         public void Dispose()
         {
-            if (objectList != null) objectList.RemoveAt(objectList.Count - 1);
+            objectList?.RemoveAt(objectList.Count - 1);
         }
     }
 
@@ -81,8 +80,7 @@ internal static class BusyManager
 
     public static BusyLock Enter(object obj)
     {
-        var activeObjects                        = _activeObjects;
-        if (activeObjects == null) activeObjects = _activeObjects = new List<object>();
+        var activeObjects = _activeObjects ??= new List<object>();
         for (var i = 0; i < activeObjects.Count; i++)
             if (activeObjects[i] == obj)
                 return BusyLock.Failed;

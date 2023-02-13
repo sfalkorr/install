@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows;
 using static installEAS.MainWindow;
 using static installEAS.Helpers.Animate;
@@ -16,6 +17,7 @@ public static class ThemesController
 
     public static ThemeTypes CurrentTheme { get; set; }
 
+    
     private static ResourceDictionary ThemeDictionary { set => Application.Current.Resources.MergedDictionaries[0] = value; }
 
     private static void ChangeTheme(Uri uri)
@@ -45,14 +47,7 @@ public static class ThemesController
                 throw new ArgumentOutOfRangeException(nameof(theme), theme, null);
         }
 
-        try
-        {
-            if (!string.IsNullOrEmpty(themeName)) ChangeTheme(new Uri($"/Themes/{themeName}.xaml", UriKind.Relative));
-        }
-        catch
-        {
-            // ignored
-        }
+        if (!string.IsNullOrEmpty(themeName)) ChangeTheme(new Uri($"/Themes/{themeName}.xaml", UriKind.Relative));
     }
 
     public static void ChangeTheme()
@@ -60,7 +55,7 @@ public static class ThemesController
         switch (CurrentTheme)
         {
             case ThemeTypes.ColorGray:
-                SetTheme( ThemeTypes.ColorDark );
+                SetTheme(ThemeTypes.ColorDark);
                 controlFrom = "#FF242A31";
                 controlTo   = "#00242A31";
                 closeFrom   = "#FF902020";
@@ -81,8 +76,6 @@ public static class ThemesController
                 controlTo   = "#0050565D";
                 closeFrom   = "#FF902020";
                 closeTo     = "#00202020";
-
-
 
                 if (MainFrame.textBox.IsEnabled) MainFrame.textBox.Focus();
                 break;

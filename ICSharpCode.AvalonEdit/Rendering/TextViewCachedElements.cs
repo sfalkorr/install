@@ -30,16 +30,13 @@ internal sealed class TextViewCachedElements : IDisposable
 
     public TextLine GetTextForNonPrintableCharacter(string text, ITextRunConstructionContext context)
     {
-        if (nonPrintableCharacterTexts == null) nonPrintableCharacterTexts = new Dictionary<string, TextLine>();
-        TextLine textLine;
-        if (!nonPrintableCharacterTexts.TryGetValue(text, out textLine))
-        {
-            var p = new VisualLineElementTextRunProperties(context.GlobalTextRunProperties);
-            p.SetForegroundBrush(context.TextView.NonPrintableCharacterBrush);
-            if (formatter == null) formatter = TextFormatterFactory.Create(context.TextView);
-            textLine                         = FormattedTextElement.PrepareText(formatter, text, p);
-            nonPrintableCharacterTexts[text] = textLine;
-        }
+        nonPrintableCharacterTexts ??= new Dictionary<string, TextLine>();
+        if (nonPrintableCharacterTexts.TryGetValue(text, out var textLine)) return textLine;
+        var p = new VisualLineElementTextRunProperties(context.GlobalTextRunProperties);
+        p.SetForegroundBrush(context.TextView.NonPrintableCharacterBrush);
+        formatter                        ??= TextFormatterFactory.Create(context.TextView);
+        textLine                         =   FormattedTextElement.PrepareText(formatter, text, p);
+        nonPrintableCharacterTexts[text] =   textLine;
 
         return textLine;
     }
@@ -49,6 +46,6 @@ internal sealed class TextViewCachedElements : IDisposable
         if (nonPrintableCharacterTexts != null)
             foreach (var line in nonPrintableCharacterTexts.Values)
                 line.Dispose();
-        if (formatter != null) formatter.Dispose();
+        formatter?.Dispose();
     }
 }

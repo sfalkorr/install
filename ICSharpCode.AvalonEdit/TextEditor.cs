@@ -43,7 +43,7 @@ namespace ICSharpCode.AvalonEdit;
 ///     Contains a scrollable TextArea.
 /// </summary>
 [Localizability(LocalizationCategory.Text)] [ContentProperty("Text")]
-public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
+public sealed class TextEditor : Control, ITextEditorComponent, IWeakEventListener
 {
     #region Constructors
 
@@ -63,10 +63,9 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
     /// <summary>
     ///     Creates a new TextEditor instance.
     /// </summary>
-    protected TextEditor(TextArea textArea)
+    private TextEditor(TextArea textArea)
     {
-        if (textArea == null) throw new ArgumentNullException(nameof(textArea));
-        TextArea = textArea;
+        TextArea = textArea ?? throw new ArgumentNullException(nameof(textArea));
 
         textArea.TextView.Services.AddService(typeof(TextEditor), this);
 
@@ -87,11 +86,9 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
     protected override void OnGotKeyboardFocus(KeyboardFocusChangedEventArgs e)
     {
         base.OnGotKeyboardFocus(e);
-        if (e.NewFocus == this)
-        {
-            Keyboard.Focus(TextArea);
-            e.Handled = true;
-        }
+        if (!Equals(e.NewFocus, this)) return;
+        Keyboard.Focus(TextArea);
+        e.Handled = true;
     }
 
     #region Document property
@@ -115,9 +112,9 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
     /// <summary>
     ///     Raises the <see cref="DocumentChanged" /> event.
     /// </summary>
-    protected virtual void OnDocumentChanged(EventArgs e)
+    private void OnDocumentChanged(EventArgs e)
     {
-        if (DocumentChanged != null) DocumentChanged(this, e);
+        DocumentChanged?.Invoke(this, e);
     }
 
     private static void OnDocumentChanged(DependencyObject dp, DependencyPropertyChangedEventArgs e)
@@ -158,9 +155,9 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
     /// <summary>
     ///     Raises the <see cref="OptionChanged" /> event.
     /// </summary>
-    protected virtual void OnOptionChanged(PropertyChangedEventArgs e)
+    private void OnOptionChanged(PropertyChangedEventArgs e)
     {
-        if (OptionChanged != null) OptionChanged(this, e);
+        OptionChanged?.Invoke(this, e);
     }
 
     private static void OnOptionsChanged(DependencyObject dp, DependencyPropertyChangedEventArgs e)
@@ -168,7 +165,7 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
         ((TextEditor)dp).OnOptionsChanged((TextEditorOptions)e.OldValue, (TextEditorOptions)e.NewValue);
     }
 
-    private void OnOptionsChanged(TextEditorOptions oldValue, TextEditorOptions newValue)
+    private void OnOptionsChanged(INotifyPropertyChanged oldValue, TextEditorOptions newValue)
     {
         if (oldValue != null) PropertyChangedWeakEventManager.RemoveListener(oldValue, this);
         TextArea.Options = newValue;
@@ -177,7 +174,7 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
     }
 
     /// <inheritdoc cref="IWeakEventListener.ReceiveWeakEvent" />
-    protected virtual bool ReceiveWeakEvent(Type managerType, object sender, EventArgs e)
+    private bool ReceiveWeakEvent(Type managerType, object sender, EventArgs e)
     {
         if (managerType == typeof(PropertyChangedWeakEventManager))
         {
@@ -185,15 +182,9 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
             return true;
         }
 
-        if (managerType == typeof(TextDocumentWeakEventManager.TextChanged))
-        {
-            OnTextChanged(e);
-            return true;
-        }
-
-        if (managerType == typeof(PropertyChangedEventManager)) return HandleIsOriginalChanged((PropertyChangedEventArgs)e);
-
-        return false;
+        if (managerType != typeof(TextDocumentWeakEventManager.TextChanged)) return managerType == typeof(PropertyChangedEventManager) && HandleIsOriginalChanged((PropertyChangedEventArgs)e);
+        OnTextChanged(e);
+        return true;
     }
 
     bool IWeakEventListener.ReceiveWeakEvent(Type managerType, object sender, EventArgs e)
@@ -223,7 +214,6 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
             // after replacing the full text, the caret is positioned at the end of the document
             // - reset it to the beginning.
             CaretOffset = 0;
-
         }
     }
 
@@ -242,9 +232,9 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
     /// <summary>
     ///     Raises the <see cref="TextChanged" /> event.
     /// </summary>
-    protected virtual void OnTextChanged(EventArgs e)
+    private void OnTextChanged(EventArgs e)
     {
-        if (TextChanged != null) TextChanged(this, e);
+        TextChanged?.Invoke(this, e);
     }
 
     #endregion
@@ -271,12 +261,12 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
     /// </summary>
     internal ScrollViewer ScrollViewer { get; private set; }
 
-    private bool CanExecute(RoutedUICommand command)
+    private bool CanExecute(RoutedCommand command)
     {
         return command.CanExecute(null, TextArea);
     }
 
-    private void Execute(RoutedUICommand command)
+    private void Execute(RoutedCommand command)
     {
         command.Execute(null, TextArea);
     }
@@ -311,11 +301,9 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
             colorizer = null;
         }
 
-        if (newValue != null)
-        {
-            colorizer = CreateColorizer(newValue);
-            if (colorizer != null) TextArea.TextView.LineTransformers.Insert(0, colorizer);
-        }
+        if (newValue == null) return;
+        colorizer = CreateColorizer(newValue);
+        if (colorizer != null) TextArea.TextView.LineTransformers.Insert(0, colorizer);
     }
 
     /// <summary>
@@ -323,7 +311,7 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
     ///     Allows derived classes to provide custom colorizer implementations for special highlighting definitions.
     /// </summary>
     /// <returns></returns>
-    protected virtual IVisualLineTransformer CreateColorizer(IHighlightingDefinition highlightingDefinition)
+    private IVisualLineTransformer CreateColorizer(IHighlightingDefinition highlightingDefinition)
     {
         if (highlightingDefinition == null) throw new ArgumentNullException(nameof(highlightingDefinition));
         return new HighlightingColorizer(highlightingDefinition);
@@ -365,13 +353,11 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
 
     private static void OnIsReadOnlyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        if (d is TextEditor editor)
-        {
-            if ((bool)e.NewValue) editor.TextArea.ReadOnlySectionProvider = ReadOnlySectionDocument.Instance;
-            else editor.TextArea.ReadOnlySectionProvider                  = NoReadOnlySections.Instance;
+        if (d is not TextEditor editor) return;
+        if ((bool)e.NewValue) editor.TextArea.ReadOnlySectionProvider = ReadOnlySectionDocument.Instance;
+        else editor.TextArea.ReadOnlySectionProvider                  = NoReadOnlySections.Instance;
 
-            if (UIElementAutomationPeer.FromElement(editor) is TextEditorAutomationPeer peer) peer.RaiseIsReadOnlyChanged((bool)e.OldValue, (bool)e.NewValue);
-        }
+        if (UIElementAutomationPeer.FromElement(editor) is TextEditorAutomationPeer peer) peer.RaiseIsReadOnlyChanged((bool)e.OldValue, (bool)e.NewValue);
     }
 
     #endregion
@@ -390,26 +376,18 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
 
     private static void OnIsModifiedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        if (d is TextEditor editor)
+        if (d is not TextEditor editor) return;
+        var document = editor.Document;
+        if (document != null)
         {
-            var document = editor.Document;
-            if (document != null)
-            {
-
-
-            }
         }
     }
 
     private bool HandleIsOriginalChanged(PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == "IsOriginalFile")
-        {
-            var document = Document;
-            return true;
-        }
-
-        return false;
+        if (e.PropertyName != "IsOriginalFile") return false;
+        var document = Document;
+        return true;
     }
 
     #endregion
@@ -432,18 +410,14 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
         var leftMargins = editor.TextArea.LeftMargins;
         if ((bool)e.NewValue)
         {
-
-            var line        = (Line)DottedLineMargin.Create();
+            var line = (Line)DottedLineMargin.Create();
 
             leftMargins.Insert(1, line);
             var lineNumbersForeground = new Binding("LineNumbersForeground") { Source = editor };
             line.SetBinding(Shape.StrokeProperty, lineNumbersForeground);
-
         }
         else
         {
-
-
         }
     }
 
@@ -463,11 +437,7 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
 
     private static void OnLineNumbersForegroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var editor           = (TextEditor)d;
-        
-        ;
-
-        
+        var editor = (TextEditor)d;
     }
 
     #endregion
@@ -487,8 +457,7 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
     {
         d = this;
         var editor       = (TextEditor)d;
-        var setlinecolor = new LineColorizer(editor.LineCount);
-        setlinecolor.LineColor = LineColor;
+        var setlinecolor = new LineColorizer(editor.LineCount) { LineColor = LineColor };
         editor.TextArea.TextView.LineTransformers.Add(setlinecolor);
         editor.AppendText(textData);
     }
@@ -547,7 +516,7 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
     /// </summary>
     public void LineDown()
     {
-        if (ScrollViewer != null) ScrollViewer.LineDown();
+        ScrollViewer?.LineDown();
     }
 
     /// <summary>
@@ -555,7 +524,7 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
     /// </summary>
     public void LineLeft()
     {
-        if (ScrollViewer != null) ScrollViewer.LineLeft();
+        ScrollViewer?.LineLeft();
     }
 
     /// <summary>
@@ -563,7 +532,7 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
     /// </summary>
     public void LineRight()
     {
-        if (ScrollViewer != null) ScrollViewer.LineRight();
+        ScrollViewer?.LineRight();
     }
 
     /// <summary>
@@ -571,7 +540,7 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
     /// </summary>
     public void LineUp()
     {
-        if (ScrollViewer != null) ScrollViewer.LineUp();
+        ScrollViewer?.LineUp();
     }
 
     /// <summary>
@@ -579,7 +548,7 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
     /// </summary>
     public void PageDown()
     {
-        if (ScrollViewer != null) ScrollViewer.PageDown();
+        ScrollViewer?.PageDown();
     }
 
     /// <summary>
@@ -587,7 +556,7 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
     /// </summary>
     public void PageUp()
     {
-        if (ScrollViewer != null) ScrollViewer.PageUp();
+        ScrollViewer?.PageUp();
     }
 
     /// <summary>
@@ -595,7 +564,7 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
     /// </summary>
     public void PageLeft()
     {
-        if (ScrollViewer != null) ScrollViewer.PageLeft();
+        ScrollViewer?.PageLeft();
     }
 
     /// <summary>
@@ -603,7 +572,7 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
     /// </summary>
     public void PageRight()
     {
-        if (ScrollViewer != null) ScrollViewer.PageRight();
+        ScrollViewer?.PageRight();
     }
 
     /// <summary>
@@ -620,13 +589,9 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
     /// <returns>True is the redo operation was successful, false is the redo stack is empty.</returns>
     public bool Redo()
     {
-        if (CanExecute(ApplicationCommands.Redo))
-        {
-            Execute(ApplicationCommands.Redo);
-            return true;
-        }
-
-        return false;
+        if (!CanExecute(ApplicationCommands.Redo)) return false;
+        Execute(ApplicationCommands.Redo);
+        return true;
     }
 
     /// <summary>
@@ -635,7 +600,7 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
     public void ScrollToEnd()
     {
         ApplyTemplate(); // ensure scrollViewer is created
-        if (ScrollViewer != null) ScrollViewer.ScrollToEnd();
+        ScrollViewer?.ScrollToEnd();
     }
 
     /// <summary>
@@ -644,7 +609,7 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
     public void ScrollToHome()
     {
         ApplyTemplate(); // ensure scrollViewer is created
-        if (ScrollViewer != null) ScrollViewer.ScrollToHome();
+        ScrollViewer?.ScrollToHome();
     }
 
     /// <summary>
@@ -653,7 +618,7 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
     public void ScrollToHorizontalOffset(double offset)
     {
         ApplyTemplate(); // ensure scrollViewer is created
-        if (ScrollViewer != null) ScrollViewer.ScrollToHorizontalOffset(offset);
+        ScrollViewer?.ScrollToHorizontalOffset(offset);
     }
 
     /// <summary>
@@ -662,7 +627,7 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
     public void ScrollToVerticalOffset(double offset)
     {
         ApplyTemplate(); // ensure scrollViewer is created
-        if (ScrollViewer != null) ScrollViewer.ScrollToVerticalOffset(offset);
+        ScrollViewer?.ScrollToVerticalOffset(offset);
     }
 
     /// <summary>
@@ -679,13 +644,9 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
     /// <returns>True is the undo operation was successful, false is the undo stack is empty.</returns>
     public bool Undo()
     {
-        if (CanExecute(ApplicationCommands.Undo))
-        {
-            Execute(ApplicationCommands.Undo);
-            return true;
-        }
-
-        return false;
+        if (!CanExecute(ApplicationCommands.Undo)) return false;
+        Execute(ApplicationCommands.Undo);
+        return true;
     }
 
     /// <summary>
@@ -701,32 +662,32 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
     /// <summary>
     ///     Gets the vertical size of the document.
     /// </summary>
-    public double ExtentHeight => ScrollViewer != null ? ScrollViewer.ExtentHeight : 0;
+    public double ExtentHeight => ScrollViewer?.ExtentHeight ?? 0;
 
     /// <summary>
     ///     Gets the horizontal size of the current document region.
     /// </summary>
-    public double ExtentWidth => ScrollViewer != null ? ScrollViewer.ExtentWidth : 0;
+    public double ExtentWidth => ScrollViewer?.ExtentWidth ?? 0;
 
     /// <summary>
     ///     Gets the horizontal size of the viewport.
     /// </summary>
-    public double ViewportHeight => ScrollViewer != null ? ScrollViewer.ViewportHeight : 0;
+    public double ViewportHeight => ScrollViewer?.ViewportHeight ?? 0;
 
     /// <summary>
     ///     Gets the horizontal size of the viewport.
     /// </summary>
-    public double ViewportWidth => ScrollViewer != null ? ScrollViewer.ViewportWidth : 0;
+    public double ViewportWidth => ScrollViewer?.ViewportWidth ?? 0;
 
     /// <summary>
     ///     Gets the vertical scroll position.
     /// </summary>
-    public double VerticalOffset => ScrollViewer != null ? ScrollViewer.VerticalOffset : 0;
+    public double VerticalOffset => ScrollViewer?.VerticalOffset ?? 0;
 
     /// <summary>
     ///     Gets the horizontal scroll position.
     /// </summary>
-    public double HorizontalOffset => ScrollViewer != null ? ScrollViewer.HorizontalOffset : 0;
+    public double HorizontalOffset => ScrollViewer?.HorizontalOffset ?? 0;
 
     #endregion
 
@@ -748,14 +709,12 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
         set
         {
             if (value == null) throw new ArgumentNullException(nameof(value));
-            if (TextArea.Document != null)
-            {
-                var offset = SelectionStart;
-                var length = SelectionLength;
-                TextArea.Document.Replace(offset, length, value);
-                // keep inserted text selected
-                TextArea.Selection = Selection.Create(TextArea, offset, offset + value.Length);
-            }
+            if (TextArea.Document == null) return;
+            var offset = SelectionStart;
+            var length = SelectionLength;
+            TextArea.Document.Replace(offset, length, value);
+            // keep inserted text selected
+            TextArea.Selection = Selection.Create(TextArea, offset, offset + value.Length);
         }
     }
 
@@ -769,36 +728,20 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
     ///     Gets/sets the start position of the selection.
     /// </summary>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public int SelectionStart
-    {
-        get
-        {
-            if (TextArea.Selection.IsEmpty) return TextArea.Caret.Offset;
-            return TextArea.Selection.SurroundingSegment.Offset;
-        }
-        set => Select(value, SelectionLength);
-    }
+    public int SelectionStart { get => TextArea.Selection.IsEmpty ? TextArea.Caret.Offset : TextArea.Selection.SurroundingSegment.Offset; set => Select(value, SelectionLength); }
 
     /// <summary>
     ///     Gets/sets the length of the selection.
     /// </summary>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public int SelectionLength
-    {
-        get
-        {
-            if (!TextArea.Selection.IsEmpty) return TextArea.Selection.SurroundingSegment.Length;
-            return 0;
-        }
-        set => Select(SelectionStart, value);
-    }
+    public int SelectionLength { get => !TextArea.Selection.IsEmpty ? TextArea.Selection.SurroundingSegment.Length : 0; set => Select(SelectionStart, value); }
 
     /// <summary>
     ///     Selects the specified text section.
     /// </summary>
     public void Select(int start, int length)
     {
-        var documentLength = Document != null ? Document.TextLength : 0;
+        var documentLength = Document?.TextLength ?? 0;
         if (start < 0 || start > documentLength) throw new ArgumentOutOfRangeException(nameof(start), start, "Value must be between 0 and " + documentLength);
         if (length < 0 || start + length > documentLength) throw new ArgumentOutOfRangeException(nameof(length), length, "Value must be between 0 and " + (documentLength - start));
         TextArea.Selection    = Selection.Create(TextArea, start, start + length);
@@ -814,8 +757,7 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
         get
         {
             var document = Document;
-            if (document != null) return document.LineCount;
-            return 1;
+            return document?.LineCount ?? 1;
         }
     }
 
@@ -837,41 +779,14 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
     /// <remarks>
     ///     This method sets <see cref="IsModified" /> to false.
     /// </remarks>
-    public void Load(Stream stream)
-    {
-        using (var reader = FileReader.OpenStream(stream, Encoding ?? Encoding.UTF8))
-        {
-            Text = reader.ReadToEnd();
-            SetCurrentValue(EncodingProperty, reader.CurrentEncoding); // assign encoding after ReadToEnd() so that the StreamReader can autodetect the encoding
-        }
-
-        SetCurrentValue(IsModifiedProperty, Boxes.False);
-    }
-
     /// <summary>
     ///     Loads the text from the stream, auto-detecting the encoding.
     /// </summary>
-    public void Load(string fileName)
-    {
-        if (fileName == null) throw new ArgumentNullException(nameof(fileName));
-        using (var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
-        {
-            Load(fs);
-        }
-    }
-
     /// <summary>
     ///     Encoding dependency property.
     /// </summary>
     public static readonly DependencyProperty EncodingProperty = DependencyProperty.Register(nameof(Encoding), typeof(Encoding), typeof(TextEditor));
 
-    /// <summary>
-    ///     Gets/sets the encoding used when the file is saved.
-    /// </summary>
-    /// <remarks>
-    ///     The <see cref="Load(Stream)" /> method autodetects the encoding of the file and sets this property accordingly.
-    ///     The <see cref="Save(Stream)" /> method uses the encoding specified in this property.
-    /// </remarks>
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public Encoding Encoding { get => (Encoding)GetValue(EncodingProperty); set => SetValue(EncodingProperty, value); }
 
@@ -887,7 +802,7 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
         var encoding = Encoding;
         var document = Document;
         var writer   = encoding != null ? new StreamWriter(stream, encoding) : new StreamWriter(stream);
-        if (document != null) document.WriteTextTo(writer);
+        document?.WriteTextTo(writer);
         writer.Flush();
         // do not close the stream
         SetCurrentValue(IsModifiedProperty, Boxes.False);
@@ -899,10 +814,8 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
     public void Save(string fileName)
     {
         if (fileName == null) throw new ArgumentNullException(nameof(fileName));
-        using (var fs = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None))
-        {
-            Save(fs);
-        }
+        using var fs = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None);
+        Save(fs);
     }
 
     #endregion
@@ -1029,44 +942,40 @@ public class TextEditor : Control, ITextEditorComponent, IWeakEventListener
     {
         var textView = TextArea.TextView;
         var document = textView.Document;
-        if (ScrollViewer != null && document != null)
+        if (ScrollViewer == null || document == null) return;
+        if (line < 1) line                  = 1;
+        if (line > document.LineCount) line = document.LineCount;
+
+        IScrollInfo scrollInfo = textView;
+        if (!scrollInfo.CanHorizontallyScroll)
         {
-            if (line < 1) line                  = 1;
-            if (line > document.LineCount) line = document.LineCount;
+            // Word wrap is enabled. Ensure that we have up-to-date info about line height so that we scroll
+            // to the correct position.
+            // This avoids that the user has to repeat the ScrollTo() call several times when there are very long lines.
+            var vl              = textView.GetOrConstructVisualLine(document.GetLineByNumber(line));
+            var remainingHeight = referencedVerticalViewPortOffset;
 
-            IScrollInfo scrollInfo = textView;
-            if (!scrollInfo.CanHorizontallyScroll)
+            while (remainingHeight > 0)
             {
-                // Word wrap is enabled. Ensure that we have up-to-date info about line height so that we scroll
-                // to the correct position.
-                // This avoids that the user has to repeat the ScrollTo() call several times when there are very long lines.
-                var vl              = textView.GetOrConstructVisualLine(document.GetLineByNumber(line));
-                var remainingHeight = referencedVerticalViewPortOffset;
-
-                while (remainingHeight > 0)
-                {
-                    var prevLine = vl.FirstDocumentLine.PreviousLine;
-                    if (prevLine == null) break;
-                    vl              =  textView.GetOrConstructVisualLine(prevLine);
-                    remainingHeight -= vl.Height;
-                }
+                var prevLine = vl.FirstDocumentLine.PreviousLine;
+                if (prevLine == null) break;
+                vl              =  textView.GetOrConstructVisualLine(prevLine);
+                remainingHeight -= vl.Height;
             }
+        }
 
-            var p           = TextArea.TextView.GetVisualPosition(new TextViewPosition(line, Math.Max(1, column)), yPositionMode);
-            var verticalPos = p.Y - referencedVerticalViewPortOffset;
-            if (Math.Abs(verticalPos - ScrollViewer.VerticalOffset) > minimumScrollFraction * ScrollViewer.ViewportHeight) ScrollViewer.ScrollToVerticalOffset(Math.Max(0, verticalPos));
-            if (column > 0)
-            {
-                if (p.X > ScrollViewer.ViewportWidth - Caret.MinimumDistanceToViewBorder * 2)
-                {
-                    var horizontalPos = Math.Max(0, p.X - ScrollViewer.ViewportWidth / 2);
-                    if (Math.Abs(horizontalPos - ScrollViewer.HorizontalOffset) > minimumScrollFraction * ScrollViewer.ViewportWidth) ScrollViewer.ScrollToHorizontalOffset(horizontalPos);
-                }
-                else
-                {
-                    ScrollViewer.ScrollToHorizontalOffset(0);
-                }
-            }
+        var p           = TextArea.TextView.GetVisualPosition(new TextViewPosition(line, Math.Max(1, column)), yPositionMode);
+        var verticalPos = p.Y - referencedVerticalViewPortOffset;
+        if (Math.Abs(verticalPos - ScrollViewer.VerticalOffset) > minimumScrollFraction * ScrollViewer.ViewportHeight) ScrollViewer.ScrollToVerticalOffset(Math.Max(0, verticalPos));
+        if (column <= 0) return;
+        if (p.X > ScrollViewer.ViewportWidth - Caret.MinimumDistanceToViewBorder * 2)
+        {
+            var horizontalPos = Math.Max(0, p.X - ScrollViewer.ViewportWidth / 2);
+            if (Math.Abs(horizontalPos - ScrollViewer.HorizontalOffset) > minimumScrollFraction * ScrollViewer.ViewportWidth) ScrollViewer.ScrollToHorizontalOffset(horizontalPos);
+        }
+        else
+        {
+            ScrollViewer.ScrollToHorizontalOffset(0);
         }
     }
 }

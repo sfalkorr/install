@@ -47,11 +47,9 @@ public sealed class RopeTextReader : TextReader
 
         // special case for the empty rope:
         // leave currentNode initialized to null (RopeTextReader doesn't support empty nodes)
-        if (rope.Length != 0)
-        {
-            currentNode = rope.root;
-            GoToLeftMostLeaf();
-        }
+        if (rope.Length == 0) return;
+        currentNode = rope.root;
+        GoToLeftMostLeaf();
     }
 
     private void GoToLeftMostLeaf()

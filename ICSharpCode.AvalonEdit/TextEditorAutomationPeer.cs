@@ -17,6 +17,7 @@
 // DEALINGS IN THE SOFTWARE.
 
 using System.Diagnostics;
+using System.Windows;
 using System.Windows.Automation;
 using System.Windows.Automation.Peers;
 using System.Windows.Automation.Provider;
@@ -32,7 +33,7 @@ public class TextEditorAutomationPeer : FrameworkElementAutomationPeer, IValuePr
     /// <summary>
     ///     Creates a new TextEditorAutomationPeer instance.
     /// </summary>
-    public TextEditorAutomationPeer(TextEditor owner) : base(owner)
+    public TextEditorAutomationPeer(FrameworkElement owner) : base(owner)
     {
         Debug.WriteLine("TextEditorAutomationPeer was created");
     }

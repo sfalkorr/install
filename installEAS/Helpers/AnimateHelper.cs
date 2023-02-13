@@ -45,8 +45,6 @@ public abstract class Animate
 
     public static Task AnimateFrameworkElement(FrameworkElement Target, int Duration)
     {
-        //var rPoint = Convert.ToInt32( Target.TransformToAncestor( MainWindow.MainFrame ).Transform( new Point( 0, 0 ) ).Y );
-
         var sb = new Storyboard();
         var ta = new ThicknessAnimation
         {
@@ -61,13 +59,11 @@ public abstract class Animate
         switch (Target.IsEnabled)
         {
             case false:
-                //ta.From          = new Thickness(0, -Target.ActualHeight - 30, 0, 0);
                 ta.To            = new Thickness(0, 0, 0, 0);
                 Target.Opacity   = 1;
                 Target.IsEnabled = true;
                 break;
             case true:
-                //ta.From          = new Thickness(0, 0, 0, 0);
                 ta.To            = new Thickness(0, -Target.ActualHeight - 30, 0, 0);
                 Target.Opacity   = 1;
                 Target.IsEnabled = false;
@@ -78,10 +74,7 @@ public abstract class Animate
         Storyboard.SetTargetProperty(ta, new PropertyPath(FrameworkElement.MarginProperty));
         sb.FillBehavior = FillBehavior.HoldEnd;
         sb.Children.Add(ta);
-        Target.Dispatcher.InvokeAsync(() =>
-        {
-            sb.Begin(Target, HandoffBehavior.Compose);
-        }, DispatcherPriority.Send);
+        Target.Dispatcher.InvokeAsync(() => { sb.Begin(Target, HandoffBehavior.Compose); }, DispatcherPriority.Send);
         return Task.CompletedTask;
     }
 }

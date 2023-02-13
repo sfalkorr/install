@@ -45,20 +45,19 @@ internal static class FreezableHelper
 
     public static IList<T> FreezeListAndElements<T>(IList<T> list)
     {
-        if (list != null)
-            foreach (var item in list)
-                Freeze(item);
+        if (list == null) return FreezeList((IList<T>)null);
+        foreach (var item in list)
+            Freeze(item);
         return FreezeList(list);
     }
 
     public static IList<T> FreezeList<T>(IList<T> list)
     {
         if (list == null || list.Count == 0) return Empty<T>.Array;
-        if (list.IsReadOnly)
+        return list.IsReadOnly ?
             // If the list is already read-only, return it directly.
             // This is important, otherwise we might undo the effects of interning.
-            return list;
-        return new ReadOnlyCollection<T>(list.ToArray());
+            list : new ReadOnlyCollection<T>(list.ToArray());
     }
 
     public static void Freeze(object item)
@@ -78,11 +77,9 @@ internal static class FreezableHelper
     /// </summary>
     public static T GetFrozenClone<T>(T item) where T : IFreezable, ICloneable
     {
-        if (!item.IsFrozen)
-        {
-            item = (T)item.Clone();
-            item.Freeze();
-        }
+        if (item.IsFrozen) return item;
+        item = (T)item.Clone();
+        item.Freeze();
 
         return item;
     }
@@ -101,11 +98,9 @@ internal abstract class AbstractFreezable : IFreezable
     /// </summary>
     public void Freeze()
     {
-        if (!IsFrozen)
-        {
-            FreezeInternal();
-            IsFrozen = true;
-        }
+        if (IsFrozen) return;
+        FreezeInternal();
+        IsFrozen = true;
     }
 
     protected virtual void FreezeInternal()

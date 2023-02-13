@@ -32,7 +32,7 @@ using Size = System.Windows.Size;
 
 namespace ICSharpCode.AvalonEdit.Utils;
 
-internal static class ExtensionMethods
+public static class ExtensionMethods
 {
     #region Epsilon / IsClose / CoerceValue
 
@@ -51,7 +51,7 @@ internal static class ExtensionMethods
     /// </summary>
     public static bool IsClose(this double d1, double d2)
     {
-        if (d1 == d2) // required for infinities
+        if (d1.Equals(d2)) // required for infinities
             return true;
         return Math.Abs(d1 - d2) < Epsilon;
     }
@@ -137,7 +137,7 @@ internal static class ExtensionMethods
     public static string GetAttributeOrNull(this XmlElement element, string attributeName)
     {
         var attr = element.GetAttributeNode(attributeName);
-        return attr != null ? attr.Value : null;
+        return attr?.Value;
     }
 
     /// <summary>
@@ -230,7 +230,7 @@ internal static class ExtensionMethods
         while (obj != null)
         {
             yield return obj;
-            if (obj is Visual || obj is Visual3D) obj = VisualTreeHelper.GetParent(obj);
+            if (obj is Visual or Visual3D) obj = VisualTreeHelper.GetParent(obj);
             else if (obj is FrameworkContentElement)
                 // When called with a non-visual such as a TextElement, walk up the
                 // logical tree instead.
@@ -242,17 +242,15 @@ internal static class ExtensionMethods
     [Conditional("DEBUG")]
     public static void CheckIsFrozen(Freezable f)
     {
-        if (f != null && !f.IsFrozen) Debug.WriteLine("Performance warning: Not frozen: " + f);
+        if (f is { IsFrozen: false }) Debug.WriteLine("Performance warning: Not frozen: " + f);
     }
 
     [Conditional("DEBUG")]
     public static void Log(bool condition, string format, params object[] args)
     {
-        if (condition)
-        {
-            var output = DateTime.Now.ToString("hh:MM:ss") + ": " + string.Format(format, args) + Environment.NewLine + Environment.StackTrace;
-            Console.WriteLine(output);
-            Debug.WriteLine(output);
-        }
+        if (!condition) return;
+        var output = DateTime.Now.ToString("hh:MM:ss") + ": " + string.Format(format, args) + Environment.NewLine + Environment.StackTrace;
+        Console.WriteLine(output);
+        Debug.WriteLine(output);
     }
 }

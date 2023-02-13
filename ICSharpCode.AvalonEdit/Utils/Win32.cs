@@ -41,13 +41,9 @@ internal static class Win32
     public static bool CreateCaret(Visual owner, Size size)
     {
         if (owner == null) throw new ArgumentNullException(nameof(owner));
-        if (PresentationSource.FromVisual(owner) is HwndSource source)
-        {
-            var r = owner.PointToScreen(new Point(size.Width, size.Height)) - owner.PointToScreen(new Point(0, 0));
-            return SafeNativeMethods.CreateCaret(source.Handle, IntPtr.Zero, (int)Math.Ceiling(r.X), (int)Math.Ceiling(r.Y));
-        }
-
-        return false;
+        if (PresentationSource.FromVisual(owner) is not HwndSource source) return false;
+        var r = owner.PointToScreen(new Point(size.Width, size.Height)) - owner.PointToScreen(new Point(0, 0));
+        return SafeNativeMethods.CreateCaret(source.Handle, IntPtr.Zero, (int)Math.Ceiling(r.X), (int)Math.Ceiling(r.Y));
     }
 
     /// <summary>
@@ -56,14 +52,10 @@ internal static class Win32
     public static bool SetCaretPosition(Visual owner, Point position)
     {
         if (owner == null) throw new ArgumentNullException(nameof(owner));
-        if (PresentationSource.FromVisual(owner) is HwndSource source)
-        {
-            var pointOnRootVisual = owner.TransformToAncestor(source.RootVisual).Transform(position);
-            var pointOnHwnd       = pointOnRootVisual.TransformToDevice(source.RootVisual);
-            return SafeNativeMethods.SetCaretPos((int)pointOnHwnd.X, (int)pointOnHwnd.Y);
-        }
-
-        return false;
+        if (PresentationSource.FromVisual(owner) is not HwndSource source) return false;
+        var pointOnRootVisual = owner.TransformToAncestor(source.RootVisual).Transform(position);
+        var pointOnHwnd       = pointOnRootVisual.TransformToDevice(source.RootVisual);
+        return SafeNativeMethods.SetCaretPos((int)pointOnHwnd.X, (int)pointOnHwnd.Y);
     }
 
     /// <summary>

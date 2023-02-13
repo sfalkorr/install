@@ -35,14 +35,7 @@ internal sealed class V1Loader
 {
     private static XmlSchemaSet schemaSet;
 
-    private static XmlSchemaSet SchemaSet
-    {
-        get
-        {
-            if (schemaSet == null) schemaSet = HighlightingLoader.LoadSchemaSet(new XmlTextReader(Resources.OpenStream("ModeV1.xsd")));
-            return schemaSet;
-        }
-    }
+    private static XmlSchemaSet SchemaSet => schemaSet ??= HighlightingLoader.LoadSchemaSet(new XmlTextReader(Resources.OpenStream("ModeV1.xsd")));
 
     public static XshdSyntaxDefinition LoadDefinition(XmlReader reader, bool skipValidation)
     {
@@ -55,8 +48,7 @@ internal sealed class V1Loader
 
     private XshdSyntaxDefinition ParseDefinition(XmlElement syntaxDefinition)
     {
-        var def = new XshdSyntaxDefinition();
-        def.Name = syntaxDefinition.GetAttributeOrNull("name");
+        var def = new XshdSyntaxDefinition { Name = syntaxDefinition.GetAttributeOrNull("name") };
         if (syntaxDefinition.HasAttribute("extensions")) def.Extensions.AddRange(syntaxDefinition.GetAttribute("extensions").Split(';', '|'));
 
         XshdRuleSet mainRuleSetElement = null;
@@ -66,14 +58,12 @@ internal sealed class V1Loader
             def.Elements.Add(ruleSet);
             if (ruleSet.Name == null) mainRuleSetElement = ruleSet;
 
-            if (syntaxDefinition["Digits"] != null)
-            {
-                // create digit highlighting rule
+            if (syntaxDefinition["Digits"] == null) continue;
+            // create digit highlighting rule
 
-                const string optionalExponent = @"([eE][+-]?[0-9]+)?";
-                const string floatingPoint    = @"\.[0-9]+";
-                ruleSet.Elements.Add(new XshdRule { ColorReference = GetColorReference(syntaxDefinition["Digits"]), RegexType = XshdRegexType.IgnorePatternWhitespace, Regex = @"\b0[xX][0-9a-fA-F]+" + @"|" + @"(\b\d+(" + floatingPoint + ")?" + @"|" + floatingPoint + ")" + optionalExponent });
-            }
+            const string optionalExponent = @"([eE][+-]?[0-9]+)?";
+            const string floatingPoint    = @"\.[0-9]+";
+            ruleSet.Elements.Add(new XshdRule { ColorReference = GetColorReference(syntaxDefinition["Digits"]), RegexType = XshdRegexType.IgnorePatternWhitespace, Regex = @"\b0[xX][0-9a-fA-F]+" + @"|" + @"(\b\d+(" + floatingPoint + ")?" + @"|" + floatingPoint + ")" + optionalExponent });
         }
 
         if (syntaxDefinition.HasAttribute("extends") && mainRuleSetElement != null)
@@ -96,8 +86,7 @@ internal sealed class V1Loader
     private static XshdReference<XshdColor> GetColorReference(XmlElement element)
     {
         var color = GetColorFromElement(element);
-        if (color != null) return new XshdReference<XshdColor>(color);
-        return new XshdReference<XshdColor>();
+        return color != null ? new XshdReference<XshdColor>(color) : new XshdReference<XshdColor>();
     }
 
     private static HighlightingBrush ParseColor(string c)
@@ -126,19 +115,16 @@ internal sealed class V1Loader
 
     private XshdRuleSet ImportRuleSet(XmlElement element)
     {
-        var ruleSet = new XshdRuleSet();
-        ruleSet.Name = element.GetAttributeOrNull("name");
+        var ruleSet = new XshdRuleSet { Name = element.GetAttributeOrNull("name") };
 
-        if (element.HasAttribute("escapecharacter")) ruleSetEscapeCharacter = element.GetAttribute("escapecharacter")[0];
-        else ruleSetEscapeCharacter                                         = '\0';
+        ruleSetEscapeCharacter = element.HasAttribute("escapecharacter") ? element.GetAttribute("escapecharacter")[0] : '\0';
 
         if (element.HasAttribute("reference")) ruleSet.Elements.Add(new XshdImport { RuleSetReference = new XshdReference<XshdRuleSet>(element.GetAttribute("reference"), string.Empty) });
         ruleSet.IgnoreCase = element.GetBoolAttribute("ignorecase");
 
         foreach (XmlElement el in element.GetElementsByTagName("KeyWords"))
         {
-            var keywords = new XshdKeywords();
-            keywords.ColorReference = GetColorReference(el);
+            var keywords = new XshdKeywords { ColorReference = GetColorReference(el) };
             // we have to handle old syntax highlighting definitions that contain
             // empty keywords or empty keyword groups
             foreach (XmlElement node in el.GetElementsByTagName("Key"))
@@ -224,8 +210,7 @@ internal sealed class V1Loader
         var b = new StringBuilder();
         if (startOfLine != null)
         {
-            if (startOfLine.Value) b.Append(@"(?<=(^\s*))");
-            else b.Append(@"(?<!(^\s*))");
+            b.Append(startOfLine.Value ? @"(?<=(^\s*))" : @"(?<!(^\s*))");
         }
         else
         {

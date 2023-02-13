@@ -355,8 +355,7 @@ internal sealed class XmlHighlightingDefinition : IHighlightingDefinition
 
     private static Exception Error(XshdElement element, string message)
     {
-        if (element.LineNumber > 0) return new HighlightingDefinitionInvalidException("Error at line " + element.LineNumber + ":\n" + message);
-        return new HighlightingDefinitionInvalidException(message);
+        return element.LineNumber > 0 ? new HighlightingDefinitionInvalidException("Error at line " + element.LineNumber + ":\n" + message) : new HighlightingDefinitionInvalidException(message);
     }
 
     private Dictionary<string, HighlightingRuleSet> ruleSetDict = new();
@@ -370,15 +369,13 @@ internal sealed class XmlHighlightingDefinition : IHighlightingDefinition
     {
         if (string.IsNullOrEmpty(name)) return MainRuleSet;
         HighlightingRuleSet r;
-        if (ruleSetDict.TryGetValue(name, out r)) return r;
-        return null;
+        return ruleSetDict.TryGetValue(name, out r) ? r : null;
     }
 
     public HighlightingColor GetNamedColor(string name)
     {
         HighlightingColor c;
-        if (colorDict.TryGetValue(name, out c)) return c;
-        return null;
+        return colorDict.TryGetValue(name, out c) ? c : null;
     }
 
     public IEnumerable<HighlightingColor> NamedHighlightingColors => colorDict.Values;

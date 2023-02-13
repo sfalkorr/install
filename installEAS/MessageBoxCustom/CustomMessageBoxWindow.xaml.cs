@@ -6,8 +6,6 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-//using Application = System.Windows.Application;
-
 namespace installEAS.MessageBoxCustom;
 
 internal partial class CustomMessageBoxWindow

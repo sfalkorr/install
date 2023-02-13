@@ -44,8 +44,7 @@ public struct StringSegment : IEquatable<StringSegment>
     /// </summary>
     public StringSegment(string text)
     {
-        if (text == null) throw new ArgumentNullException(nameof(text));
-        Text   = text;
+        Text   = text ?? throw new ArgumentNullException(nameof(text));
         Offset = 0;
         Count  = text.Length;
     }
@@ -70,8 +69,7 @@ public struct StringSegment : IEquatable<StringSegment>
     /// <inheritdoc />
     public override bool Equals(object obj)
     {
-        if (obj is StringSegment) return Equals((StringSegment)obj); // use Equals method below
-        return false;
+        return obj is StringSegment && Equals((StringSegment)obj); // use Equals method below
     }
 
     /// <inheritdoc />

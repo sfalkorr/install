@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using ICSharpCode.AvalonEdit.Document;
@@ -200,27 +201,8 @@ public abstract class Selection
         if (b == null) return text ?? string.Empty;
         if (text != null) b.Append(text);
         return b.ToString();
-
     }
 
-    /// <summary>
-    ///     Creates a HTML fragment for the selected text.
-    /// </summary>
-    public string CreateHtmlFragment(HtmlOptions options)
-    {
-        if (options == null) throw new ArgumentNullException(nameof(options));
-        var highlighter = textArea.GetService(typeof(IHighlighter)) as IHighlighter;
-        var html        = new StringBuilder();
-        var first       = true;
-        foreach (var selectedSegment in Segments)
-        {
-            if (first) first = false;
-            else html.AppendLine("<br>");
-            html.Append(HtmlClipboard.CreateHtmlFragment(textArea.Document, highlighter, selectedSegment, options));
-        }
-
-        return html.ToString();
-    }
 
     /// <inheritdoc />
     public abstract override bool Equals(object obj);
@@ -238,12 +220,7 @@ public abstract class Selection
     public virtual bool Contains(int offset)
     {
         if (IsEmpty) return false;
-        if (SurroundingSegment.Contains(offset, 0))
-            foreach (ISegment s in Segments)
-                if (s.Contains(offset, 0))
-                    return true;
-
-        return false;
+        return SurroundingSegment.Contains(offset, 0) && Segments.Cast<ISegment>().Any(s => s.Contains(offset, 0));
     }
 
     /// <summary>

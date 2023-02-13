@@ -36,7 +36,6 @@ public class VisualLineConstructionStartEventArgs : EventArgs
     /// </summary>
     public VisualLineConstructionStartEventArgs(DocumentLine firstLineInView)
     {
-        if (firstLineInView == null) throw new ArgumentNullException(nameof(firstLineInView));
-        FirstLineInView = firstLineInView;
+        FirstLineInView = firstLineInView ?? throw new ArgumentNullException(nameof(firstLineInView));
     }
 }

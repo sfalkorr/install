@@ -16,12 +16,6 @@ public static class Log
                 if (text != null) text = newline ? " " + text + Environment.NewLine : text;
                 MainFrame.rtb.AppendColorLine(text, brush);
                 MainFrame.rtb.ScrollToEnd();
-
-                //TextRange tr = new(MainFrame.rtb.Document.ContentEnd, MainFrame.rtb.Document.ContentEnd) { Text = newline ? text + Environment.NewLine : text + " " };
-                //tr.ApplyPropertyValue(TextElement.ForegroundProperty, brush);
-                ////MainFrame.sv.ScrollToEnd();
-                ////MainFrame.sv.Focus();
-                //MainFrame.rtb.ScrollToEnd();
             });
     }
 
@@ -33,12 +27,6 @@ public static class Log
                 if (text != null) text = newline ? " " + text + Environment.NewLine : text;
                 MainFrame.rtb.AppendText(text);
                 MainFrame.rtb.ScrollToEnd();
-
-                //TextRange tr = new(MainFrame.rtb.Document.ContentEnd, MainFrame.rtb.Document.ContentEnd) { Text = newline ? text + Environment.NewLine : text + " " };
-                //tr.ApplyPropertyValue(TextElement.ForegroundProperty, MainFrame.rtb.Foreground);
-                ////MainFrame.sv.ScrollToEnd();
-                ////MainFrame.sv.Focus();
-                //MainFrame.rtb.ScrollToEnd();
             });
     }
 

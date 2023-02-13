@@ -61,9 +61,9 @@ internal static class TextFormatterFactory
     {
         if (element == null) throw new ArgumentNullException(nameof(element));
         if (text == null) throw new ArgumentNullException(nameof(text));
-        if (typeface == null) typeface     = element.CreateTypeface();
-        if (emSize == null) emSize         = TextBlock.GetFontSize(element);
-        if (foreground == null) foreground = TextBlock.GetForeground(element);
+        typeface   ??= element.CreateTypeface();
+        emSize     ??= TextBlock.GetFontSize(element);
+        foreground ??= TextBlock.GetForeground(element);
         return new FormattedText(text, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, typeface, emSize.Value, foreground, null, TextOptions.GetTextFormattingMode(element), VisualTreeHelper.GetDpi(element).PixelsPerDip);
     }
 }

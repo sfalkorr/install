@@ -296,8 +296,7 @@ public class TextEditorOptions : INotifyPropertyChanged
     {
         if (column < 1) throw new ArgumentOutOfRangeException(nameof(column), column, "Value must be at least 1.");
         var indentationSize = IndentationSize;
-        if (ConvertTabsToSpaces) return new string(' ', indentationSize - (column - 1) % indentationSize);
-        return "\t";
+        return ConvertTabsToSpaces ? new string(' ', indentationSize - (column - 1) % indentationSize) : "\t";
     }
 
     #endregion
@@ -313,11 +312,9 @@ public class TextEditorOptions : INotifyPropertyChanged
         get => cutCopyWholeLine;
         set
         {
-            if (cutCopyWholeLine != value)
-            {
-                cutCopyWholeLine = value;
-                OnPropertyChanged("CutCopyWholeLine");
-            }
+            if (cutCopyWholeLine == value) return;
+            cutCopyWholeLine = value;
+            OnPropertyChanged("CutCopyWholeLine");
         }
     }
 
@@ -333,11 +330,9 @@ public class TextEditorOptions : INotifyPropertyChanged
         get => allowScrollBelowDocument;
         set
         {
-            if (allowScrollBelowDocument != value)
-            {
-                allowScrollBelowDocument = value;
-                OnPropertyChanged("AllowScrollBelowDocument");
-            }
+            if (allowScrollBelowDocument == value) return;
+            allowScrollBelowDocument = value;
+            OnPropertyChanged("AllowScrollBelowDocument");
         }
     }
 
@@ -354,11 +349,9 @@ public class TextEditorOptions : INotifyPropertyChanged
         set
         {
             if (double.IsNaN(value) || double.IsInfinity(value)) throw new ArgumentOutOfRangeException(nameof(value), value, "value must not be NaN/infinity");
-            if (value != wordWrapIndentation)
-            {
-                wordWrapIndentation = value;
-                OnPropertyChanged("WordWrapIndentation");
-            }
+            if (value == wordWrapIndentation) return;
+            wordWrapIndentation = value;
+            OnPropertyChanged("WordWrapIndentation");
         }
     }
 
@@ -375,11 +368,9 @@ public class TextEditorOptions : INotifyPropertyChanged
         get => inheritWordWrapIndentation;
         set
         {
-            if (value != inheritWordWrapIndentation)
-            {
-                inheritWordWrapIndentation = value;
-                OnPropertyChanged("InheritWordWrapIndentation");
-            }
+            if (value == inheritWordWrapIndentation) return;
+            inheritWordWrapIndentation = value;
+            OnPropertyChanged("InheritWordWrapIndentation");
         }
     }
 
@@ -394,11 +385,9 @@ public class TextEditorOptions : INotifyPropertyChanged
         get => enableRectangularSelection;
         set
         {
-            if (enableRectangularSelection != value)
-            {
-                enableRectangularSelection = value;
-                OnPropertyChanged("EnableRectangularSelection");
-            }
+            if (enableRectangularSelection == value) return;
+            enableRectangularSelection = value;
+            OnPropertyChanged("EnableRectangularSelection");
         }
     }
 
@@ -413,11 +402,9 @@ public class TextEditorOptions : INotifyPropertyChanged
         get => enableTextDragDrop;
         set
         {
-            if (enableTextDragDrop != value)
-            {
-                enableTextDragDrop = value;
-                OnPropertyChanged("EnableTextDragDrop");
-            }
+            if (enableTextDragDrop == value) return;
+            enableTextDragDrop = value;
+            OnPropertyChanged("EnableTextDragDrop");
         }
     }
 
@@ -435,11 +422,9 @@ public class TextEditorOptions : INotifyPropertyChanged
         get => enableVirtualSpace;
         set
         {
-            if (enableVirtualSpace != value)
-            {
-                enableVirtualSpace = value;
-                OnPropertyChanged("EnableVirtualSpace");
-            }
+            if (enableVirtualSpace == value) return;
+            enableVirtualSpace = value;
+            OnPropertyChanged("EnableVirtualSpace");
         }
     }
 
@@ -455,11 +440,9 @@ public class TextEditorOptions : INotifyPropertyChanged
         get => enableImeSupport;
         set
         {
-            if (enableImeSupport != value)
-            {
-                enableImeSupport = value;
-                OnPropertyChanged("EnableImeSupport");
-            }
+            if (enableImeSupport == value) return;
+            enableImeSupport = value;
+            OnPropertyChanged("EnableImeSupport");
         }
     }
 
@@ -474,11 +457,9 @@ public class TextEditorOptions : INotifyPropertyChanged
         get => showColumnRuler;
         set
         {
-            if (showColumnRuler != value)
-            {
-                showColumnRuler = value;
-                OnPropertyChanged("ShowColumnRuler");
-            }
+            if (showColumnRuler == value) return;
+            showColumnRuler = value;
+            OnPropertyChanged("ShowColumnRuler");
         }
     }
 
@@ -493,11 +474,9 @@ public class TextEditorOptions : INotifyPropertyChanged
         get => columnRulerPosition;
         set
         {
-            if (columnRulerPosition != value)
-            {
-                columnRulerPosition = value;
-                OnPropertyChanged("ColumnRulerPosition");
-            }
+            if (columnRulerPosition == value) return;
+            columnRulerPosition = value;
+            OnPropertyChanged("ColumnRulerPosition");
         }
     }
 
@@ -512,11 +491,9 @@ public class TextEditorOptions : INotifyPropertyChanged
         get => highlightCurrentLine;
         set
         {
-            if (highlightCurrentLine != value)
-            {
-                highlightCurrentLine = value;
-                OnPropertyChanged("HighlightCurrentLine");
-            }
+            if (highlightCurrentLine == value) return;
+            highlightCurrentLine = value;
+            OnPropertyChanged("HighlightCurrentLine");
         }
     }
 
@@ -531,11 +508,9 @@ public class TextEditorOptions : INotifyPropertyChanged
         get => hideCursorWhileTyping;
         set
         {
-            if (hideCursorWhileTyping != value)
-            {
-                hideCursorWhileTyping = value;
-                OnPropertyChanged("HideCursorWhileTyping");
-            }
+            if (hideCursorWhileTyping == value) return;
+            hideCursorWhileTyping = value;
+            OnPropertyChanged("HideCursorWhileTyping");
         }
     }
 
@@ -550,11 +525,9 @@ public class TextEditorOptions : INotifyPropertyChanged
         get => allowToggleOverstrikeMode;
         set
         {
-            if (allowToggleOverstrikeMode != value)
-            {
-                allowToggleOverstrikeMode = value;
-                OnPropertyChanged("AllowToggleOverstrikeMode");
-            }
+            if (allowToggleOverstrikeMode == value) return;
+            allowToggleOverstrikeMode = value;
+            OnPropertyChanged("AllowToggleOverstrikeMode");
         }
     }
 }

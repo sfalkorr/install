@@ -46,9 +46,8 @@ public struct XshdReference<T> : IEquatable<XshdReference<T>> where T : XshdElem
     /// </summary>
     public XshdReference(string referencedDefinition, string referencedElement)
     {
-        if (referencedElement == null) throw new ArgumentNullException(nameof(referencedElement));
         ReferencedDefinition = referencedDefinition;
-        ReferencedElement    = referencedElement;
+        ReferencedElement    = referencedElement ?? throw new ArgumentNullException(nameof(referencedElement));
         InlineElement        = null;
     }
 
@@ -57,10 +56,9 @@ public struct XshdReference<T> : IEquatable<XshdReference<T>> where T : XshdElem
     /// </summary>
     public XshdReference(T inlineElement)
     {
-        if (inlineElement == null) throw new ArgumentNullException(nameof(inlineElement));
         ReferencedDefinition = null;
         ReferencedElement    = null;
-        InlineElement        = inlineElement;
+        InlineElement        = inlineElement ?? throw new ArgumentNullException(nameof(inlineElement));
     }
 
     /// <summary>
@@ -68,8 +66,7 @@ public struct XshdReference<T> : IEquatable<XshdReference<T>> where T : XshdElem
     /// </summary>
     public object AcceptVisitor(IXshdVisitor visitor)
     {
-        if (InlineElement != null) return InlineElement.AcceptVisitor(visitor);
-        return null;
+        return InlineElement?.AcceptVisitor(visitor);
     }
 
     #region Equals and GetHashCode implementation
@@ -80,8 +77,7 @@ public struct XshdReference<T> : IEquatable<XshdReference<T>> where T : XshdElem
     /// <inheritdoc />
     public override bool Equals(object obj)
     {
-        if (obj is XshdReference<T>) return Equals((XshdReference<T>)obj); // use Equals method below
-        return false;
+        return obj is XshdReference<T> && Equals((XshdReference<T>)obj); // use Equals method below
     }
 
     /// <summary>

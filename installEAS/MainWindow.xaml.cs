@@ -22,6 +22,7 @@ using installEAS.Helpers;
 using installEAS.MessageBoxCustom;
 using installEAS.Themes;
 using installEAS.Controls;
+using static installEAS.Themes.ThemesController;
 using static installEAS.Helpers.Log;
 using static installEAS.Helpers.Animate;
 using static installEAS.Variables;
@@ -53,15 +54,15 @@ public partial class MainWindow
 
         InitializeComponent();
 
-        MainFrame                     =  this;
-        Left                          =  5;
-        Top                           =  5;
-        StateChanged                  += MainWindowStateChangeRaised;
-        SizeChanged                   += MainWin_SizeChanged;
-        ThemesController.CurrentTheme =  ThemesController.ThemeTypes.ColorGray;
-        switch (ThemesController.CurrentTheme)
+        MainFrame    =  this;
+        Left         =  5;
+        Top          =  5;
+        StateChanged += MainWindowStateChangeRaised;
+        SizeChanged  += MainWin_SizeChanged;
+        CurrentTheme =  ThemeTypes.ColorGray;
+        switch (CurrentTheme)
         {
-            case ThemesController.ThemeTypes.ColorDark:
+            case ThemeTypes.ColorDark:
             {
                 controlFrom = "#FF242A31";
                 controlTo   = "#00242A31";
@@ -69,7 +70,7 @@ public partial class MainWindow
                 closeTo     = "#00202020";
                 break;
             }
-            case ThemesController.ThemeTypes.ColorBlue:
+            case ThemeTypes.ColorBlue:
             {
                 controlFrom = "#FF32506E";
                 controlTo   = "#0032506E";
@@ -77,7 +78,7 @@ public partial class MainWindow
                 closeTo     = "#0032506E";
                 break;
             }
-            case ThemesController.ThemeTypes.ColorGray:
+            case ThemeTypes.ColorGray:
             {
                 controlFrom = "#FF50565D";
                 controlTo   = "#0050565D";
@@ -100,23 +101,27 @@ public partial class MainWindow
         waitProgress.IsEnabled                       = false;
         labelVer.Content                             = $"InstallEAS v{AppVersion}";
 
-        var SelectionBorder = new Pen();
-        rtb.TextArea.Cursor                     = Cursors.Arrow;
-        rtb.IsReadOnly                          = true;
-        rtb.TextArea.MouseSelectionMode         = MouseSelectionMode.Drag;
-        rtb.TextArea.Caret.CaretBrush           = Brushes.Transparent;
-        rtb.TextArea.SelectionCornerRadius      = 1;
-        rtb.TextArea.SelectionBorder            = SelectionBorder;
-        rtb.Options.InheritWordWrapIndentation  = false;
-        rtb.TextArea.SelectionBrush             = new SolidColorBrush(Color.FromArgb(180, 100, 100, 150));
-        rtb.Options.EnableTextDragDrop          = false;
-        rtb.Options.AllowScrollBelowDocument    = false;
-        rtb.Options.HighlightCurrentLine        = false;
-        rtb.Options.EnableHyperlinks            = false;
-        rtb.Options.EnableRectangularSelection  = true;
-        rtb.Options.EnableEmailHyperlinks       = false;
-        rtb.Options.ShowBoxForControlCharacters = false;
-        rtb.TextArea.OverstrikeMode             = false;
+        var SelectionBorder = new Pen { Brush = new SolidColorBrush(Colors.Wheat) };
+        SelectionBorder.Brush.Opacity            = 0.5;
+        rtb.TextArea.Cursor                      = Cursors.Arrow;
+        rtb.IsReadOnly                           = true;
+        rtb.TextArea.MouseSelectionMode          = MouseSelectionMode.WholeWord;
+        rtb.TextArea.Caret.CaretBrush            = Brushes.Transparent;
+        rtb.TextArea.SelectionForeground         = Brushes.White;
+        rtb.TextArea.SelectionCornerRadius       = 5;
+        rtb.TextArea.SelectionBorder             = SelectionBorder;
+        rtb.Options.InheritWordWrapIndentation   = false;
+        rtb.TextArea.SelectionBrush              = new SolidColorBrush(Color.FromArgb(100, 100, 100, 150));
+        rtb.Options.EnableTextDragDrop           = false;
+        rtb.Options.AllowScrollBelowDocument     = false;
+        rtb.Options.HighlightCurrentLine         = false;
+        rtb.Options.EnableHyperlinks             = false;
+        rtb.Options.EnableRectangularSelection   = true;
+        rtb.Options.EnableEmailHyperlinks        = false;
+        rtb.Options.ShowBoxForControlCharacters  = false;
+        rtb.TextArea.OverstrikeMode              = false;
+        rtb.TextArea.Options.WordWrapIndentation = double.MaxValue;
+        rtb.TextArea.Options.EnableImeSupport    = false;
     }
 
     public static void CloseMain()
@@ -246,7 +251,6 @@ public partial class MainWindow
         CreateVariablesInstance();
         CreateSlidePanelsInstance();
         CreatetempControlInstance();
-
         BeginAnimation(OpacityProperty, MainOpen);
     }
 
@@ -285,7 +289,6 @@ public partial class MainWindow
     {
         if (e.Key != Key.Enter) return;
         textBoxClos.Begin(textBox);
-
         textBox.Focus();
         if (textBox.Text != "") log(textBox.Text);
         textBox.IsEnabled = false;
@@ -295,7 +298,7 @@ public partial class MainWindow
 
     private void LabelVer_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-        ThemesController.ChangeTheme();
+        ChangeTheme();
         if (textBox.IsEnabled) textBox.Focus();
     }
 
@@ -312,14 +315,10 @@ public partial class MainWindow
             // ReSharper disable once PossibleInvalidOperationException
             var PosCol = rtb.GetPositionFromPoint(e.GetPosition(rtb)).Value.Column;
             // ReSharper disable once PossibleInvalidOperationException
-            var PosVisualCol = rtb.GetPositionFromPoint(e.GetPosition(rtb)).Value.VisualColumn;
-
+            var PosVisualCol                              = rtb.GetPositionFromPoint(e.GetPosition(rtb)).Value.VisualColumn;
             if (PosCol == 1 && PosVisualCol == 0) IsEmpty = true;
         }
-        catch (Exception)
-        {
-            IsEmpty = true;
-        }
+        catch (Exception) { IsEmpty = true; }
 
         if (e.LeftButton != MouseButtonState.Pressed || obj != "ICSharpCode.AvalonEdit.Rendering.TextView" || !IsEmpty) return;
         DragMove();

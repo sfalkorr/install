@@ -85,35 +85,29 @@ internal class RopeNode<T>
 
     internal RopeNode<T> Clone()
     {
-        if (height == 0)
-        {
-            // If a function node needs cloning, we'll evaluate it.
-            if (contents == null) return GetContentNode().Clone();
-            var newContents = new T[NodeSize];
-            contents.CopyTo(newContents, 0);
-            return new RopeNode<T> { length = length, contents = newContents };
-        }
+        if (height != 0) return new RopeNode<T> { left = left, right = right, length = length, height = height };
+        // If a function node needs cloning, we'll evaluate it.
+        if (contents == null) return GetContentNode().Clone();
+        var newContents = new T[NodeSize];
+        contents.CopyTo(newContents, 0);
+        return new RopeNode<T> { length = length, contents = newContents };
 
-        return new RopeNode<T> { left = left, right = right, length = length, height = height };
     }
 
     internal RopeNode<T> CloneIfShared()
     {
-        if (isShared) return Clone();
-        return this;
+        return isShared ? Clone() : this;
     }
 
     internal void Publish()
     {
-        if (!isShared)
-        {
-            if (left != null) left.Publish();
-            if (right != null) right.Publish();
-            // it's important that isShared=true is set at the end:
-            // Publish() must not return until the whole subtree is marked as shared, even when
-            // Publish() is called concurrently.
-            isShared = true;
-        }
+        if (isShared) return;
+        if (left != null) left.Publish();
+        if (right != null) right.Publish();
+        // it's important that isShared=true is set at the end:
+        // Publish() must not return until the whole subtree is marked as shared, even when
+        // Publish() is called concurrently.
+        isShared = true;
     }
 
     internal static RopeNode<T> CreateFromArray(T[] arr, int index, int length)
@@ -133,8 +127,7 @@ internal class RopeNode<T>
     {
         Debug.Assert(leafCount > 0);
         Debug.Assert(totalLength > 0);
-        var result = new RopeNode<T>();
-        result.length = totalLength;
+        var result = new RopeNode<T> { length = totalLength };
         if (leafCount == 1)
         {
             result.contents = new T[NodeSize];
@@ -170,32 +163,37 @@ internal class RopeNode<T>
         // We need to loop until it's balanced. Rotations might cause two small leaves to combine to a larger one,
         // which changes the height and might mean we need additional balancing steps.
         while (Math.Abs(Balance) > 1)
-            // AVL balancing
-            // note: because we don't care about the identity of concat nodes, this works a little different than usual
-            // tree rotations: in our implementation, the "this" node will stay at the top, only its children are rearranged
-            if (Balance > 1)
+            switch (Balance)
             {
-                if (right.Balance < 0)
+                // AVL balancing
+                // note: because we don't care about the identity of concat nodes, this works a little different than usual
+                // tree rotations: in our implementation, the "this" node will stay at the top, only its children are rearranged
+                case > 1:
                 {
-                    right = right.CloneIfShared();
-                    right.RotateRight();
-                }
+                    if (right.Balance < 0)
+                    {
+                        right = right.CloneIfShared();
+                        right.RotateRight();
+                    }
 
-                RotateLeft();
-                // If 'this' was unbalanced by more than 2, we've shifted some of the inbalance to the left node; so rebalance that.
-                left.Rebalance();
-            }
-            else if (Balance < -1)
-            {
-                if (left.Balance > 0)
+                    RotateLeft();
+                    // If 'this' was unbalanced by more than 2, we've shifted some of the inbalance to the left node; so rebalance that.
+                    left.Rebalance();
+                    break;
+                }
+                case < -1:
                 {
-                    left = left.CloneIfShared();
-                    left.RotateLeft();
-                }
+                    if (left.Balance > 0)
+                    {
+                        left = left.CloneIfShared();
+                        left.RotateLeft();
+                    }
 
-                RotateRight();
-                // If 'this' was unbalanced by more than 2, we've shifted some of the inbalance to the right node; so rebalance that.
-                right.Rebalance();
+                    RotateRight();
+                    // If 'this' was unbalanced by more than 2, we've shifted some of the inbalance to the right node; so rebalance that.
+                    right.Rebalance();
+                    break;
+                }
             }
 
         Debug.Assert(Math.Abs(Balance) <= 1);
@@ -258,35 +256,33 @@ internal class RopeNode<T>
     {
         Debug.Assert(!isShared);
 
-        if (length <= NodeSize)
+        if (length > NodeSize) return;
+        // Convert this concat node to leaf node.
+        // We know left and right cannot be concat nodes (they would have merged already),
+        // but they could be function nodes.
+        height = 0;
+        var lengthOnLeftSide = left.length;
+        if (left.isShared)
         {
-            // Convert this concat node to leaf node.
-            // We know left and right cannot be concat nodes (they would have merged already),
-            // but they could be function nodes.
-            height = 0;
-            var lengthOnLeftSide = left.length;
-            if (left.isShared)
-            {
-                contents = new T[NodeSize];
-                left.CopyTo(0, contents, 0, lengthOnLeftSide);
-            }
-            else
-            {
-                // must be a leaf node: function nodes are always marked shared
-                Debug.Assert(left.contents != null);
-                // steal buffer from left side
-                contents = left.contents;
+            contents = new T[NodeSize];
+            left.CopyTo(0, contents, 0, lengthOnLeftSide);
+        }
+        else
+        {
+            // must be a leaf node: function nodes are always marked shared
+            Debug.Assert(left.contents != null);
+            // steal buffer from left side
+            contents = left.contents;
 #if DEBUG
                 // In debug builds, explicitly mark left node as 'damaged' - but no one else should be using it
                 // because it's not shared.
                 left.contents = Empty<T>.Array;
 #endif
-            }
-
-            left = null;
-            right.CopyTo(0, contents, lengthOnLeftSide, right.length);
-            right = null;
         }
+
+        left = null;
+        right.CopyTo(0, contents, lengthOnLeftSide, right.length);
+        right = null;
     }
 
     /// <summary>
@@ -393,10 +389,7 @@ internal class RopeNode<T>
             return left;
         }
 
-        var concatNode = new RopeNode<T>();
-        concatNode.left   = left;
-        concatNode.right  = right;
-        concatNode.length = left.length + right.length;
+        var concatNode = new RopeNode<T> { left = left, right = right, length = left.length + right.length };
         concatNode.Rebalance();
         return concatNode;
     }
@@ -407,9 +400,7 @@ internal class RopeNode<T>
     private RopeNode<T> SplitAfter(int offset)
     {
         Debug.Assert(!isShared && height == 0 && contents != null);
-        var newPart = new RopeNode<T>();
-        newPart.contents = new T[NodeSize];
-        newPart.length   = length - offset;
+        var newPart = new RopeNode<T> { contents = new T[NodeSize], length = length - offset };
         Array.Copy(contents, offset, newPart.contents, 0, newPart.length);
         length = offset;
         return newPart;
@@ -591,23 +582,21 @@ internal sealed class FunctionNode<T> : RopeNode<T>
     {
         lock (this)
         {
-            if (cachedResults == null)
-            {
-                if (initializer == null) throw new InvalidOperationException("Trying to load this node recursively; or: a previous call to a rope initializer failed.");
-                var initializerCopy = initializer;
-                initializer = null;
-                var resultRope = initializerCopy();
-                if (resultRope == null) throw new InvalidOperationException("Rope initializer returned null.");
-                var resultNode = resultRope.root;
-                resultNode.Publish(); // result is shared between returned rope and the rope containing this function node
-                if (resultNode.length != length) throw new InvalidOperationException("Rope initializer returned rope with incorrect length.");
-                if (resultNode.height == 0 && resultNode.contents == null)
-                    // ResultNode is another function node.
-                    // We want to guarantee that GetContentNode() never returns function nodes, so we have to
-                    // go down further in the tree.
-                    cachedResults  = resultNode.GetContentNode();
-                else cachedResults = resultNode;
-            }
+            if (cachedResults != null) return cachedResults;
+            if (initializer == null) throw new InvalidOperationException("Trying to load this node recursively; or: a previous call to a rope initializer failed.");
+            var initializerCopy = initializer;
+            initializer = null;
+            var resultRope = initializerCopy();
+            if (resultRope == null) throw new InvalidOperationException("Rope initializer returned null.");
+            var resultNode = resultRope.root;
+            resultNode.Publish(); // result is shared between returned rope and the rope containing this function node
+            if (resultNode.length != length) throw new InvalidOperationException("Rope initializer returned rope with incorrect length.");
+            if (resultNode.height == 0 && resultNode.contents == null)
+                // ResultNode is another function node.
+                // We want to guarantee that GetContentNode() never returns function nodes, so we have to
+                // go down further in the tree.
+                cachedResults  = resultNode.GetContentNode();
+            else cachedResults = resultNode;
 
             return cachedResults;
         }

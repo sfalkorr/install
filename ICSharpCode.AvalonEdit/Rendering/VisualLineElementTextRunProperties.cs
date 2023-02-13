@@ -62,9 +62,9 @@ public class VisualLineElementTextRunProperties : TextRunProperties, ICloneable
         foregroundBrush     = textRunProperties.ForegroundBrush;
         typeface            = textRunProperties.Typeface;
         textDecorations     = textRunProperties.TextDecorations;
-        if (textDecorations != null && !textDecorations.IsFrozen) textDecorations = textDecorations.Clone();
+        if (textDecorations is { IsFrozen: false }) textDecorations = textDecorations.Clone();
         textEffects = textRunProperties.TextEffects;
-        if (textEffects != null && !textEffects.IsFrozen) textEffects = textEffects.Clone();
+        if (textEffects is { IsFrozen: false }) textEffects = textEffects.Clone();
         typographyProperties = textRunProperties.TypographyProperties;
         numberSubstitution   = textRunProperties.NumberSubstitution;
     }
@@ -113,8 +113,7 @@ public class VisualLineElementTextRunProperties : TextRunProperties, ICloneable
     /// </summary>
     public void SetCultureInfo(CultureInfo value)
     {
-        if (value == null) throw new ArgumentNullException(nameof(value));
-        cultureInfo = value;
+        cultureInfo = value ?? throw new ArgumentNullException(nameof(value));
     }
 
     /// <inheritdoc />
@@ -159,8 +158,7 @@ public class VisualLineElementTextRunProperties : TextRunProperties, ICloneable
     /// </summary>
     public void SetTypeface(Typeface value)
     {
-        if (value == null) throw new ArgumentNullException(nameof(value));
-        typeface = value;
+        typeface = value ?? throw new ArgumentNullException(nameof(value));
     }
 
     /// <summary>
@@ -178,8 +176,7 @@ public class VisualLineElementTextRunProperties : TextRunProperties, ICloneable
     public void SetTextDecorations(TextDecorationCollection value)
     {
         ExtensionMethods.CheckIsFrozen(value);
-        if (textDecorations == null) textDecorations = value;
-        else textDecorations                         = new TextDecorationCollection(textDecorations.Union(value));
+        textDecorations = textDecorations == null ? value : new TextDecorationCollection(textDecorations.Union(value));
     }
 
     /// <summary>

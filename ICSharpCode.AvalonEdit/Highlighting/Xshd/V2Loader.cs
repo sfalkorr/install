@@ -37,14 +37,7 @@ internal static class V2Loader
 
     private static XmlSchemaSet schemaSet;
 
-    private static XmlSchemaSet SchemaSet
-    {
-        get
-        {
-            if (schemaSet == null) schemaSet = HighlightingLoader.LoadSchemaSet(new XmlTextReader(Resources.OpenStream("ModeV2.xsd")));
-            return schemaSet;
-        }
-    }
+    private static XmlSchemaSet SchemaSet => schemaSet ??= HighlightingLoader.LoadSchemaSet(new XmlTextReader(Resources.OpenStream("ModeV2.xsd")));
 
     public static XshdSyntaxDefinition LoadDefinition(XmlReader reader, bool skipValidation)
     {
@@ -56,8 +49,7 @@ internal static class V2Loader
     private static XshdSyntaxDefinition ParseDefinition(XmlReader reader)
     {
         Debug.Assert(reader.LocalName == "SyntaxDefinition");
-        var def = new XshdSyntaxDefinition();
-        def.Name = reader.GetAttribute("name");
+        var def        = new XshdSyntaxDefinition { Name = reader.GetAttribute("name") };
         var extensions = reader.GetAttribute("extensions");
         if (extensions != null) def.Extensions.AddRange(extensions.Split(';'));
         ParseElements(def.Elements, reader);
@@ -309,8 +301,7 @@ internal static class V2Loader
     private static HighlightingBrush ParseColor(IXmlLineInfo lineInfo, string color)
     {
         if (string.IsNullOrEmpty(color)) return null;
-        if (color.StartsWith("SystemColors.", StringComparison.Ordinal)) return GetSystemColorBrush(lineInfo, color);
-        return FixedColorHighlightingBrush((Color?)ColorConverter.ConvertFromInvariantString(color));
+        return color.StartsWith("SystemColors.", StringComparison.Ordinal) ? GetSystemColorBrush(lineInfo, color) : FixedColorHighlightingBrush((Color?)ColorConverter.ConvertFromInvariantString(color));
     }
 
     private static int? ParseFontSize(IXmlLineInfo lineInfo, string size)
@@ -321,8 +312,7 @@ internal static class V2Loader
 
     private static FontFamily ParseFontFamily(IXmlLineInfo lineInfo, string family)
     {
-        if (!string.IsNullOrEmpty(family)) return new FontFamily(family);
-        return null;
+        return !string.IsNullOrEmpty(family) ? new FontFamily(family) : null;
     }
 
     internal static SystemColorHighlightingBrush GetSystemColorBrush(IXmlLineInfo lineInfo, string name)
@@ -336,8 +326,7 @@ internal static class V2Loader
 
     private static HighlightingBrush FixedColorHighlightingBrush(Color? color)
     {
-        if (color == null) return null;
-        return new SimpleHighlightingBrush(color.Value);
+        return color == null ? null : new SimpleHighlightingBrush(color.Value);
     }
 
     private static FontWeight? ParseFontWeight(string fontWeight)

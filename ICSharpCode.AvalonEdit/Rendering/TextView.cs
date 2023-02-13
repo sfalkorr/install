@@ -89,7 +89,7 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
     /// <summary>
     ///     Document property.
     /// </summary>
-    public static readonly DependencyProperty DocumentProperty = DependencyProperty.Register("Document", typeof(TextDocument), typeof(TextView), new FrameworkPropertyMetadata(OnDocumentChanged));
+    public static readonly DependencyProperty DocumentProperty = DependencyProperty.Register(nameof(Document), typeof(TextDocument), typeof(TextView), new FrameworkPropertyMetadata(OnDocumentChanged));
 
     private TextDocument document;
     private HeightTree   heightTree;
@@ -198,7 +198,7 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
     /// <summary>
     ///     Options property.
     /// </summary>
-    public static readonly DependencyProperty OptionsProperty = DependencyProperty.Register("Options", typeof(TextEditorOptions), typeof(TextView), new FrameworkPropertyMetadata(OnOptionsChanged));
+    public static readonly DependencyProperty OptionsProperty = DependencyProperty.Register(nameof(Options), typeof(TextEditorOptions), typeof(TextView), new FrameworkPropertyMetadata(OnOptionsChanged));
 
     /// <summary>
     ///     Gets/Sets the options used by the text editor.
@@ -284,8 +284,7 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
 
     //		NewLineElementGenerator newLineElementGenerator;
     private SingleCharacterElementGenerator singleCharacterElementGenerator;
-    private LinkElementGenerator            linkElementGenerator;
-    private MailLinkElementGenerator        mailLinkElementGenerator;
+
 
     private void UpdateBuiltinElementGeneratorsFromOptions()
     {
@@ -293,8 +292,6 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
 
         //			AddRemoveDefaultElementGeneratorOnDemand(ref newLineElementGenerator, options.ShowEndOfLine);
         AddRemoveDefaultElementGeneratorOnDemand(ref singleCharacterElementGenerator, options.ShowBoxForControlCharacters || options.ShowSpaces || options.ShowTabs);
-        AddRemoveDefaultElementGeneratorOnDemand(ref linkElementGenerator, options.EnableHyperlinks);
-        AddRemoveDefaultElementGeneratorOnDemand(ref mailLinkElementGenerator, options.EnableEmailHyperlinks);
     }
 
     private void AddRemoveDefaultElementGeneratorOnDemand<T>(ref T generator, bool demand) where T : VisualLineElementGenerator, IBuiltinElementGenerator, new()
@@ -522,8 +519,8 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
             // When the inline element that has the focus is removed, WPF will reset the
             // focus to the main window without raising appropriate LostKeyboardFocus events.
             // To work around this, we manually set focus to the next focusable parent.
-            UIElement element                                     = this;
-            while (element != null && !element.Focusable) element = VisualTreeHelper.GetParent(element) as UIElement;
+            UIElement element                               = this;
+            while (element is { Focusable: false }) element = VisualTreeHelper.GetParent(element) as UIElement;
             if (element != null) Keyboard.Focus(element);
         }
 
@@ -538,7 +535,7 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
     /// <summary>
     ///     NonPrintableCharacterBrush dependency property.
     /// </summary>
-    public static readonly DependencyProperty NonPrintableCharacterBrushProperty = DependencyProperty.Register("NonPrintableCharacterBrush", typeof(Brush), typeof(TextView), new FrameworkPropertyMetadata(Brushes.LightGray));
+    public static readonly DependencyProperty NonPrintableCharacterBrushProperty = DependencyProperty.Register(nameof(NonPrintableCharacterBrush), typeof(Brush), typeof(TextView), new FrameworkPropertyMetadata(Brushes.LightGray));
 
     /// <summary>
     ///     Gets/sets the Brush used for displaying non-printable characters.
@@ -548,7 +545,7 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
     /// <summary>
     ///     LinkTextForegroundBrush dependency property.
     /// </summary>
-    public static readonly DependencyProperty LinkTextForegroundBrushProperty = DependencyProperty.Register("LinkTextForegroundBrush", typeof(Brush), typeof(TextView), new FrameworkPropertyMetadata(Brushes.Blue));
+    public static readonly DependencyProperty LinkTextForegroundBrushProperty = DependencyProperty.Register(nameof(LinkTextForegroundBrush), typeof(Brush), typeof(TextView), new FrameworkPropertyMetadata(Brushes.Blue));
 
     /// <summary>
     ///     Gets/sets the Brush used for displaying link texts.
@@ -558,7 +555,7 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
     /// <summary>
     ///     LinkTextBackgroundBrush dependency property.
     /// </summary>
-    public static readonly DependencyProperty LinkTextBackgroundBrushProperty = DependencyProperty.Register("LinkTextBackgroundBrush", typeof(Brush), typeof(TextView), new FrameworkPropertyMetadata(Brushes.Transparent));
+    public static readonly DependencyProperty LinkTextBackgroundBrushProperty = DependencyProperty.Register(nameof(LinkTextBackgroundBrush), typeof(Brush), typeof(TextView), new FrameworkPropertyMetadata(Brushes.Transparent));
 
     /// <summary>
     ///     Gets/sets the Brush used for the background of link texts.
@@ -570,7 +567,7 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
     /// <summary>
     ///     LinkTextUnderlinedBrush dependency property.
     /// </summary>
-    public static readonly DependencyProperty LinkTextUnderlineProperty = DependencyProperty.Register("LinkTextUnderline", typeof(bool), typeof(TextView), new FrameworkPropertyMetadata(true));
+    public static readonly DependencyProperty LinkTextUnderlineProperty = DependencyProperty.Register(nameof(LinkTextUnderline), typeof(bool), typeof(TextView), new FrameworkPropertyMetadata(true));
 
     /// <summary>
     ///     Gets/sets whether to underline link texts.
@@ -958,8 +955,7 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
         var    yPos                   = -clippedPixelsOnTop;
         while (yPos < availableSize.Height && nextLine != null)
         {
-            var visualLine                     = GetVisualLine(nextLine.LineNumber);
-            if (visualLine == null) visualLine = BuildVisualLine(nextLine, globalTextRunProperties, paragraphProperties, elementGeneratorsArray, lineTransformersArray, availableSize);
+            var visualLine = GetVisualLine(nextLine.LineNumber) ?? BuildVisualLine(nextLine, globalTextRunProperties, paragraphProperties, elementGeneratorsArray, lineTransformersArray, availableSize);
 
             visualLine.VisualTop = scrollOffset.Y + yPos;
 
@@ -967,9 +963,7 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
 
             yPos += visualLine.Height;
 
-            foreach (var textLine in visualLine.TextLines)
-                if (textLine.WidthIncludingTrailingWhitespace > maxWidth)
-                    maxWidth = textLine.WidthIncludingTrailingWhitespace;
+            maxWidth = visualLine.TextLines.Select(textLine => textLine.WidthIncludingTrailingWhitespace).Prepend(maxWidth).Max();
 
             newVisualLines.Add(visualLine);
         }
@@ -998,10 +992,7 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
 
     private TextRunProperties CreateGlobalTextRunProperties()
     {
-        var p = new GlobalTextRunProperties();
-        p.typeface            = this.CreateTypeface();
-        p.fontRenderingEmSize = FontSize;
-        p.foregroundBrush     = (Brush)GetValue(Control.ForegroundProperty);
+        var p = new GlobalTextRunProperties { typeface = this.CreateTypeface(), fontRenderingEmSize = FontSize, foregroundBrush = (Brush)GetValue(Control.ForegroundProperty) };
         ExtensionMethods.CheckIsFrozen(p.foregroundBrush);
         p.cultureInfo = CultureInfo.CurrentCulture;
         return p;
@@ -1135,7 +1126,7 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
                 {
                     foreach (var span in textLine.GetTextRunSpans())
                     {
-                        if (span.Value is InlineObjectRun inline && inline.VisualLine != null)
+                        if (span.Value is InlineObjectRun { VisualLine: { } } inline)
                         {
                             Debug.Assert(inlineObjects.Contains(inline));
                             var distance = textLine.GetDistanceFromCharacterHit(new CharacterHit(offset, 0));
@@ -1199,9 +1190,7 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
                 {
                     if (currentBrush != null)
                     {
-                        var builder = new BackgroundGeometryBuilder();
-                        builder.AlignToWholePixels = true;
-                        builder.CornerRadius       = 3;
+                        var builder = new BackgroundGeometryBuilder { AlignToWholePixels = true, CornerRadius = 3 };
                         foreach (var rect in BackgroundGeometryBuilder.GetRectsFromVisualSegment(this, line, startVC, startVC + length)) builder.AddRectangle(this, rect);
                         var geometry = builder.CreateGeometry();
                         if (geometry != null) drawingContext.DrawGeometry(currentBrush, null, geometry);
@@ -1218,9 +1207,7 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
 
             if (currentBrush != null)
             {
-                var builder = new BackgroundGeometryBuilder();
-                builder.AlignToWholePixels = true;
-                builder.CornerRadius       = 3;
+                var builder = new BackgroundGeometryBuilder { AlignToWholePixels = true, CornerRadius = 3 };
                 foreach (var rect in BackgroundGeometryBuilder.GetRectsFromVisualSegment(this, line, startVC, startVC + length)) builder.AddRectangle(this, rect);
                 var geometry = builder.CreateGeometry();
                 if (geometry != null) drawingContext.DrawGeometry(currentBrush, null, geometry);
@@ -1235,7 +1222,7 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
                 bg.Draw(this, drawingContext);
     }
 
-    internal void ArrangeTextLayer(IList<VisualLineDrawingVisual> visuals)
+    internal void ArrangeTextLayer(IEnumerable<VisualLineDrawingVisual> visuals)
     {
         var pos = new Point(-scrollOffset.X, -clippedPixelsOnTop);
         foreach (var visual in visuals)
@@ -1492,13 +1479,11 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
         defaultTextMetricsValid = true;
         if (formatter != null)
         {
-            var textRunProperties = CreateGlobalTextRunProperties();
-            using (var line = formatter.FormatLine(new SimpleTextSource("x", textRunProperties), 0, 32000, new VisualLineTextParagraphProperties { defaultTextRunProperties = textRunProperties, flowDirection = FlowDirection }, null))
-            {
-                wideSpaceWidth    = Math.Max(1, line.WidthIncludingTrailingWhitespace);
-                defaultBaseline   = Math.Max(1, line.Baseline);
-                defaultLineHeight = Math.Max(1, line.Height);
-            }
+            var       textRunProperties = CreateGlobalTextRunProperties();
+            using var line              = formatter.FormatLine(new SimpleTextSource("x", textRunProperties), 0, 32000, new VisualLineTextParagraphProperties { defaultTextRunProperties = textRunProperties, flowDirection = FlowDirection }, null);
+            wideSpaceWidth    = Math.Max(1, line.WidthIncludingTrailingWhitespace);
+            defaultBaseline   = Math.Max(1, line.Baseline);
+            defaultLineHeight = Math.Max(1, line.Height);
         }
         else
         {
@@ -1521,22 +1506,18 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
     void IScrollInfo.SetHorizontalOffset(double offset)
     {
         offset = ValidateVisualOffset(offset);
-        if (!scrollOffset.X.IsClose(offset))
-        {
-            SetScrollOffset(new Vector(offset, scrollOffset.Y));
-            InvalidateVisual();
-            textLayer.InvalidateVisual();
-        }
+        if (scrollOffset.X.IsClose(offset)) return;
+        SetScrollOffset(new Vector(offset, scrollOffset.Y));
+        InvalidateVisual();
+        textLayer.InvalidateVisual();
     }
 
     void IScrollInfo.SetVerticalOffset(double offset)
     {
         offset = ValidateVisualOffset(offset);
-        if (!scrollOffset.Y.IsClose(offset))
-        {
-            SetScrollOffset(new Vector(scrollOffset.X, offset));
-            InvalidateMeasure(DispatcherPriority.Normal);
-        }
+        if (scrollOffset.Y.IsClose(offset)) return;
+        SetScrollOffset(new Vector(scrollOffset.X, offset));
+        InvalidateMeasure(DispatcherPriority.Normal);
     }
 
     Rect IScrollInfo.MakeVisible(Visual visual, Rect rectangle)
@@ -1580,12 +1561,10 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
 
         newScrollOffset.X = ValidateVisualOffset(newScrollOffset.X);
         newScrollOffset.Y = ValidateVisualOffset(newScrollOffset.Y);
-        if (!scrollOffset.IsClose(newScrollOffset))
-        {
-            SetScrollOffset(newScrollOffset);
-            OnScrollChange();
-            InvalidateMeasure(DispatcherPriority.Normal);
-        }
+        if (scrollOffset.IsClose(newScrollOffset)) return;
+        SetScrollOffset(newScrollOffset);
+        OnScrollChange();
+        InvalidateMeasure(DispatcherPriority.Normal);
     }
 
     #endregion
@@ -1607,16 +1586,14 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
     /// </summary>
     public static void InvalidateCursor()
     {
-        if (!invalidCursor)
-        {
-            invalidCursor = true;
-            Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Background, // fixes issue #288
-                                                     new Action(delegate
-                                                     {
-                                                         invalidCursor = false;
-                                                         Mouse.UpdateCursor();
-                                                     }));
-        }
+        if (invalidCursor) return;
+        invalidCursor = true;
+        Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Background, // fixes issue #288
+                                                 new Action(delegate
+                                                 {
+                                                     invalidCursor = false;
+                                                     Mouse.UpdateCursor();
+                                                 }));
     }
 
     internal void InvalidateCursorIfMouseWithinTextView()
@@ -1631,31 +1608,27 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
     protected override void OnQueryCursor(QueryCursorEventArgs e)
     {
         var element = GetVisualLineElementFromPosition(e.GetPosition(this) + scrollOffset);
-        if (element != null) element.OnQueryCursor(e);
+        element?.OnQueryCursor(e);
     }
 
     /// <inheritdoc />
     protected override void OnMouseDown(MouseButtonEventArgs e)
     {
         base.OnMouseDown(e);
-        if (!e.Handled)
-        {
-            EnsureVisualLines();
-            var element = GetVisualLineElementFromPosition(e.GetPosition(this) + scrollOffset);
-            if (element != null) element.OnMouseDown(e);
-        }
+        if (e.Handled) return;
+        EnsureVisualLines();
+        var element = GetVisualLineElementFromPosition(e.GetPosition(this) + scrollOffset);
+        element?.OnMouseDown(e);
     }
 
     /// <inheritdoc />
     protected override void OnMouseUp(MouseButtonEventArgs e)
     {
         base.OnMouseUp(e);
-        if (!e.Handled)
-        {
-            EnsureVisualLines();
-            var element = GetVisualLineElementFromPosition(e.GetPosition(this) + scrollOffset);
-            if (element != null) element.OnMouseUp(e);
-        }
+        if (e.Handled) return;
+        EnsureVisualLines();
+        var element = GetVisualLineElementFromPosition(e.GetPosition(this) + scrollOffset);
+        element?.OnMouseUp(e);
     }
 
     #endregion
@@ -1672,13 +1645,7 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
         // TODO: change this method to also work outside the visible range -
         // required to make GetPosition work as expected!
         EnsureVisualLines();
-        foreach (var vl in VisualLines)
-        {
-            if (visualTop < vl.VisualTop) continue;
-            if (visualTop < vl.VisualTop + vl.Height) return vl;
-        }
-
-        return null;
+        return VisualLines.Where(vl => !(visualTop < vl.VisualTop)).FirstOrDefault(vl => visualTop < vl.VisualTop + vl.Height);
     }
 
     /// <summary>
@@ -1693,19 +1660,10 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
 
     private VisualLineElement GetVisualLineElementFromPosition(Point visualPosition)
     {
-        var vl = GetVisualLineFromVisualTop(visualPosition.Y);
-        if (vl != null)
-        {
-            var column = vl.GetVisualColumnFloor(visualPosition);
-            //				Debug.WriteLine(vl.FirstDocumentLine.LineNumber + " vc " + column);
-            foreach (var element in vl.Elements)
-            {
-                if (element.VisualColumn + element.VisualLength <= column) continue;
-                return element;
-            }
-        }
-
-        return null;
+        var vl     = GetVisualLineFromVisualTop(visualPosition.Y);
+        var column = vl?.GetVisualColumnFloor(visualPosition);
+        //				Debug.WriteLine(vl.FirstDocumentLine.LineNumber + " vc " + column);
+        return vl?.Elements.FirstOrDefault(element => element.VisualColumn + element.VisualLength > column);
     }
 
     #endregion
@@ -1728,11 +1686,9 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
         var documentLine = Document.GetLineByNumber(position.Line);
         var visualLine   = GetOrConstructVisualLine(documentLine);
         var visualColumn = position.VisualColumn;
-        if (visualColumn < 0)
-        {
-            var offset = documentLine.Offset + position.Column - 1;
-            visualColumn = visualLine.GetVisualColumn(offset - visualLine.FirstDocumentLine.Offset);
-        }
+        if (visualColumn >= 0) return visualLine.GetVisualPosition(visualColumn, position.IsAtEndOfLine, yPositionMode);
+        var offset = documentLine.Offset + position.Column - 1;
+        visualColumn = visualLine.GetVisualColumn(offset - visualLine.FirstDocumentLine.Offset);
 
         return visualLine.GetVisualPosition(visualColumn, position.IsAtEndOfLine, yPositionMode);
     }
@@ -1751,8 +1707,7 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
         VerifyAccess();
         if (Document == null) throw ThrowUtil.NoDocumentAssigned();
         var line = GetVisualLineFromVisualTop(visualPosition.Y);
-        if (line == null) return null;
-        return line.GetTextViewPosition(visualPosition, Options.EnableVirtualSpace);
+        return line?.GetTextViewPosition(visualPosition, Options.EnableVirtualSpace);
     }
 
     /// <summary>
@@ -1769,8 +1724,7 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
         VerifyAccess();
         if (Document == null) throw ThrowUtil.NoDocumentAssigned();
         var line = GetVisualLineFromVisualTop(visualPosition.Y);
-        if (line == null) return null;
-        return line.GetTextViewPositionFloor(visualPosition, Options.EnableVirtualSpace);
+        return line?.GetTextViewPositionFloor(visualPosition, Options.EnableVirtualSpace);
     }
 
     #endregion
@@ -1875,7 +1829,6 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
     ///     This method is meant for <see cref="VisualLineElementGenerator" />s that cause <see cref="VisualLine" />s to span
     ///     multiple <see cref="DocumentLine" />s. Do not call it without providing a corresponding
     ///     <see cref="VisualLineElementGenerator" />.
-
     ///     Note that if you want a VisualLineElement to span from line N to line M, then you need to collapse only the lines
     ///     N+1 to M. Do not collapse line N itself.
     ///     When you no longer need the section to be collapsed, call <see cref="CollapsedLineSection.Uncollapse()" /> on the
@@ -1893,7 +1846,7 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
     /// </summary>
     public double DocumentHeight =>
         // return 0 if there is no document = no heightTree
-        heightTree != null ? heightTree.TotalHeight : 0;
+        heightTree?.TotalHeight ?? 0;
 
     /// <summary>
     ///     Gets the document line at the specified visual position.
@@ -1943,7 +1896,7 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
     ///     The pen used to draw the column ruler.
     ///     <seealso cref="TextEditorOptions.ShowColumnRuler" />
     /// </summary>
-    public static readonly DependencyProperty ColumnRulerPenProperty = DependencyProperty.Register("ColumnRulerPen", typeof(Pen), typeof(TextView), new FrameworkPropertyMetadata(CreateFrozenPen(Brushes.LightGray)));
+    public static readonly DependencyProperty ColumnRulerPenProperty = DependencyProperty.Register(nameof(ColumnRulerPen), typeof(Pen), typeof(TextView), new FrameworkPropertyMetadata(CreateFrozenPen(Brushes.LightGray)));
 
     private static Pen CreateFrozenPen(SolidColorBrush brush)
     {
@@ -1961,7 +1914,7 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
     /// <summary>
     ///     The <see cref="CurrentLineBackground" /> property.
     /// </summary>
-    public static readonly DependencyProperty CurrentLineBackgroundProperty = DependencyProperty.Register("CurrentLineBackground", typeof(Brush), typeof(TextView));
+    public static readonly DependencyProperty CurrentLineBackgroundProperty = DependencyProperty.Register(nameof(CurrentLineBackground), typeof(Brush), typeof(TextView));
 
     /// <summary>
     ///     Gets/Sets the background brush used by current line highlighter.
@@ -1971,7 +1924,7 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
     /// <summary>
     ///     The <see cref="CurrentLineBorder" /> property.
     /// </summary>
-    public static readonly DependencyProperty CurrentLineBorderProperty = DependencyProperty.Register("CurrentLineBorder", typeof(Pen), typeof(TextView));
+    public static readonly DependencyProperty CurrentLineBorderProperty = DependencyProperty.Register(nameof(CurrentLineBorder), typeof(Pen), typeof(TextView));
 
     /// <summary>
     ///     Gets/Sets the background brush used for the current line.

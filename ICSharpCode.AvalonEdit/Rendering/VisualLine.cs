@@ -554,8 +554,7 @@ public sealed class VisualLine
         bool isAtEndOfLine;
         var  visualColumn   = GetVisualColumn(visualPosition, allowVirtualSpace, out isAtEndOfLine);
         var  documentOffset = GetRelativeOffset(visualColumn) + FirstDocumentLine.Offset;
-        var  pos            = new TextViewPosition(Document.GetLocation(documentOffset), visualColumn);
-        pos.IsAtEndOfLine = isAtEndOfLine;
+        var  pos            = new TextViewPosition(Document.GetLocation(documentOffset), visualColumn) { IsAtEndOfLine = isAtEndOfLine };
         return pos;
     }
 
@@ -692,8 +691,7 @@ public sealed class VisualLine
     internal VisualLineDrawingVisual Render()
     {
         Debug.Assert(phase == LifetimePhase.Live);
-        if (visual == null) visual = new VisualLineDrawingVisual(this, textView.FlowDirection);
-        return visual;
+        return visual ??= new VisualLineDrawingVisual(this, textView.FlowDirection);
     }
 }
 
@@ -710,10 +708,8 @@ internal sealed class VisualLineDrawingVisual : DrawingVisual
         double pos            = 0;
         foreach (var textLine in visualLine.TextLines)
         {
-            if (flow == FlowDirection.LeftToRight) textLine.Draw(drawingContext, new Point(0, pos), InvertAxes.None);
-            else
-                // Invert Axis for RightToLeft (Arabic language) support
-                textLine.Draw(drawingContext, new Point(0, pos), InvertAxes.Horizontal);
+            // Invert Axis for RightToLeft (Arabic language) support
+            textLine.Draw(drawingContext, new Point(0, pos), flow == FlowDirection.LeftToRight ? InvertAxes.None : InvertAxes.Horizontal);
             pos += textLine.Height;
         }
 

@@ -41,8 +41,6 @@ namespace ICSharpCode.AvalonEdit.Editing;
 /// </summary>
 public class TextArea : Control, IScrollInfo, IWeakEventListener, ITextEditorComponent
 {
-    internal readonly ImeSupport ime;
-
     #region Constructor
 
     static TextArea()
@@ -79,7 +77,6 @@ public class TextArea : Control, IScrollInfo, IWeakEventListener, ITextEditorCom
         Caret.PositionChanged += (sender, e) => RequestSelectionValidation();
         Caret.PositionChanged += CaretPositionChanged;
         AttachTypingEvents();
-        ime = new ImeSupport(this);
 
         LeftMargins.CollectionChanged += leftMargins_CollectionChanged;
 
@@ -339,7 +336,6 @@ public class TextArea : Control, IScrollInfo, IWeakEventListener, ITextEditorCom
 
     private void OnUpdateStarted()
     {
-
     }
 
     private void OnUpdateFinished()
@@ -751,7 +747,7 @@ public class TextArea : Control, IScrollInfo, IWeakEventListener, ITextEditorCom
     {
         base.OnGotKeyboardFocus(e);
         // First activate IME, then show caret
-        ime.OnGotKeyboardFocus(e);
+
         Caret.Show();
     }
 
@@ -760,7 +756,6 @@ public class TextArea : Control, IScrollInfo, IWeakEventListener, ITextEditorCom
     {
         base.OnLostKeyboardFocus(e);
         Caret.Hide();
-        ime.OnLostKeyboardFocus(e);
     }
 
     #endregion
@@ -897,8 +892,6 @@ public class TextArea : Control, IScrollInfo, IWeakEventListener, ITextEditorCom
     #endregion
 
     #region IndentationStrategy property
-
-
 
     #endregion
 

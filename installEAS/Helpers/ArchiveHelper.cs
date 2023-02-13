@@ -30,10 +30,7 @@ public abstract class Archive
                 _match = Regex.Match(strOutput, filenamepattern);
                 if (_match.Success) return _match.Value;
             }
-            else
-            {
-                return null;
-            }
+            else { return null; }
 
             return _match.Value;
         }
@@ -55,10 +52,7 @@ public abstract class Archive
             var x = Process.Start(p);
             x?.WaitForExit();
         }
-        catch (Exception e)
-        {
-            log(e.Message, Brushes.Red);
-        }
+        catch (Exception e) { log(e.Message, Brushes.Red); }
     }
 
     public static void ArchExtract(string source, string destination, string filemask = default, ProcessWindowStyle WindowStyle = ProcessWindowStyle.Normal)
@@ -73,9 +67,6 @@ public abstract class Archive
             var x = Process.Start(pro);
             x?.WaitForExit();
         }
-        catch (Exception e)
-        {
-            log(e.Message, Brushes.Red);
-        }
+        catch (Exception e) { log(e.Message, Brushes.Red); }
     }
 }

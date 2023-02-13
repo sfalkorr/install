@@ -405,7 +405,6 @@ public sealed class Caret
         if (textView is not { Document: { } }) return Rect.Empty;
         var visualLine = textView.GetOrConstructVisualLine(textView.Document.GetLineByNumber(position.Line));
         return textArea.OverstrikeMode ? CalcCaretOverstrikeRectangle(visualLine) : CalcCaretRectangle(visualLine);
-
     }
 
     /// <summary>
@@ -461,7 +460,6 @@ public sealed class Caret
             if (!hasWin32Caret) hasWin32Caret = Win32.CreateCaret(textView, caretRect.Size);
             if (hasWin32Caret) Win32.SetCaretPosition(textView, caretRect.Location - textView.ScrollOffset);
             caretAdorner.Show(caretRect);
-            textArea.ime.UpdateCompositionWindow();
         }
         else
         {
@@ -482,7 +480,7 @@ public sealed class Caret
             hasWin32Caret = false;
         }
 
-        if (caretAdorner != null) caretAdorner.Hide();
+        caretAdorner?.Hide();
     }
 
     [Conditional("DEBUG")]

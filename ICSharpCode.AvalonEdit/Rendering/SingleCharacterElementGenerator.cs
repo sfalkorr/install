@@ -170,8 +170,7 @@ internal sealed class SingleCharacterElementGenerator : VisualLineElementGenerat
 
         public TabGlyphRun(TabTextElement element, TextRunProperties properties)
         {
-            if (properties == null) throw new ArgumentNullException(nameof(properties));
-            Properties   = properties;
+            Properties   = properties ?? throw new ArgumentNullException(nameof(properties));
             this.element = element;
         }
 

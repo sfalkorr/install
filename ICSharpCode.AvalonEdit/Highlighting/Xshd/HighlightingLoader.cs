@@ -86,10 +86,7 @@ public static class HighlightingLoader
     {
         var schemaSet = new XmlSchemaSet();
         schemaSet.Add(null, schemaInput);
-        schemaSet.ValidationEventHandler += delegate(object sender, ValidationEventArgs args)
-        {
-            throw new HighlightingDefinitionInvalidException(args.Message);
-        };
+        schemaSet.ValidationEventHandler += (sender, args) => throw new HighlightingDefinitionInvalidException(args.Message);
         return schemaSet;
     }
 
