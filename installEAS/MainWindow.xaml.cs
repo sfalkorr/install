@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
 using System.Threading;
@@ -11,13 +12,13 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
-using ICSharpCode.AvalonEdit;
-using ICSharpCode.AvalonEdit.Editing;
-using ICSharpCode.AvalonEdit.Utils;
-using ICSharpCode.AvalonEdit.Highlighting;
-using ICSharpCode.AvalonEdit.Highlighting.Xshd;
-using ICSharpCode.AvalonEdit.Rendering;
-using ICSharpCode.AvalonEdit.Document;
+using AvalonEdit;
+using AvalonEdit.Editing;
+using AvalonEdit.Utils;
+using AvalonEdit.Highlighting;
+using AvalonEdit.Highlighting.Xshd;
+using AvalonEdit.Rendering;
+using AvalonEdit.Document;
 using installEAS.Helpers;
 using installEAS.MessageBoxCustom;
 using installEAS.Themes;
@@ -31,7 +32,7 @@ using static installEAS.Controls.tempControl;
 using System.Windows.Controls;
 using System.Windows.Shapes;
 using System.Xml;
-using static ICSharpCode.AvalonEdit.Highlighting.HighlightingManager;
+using static AvalonEdit.Highlighting.HighlightingManager;
 
 namespace installEAS;
 
@@ -67,7 +68,7 @@ public partial class MainWindow
                 controlFrom = "#FF242A31";
                 controlTo   = "#00242A31";
                 closeFrom   = "#FF902020";
-                closeTo     = "#00202020";
+                closeTo     = "#00902020";
                 break;
             }
             case ThemeTypes.ColorBlue:
@@ -75,7 +76,7 @@ public partial class MainWindow
                 controlFrom = "#FF32506E";
                 controlTo   = "#0032506E";
                 closeFrom   = "#FF902020";
-                closeTo     = "#0032506E";
+                closeTo     = "#00902020";
                 break;
             }
             case ThemeTypes.ColorGray:
@@ -83,7 +84,7 @@ public partial class MainWindow
                 controlFrom = "#FF50565D";
                 controlTo   = "#0050565D";
                 closeFrom   = "#FF902020";
-                closeTo     = "#00202020";
+                closeTo     = "#00902020";
                 break;
             }
 
@@ -115,9 +116,7 @@ public partial class MainWindow
         rtb.Options.EnableTextDragDrop           = false;
         rtb.Options.AllowScrollBelowDocument     = false;
         rtb.Options.HighlightCurrentLine         = false;
-        rtb.Options.EnableHyperlinks             = false;
         rtb.Options.EnableRectangularSelection   = true;
-        rtb.Options.EnableEmailHyperlinks        = false;
         rtb.Options.ShowBoxForControlCharacters  = false;
         rtb.TextArea.OverstrikeMode              = false;
         rtb.TextArea.Options.WordWrapIndentation = double.MaxValue;
@@ -276,12 +275,10 @@ public partial class MainWindow
         }
     }
 
-
-    [STAThread]
     private new void MouseLeave(object sender, MouseEventArgs e)
     {
         var element = (FrameworkElement)sender;
-        ColorAnimation(element.Name == "CloseButton" ? new InClassName(element, closeFrom, closeTo, 100) : new InClassName(element, controlFrom, controlTo, 100));
+        ColorAnimation(element.Name == "CloseButton" ? new InClassName(element, closeFrom, closeTo, 120) : new InClassName(element, controlFrom, controlTo, 120));
     }
 
 
@@ -305,33 +302,27 @@ public partial class MainWindow
 
     public static bool IsEmpty;
 
+    [SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
     private void rtb_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
         var pt                  = e.GetPosition((UIElement)sender);
         var result              = VisualTreeHelper.HitTest(this, pt);
         if (result != null) obj = result.VisualHit.ToString();
+
         try
         {
-            // ReSharper disable once PossibleInvalidOperationException
-            var PosCol = rtb.GetPositionFromPoint(e.GetPosition(rtb)).Value.Column;
-            // ReSharper disable once PossibleInvalidOperationException
-            var PosVisualCol                              = rtb.GetPositionFromPoint(e.GetPosition(rtb)).Value.VisualColumn;
+            var PosCol       = rtb.GetPositionFromPoint(e.GetPosition(rtb)).Value.Column;
+            var PosVisualCol = rtb.GetPositionFromPoint(e.GetPosition(rtb)).Value.VisualColumn;
+
             if (PosCol == 1 && PosVisualCol == 0) IsEmpty = true;
         }
         catch (Exception) { IsEmpty = true; }
 
-        if (e.LeftButton != MouseButtonState.Pressed || obj != "ICSharpCode.AvalonEdit.Rendering.TextView" || !IsEmpty) return;
+        if (e.LeftButton != MouseButtonState.Pressed) return;
+        if (obj != "AvalonEdit.Rendering.TextView" || !IsEmpty) return;
         DragMove();
         IsEmpty = false;
-        if (textBox.IsEnabled) textBox.Focus();
-    }
 
-    [STAThread]
-    public void ToClip()
-    {
-        var text = rtb.SelectedText;
-        Clipboard.SetText(text);
-        rtb.TextArea.ClearSelection();
         if (textBox.IsEnabled) textBox.Focus();
     }
 
@@ -339,7 +330,7 @@ public partial class MainWindow
     private void rtb_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
     {
         var Sel = rtb.SelectedText;
-        if (e.LeftButton == MouseButtonState.Released && Sel != "") ToClip();
+        if (e.LeftButton == MouseButtonState.Released && Sel != "") rtb.ToClipSelection();
         if (textBox.IsEnabled) textBox.Focus();
     }
 }

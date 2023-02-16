@@ -1,0 +1,72 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+    <PropertyGroup>
+        <OutputType>Library</OutputType>
+        <TargetFrameworks>net472</TargetFrameworks>
+        <UseWPF>true</UseWPF>
+        <UseWindowsForms>true</UseWindowsForms>
+        <DefineConstants>TRACE</DefineConstants>
+        <AssemblyOriginatorKeyFile>ICSharpCode.AvalonEdit.snk</AssemblyOriginatorKeyFile>
+        <Company>ic#code</Company>
+        <Copyright></Copyright>
+        <Description></Description>
+        <Version></Version>
+        <AssemblyVersion>6.2.0.0</AssemblyVersion>
+        <FileVersion>6.2.0.0</FileVersion>
+        <GenerateDocumentationFile>False</GenerateDocumentationFile>
+        <IsPackable>false</IsPackable>
+        <LangVersion>11</LangVersion>
+        <NeutralLanguage></NeutralLanguage>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <PackageId></PackageId>
+        <IncludeSymbols>False</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <RepositoryUrl></RepositoryUrl>
+        <RepositoryType></RepositoryType>
+        <Authors></Authors>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl></PackageProjectUrl>
+        <PackageTags></PackageTags>
+        <PackageReleaseNotes></PackageReleaseNotes>
+        <PackageReadmeFile>PackageReadme.md</PackageReadmeFile>
+        <AutoGenerateBindingRedirects>True</AutoGenerateBindingRedirects>
+        <IsPublishable>False</IsPublishable>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(TargetFramework)' == 'net6.0-windows' ">
+        <DefineConstants>TRACE</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(TargetFramework)' == 'net7.0-windows' ">
+        <DefineConstants>TRACE</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(TargetFramework)' == 'net462' ">
+        <DefineConstants>TRACE</DefineConstants>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <PlatformTarget>x64</PlatformTarget>
+        <Optimize>true</Optimize>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <PlatformTarget>x64</PlatformTarget>
+    </PropertyGroup>
+
+    <ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">
+        <Reference Include="System.Windows.Forms" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Remove="themes\RightArrow.cur" />
+        <Resource Include="themes\RightArrow.cur" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Remove="Highlighting\Resources\*" />
+        <EmbeddedResource Include="Highlighting\Resources\*" />
+        <EmbeddedResource Remove="Highlighting\Resources\Resources.cs" />
+        <Resource Include="Highlighting\Resources\Resources.cs" />
+    </ItemGroup>
+</Project>

@@ -61,4 +61,17 @@ internal abstract class Files
     {
         return c.Substring(c.IndexOf(a, StringComparison.Ordinal) + a.Length, c.IndexOf(b, StringComparison.Ordinal) - c.IndexOf(a, StringComparison.Ordinal) - a.Length);
     }
+
+    public static void CreateBackupFile(string path)
+    {
+        if (string.IsNullOrEmpty(path) || !File.Exists(path)) return;
+        File.Copy(path, path + ".bak", true);
+    }
+
+    public static void DeleteBackupFile(string path)
+    {
+        var path1 = path + ".bak";
+        if (!File.Exists(path1)) return;
+        File.Delete(path1);
+    }
 }

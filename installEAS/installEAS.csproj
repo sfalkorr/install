@@ -47,7 +47,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>x64</PlatformTarget>
     <DebugType>pdbonly</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>C:\InstallEAS</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -121,6 +121,7 @@
     </Compile>
     <Compile Include="Helpers\AnimateHelper.cs" />
     <Compile Include="Helpers\ArchiveHelper.cs" />
+    <Compile Include="Helpers\ArrayHelper.cs" />
     <Compile Include="Helpers\CryptpHelper.cs" />
     <Compile Include="Helpers\DispatcherEx.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
@@ -128,6 +129,9 @@
     <Compile Include="Helpers\Functions.cs" />
     <Compile Include="Helpers\LogHelper.cs" />
     <Compile Include="Helpers\PassHelper.cs" />
+    <Compile Include="Helpers\ProcessTools.cs" />
+    <Compile Include="Helpers\RegistryTools.cs" />
+    <Compile Include="Helpers\ServiceHelper.cs" />
     <Compile Include="Helpers\SqlHelper.cs" />
     <Compile Include="MessageBoxCustom\CustomMessageBoxWindow.xaml.cs">
       <DependentUpon>CustomMessageBoxWindow.xaml</DependentUpon>
@@ -219,9 +223,9 @@
     <EmbeddedResource Include="CustomHighlighting.xshd" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ICSharpCode.AvalonEdit\ICSharpCode.AvalonEdit.csproj">
+    <ProjectReference Include="..\AvalonEdit\AvalonEdit.csproj">
       <Project>{843ba9b5-75b9-46ec-afb8-d791bd296b15}</Project>
-      <Name>ICSharpCode.AvalonEdit</Name>
+      <Name>AvalonEdit</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

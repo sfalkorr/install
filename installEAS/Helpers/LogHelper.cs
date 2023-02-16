@@ -1,13 +1,39 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Documents;
 using System.Windows.Media;
+using static System.String;
 using static installEAS.MainWindow;
 
 namespace installEAS.Helpers;
 
 public static class Log
 {
+    public enum Level
+    {
+        Error       = 0,
+        Information = 1,
+        Warning     = 2
+    }
+
+
+    public static void ToEventLog(string @object, string msg, Level level)
+    {
+        EventLogEntryType lev = level switch
+                                {
+                                    Level.Error       => EventLogEntryType.Error,
+                                    Level.Information => EventLogEntryType.Information,
+                                    Level.Warning     => EventLogEntryType.Warning,
+                                    _                 => 0
+                                };
+        var processModule = Process.GetCurrentProcess().MainModule;
+        msg = $"{msg}\n{processModule?.FileName}\nSource: {@object}";
+        const string source = "installEAS";
+        if (!EventLog.SourceExists(source)) EventLog.CreateEventSource(source, "Application");
+        EventLog.WriteEntry(source, msg, lev);
+    }
+
     public static void log(string text, SolidColorBrush brush, bool newline = true)
     {
         if (text != null)

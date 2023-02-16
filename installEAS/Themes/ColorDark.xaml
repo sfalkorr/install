@@ -3,6 +3,8 @@
     <SolidColorBrush x:Key="Tittle.Border.Color" Color="#FF404040" />
     <SolidColorBrush x:Key="Panel.Background.Color" Color="#F5202020" />
     <SolidColorBrush x:Key="ControlButton.Text.Color" Color="#FFDDDDDD" />
+    <SolidColorBrush x:Key="ControlButton.MouseOver.Color" Color="#FF343a41" />
+    <SolidColorBrush x:Key="ControlButton.IsPressed.Color" Color="#70343a41" />
     <SolidColorBrush x:Key="Button.Close.Foreground.Color" Color="#FFBBBBBB" />
     <SolidColorBrush x:Key="Button.Close.MouseOver.Foreground.Color" Color="LightGray" />
     <SolidColorBrush x:Key="Button.Close.Background.Color" Color="#00333333" />
@@ -35,8 +37,7 @@
         <GradientStop Color="#FF22272b" />
         <GradientStop Offset="1" Color="#AF32373b" />
     </LinearGradientBrush>
-    <SolidColorBrush x:Key="ControlButton.MouseOver.Color" Color="#FF343a41" />
-    <SolidColorBrush x:Key="ControlButton.IsPressed.Color" Color="#70343a41" />
+
     <LinearGradientBrush x:Key="ProgressBar.Color" Opacity="0.8" StartPoint="0.5,0" EndPoint="0.5,1">
         <GradientStop Offset="0" Color="#FF545a61" />
         <GradientStop Offset="0.5" Color="#FF646a71" />

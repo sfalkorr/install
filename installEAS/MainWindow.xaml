@@ -14,6 +14,7 @@
      MinHeight="350"
      Activated="MainWindow_OnActivated"
      AllowsTransparency="True"
+     Background="{x:Null}"
      BorderThickness="0.5,0.5,0.5,0.5"
      Closing="MainWindow_OnClosing"
      Foreground="{x:Null}"
@@ -29,7 +30,7 @@
      Topmost="False"
      UseLayoutRounding="True"
      WindowStyle="None"
-     mc:Ignorable="d" Background="{x:Null}">
+     mc:Ignorable="d">
 
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="30" CornerRadius="8,8,8,8" ResizeBorderThickness="8,5,8,8" />
@@ -71,6 +72,7 @@
 
                 <avalonedit:TextEditor x:Name="rtb"
                      Padding="10,5,10,10"
+                     Background="{x:Null}"
                      BorderBrush="#FF454C56"
                      BorderThickness="0.51,0,0.51,0.51"
                      Cursor="Arrow"
@@ -87,7 +89,7 @@
                      SyntaxHighlighting="Custom Highlighting"
                      Text="Виртуальная кинопремия в формате опроса на гугл-формах, в голосовании которой участвует любой желающий. Единственное условие – любить фильмы! В скором времени вам представится шанс самому оставить голос за своего фаворита в нашем ежегодном киноопросе. Цель опроса – развлекательная, ну и повод напомнить о хороших фильмах, которые вы могли пропустить"
                      VerticalScrollBarVisibility="Auto"
-                     WordWrap="True" Background="{x:Null}" />
+                     WordWrap="True" />
 
                 <!--  SyntaxHighlighting="Custom Highlighting"  -->
 
@@ -158,7 +160,7 @@
                 </Border.Effect>
                 <Grid x:Name="GridTittle" Height="30" UseLayoutRounding="False">
 
-                    <controls:ProgressBarControl x:Name="pb" Height="30" VerticalAlignment="Top" />
+                    <controls:ProgressBarControl x:Name="pb" Height="30" VerticalAlignment="Top" IsTabStop="False" />
                     <StackPanel x:Name="ControlButtons"
                          Height="30"
                          Margin="0,0,0,1"
@@ -170,6 +172,7 @@
                              Command="{x:Static SystemCommands.MinimizeWindowCommand}"
                              Content="&#xE921;"
                              FontFamily="Segoe MDL2 Assets"
+                             IsTabStop="False"
                              MouseLeave="MouseLeave"
                              Style="{DynamicResource ButtonStyleTest}"
                              TextOptions.TextRenderingMode="Aliased"
@@ -179,6 +182,7 @@
                              Command="{x:Static SystemCommands.RestoreWindowCommand}"
                              Content="&#xE923;"
                              FontFamily="Segoe MDL2 Assets"
+                             IsTabStop="False"
                              MouseLeave="MouseLeave"
                              Style="{StaticResource ButtonStyleTest}"
                              TextOptions.TextRenderingMode="Aliased"
@@ -189,6 +193,7 @@
                              Command="{x:Static SystemCommands.MaximizeWindowCommand}"
                              Content="&#xE922;"
                              FontFamily="Segoe MDL2 Assets"
+                             IsTabStop="False"
                              MouseLeave="MouseLeave"
                              Style="{DynamicResource ButtonStyleTest}"
                              TextOptions.TextRenderingMode="Aliased"
@@ -200,6 +205,7 @@
                              Content="&#xE8BB; "
                              FontFamily="Segoe MDL2 Assets"
                              FontSize="10"
+                             IsTabStop="False"
                              MouseLeave="MouseLeave"
                              RenderOptions.ClearTypeHint="Enabled"
                              Style="{DynamicResource CloseButtonStyle2}"

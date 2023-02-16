@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
@@ -80,10 +82,7 @@ public abstract class Replica
 
         foreach (var item in packages)
             if (item.Split('\\').Last() == (string)POSVer)
-            {
                 package = item;
-                Console.WriteLine(package);
-            }
 
         if (package != null)
         {
@@ -124,6 +123,9 @@ public abstract class Replica
                 process.StartInfo.RedirectStandardError  = true;
                 process.StartInfo.RedirectStandardInput  = false;
                 process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.StandardOutputEncoding = Encoding.GetEncoding(866);
+                process.StartInfo.StandardErrorEncoding  = Encoding.GetEncoding(866);
+
                 process.OutputDataReceived += (_, args) =>
                 {
                     if (args.Data is not { Length: > 0 }) return;
@@ -151,8 +153,8 @@ public abstract class Replica
                     RoundedProgressBarControl.RoundedProgressBarControlRounded.Dispatcher.InvokeOrExecute(RoundedProgressBarControl.Stop);
                     MainFrame.pb.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.progressBar.SetPercentDuration(0, 1); });
                     MainFrame.pb.pbLabel.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.pbLabel.Foreground = Brushes.Transparent; });
-                    log(e.Data, Brushes.OrangeRed );
-                    Console.WriteLine(e.Data);
+                    var err = e.Data;
+                    log(err, Brushes.Salmon);
                 };
                 process.Start();
                 process.BeginOutputReadLine();
@@ -164,8 +166,7 @@ public abstract class Replica
                 RoundedProgressBarControl.RoundedProgressBarControlRounded.Dispatcher.InvokeOrExecute(RoundedProgressBarControl.Stop);
                 MainFrame.pb.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.progressBar.SetPercentDuration(0, 1); });
                 MainFrame.pb.pbLabel.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.pbLabel.Foreground = Brushes.Transparent; });
-                log(ex.Message, Brushes.OrangeRed );
-                Console.WriteLine(ex);
+                log(ex.Message, Brushes.OrangeRed);
             }
         });
     }

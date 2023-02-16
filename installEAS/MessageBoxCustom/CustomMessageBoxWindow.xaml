@@ -10,6 +10,7 @@
      x:ClassModifier="internal"
      AllowsTransparency="True"
      Background="Transparent"
+     IsTabStop="False"
      MouseLeftButtonDown="Window_MouseLeftButtonDown"
      Opacity="0.97"
      ResizeMode="NoResize"
@@ -112,7 +113,7 @@
          Background="{DynamicResource ResourceKey=Menu.Background}"
          BorderBrush="{DynamicResource ResourceKey=Tittle.Border.Color}"
          BorderThickness="0.51"
-         CornerRadius="12">
+         CornerRadius="10">
         <Border.Effect>
             <DropShadowEffect BlurRadius="10"
                  Direction="-90"
@@ -137,7 +138,7 @@
                      Background="{DynamicResource ResourceKey=Tittle.Background.Color}"
                      BorderBrush="{DynamicResource ResourceKey=Tittle.Border.Color}"
                      BorderThickness="0,0,0,0.51"
-                     CornerRadius="10,10,0,0" />
+                     CornerRadius="9.4,9.4,0,0" />
                 <TextBlock x:Name="CaptionTextBlock" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Silver" Text="" />
                 <Border Grid.Column="0" BorderThickness="1" CornerRadius="5" />
             </Grid>
@@ -147,7 +148,8 @@
                  Height="32"
                  Margin="20,0,0,0"
                  HorizontalAlignment="Left"
-                 VerticalAlignment="Center" />
+                 VerticalAlignment="Center"
+                 IsHitTestVisible="False" />
             <TextBlock x:Name="TextBlock_Message"
                  Grid.Row="1"
                  Width="Auto"
@@ -163,17 +165,22 @@
                  TextWrapping="Wrap"
                  UseLayoutRounding="False" />
             <StackPanel Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
-                <Button Name="Button_OK" Click="Button_OK_Click" Style="{DynamicResource ButtonMenuStyle1}" Visibility="Visible">
-                    <Label Name="Label_Ok" Style="{DynamicResource LabelStyle1}">Да</Label>
+                <Button Name="Button_OK" Click="Button_OK_Click" IsTabStop="False" Style="{DynamicResource ButtonMenuStyle1}" Visibility="Visible">
+                    <Label Name="Label_Ok" IsTabStop="False" Style="{DynamicResource LabelStyle1}">Да</Label>
                 </Button>
-                <Button Name="Button_Yes" Click="Button_Yes_Click" Style="{DynamicResource ButtonMenuStyle1}" Visibility="Visible">
-                    <Label Name="Label_Yes" Style="{DynamicResource LabelStyle1}">Да</Label>
+                <Button Name="Button_Yes" Click="Button_Yes_Click" IsTabStop="False" Style="{DynamicResource ButtonMenuStyle1}" Visibility="Visible">
+                    <Label Name="Label_Yes" IsTabStop="False" Style="{DynamicResource LabelStyle1}">Да</Label>
                 </Button>
-                <Button Name="Button_No" Click="Button_No_Click" Style="{DynamicResource ButtonMenuStyle1}" Visibility="Visible">
-                    <Label Name="Label_No" Style="{DynamicResource LabelStyle1}">Нет</Label>
+                <Button Name="Button_No" Click="Button_No_Click" IsTabStop="False" Style="{DynamicResource ButtonMenuStyle1}" Visibility="Visible">
+                    <Label Name="Label_No" IsTabStop="False" Style="{DynamicResource LabelStyle1}">Нет</Label>
                 </Button>
-                <Button Name="Button_Cancel" Click="Button_Cancel_Click" IsCancel="True" Style="{DynamicResource ButtonMenuStyle1}" Visibility="Visible">
-                    <Label Name="Label_Cancel" Style="{DynamicResource LabelStyle1}">Отмена</Label>
+                <Button Name="Button_Cancel"
+                     Click="Button_Cancel_Click"
+                     IsCancel="True"
+                     IsTabStop="False"
+                     Style="{DynamicResource ButtonMenuStyle1}"
+                     Visibility="Visible">
+                    <Label Name="Label_Cancel" IsTabStop="False" Style="{DynamicResource LabelStyle1}">Отмена</Label>
                 </Button>
             </StackPanel>
         </Grid>

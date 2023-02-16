@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Security.AccessControl;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
@@ -10,6 +11,7 @@ using System.Windows.Media.Imaging;
 using installEAS.Common;
 using installEAS.Helpers;
 using installEAS.MessageBoxCustom;
+using Microsoft.Win32;
 using static installEAS.Variables;
 using static installEAS.MainWindow;
 using static installEAS.Helpers.Log;
@@ -73,27 +75,25 @@ public partial class tempControl
 
     private void Btn5_OnClick(object sender, RoutedEventArgs e)
     {
-        MainFrame.rtb.Clear();
+        ToEventLog(sender.ToString(), $"Хуйня случилась", Level.Error);
+        ToEventLog(sender.ToString(), $"Нехуйня случилась", Level.Warning);
+        ToEventLog(sender.ToString(), $"случилась", Level.Information);
+
         //MainFrame.rtb.Document.Blocks.Clear();
     }
 
 
     private void Btn6_OnClick(object sender, RoutedEventArgs e)
     {
-        var output = DateTime.Now.ToString("hh:MM:ss") + ": " +  Environment.NewLine + Environment.StackTrace[0];
-        Console.WriteLine(output);
-
     }
 
 
     private void Btn7_OnClick(object sender, RoutedEventArgs e)
     {
-        
     }
 
     private void Btn8_OnClick(object sender, RoutedEventArgs e)
     {
-        log(Sql.IsPasswordOK("QWEasd123*").ToString());
-        log(Sql.IsPasswordOK("QWEasd123*1").ToString());
+        ProcessTools.StartElevated("notepad", null);
     }
 }
