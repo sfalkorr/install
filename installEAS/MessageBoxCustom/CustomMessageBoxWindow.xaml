@@ -11,6 +11,7 @@
      AllowsTransparency="True"
      Background="Transparent"
      IsTabStop="False"
+     Loaded="CustomMessageBoxWindow_OnLoaded"
      MouseLeftButtonDown="Window_MouseLeftButtonDown"
      Opacity="0.97"
      ResizeMode="NoResize"
@@ -165,21 +166,16 @@
                  TextWrapping="Wrap"
                  UseLayoutRounding="False" />
             <StackPanel Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
-                <Button Name="Button_OK" Click="Button_OK_Click" IsTabStop="False" Style="{DynamicResource ButtonMenuStyle1}" Visibility="Visible">
+                <Button Name="Button_OK" Click="Button_OK_Click" IsTabStop="False" Style="{DynamicResource ButtonMenuStyle1}" Visibility="Visible" Focusable="False">
                     <Label Name="Label_Ok" IsTabStop="False" Style="{DynamicResource LabelStyle1}">Да</Label>
                 </Button>
-                <Button Name="Button_Yes" Click="Button_Yes_Click" IsTabStop="False" Style="{DynamicResource ButtonMenuStyle1}" Visibility="Visible">
+                <Button Name="Button_Yes" Click="Button_Yes_Click" IsTabStop="False" Style="{DynamicResource ButtonMenuStyle1}" Visibility="Visible" Focusable="False">
                     <Label Name="Label_Yes" IsTabStop="False" Style="{DynamicResource LabelStyle1}">Да</Label>
                 </Button>
-                <Button Name="Button_No" Click="Button_No_Click" IsTabStop="False" Style="{DynamicResource ButtonMenuStyle1}" Visibility="Visible">
+                <Button Name="Button_No" Click="Button_No_Click" IsTabStop="False" Style="{DynamicResource ButtonMenuStyle1}" Visibility="Visible" Focusable="False">
                     <Label Name="Label_No" IsTabStop="False" Style="{DynamicResource LabelStyle1}">Нет</Label>
                 </Button>
-                <Button Name="Button_Cancel"
-                     Click="Button_Cancel_Click"
-                     IsCancel="True"
-                     IsTabStop="False"
-                     Style="{DynamicResource ButtonMenuStyle1}"
-                     Visibility="Visible">
+                <Button Name="Button_Cancel" Click="Button_Cancel_Click" IsTabStop="False" Style="{DynamicResource ButtonMenuStyle1}" Visibility="Visible" Focusable="False">
                     <Label Name="Label_Cancel" IsTabStop="False" Style="{DynamicResource LabelStyle1}">Отмена</Label>
                 </Button>
             </StackPanel>

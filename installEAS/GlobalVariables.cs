@@ -25,7 +25,7 @@ public static class Variables
     {
         var value = Reg.Read(path, key);
         if (value != null) return value;
-        CustomMessageBox.ShowOK($"Не найдено значение {key} в {path}\nПродолжение работы невозможно", "Ошибка инициализации", "Выход", MessageBoxImage.Error);
+        CustomMessageBox.ShowOK($"Не найдено значение {key} в\n{path}\nПродолжение работы невозможно", "Ошибка инициализации", "Выход", MessageBoxImage.Error);
         Process.GetCurrentProcess().Kill();
 
         return "";

@@ -76,7 +76,6 @@
                      BorderBrush="#FF454C56"
                      BorderThickness="0.51,0,0.51,0.51"
                      Cursor="Arrow"
-                     FontSize="16"
                      Foreground="#FFCCCCCC"
                      HorizontalScrollBarVisibility="Disabled"
                      IsReadOnly="True"
@@ -87,7 +86,6 @@
                      ScrollViewer.VerticalScrollBarVisibility="Auto"
                      Style="{DynamicResource TextEditorStyle1}"
                      SyntaxHighlighting="Custom Highlighting"
-                     Text="Виртуальная кинопремия в формате опроса на гугл-формах, в голосовании которой участвует любой желающий. Единственное условие – любить фильмы! В скором времени вам представится шанс самому оставить голос за своего фаворита в нашем ежегодном киноопросе. Цель опроса – развлекательная, ну и повод напомнить о хороших фильмах, которые вы могли пропустить"
                      VerticalScrollBarVisibility="Auto"
                      WordWrap="True" />
 
@@ -177,7 +175,7 @@
                              Style="{DynamicResource ButtonStyleTest}"
                              TextOptions.TextRenderingMode="Aliased"
                              ToolTip="Minimize"
-                             WindowChrome.IsHitTestVisibleInChrome="True" />
+                             WindowChrome.IsHitTestVisibleInChrome="True" Focusable="False" />
                         <Button x:Name="RestoreButton"
                              Command="{x:Static SystemCommands.RestoreWindowCommand}"
                              Content="&#xE923;"
@@ -188,7 +186,7 @@
                              TextOptions.TextRenderingMode="Aliased"
                              ToolTip="Restore"
                              Visibility="Collapsed"
-                             WindowChrome.IsHitTestVisibleInChrome="True" />
+                             WindowChrome.IsHitTestVisibleInChrome="True" Focusable="False" />
                         <Button x:Name="MaximizeButton"
                              Command="{x:Static SystemCommands.MaximizeWindowCommand}"
                              Content="&#xE922;"
@@ -199,7 +197,7 @@
                              TextOptions.TextRenderingMode="Aliased"
                              ToolTip="Maximize"
                              Visibility="Visible"
-                             WindowChrome.IsHitTestVisibleInChrome="True" />
+                             WindowChrome.IsHitTestVisibleInChrome="True" Focusable="False" />
                         <Button x:Name="CloseButton"
                              Command="{x:Static SystemCommands.CloseWindowCommand}"
                              Content="&#xE8BB; "
@@ -211,7 +209,7 @@
                              Style="{DynamicResource CloseButtonStyle2}"
                              TextOptions.TextRenderingMode="Aliased"
                              ToolTip="Close"
-                             WindowChrome.IsHitTestVisibleInChrome="True">
+                             WindowChrome.IsHitTestVisibleInChrome="True" Focusable="False">
                             <Button.Resources>
                                 <Style TargetType="{x:Type Border}">
                                     <Setter Property="CornerRadius" Value="0,7,0,0" />

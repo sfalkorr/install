@@ -103,6 +103,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Common\Replica.cs" />
+    <Compile Include="Common\StartCheck.cs" />
     <Compile Include="Controls\FluidProgressBar.xaml.cs">
       <DependentUpon>FluidProgressBar.xaml</DependentUpon>
     </Compile>

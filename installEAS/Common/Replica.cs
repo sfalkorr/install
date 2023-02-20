@@ -45,7 +45,7 @@ public abstract class Replica
                             ReplicaMetaParse($@"{pathTemp}\meta.xml");
                             log(file);
                         }
-                        else { log($"Ошибка извлечения файла meta.xml из {file}", Brushes.Red); }
+                        else { log($"Ошибка извлечения файла meta.xml из {file}", Brushes.Tomato); }
                     }
                     else { log($"Архив {file} не содержит файла meta.xml с данными реплики\n", Brushes.Yellow); }
                 }
@@ -68,11 +68,11 @@ public abstract class Replica
         var dbVer      = Regex.Match(readedmeta, "dbVersion(.*)", RegexOptions.IgnorePatternWhitespace);
         var secw2      = Regex.Match(readedmeta, "securityword(.*)", RegexOptions.IgnorePatternWhitespace);
         if (dstid.Success) meta_num = dstid.Value.Split('"')[1];
-        else log($"Ошибка получения dstid из {path}", Brushes.Red);
+        else log($"Ошибка получения dstid из {path}", Brushes.Tomato);
         if (dbVer.Success) meta_ver = dbVer.Value.Split('"')[1];
-        else log($"Ошибка получения dbVer из {path}", Brushes.Red);
+        else log($"Ошибка получения dbVer из {path}", Brushes.Tomato);
         if (secw2.Success) meta_sec = secw2.Value.Split('"')[1];
-        else log($"Ошибка получения secw2 из {path}", Brushes.Red);
+        else log($"Ошибка получения secw2 из {path}", Brushes.Tomato);
     }
 
 
@@ -93,7 +93,7 @@ public abstract class Replica
             return dacfile;
         }
 
-        log($"{SqlPackPath} не найден SQL Package, соответствующий установленной версии POS {POSVer}", Brushes.Red);
+        log($"{SqlPackPath} не найден SQL Package, соответствующий установленной версии POS {POSVer}", Brushes.Tomato);
         return null;
     }
 
@@ -154,7 +154,7 @@ public abstract class Replica
                     MainFrame.pb.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.progressBar.SetPercentDuration(0, 1); });
                     MainFrame.pb.pbLabel.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.pbLabel.Foreground = Brushes.Transparent; });
                     var err = e.Data;
-                    log(err, Brushes.Salmon);
+                    log("err", Brushes.Tomato);
                 };
                 process.Start();
                 process.BeginOutputReadLine();
@@ -166,7 +166,7 @@ public abstract class Replica
                 RoundedProgressBarControl.RoundedProgressBarControlRounded.Dispatcher.InvokeOrExecute(RoundedProgressBarControl.Stop);
                 MainFrame.pb.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.progressBar.SetPercentDuration(0, 1); });
                 MainFrame.pb.pbLabel.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.pbLabel.Foreground = Brushes.Transparent; });
-                log(ex.Message, Brushes.OrangeRed);
+                log(ex.Message, Brushes.Tomato);
             }
         });
     }

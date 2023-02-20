@@ -46,6 +46,6 @@
     </LinearGradientBrush>
     <SolidColorBrush x:Key="Editor.Background.Color" Color="#FF204060" />
     <SolidColorBrush x:Key="Editor.Foreground.Color" Color="#FFEFEFEF" />
-    <SolidColorBrush x:Key="ScrollBarThumbKey.Color" Color="#FF708EB0" />
+    <SolidColorBrush x:Key="ScrollBarThumbKey.Color" Color="#FF90A8D0" />
     <SolidColorBrush x:Key="ScrollBarThumbKey.BackColor" Color="#15708EB0" />
 </ResourceDictionary>

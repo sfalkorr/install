@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
@@ -45,6 +46,7 @@ public partial class MainWindow
     private readonly Storyboard      textBoxOpen;
     public static    string          obj = "";
 
+
     public MainWindow()
     {
         var s = typeof(MainWindow).Assembly.GetManifestResourceStream("installEAS.CustomHighlighting.xshd");
@@ -60,7 +62,7 @@ public partial class MainWindow
         Top          =  5;
         StateChanged += MainWindowStateChangeRaised;
         SizeChanged  += MainWin_SizeChanged;
-        CurrentTheme =  ThemeTypes.ColorGray;
+        CurrentTheme =  ThemeTypes.ColorBlue;
         switch (CurrentTheme)
         {
             case ThemeTypes.ColorDark:
@@ -92,8 +94,8 @@ public partial class MainWindow
                 throw new ArgumentOutOfRangeException();
         }
 
-        MainOpen    = new DoubleAnimation { From = 0.1, To  = 0.97, Duration = new Duration(TimeSpan.FromMilliseconds(400)) };
-        MainClos    = new DoubleAnimation { From = 0.97, To = 0.1, Duration  = new Duration(TimeSpan.FromMilliseconds(400)) };
+        MainOpen    = new DoubleAnimation { From = 0.1, To  = 0.97, Duration = new Duration(TimeSpan.FromMilliseconds(500)) };
+        MainClos    = new DoubleAnimation { From = 0.97, To = 0.1, Duration  = new Duration(TimeSpan.FromMilliseconds(500)) };
         textBoxOpen = Resources["OpenTextBox"] as Storyboard;
         textBoxClos = Resources["CloseTextBox"] as Storyboard;
 
@@ -239,8 +241,8 @@ public partial class MainWindow
     private void MainWindow_OnClosing(object sender, CancelEventArgs e)
     {
         e.Cancel = true;
-        var result = CustomMessageBox.Show("Действительно закрыть приложение?", "Подтверждение выхода", MessageBoxButton.OKCancel, MessageBoxImage.Question);
-        if (result.ToString() != "OK") return;
+        var result = CustomMessageBox.Show("Действительно закрыть приложение?", "Подтверждение выхода", MessageBoxButton.YesNo, MessageBoxImage.Question);
+        if (result.ToString() != "Yes") return;
         MainClos.Completed += (_, _) => Process.GetCurrentProcess().Kill();
         BeginAnimation(OpacityProperty, MainClos);
     }
@@ -250,6 +252,14 @@ public partial class MainWindow
         CreateVariablesInstance();
         CreateSlidePanelsInstance();
         CreatetempControlInstance();
+        MainOpen.Completed += async (_, _) =>
+        {
+            log("Инициализация...", false);
+
+            await Task.Delay(1000).ConfigureAwait(true);
+            log("OK");
+            await AnimateFrameworkElement(MenuMain.PanelTopMain, 600).ConfigureAwait(true);
+        };
         BeginAnimation(OpacityProperty, MainOpen);
     }
 

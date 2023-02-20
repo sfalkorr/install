@@ -45,26 +45,30 @@ public partial class tempControl
 
     private void Btn2_OnClick(object sender, RoutedEventArgs e)
     {
-        Password.SaveSqlPassToReg("QWEasd123*");
+        //Password.SaveSqlPassToReg("QWEasd123*");
+        MainFrame.pb.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.progressBar.SetPercentDuration(99, 3000); });
     }
 
     private void Btn3_OnClick(object sender, RoutedEventArgs e)
     {
-        log(Password.ReadSqlPassFromReg());
+        MainFrame.pb.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.progressBar.SetPercentDuration(0, 3000); });
+        //log(Password.ReadSqlPassFromReg());
     }
 
 
     private void Btn4_OnClick(object sender, RoutedEventArgs e)
     {
-        MainFrame.rtb.AppendText(" Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)\n\n");
+        MainFrame.rtb.AppendText("Инициализация... Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)\n\n");
         MainFrame.rtb.ScrollToEnd();
         MainFrame.rtb.AppendColorLine(" Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)\n\n", Brushes.Coral);
         MainFrame.rtb.ScrollToEnd();
         MainFrame.rtb.AppendColorLine(" Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)\n\n", Brushes.Bisque);
         MainFrame.rtb.ScrollToEnd();
-        MainFrame.rtb.AppendColorLine(" Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)\n\n", Brushes.Crimson);
+        MainFrame.rtb.AppendColorLine(" Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)\n", Brushes.YellowGreen);
         MainFrame.rtb.ScrollToEnd();
-        MainFrame.rtb.AppendColorLine(" Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)\n", Brushes.Chartreuse);
+        MainFrame.rtb.AppendColorLine(" Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)\n", Brushes.Tomato);
+        MainFrame.rtb.ScrollToEnd();
+        MainFrame.rtb.AppendColorLine(" Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)\n", Brushes.Yellow);
         MainFrame.rtb.ScrollToEnd();
 
         //log("Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)", Brushes.OrangeRed);
@@ -85,11 +89,14 @@ public partial class tempControl
 
     private void Btn6_OnClick(object sender, RoutedEventArgs e)
     {
+        log(GetEmbeddedResource("installEAS", "CustomHighlighting.xshd"));
     }
 
 
     private void Btn7_OnClick(object sender, RoutedEventArgs e)
     {
+        //var result = CustomMessageBox.Show("Действительно закрыть приложение?", "Подтверждение выхода", MessageBoxButton.OKCancel, MessageBoxImage.Question);
+        CustomMessageBox.Show("хуй", "пизда", MessageBoxButton.YesNo);
     }
 
     private void Btn8_OnClick(object sender, RoutedEventArgs e)

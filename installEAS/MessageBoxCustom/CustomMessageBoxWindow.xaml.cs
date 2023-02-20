@@ -1,10 +1,17 @@
+using System;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 
 namespace installEAS.MessageBoxCustom;
 
@@ -26,9 +33,16 @@ internal partial class CustomMessageBoxWindow
 
     public MessageBoxResult Result { get; set; }
 
+    public static DoubleAnimation Open;
+    public static DoubleAnimation Clos;
+
     internal CustomMessageBoxWindow(string message, string caption, MessageBoxButton button, MessageBoxImage image)
     {
         InitializeComponent();
+
+        Open = new DoubleAnimation { From = 0.1, To  = 0.97, Duration = new Duration(TimeSpan.FromMilliseconds(200)) };
+        Clos = new DoubleAnimation { From = 0.97, To = 0.1, Duration  = new Duration(TimeSpan.FromMilliseconds(200)) };
+
         CustomMainFrame             = this;
         Message                     = message;
         Caption                     = caption;
@@ -112,31 +126,40 @@ internal partial class CustomMessageBoxWindow
 
     private void Button_OK_Click(object sender, RoutedEventArgs e)
     {
-        Result = MessageBoxResult.OK;
-        Close();
+        Result         =  MessageBoxResult.OK;
+        Clos.Completed += (_, _) => Close();
+        BeginAnimation(OpacityProperty, Clos);
     }
 
     private void Button_Cancel_Click(object sender, RoutedEventArgs e)
     {
-        Result = MessageBoxResult.Cancel;
-        Close();
+        Result         =  MessageBoxResult.Cancel;
+        Clos.Completed += (_, _) => Close();
+        BeginAnimation(OpacityProperty, Clos);
     }
 
     private void Button_Yes_Click(object sender, RoutedEventArgs e)
     {
-        Result = MessageBoxResult.Yes;
-        Close();
+        Result         =  MessageBoxResult.Yes;
+        Clos.Completed += (_, _) => Close();
+        BeginAnimation(OpacityProperty, Clos);
     }
 
     private void Button_No_Click(object sender, RoutedEventArgs e)
     {
-        Result = MessageBoxResult.No;
-        Close();
+        Result         =  MessageBoxResult.No;
+        Clos.Completed += (_, _) => Close();
+        BeginAnimation(OpacityProperty, Clos);
     }
 
     private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
         DragMove();
+    }
+
+    private void CustomMessageBoxWindow_OnLoaded(object sender, RoutedEventArgs e)
+    {
+        BeginAnimation(OpacityProperty, Open);
     }
 }
 
@@ -338,6 +361,7 @@ public static class CustomMessageBox
             NoButtonCaption     = noButtonText,
             CancelButtonCaption = cancelButtonText
         };
+
         return msgData.ShowMessageBox();
     }
 }
