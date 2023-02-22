@@ -39,7 +39,7 @@ public static class Log
         if (text != null)
             MainFrame.Dispatcher.BeginInvoke(() =>
             {
-                if (text != null) text = newline ? " " + text + Environment.NewLine : text;
+                if (text != null) text = newline ? text + Environment.NewLine : text;
                 MainFrame.rtb.AppendColorLine(text, brush);
                 MainFrame.rtb.ScrollToEnd();
             });
@@ -50,7 +50,7 @@ public static class Log
         if (text != null)
             MainFrame.Dispatcher.BeginInvoke(() =>
             {
-                if (text != null) text = newline ? " " + text + Environment.NewLine : text;
+                if (text != null) text = newline ? text + Environment.NewLine : text;
                 MainFrame.rtb.AppendText(text);
                 MainFrame.rtb.ScrollToEnd();
             });

@@ -39,12 +39,12 @@ namespace installEAS;
 
 public partial class MainWindow
 {
-    public static    MainWindow      MainFrame;
-    public static    DoubleAnimation MainOpen;
-    public static    DoubleAnimation MainClos;
-    private readonly Storyboard      textBoxClos;
-    private readonly Storyboard      textBoxOpen;
-    public static    string          obj = "";
+    public static   MainWindow      MainFrame;
+    public static   DoubleAnimation MainOpen;
+    public static   DoubleAnimation MainClos;
+    public readonly Storyboard      textBoxClos;
+    public readonly Storyboard      textBoxOpen;
+    public static   string          obj = "";
 
 
     public MainWindow()
@@ -124,6 +124,37 @@ public partial class MainWindow
         rtb.TextArea.Options.WordWrapIndentation = double.MaxValue;
         rtb.TextArea.Options.EnableImeSupport    = false;
     }
+
+    public static void WaitInput(string ask)
+    {
+        if (MainFrame.textBox.IsEnabled == false)
+        {
+            MainFrame.textBoxOpen.Begin(MainFrame.textBox);
+            MainFrame.textBox.IsEnabled = true;
+            MainFrame.textBox.Focus();
+        }
+
+        log($"{ask} >> ", Brushes.White, false);
+    }
+
+    private void TextBox_OnKeyDownKeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key != Key.Enter) return;
+
+        textBox.Focus();
+        if (textBox.Text == "") return;
+        InputText = textBox.Text;
+        log(InputText);
+
+        textBoxClos.Completed += (_, _) =>
+        {
+            textBox.IsEnabled = false;
+            textBox.Clear();
+        };
+
+        textBoxClos.Begin(textBox);
+    }
+
 
     public static void CloseMain()
     {
@@ -240,11 +271,12 @@ public partial class MainWindow
 
     private void MainWindow_OnClosing(object sender, CancelEventArgs e)
     {
-        e.Cancel = true;
-        var result = CustomMessageBox.Show("Действительно закрыть приложение?", "Подтверждение выхода", MessageBoxButton.YesNo, MessageBoxImage.Question);
-        if (result.ToString() != "Yes") return;
-        MainClos.Completed += (_, _) => Process.GetCurrentProcess().Kill();
-        BeginAnimation(OpacityProperty, MainClos);
+        //TODO Раскоментить в релизе
+        // e.Cancel = true;
+        // var result = CustomMessageBox.Show("Действительно закрыть приложение?", "Подтверждение выхода", MessageBoxButton.YesNo, MessageBoxImage.Question);
+        // if (result.ToString() != "Yes") return;
+        // MainClos.Completed += (_, _) => Process.GetCurrentProcess().Kill();
+        // BeginAnimation(OpacityProperty, MainClos);
     }
 
     private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
@@ -252,15 +284,17 @@ public partial class MainWindow
         CreateVariablesInstance();
         CreateSlidePanelsInstance();
         CreatetempControlInstance();
-        MainOpen.Completed += async (_, _) =>
-        {
-            log("Инициализация...", false);
 
-            await Task.Delay(1000).ConfigureAwait(true);
-            log("OK");
-            await AnimateFrameworkElement(MenuMain.PanelTopMain, 600).ConfigureAwait(true);
-        };
-        BeginAnimation(OpacityProperty, MainOpen);
+        //TODO раскоментить в релизе
+        // MainOpen.Completed += async (_, _) =>
+        // {
+        //      log("Инициализация...", false);
+        //     
+        //      await Task.Delay(1).ConfigureAwait(true);
+        //      log("OK");
+        //      await AnimateFrameworkElement(MenuMain.PanelTopMain, 600).ConfigureAwait(true);
+        // };
+        // BeginAnimation(OpacityProperty, MainOpen);
     }
 
     private void MainWindow_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -291,16 +325,7 @@ public partial class MainWindow
         ColorAnimation(element.Name == "CloseButton" ? new InClassName(element, closeFrom, closeTo, 120) : new InClassName(element, controlFrom, controlTo, 120));
     }
 
-
-    private void TextBox_OnKeyDownKeyDown(object sender, KeyEventArgs e)
-    {
-        if (e.Key != Key.Enter) return;
-        textBoxClos.Begin(textBox);
-        textBox.Focus();
-        if (textBox.Text != "") log(textBox.Text);
-        textBox.IsEnabled = false;
-        textBox.Clear();
-    }
+    public static string InputText { get; set; }
 
 
     private void LabelVer_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -342,5 +367,10 @@ public partial class MainWindow
         var Sel = rtb.SelectedText;
         if (e.LeftButton == MouseButtonState.Released && Sel != "") rtb.ToClipSelection();
         if (textBox.IsEnabled) textBox.Focus();
+    }
+
+    private void LabelVer_OnToolTipOpening(object sender, ToolTipEventArgs e)
+    {
+        log("Тултип");
     }
 }

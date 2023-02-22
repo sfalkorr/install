@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Management;
 using System.Security.AccessControl;
 using System.Threading;
 using System.Threading.Tasks;
@@ -37,16 +38,30 @@ public partial class tempControl
 
     private void Btn1_OnClick(object sender, RoutedEventArgs e)
     {
-        //Console.WriteLine(
-        //Replica.ReplicaGetSqlPackage());
-        Replica.ReplicaSqlPackageStartAsync();
+        //Replica.ReplicaSqlPackageStartAsync();
+        //Console.WriteLine(EnvCheck.NameCheck(1, "R12-123456-N"));
+
+        //Console.WriteLine(SQLRegParameters);
+        // Console.WriteLine(IsServer());
+        // Console.WriteLine(IsComputernameCorrect());
+        // Console.WriteLine(OPSNum);
+        // Console.WriteLine(DBOPSName);
+
+        WaitInput("Введи хуйню");
+
+        //Console.WriteLine(SetMachineName("C01-160024-N"));
+
+        //Console.WriteLine(Reg.TestFilePath(@"HKLM:\SOFTWARE\7-Zip"));
+        //Console.WriteLine(Reg.TestFilePath(@"HKLM:\SOFTWARE\7-Zip2"));
+        //Console.WriteLine(RegistryTools.KeyExists(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SQL Server\MSSQL11.MSSQLSERVER\MSSQLServer\Parameters"));
     }
 
 
     private void Btn2_OnClick(object sender, RoutedEventArgs e)
     {
+        log(InputText);
         //Password.SaveSqlPassToReg("QWEasd123*");
-        MainFrame.pb.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.progressBar.SetPercentDuration(99, 3000); });
+        //MainFrame.pb.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.progressBar.SetPercentDuration(99, 3000); });
     }
 
     private void Btn3_OnClick(object sender, RoutedEventArgs e)
@@ -96,7 +111,7 @@ public partial class tempControl
     private void Btn7_OnClick(object sender, RoutedEventArgs e)
     {
         //var result = CustomMessageBox.Show("Действительно закрыть приложение?", "Подтверждение выхода", MessageBoxButton.OKCancel, MessageBoxImage.Question);
-        CustomMessageBox.Show("хуй", "пизда", MessageBoxButton.YesNo);
+        Replica.ReplicaSqlPackageStartAsync();
     }
 
     private void Btn8_OnClick(object sender, RoutedEventArgs e)

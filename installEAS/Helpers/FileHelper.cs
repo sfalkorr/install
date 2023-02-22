@@ -74,4 +74,9 @@ internal abstract class Files
         if (!File.Exists(path1)) return;
         File.Delete(path1);
     }
+
+    public static bool TestFilePath(string path)
+    {
+        return File.Exists(path) || Directory.Exists(path);
+    }
 }

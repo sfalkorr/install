@@ -169,16 +169,18 @@
                         <Button x:Name="MinimizeButton"
                              Command="{x:Static SystemCommands.MinimizeWindowCommand}"
                              Content="&#xE921;"
+                             Focusable="False"
                              FontFamily="Segoe MDL2 Assets"
                              IsTabStop="False"
                              MouseLeave="MouseLeave"
                              Style="{DynamicResource ButtonStyleTest}"
                              TextOptions.TextRenderingMode="Aliased"
                              ToolTip="Minimize"
-                             WindowChrome.IsHitTestVisibleInChrome="True" Focusable="False" />
+                             WindowChrome.IsHitTestVisibleInChrome="True" />
                         <Button x:Name="RestoreButton"
                              Command="{x:Static SystemCommands.RestoreWindowCommand}"
                              Content="&#xE923;"
+                             Focusable="False"
                              FontFamily="Segoe MDL2 Assets"
                              IsTabStop="False"
                              MouseLeave="MouseLeave"
@@ -186,10 +188,11 @@
                              TextOptions.TextRenderingMode="Aliased"
                              ToolTip="Restore"
                              Visibility="Collapsed"
-                             WindowChrome.IsHitTestVisibleInChrome="True" Focusable="False" />
+                             WindowChrome.IsHitTestVisibleInChrome="True" />
                         <Button x:Name="MaximizeButton"
                              Command="{x:Static SystemCommands.MaximizeWindowCommand}"
                              Content="&#xE922;"
+                             Focusable="False"
                              FontFamily="Segoe MDL2 Assets"
                              IsTabStop="False"
                              MouseLeave="MouseLeave"
@@ -197,10 +200,11 @@
                              TextOptions.TextRenderingMode="Aliased"
                              ToolTip="Maximize"
                              Visibility="Visible"
-                             WindowChrome.IsHitTestVisibleInChrome="True" Focusable="False" />
+                             WindowChrome.IsHitTestVisibleInChrome="True" />
                         <Button x:Name="CloseButton"
                              Command="{x:Static SystemCommands.CloseWindowCommand}"
                              Content="&#xE8BB; "
+                             Focusable="False"
                              FontFamily="Segoe MDL2 Assets"
                              FontSize="10"
                              IsTabStop="False"
@@ -209,7 +213,7 @@
                              Style="{DynamicResource CloseButtonStyle2}"
                              TextOptions.TextRenderingMode="Aliased"
                              ToolTip="Close"
-                             WindowChrome.IsHitTestVisibleInChrome="True" Focusable="False">
+                             WindowChrome.IsHitTestVisibleInChrome="True">
                             <Button.Resources>
                                 <Style TargetType="{x:Type Border}">
                                     <Setter Property="CornerRadius" Value="0,7,0,0" />
@@ -227,6 +231,8 @@
                          IsHitTestVisible="True"
                          MouseLeftButtonDown="LabelVer_OnMouseLeftButtonDown"
                          Style="{DynamicResource LabelStyle1}"
+                         ToolTip="Change color theme"
+                         ToolTipOpening="LabelVer_OnToolTipOpening"
                          WindowChrome.IsHitTestVisibleInChrome="True">
                         <Label.Effect>
                             <DropShadowEffect Opacity="0.5" ShadowDepth="2" />
