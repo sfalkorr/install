@@ -10,13 +10,10 @@
     <SolidColorBrush x:Key="Button.Close.Background.Color" Color="#00333333" />
     <SolidColorBrush x:Key="Button.Close.Mouseover.Color" Color="#FF902020" />
     <SolidColorBrush x:Key="Button.Close.Pressed.Color" Color="#FF801010" />
-
     <LinearGradientBrush x:Key="Tittle.Background.Color" StartPoint="0.5,0" EndPoint="0.5,1">
         <GradientStop Color="#FF22272b" />
         <GradientStop Offset="1" Color="#FF22272b" />
     </LinearGradientBrush>
-
-
     <LinearGradientBrush x:Key="MessageBox.Button.Default" StartPoint="0.5,0" EndPoint="0.5,1">
         <GradientStop Color="#FF32373b" />
         <GradientStop Offset="0.5" Color="#FF42474b" />
@@ -37,7 +34,6 @@
         <GradientStop Color="#FF22272b" />
         <GradientStop Offset="1" Color="#AF32373b" />
     </LinearGradientBrush>
-
     <LinearGradientBrush x:Key="ProgressBar.Color" Opacity="0.8" StartPoint="0.5,0" EndPoint="0.5,1">
         <GradientStop Offset="0" Color="#FF545a61" />
         <GradientStop Offset="0.5" Color="#FF646a71" />
@@ -48,7 +44,7 @@
         <GradientStop Offset="0" Color="#FF161b22" />
     </LinearGradientBrush>
     <SolidColorBrush x:Key="Editor.Foreground.Color" Color="#FFDDDDDD" />
-    <SolidColorBrush x:Key="Editor.Background.Color" Color="#FF101015" />
-    <SolidColorBrush x:Key="ScrollBarThumbKey.Color" Color="#FF565b72" />
-    <SolidColorBrush x:Key="ScrollBarThumbKey.BackColor" Color="#20565b72" />
+    <SolidColorBrush x:Key="Editor.Background.Color" Color="#FF101010" />
+    <SolidColorBrush x:Key="ScrollBarThumbKey.Color" Color="#FFAAAAAA" />
+    <SolidColorBrush x:Key="ScrollBarThumbKey.BackColor" Color="#05AAAAAA" />
 </ResourceDictionary>

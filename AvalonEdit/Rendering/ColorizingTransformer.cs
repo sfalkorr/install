@@ -37,16 +37,14 @@ public abstract class ColorizingTransformer : IVisualLineTransformer, ITextViewC
                     continue;
                 }
 
-            if (e.VisualColumn >= visualStartColumn && e.VisualColumn < visualEndColumn)
+            if (e.VisualColumn < visualStartColumn || e.VisualColumn >= visualEndColumn) continue;
+            if (e.VisualColumn + e.VisualLength > visualEndColumn)
             {
-                if (e.VisualColumn + e.VisualLength > visualEndColumn)
-                {
-                    if (e.CanSplit) e.Split(visualEndColumn, CurrentElements, i--);
-                }
-                else
-                {
-                    action(e);
-                }
+                if (e.CanSplit) e.Split(visualEndColumn, CurrentElements, i--);
+            }
+            else
+            {
+                action(e);
             }
         }
     }

@@ -3,7 +3,7 @@
     <Style x:Key="ButtonStyleTest" TargetType="{x:Type Button}">
         <Setter Property="Background" Value="#00AAAAAA" />
         <Setter Property="BorderBrush" Value="{DynamicResource ResourceKey=Tittle.Border.Color}" />
-        <Setter Property="BorderThickness" Value="0.51,0.51,0,0.51" />
+        <Setter Property="BorderThickness" Value="0.51,0,0,0.51" />
         <Setter Property="FontSize" Value="10" />
         <Setter Property="Foreground" Value="#FFBBBBBB" />
         <Setter Property="Height" Value="22" />
@@ -22,9 +22,6 @@
                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="true">
-                            <Setter TargetName="border" Property="Background" Value="{DynamicResource ResourceKey=ControlButton.MouseOver.Color}" />
-                        </Trigger>
                         <Trigger Property="IsPressed" Value="true">
                             <Setter TargetName="border" Property="Background" Value="{DynamicResource ResourceKey=ControlButton.IsPressed.Color}" />
                         </Trigger>
@@ -32,6 +29,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Setter Property="UseLayoutRounding" Value="True" />
         <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Width" Value="40" />
@@ -39,7 +37,7 @@
     <Style x:Key="CloseButtonStyle2" TargetType="{x:Type Button}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="{DynamicResource ResourceKey=Tittle.Border.Color}" />
-        <Setter Property="BorderThickness" Value="0.51,0.51,0,0.51" />
+        <Setter Property="BorderThickness" Value="0.51,0,0,0.51" />
         <Setter Property="Foreground" Value="{DynamicResource ResourceKey=Button.Close.Foreground.Color}" />
         <Setter Property="Height" Value="22" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -56,9 +54,6 @@
                              RecognizesAccessKey="True" />
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="true">
-                            <Setter TargetName="border" Property="Background" Value="{DynamicResource ResourceKey=Button.Close.Mouseover.Color}" />
-                        </Trigger>
                         <Trigger Property="IsPressed" Value="true">
                             <Setter TargetName="border" Property="Background" Value="{StaticResource ResourceKey=Button.Close.Pressed.Color}" />
                         </Trigger>
@@ -67,6 +62,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Setter Property="UseLayoutRounding" Value="True" />
         <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Width" Value="40" />
@@ -275,6 +271,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Setter Property="UseLayoutRounding" Value="True" />
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
     <Style x:Key="RichTextBoxStyle2" TargetType="{x:Type RichTextBox}">

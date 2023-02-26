@@ -31,16 +31,19 @@
             <Word>OK</Word>
         </Keywords>
 
-        <Keywords foreground="Yellow">
-            <Word>статьи</Word>
+        <Keywords foreground="Yellow" background="Green">
+            <Word>>></Word>
         </Keywords>
 
         <Keywords foreground="White">
             <Word>пароль</Word>
         </Keywords>
 
-        <Keywords fontWeight="bold" fontStyle="italic" foreground="Red">
-            <Word>системы</Word>
+        <Keywords fontWeight="bold" foreground="White">
+            <Word>пароль</Word>
+            <Word>new</Word>
+            <Word>sa</Word>
+
         </Keywords>
 
         <!-- Digits -->

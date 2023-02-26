@@ -688,7 +688,7 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
 
         newVisualLines = new List<VisualLine>();
 
-        if (VisualLineConstructionStarting != null) VisualLineConstructionStarting(this, new VisualLineConstructionStartEventArgs(firstLineInView));
+        VisualLineConstructionStarting?.Invoke(this, new VisualLineConstructionStartEventArgs(firstLineInView));
 
         var    elementGeneratorsArray = elementGenerators.ToArray();
         var    lineTransformersArray  = lineTransformers.ToArray();
@@ -814,12 +814,10 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
         while (element.IsWhitespace(column))
         {
             column++;
-            if (column == element.VisualColumn + element.VisualLength)
-            {
-                elementIndex++;
-                if (elementIndex == visualLine.Elements.Count) break;
-                element = visualLine.Elements[elementIndex];
-            }
+            if (column != element.VisualColumn + element.VisualLength) continue;
+            elementIndex++;
+            if (elementIndex == visualLine.Elements.Count) break;
+            element = visualLine.Elements[elementIndex];
         }
 
         return column;
@@ -926,7 +924,7 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
                     length += element.VisualLength;
                 }
 
-            if (currentBrush != null)
+            if (currentBrush == null) continue;
             {
                 var builder = new BackgroundGeometryBuilder { AlignToWholePixels = true, CornerRadius = 3 };
                 foreach (var rect in BackgroundGeometryBuilder.GetRectsFromVisualSegment(this, line, startVC, startVC + length)) builder.AddRectangle(this, rect);
@@ -975,16 +973,12 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
 
     private bool SetScrollData(Size viewport, Size extent, Vector offset)
     {
-        if (!(viewport.IsClose(scrollViewport) && extent.IsClose(scrollExtent) && offset.IsClose(scrollOffset)))
-        {
-            scrollViewport = viewport;
-            scrollExtent   = extent;
-            SetScrollOffset(offset);
-            OnScrollChange();
-            return true;
-        }
-
-        return false;
+        if (viewport.IsClose(scrollViewport) && extent.IsClose(scrollExtent) && offset.IsClose(scrollOffset)) return false;
+        scrollViewport = viewport;
+        scrollExtent   = extent;
+        SetScrollOffset(offset);
+        OnScrollChange();
+        return true;
     }
 
     private void OnScrollChange()
@@ -999,11 +993,9 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
         get => canVerticallyScroll;
         set
         {
-            if (canVerticallyScroll != value)
-            {
-                canVerticallyScroll = value;
-                InvalidateMeasure(DispatcherPriority.Normal);
-            }
+            if (canVerticallyScroll == value) return;
+            canVerticallyScroll = value;
+            InvalidateMeasure(DispatcherPriority.Normal);
         }
     }
     private bool canHorizontallyScroll;
@@ -1012,12 +1004,10 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
         get => canHorizontallyScroll;
         set
         {
-            if (canHorizontallyScroll != value)
-            {
-                canHorizontallyScroll = value;
-                ClearVisualLines();
-                InvalidateMeasure(DispatcherPriority.Normal);
-            }
+            if (canHorizontallyScroll == value) return;
+            canHorizontallyScroll = value;
+            ClearVisualLines();
+            InvalidateMeasure(DispatcherPriority.Normal);
         }
     }
 
@@ -1175,9 +1165,12 @@ public class TextView : FrameworkElement, IScrollInfo, IWeakEventListener, IText
 
     private static double ValidateVisualOffset(double offset)
     {
-        if (double.IsNaN(offset)) throw new ArgumentException("offset must not be NaN");
-        if (offset < 0) return 0;
-        return offset;
+        return offset switch
+               {
+                   double.NaN => throw new ArgumentException("offset must not be NaN"),
+                   < 0        => 0,
+                   _          => offset
+               };
     }
 
     void IScrollInfo.SetHorizontalOffset(double offset)

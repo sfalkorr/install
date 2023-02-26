@@ -47,8 +47,9 @@ public partial class tempControl
         // Console.WriteLine(OPSNum);
         // Console.WriteLine(DBOPSName);
 
-        WaitInput("Введи хуйню");
-
+        //WaitInput("Введите новый пароль для пользователя sa в SQL или введите new для генерации случайного");
+        //SQLNewPassword();
+        inputOpen();
         //Console.WriteLine(SetMachineName("C01-160024-N"));
 
         //Console.WriteLine(Reg.TestFilePath(@"HKLM:\SOFTWARE\7-Zip"));
@@ -59,14 +60,16 @@ public partial class tempControl
 
     private void Btn2_OnClick(object sender, RoutedEventArgs e)
     {
-        log(InputText);
+        log(inputClose());
         //Password.SaveSqlPassToReg("QWEasd123*");
         //MainFrame.pb.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.progressBar.SetPercentDuration(99, 3000); });
     }
 
     private void Btn3_OnClick(object sender, RoutedEventArgs e)
     {
-        MainFrame.pb.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.progressBar.SetPercentDuration(0, 3000); });
+        var line = MainFrame.rtb.Document.Lines.Count;
+        //MainFrame.rtb.Document.Lines.Remove(line);
+        //MainFrame.pb.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.progressBar.SetPercentDuration(0, 3000); });
         //log(Password.ReadSqlPassFromReg());
     }
 

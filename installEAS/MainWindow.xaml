@@ -130,7 +130,7 @@
                          CaretBrush="White"
                          FontSize="18"
                          KeyDown="TextBox_OnKeyDownKeyDown"
-                         MaxLength="48"
+                         MaxLength="20"
                          Template="{StaticResource TextBoxTemplate1}">
                         <TextBox.Effect>
                             <DropShadowEffect BlurRadius="10" Direction="90" Opacity="0.5" RenderingBias="Quality" ShadowDepth="5" />
@@ -164,7 +164,8 @@
                          Margin="0,0,0,1"
                          HorizontalAlignment="Right"
                          VerticalAlignment="Stretch"
-                         Orientation="Horizontal">
+                         Orientation="Horizontal"
+                         UseLayoutRounding="True">
                         <!-- <Button x:Name="ThemeButton" Click="ThemeButton_OnClick" Content="&#xEDAB;" FontFamily="Segoe MDL2 Assets" FontSize="11" MouseLeave="MouseLeave" Style="{DynamicResource ButtonStyleTest}" TextOptions.TextRenderingMode="Aliased" ToolTip="Theme" WindowChrome.IsHitTestVisibleInChrome="True" /> -->
                         <Button x:Name="MinimizeButton"
                              Command="{x:Static SystemCommands.MinimizeWindowCommand}"
@@ -173,6 +174,7 @@
                              FontFamily="Segoe MDL2 Assets"
                              IsTabStop="False"
                              MouseLeave="MouseLeave"
+                             MouseEnter="MouseOver" 
                              Style="{DynamicResource ButtonStyleTest}"
                              TextOptions.TextRenderingMode="Aliased"
                              ToolTip="Minimize"
@@ -184,6 +186,7 @@
                              FontFamily="Segoe MDL2 Assets"
                              IsTabStop="False"
                              MouseLeave="MouseLeave"
+                             MouseEnter="MouseOver" 
                              Style="{StaticResource ButtonStyleTest}"
                              TextOptions.TextRenderingMode="Aliased"
                              ToolTip="Restore"
@@ -196,6 +199,7 @@
                              FontFamily="Segoe MDL2 Assets"
                              IsTabStop="False"
                              MouseLeave="MouseLeave"
+                             MouseEnter="MouseOver" 
                              Style="{DynamicResource ButtonStyleTest}"
                              TextOptions.TextRenderingMode="Aliased"
                              ToolTip="Maximize"
@@ -209,6 +213,7 @@
                              FontSize="10"
                              IsTabStop="False"
                              MouseLeave="MouseLeave"
+                             MouseEnter="MouseOver" 
                              RenderOptions.ClearTypeHint="Enabled"
                              Style="{DynamicResource CloseButtonStyle2}"
                              TextOptions.TextRenderingMode="Aliased"

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -27,6 +28,7 @@ using installEAS.Controls;
 using static installEAS.Themes.ThemesController;
 using static installEAS.Helpers.Log;
 using static installEAS.Helpers.Animate;
+using static installEAS.Helpers.Functions;
 using static installEAS.Variables;
 using static installEAS.Controls.SlidePanelsControl;
 using static installEAS.Controls.tempControl;
@@ -75,19 +77,19 @@ public partial class MainWindow
             }
             case ThemeTypes.ColorBlue:
             {
-                controlFrom = "#FF32506E";
-                controlTo   = "#0032506E";
-                closeFrom   = "#FF902020";
-                closeTo     = "#00902020";
+                controlFrom   = "#FF496785";
+                controlTo     = "#00496785";
+                    closeFrom = "#FF902020";
+                closeTo       = "#00496785";
                 break;
             }
             case ThemeTypes.ColorGray:
             {
-                controlFrom = "#FF50565D";
-                controlTo   = "#0050565D";
+                controlFrom = "#FA5A5F64";
+                controlTo   = "#005A5F64";
                 closeFrom   = "#FF902020";
-                closeTo     = "#00902020";
-                break;
+                closeTo     = "#005A5F64";
+                    break;
             }
 
             default:
@@ -125,34 +127,58 @@ public partial class MainWindow
         rtb.TextArea.Options.EnableImeSupport    = false;
     }
 
-    public static void WaitInput(string ask)
+    public static Task inputOpen()
     {
-        if (MainFrame.textBox.IsEnabled == false)
-        {
-            MainFrame.textBoxOpen.Begin(MainFrame.textBox);
-            MainFrame.textBox.IsEnabled = true;
-            MainFrame.textBox.Focus();
-        }
-
-        log($"{ask} >> ", Brushes.White, false);
+        if (MainFrame.textBox.IsEnabled) return Task.CompletedTask;
+        MainFrame.textBoxOpen.Begin(MainFrame.textBox);
+        MainFrame.textBox.IsEnabled = true;
+        MainFrame.textBox.Focus();
+        return Task.CompletedTask;
     }
 
+    public static string inputClose()
+    {
+        if (MainFrame.textBox.IsEnabled)
+        {
+
+            MainFrame.textBoxClos.Completed += (_, _) =>
+            {
+                MainFrame.textBox.IsEnabled = false;
+                MainFrame.textBox.Clear();
+            };
+            MainFrame.textBoxClos.Begin(MainFrame.textBox);
+        }
+
+        return MainFrame.textBox.Text;
+    }
+    
+    public static Task WaitInput(string ask)
+    {
+
+
+        log($"\n{ask} >> ", Brushes.White, false);
+        return Task.CompletedTask;
+    }
+
+    public static bool SQLNewPassword()
+    {
+        while (Password.ValidatePass(InputText)) WaitInput("Введите новый пароль для пользователя sa в SQL или введите new для генерации случайного").ConfigureAwait(true);
+
+        return true;
+    }
+
+    public static bool inputValidate(string input)
+    {
+        var validateChars = new Regex("^(?=.*?[A-Z]).{3,}(?=.*?[a-z])(?=.*?[0-9])(?!.*?[\\s])(?!.*?[а-яА-Я])(?=.*?[!@#$%^&*()_+=?-]).{10,}$");
+        return validateChars.IsMatch(input);
+    }
+    
     private void TextBox_OnKeyDownKeyDown(object sender, KeyEventArgs e)
     {
         if (e.Key != Key.Enter) return;
-
         textBox.Focus();
-        if (textBox.Text == "") return;
         InputText = textBox.Text;
-        log(InputText);
-
-        textBoxClos.Completed += (_, _) =>
-        {
-            textBox.IsEnabled = false;
-            textBox.Clear();
-        };
-
-        textBoxClos.Begin(textBox);
+        if (textBox.Text != "") inputClose();
     }
 
 
@@ -230,7 +256,7 @@ public partial class MainWindow
         if (Keyboard.IsKeyDown(Key.OemTilde) && Keyboard.IsKeyDown(Key.LeftAlt))
             MainFrame.Dispatcher.InvokeAsync(() =>
             {
-                var _ = AnimateFrameworkElement(MenuMain.PanelTopAdd, 400);
+                var _ = AnimateFrameworkElement(MenuMain.PanelTopMain, 400);
             }, DispatcherPriority.Send);
 
         if (Keyboard.IsKeyDown(Key.OemTilde) && Keyboard.IsKeyDown(Key.LeftCtrl))
@@ -263,7 +289,7 @@ public partial class MainWindow
     {
         if (textBox.IsEnabled) textBox.Focus();
     }
-
+  
     private void MainWindow_OnActivated(object sender, EventArgs e)
     {
         if (textBox.IsEnabled) textBox.Focus();
@@ -322,7 +348,13 @@ public partial class MainWindow
     private new void MouseLeave(object sender, MouseEventArgs e)
     {
         var element = (FrameworkElement)sender;
-        ColorAnimation(element.Name == "CloseButton" ? new InClassName(element, closeFrom, closeTo, 120) : new InClassName(element, controlFrom, controlTo, 120));
+        ColorAnimation(element.Name == "CloseButton" ? new InClassName(element, closeFrom, closeTo, 150) : new InClassName(element, controlFrom, controlTo, 120));
+    }
+
+    private  void MouseOver( object sender, MouseEventArgs e )
+    {
+        var element = (FrameworkElement)sender;
+        ColorAnimation( element.Name == "CloseButton" ? new InClassName( element, closeTo, closeFrom, 150 ) : new InClassName( element, controlTo, controlFrom, 120 ) );
     }
 
     public static string InputText { get; set; }

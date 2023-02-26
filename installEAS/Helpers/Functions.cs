@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Management;
@@ -9,6 +10,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Microsoft.Win32;
 
@@ -17,6 +19,31 @@ namespace installEAS.Helpers;
 
 public static class Functions
 {
+
+    /// <summary>
+    /// path: yournamespace.resourcefolder.filename (like png) 
+    /// </summary>
+    public static BitmapSource GetImageSource( string path )
+    {
+        var bitmap = new BitmapImage();
+        if (path == null) return null;
+        bitmap.BeginInit();
+        bitmap.StreamSource = Assembly.GetExecutingAssembly().GetManifestResourceStream( path );
+        bitmap.CacheOption  = BitmapCacheOption.OnLoad;
+        bitmap.EndInit();
+        return bitmap;
+    }
+
+    /// <summary>
+    /// path: yournamespace.resourcefolder.filename (like png) 
+    /// </summary>
+    public static Icon GetPngConvertToIco( string path )
+    {
+        if (path == null) return null;
+        var bitmap = new Bitmap( Assembly.GetExecutingAssembly().GetManifestResourceStream( path ) );
+        return Icon.FromHandle( bitmap.GetHicon() );
+    }
+
     public static void ProcessKill(string processname)
     {
         Process.GetProcesses().Where(x => x.ProcessName.StartsWith(processname, StringComparison.OrdinalIgnoreCase)).ToList().ForEach(x => x.Kill());

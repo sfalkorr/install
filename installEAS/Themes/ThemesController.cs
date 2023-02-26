@@ -64,18 +64,18 @@ public static class ThemesController
                 break;
             case ThemeTypes.ColorDark:
                 SetTheme(ThemeTypes.ColorBlue);
-                controlFrom = "#FF32506E";
-                controlTo   = "#0032506E";
+                controlFrom = "#FF496785";
+                controlTo   = "#00496785";
                 closeFrom   = "#FF902020";
-                closeTo     = "#00902020";
+                closeTo     = "#00496785";
                 if (MainFrame.textBox.IsEnabled) MainFrame.textBox.Focus();
                 break;
             case ThemeTypes.ColorBlue:
                 SetTheme(ThemeTypes.ColorGray);
-                controlFrom = "#FF50565D";
-                controlTo   = "#0050565D";
+                controlFrom = "#FA5A5F64";
+                controlTo   = "#005A5F64";
                 closeFrom   = "#FF902020";
-                closeTo     = "#00902020";
+                closeTo     = "#005A5F64";
                 if (MainFrame.textBox.IsEnabled) MainFrame.textBox.Focus();
                 break;
 
