@@ -33,6 +33,8 @@
         <GradientStop Offset="1" Color="#AF32506E" />
         <GradientStop Offset="0" Color="#FF1E3C5A" />
     </LinearGradientBrush>
+
+    <SolidColorBrush x:Key="Menu.Selector" Color="#FF496785" />
     <SolidColorBrush x:Key="Button.Close.Foreground.Color" Color="#FFBBBBBB" />
     <SolidColorBrush x:Key="Button.Close.MouseOver.Foreground.Color" Color="LightGray" />
     <SolidColorBrush x:Key="Button.Close.Background.Color" Color="#00333333" />

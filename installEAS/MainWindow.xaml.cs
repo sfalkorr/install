@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,6 +28,7 @@ using installEAS.Themes;
 using installEAS.Controls;
 using static installEAS.Themes.ThemesController;
 using static installEAS.Helpers.Log;
+using static installEAS.Helpers.Password;
 using static installEAS.Helpers.Animate;
 using static installEAS.Helpers.Functions;
 using static installEAS.Variables;
@@ -35,6 +37,7 @@ using static installEAS.Controls.tempControl;
 using System.Windows.Controls;
 using System.Windows.Shapes;
 using System.Xml;
+using static System.Windows.Input.Key;
 using static AvalonEdit.Highlighting.HighlightingManager;
 
 namespace installEAS;
@@ -77,10 +80,10 @@ public partial class MainWindow
             }
             case ThemeTypes.ColorBlue:
             {
-                controlFrom   = "#FF496785";
-                controlTo     = "#00496785";
-                    closeFrom = "#FF902020";
-                closeTo       = "#00496785";
+                controlFrom = "#FF496785";
+                controlTo   = "#00496785";
+                closeFrom   = "#FF902020";
+                closeTo     = "#00496785";
                 break;
             }
             case ThemeTypes.ColorGray:
@@ -89,7 +92,7 @@ public partial class MainWindow
                 controlTo   = "#005A5F64";
                 closeFrom   = "#FF902020";
                 closeTo     = "#005A5F64";
-                    break;
+                break;
             }
 
             default:
@@ -125,62 +128,54 @@ public partial class MainWindow
         rtb.TextArea.OverstrikeMode              = false;
         rtb.TextArea.Options.WordWrapIndentation = double.MaxValue;
         rtb.TextArea.Options.EnableImeSupport    = false;
+        textBox.Background                       = Brushes.Red;
     }
 
-    public static Task inputOpen()
-    {
-        if (MainFrame.textBox.IsEnabled) return Task.CompletedTask;
-        MainFrame.textBoxOpen.Begin(MainFrame.textBox);
-        MainFrame.textBox.IsEnabled = true;
-        MainFrame.textBox.Focus();
-        return Task.CompletedTask;
-    }
 
-    public static string inputClose()
-    {
-        if (MainFrame.textBox.IsEnabled)
-        {
-
-            MainFrame.textBoxClos.Completed += (_, _) =>
-            {
-                MainFrame.textBox.IsEnabled = false;
-                MainFrame.textBox.Clear();
-            };
-            MainFrame.textBoxClos.Begin(MainFrame.textBox);
-        }
-
-        return MainFrame.textBox.Text;
-    }
-    
-    public static Task WaitInput(string ask)
-    {
-
-
-        log($"\n{ask} >> ", Brushes.White, false);
-        return Task.CompletedTask;
-    }
-
-    public static bool SQLNewPassword()
-    {
-        while (Password.ValidatePass(InputText)) WaitInput("Введите новый пароль для пользователя sa в SQL или введите new для генерации случайного").ConfigureAwait(true);
-
-        return true;
-    }
-
-    public static bool inputValidate(string input)
-    {
-        var validateChars = new Regex("^(?=.*?[A-Z]).{3,}(?=.*?[a-z])(?=.*?[0-9])(?!.*?[\\s])(?!.*?[а-яА-Я])(?=.*?[!@#$%^&*()_+=?-]).{10,}$");
-        return validateChars.IsMatch(input);
-    }
-    
     private void TextBox_OnKeyDownKeyDown(object sender, KeyEventArgs e)
     {
-        if (e.Key != Key.Enter) return;
-        textBox.Focus();
-        InputText = textBox.Text;
-        if (textBox.Text != "") inputClose();
+        //if (e.Key != Enter || MainFrame.textBox.Text == "") return;
+        //if (Regex.IsMatch(MainFrame.textBox.Text, "^[0-9A-Z!@#$%^&*()_+=?-]+$", RegexOptions.IgnoreCase))
+        //{
+        //    log(MainFrame.textBox.Text);
+        //    tlabel.Text                 = "";
+        //    MainFrame.textBox.IsEnabled = false;
+        //    MainFrame.textBox.Clear();
+        //    MainFrame.textBoxClos.Begin(MainFrame.textBox);
+        //    sqlpass = textBox.Text;
+        //}
+
+        //if (e.Key != Enter || MainFrame.textBox.Text == "") tlabel.Text = "Пароль не может быть пустым";
+        if (ValidatePass(textBox.Text) == "Пароль корректен" && e.Key == Enter)
+        {
+            log(MainFrame.textBox.Text);
+            tlabel.Visibility           = Visibility.Collapsed;
+            MainFrame.textBox.IsEnabled = false;
+            MainFrame.textBox.Clear();
+            MainFrame.textBoxClos.Begin(MainFrame.textBox);
+            sqlpass = textBox.Text;
+        }
     }
 
+    private void textBox_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        //tlabel.Text = MainFrame.textBox.Text != "" ? !Regex.IsMatch(MainFrame.textBox.Text, "^[0-9A-Z!@#$%^&*()_+=?-]+$", RegexOptions.IgnoreCase) ? "Недопустимые символы" : "" : "";
+        //tlabel.Visibility = Visibility.Visible;
+
+        if (ValidatePass(textBox.Text) == "Пароль корректен")
+        {
+            tlabel.Foreground = Brushes.GreenYellow;
+            tlabel.Text       = ValidatePass(textBox.Text);
+        }
+        else
+        {
+            tlabel.Foreground = Brushes.OrangeRed;
+            tlabel.Text       = ValidatePass(textBox.Text);
+        }
+    }
+
+
+    public static string sqlpass;
 
     public static void CloseMain()
     {
@@ -215,11 +210,24 @@ public partial class MainWindow
 
     public static string yolka
     {
-        get => ololo;
+        get =>
+            // MainFrame.textBoxClos.Completed += (_, _) =>
+            // {
+            //     
+            //     MainFrame.textBox.IsEnabled = false;
+            //     MainFrame.textBox.Clear();
+            // };
+            // MainFrame.textBoxClos.Begin(MainFrame.textBox);
+            ololo = "dfdf";
         set
         {
-            if (value != "хуй") ololo = value;
-            else log(@"Сам ты хуй!", Brushes.Red);
+            MainFrame.textBoxClos.Completed += (_, _) =>
+            {
+                MainFrame.textBox.IsEnabled = false;
+                MainFrame.textBox.Clear();
+                value = MainFrame.textBox.Text;
+            };
+            MainFrame.textBoxClos.Begin(MainFrame.textBox);
         }
     }
 
@@ -243,23 +251,23 @@ public partial class MainWindow
 
     private void MainWin_KeyDown(object sender, KeyEventArgs e)
     {
-        if (Keyboard.IsKeyDown(Key.F1)) tempButtons.btn1.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
-        if (Keyboard.IsKeyDown(Key.F2)) tempButtons.btn2.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
-        if (Keyboard.IsKeyDown(Key.F3)) tempButtons.btn3.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
-        if (Keyboard.IsKeyDown(Key.F4)) tempButtons.btn4.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
-        if (Keyboard.IsKeyDown(Key.F5)) tempButtons.btn5.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
-        if (Keyboard.IsKeyDown(Key.F6)) tempButtons.btn6.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
-        if (Keyboard.IsKeyDown(Key.F7)) tempButtons.btn7.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
-        if (Keyboard.IsKeyDown(Key.F8)) tempButtons.btn8.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+        if (Keyboard.IsKeyDown(F1)) tempButtons.btn1.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+        if (Keyboard.IsKeyDown(F2)) tempButtons.btn2.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+        if (Keyboard.IsKeyDown(F3)) tempButtons.btn3.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+        if (Keyboard.IsKeyDown(F4)) tempButtons.btn4.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+        if (Keyboard.IsKeyDown(F5)) tempButtons.btn5.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+        if (Keyboard.IsKeyDown(F6)) tempButtons.btn6.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+        if (Keyboard.IsKeyDown(F7)) tempButtons.btn7.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+        if (Keyboard.IsKeyDown(F8)) tempButtons.btn8.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
 
-        if (Keyboard.IsKeyDown(Key.X) && Keyboard.IsKeyDown(Key.LeftAlt)) Close();
-        if (Keyboard.IsKeyDown(Key.OemTilde) && Keyboard.IsKeyDown(Key.LeftAlt))
+        if (Keyboard.IsKeyDown(X) && Keyboard.IsKeyDown(LeftAlt)) Close();
+        if (Keyboard.IsKeyDown(OemTilde) && Keyboard.IsKeyDown(LeftAlt))
             MainFrame.Dispatcher.InvokeAsync(() =>
             {
                 var _ = AnimateFrameworkElement(MenuMain.PanelTopMain, 400);
             }, DispatcherPriority.Send);
 
-        if (Keyboard.IsKeyDown(Key.OemTilde) && Keyboard.IsKeyDown(Key.LeftCtrl))
+        if (Keyboard.IsKeyDown(OemTilde) && Keyboard.IsKeyDown(LeftCtrl))
             switch (textBox.IsEnabled)
             {
                 case false:
@@ -275,13 +283,13 @@ public partial class MainWindow
 
         if (MenuMain.PanelTopAdd.IsEnabled)
         {
-            if (Keyboard.IsKeyDown(Key.D0) || Keyboard.IsKeyDown(Key.NumPad0)) MenuMain.btnMenuAdd0.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
-            if (Keyboard.IsKeyDown(Key.D1) || Keyboard.IsKeyDown(Key.NumPad1)) MenuMain.btnMenuAdd1.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+            if (Keyboard.IsKeyDown(D0) || Keyboard.IsKeyDown(NumPad0)) MenuMain.btnMenuAdd0.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+            if (Keyboard.IsKeyDown(D1) || Keyboard.IsKeyDown(NumPad1)) MenuMain.btnMenuAdd1.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
         }
 
         if (MenuMain.PanelTopMain.IsEnabled == false) return;
-        if (Keyboard.IsKeyDown(Key.D3) || Keyboard.IsKeyDown(Key.NumPad3)) MenuMain.btnMenu3.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
-        if (Keyboard.IsKeyDown(Key.D4) || Keyboard.IsKeyDown(Key.NumPad4)) MenuMain.btnMenu4.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+        if (Keyboard.IsKeyDown(D3) || Keyboard.IsKeyDown(NumPad3)) MenuMain.btnMenu3.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+        if (Keyboard.IsKeyDown(D4) || Keyboard.IsKeyDown(NumPad4)) MenuMain.btnMenu4.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
     }
 
     [STAThread]
@@ -289,7 +297,7 @@ public partial class MainWindow
     {
         if (textBox.IsEnabled) textBox.Focus();
     }
-  
+
     private void MainWindow_OnActivated(object sender, EventArgs e)
     {
         if (textBox.IsEnabled) textBox.Focus();
@@ -351,10 +359,10 @@ public partial class MainWindow
         ColorAnimation(element.Name == "CloseButton" ? new InClassName(element, closeFrom, closeTo, 150) : new InClassName(element, controlFrom, controlTo, 120));
     }
 
-    private  void MouseOver( object sender, MouseEventArgs e )
+    private void MouseOver(object sender, MouseEventArgs e)
     {
         var element = (FrameworkElement)sender;
-        ColorAnimation( element.Name == "CloseButton" ? new InClassName( element, closeTo, closeFrom, 150 ) : new InClassName( element, controlTo, controlFrom, 120 ) );
+        ColorAnimation(element.Name == "CloseButton" ? new InClassName(element, closeTo, closeFrom, 150) : new InClassName(element, controlTo, controlFrom, 120));
     }
 
     public static string InputText { get; set; }

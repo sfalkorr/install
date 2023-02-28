@@ -29,6 +29,7 @@
         <GradientStop Offset="1" Color="#AF545A61" />
         <GradientStop Offset="0" Color="#FF343A41" />
     </LinearGradientBrush>
+    <SolidColorBrush x:Key="Menu.Selector" Color="#FA5A5F64" />
     <SolidColorBrush x:Key="ControlButton.MouseOver.Color" Color="#FF50565D" />
     <SolidColorBrush x:Key="ControlButton.IsPressed.Color" Color="#7050565D" />
     <LinearGradientBrush x:Key="ProgressBar.Color" Opacity="0.8" StartPoint="0.5,0" EndPoint="0.5,1">

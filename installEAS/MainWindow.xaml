@@ -1,36 +1,36 @@
 ﻿<Window x:Class="installEAS.MainWindow"
-     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-     xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
-     xmlns:controls="clr-namespace:installEAS.Controls"
-     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-     xmlns:temp="clr-namespace:installEAS.Controls"
-     x:Name="MainWin"
-     Title="InstallEASApp"
-     Width="1000"
-     Height="850"
-     MinWidth="500"
-     MinHeight="350"
-     Activated="MainWindow_OnActivated"
-     AllowsTransparency="True"
-     Background="{x:Null}"
-     BorderThickness="0.5,0.5,0.5,0.5"
-     Closing="MainWindow_OnClosing"
-     Foreground="{x:Null}"
-     IsHitTestVisible="True"
-     KeyDown="MainWin_KeyDown"
-     Loaded="MainWindow_OnLoaded"
-     MouseLeftButtonDown="MainWindow_OnMouseLeftButtonDown"
-     Opacity="0.97"
-     ResizeMode="CanResize"
-     TextOptions.TextFormattingMode="Display"
-     TextOptions.TextHintingMode="Fixed"
-     TextOptions.TextRenderingMode="Auto"
-     Topmost="False"
-     UseLayoutRounding="True"
-     WindowStyle="None"
-     mc:Ignorable="d">
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
+ xmlns:controls="clr-namespace:installEAS.Controls"
+ xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:temp="clr-namespace:installEAS.Controls"
+ x:Name="MainWin"
+ Title="InstallEASApp"
+ Width="1000"
+ Height="850"
+ MinWidth="500"
+ MinHeight="350"
+ Activated="MainWindow_OnActivated"
+ AllowsTransparency="True"
+ Background="{x:Null}"
+ BorderThickness="0.5,0.5,0.5,0.5"
+ Closing="MainWindow_OnClosing"
+ Foreground="{x:Null}"
+ IsHitTestVisible="True"
+ KeyDown="MainWin_KeyDown"
+ Loaded="MainWindow_OnLoaded"
+ MouseLeftButtonDown="MainWindow_OnMouseLeftButtonDown"
+ Opacity="0.97"
+ ResizeMode="CanResize"
+ TextOptions.TextFormattingMode="Display"
+ TextOptions.TextHintingMode="Fixed"
+ TextOptions.TextRenderingMode="Auto"
+ Topmost="False"
+ UseLayoutRounding="True"
+ WindowStyle="None"
+ mc:Ignorable="d">
 
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="30" CornerRadius="8,8,8,8" ResizeBorderThickness="8,5,8,8" />
@@ -67,158 +67,48 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
+
             </Grid.RowDefinitions>
             <Grid Grid.Row="1">
 
-                <avalonedit:TextEditor x:Name="rtb"
-                     Padding="10,5,10,10"
-                     Background="{x:Null}"
-                     BorderBrush="#FF454C56"
-                     BorderThickness="0.51,0,0.51,0.51"
-                     Cursor="Arrow"
-                     Foreground="#FFCCCCCC"
-                     HorizontalScrollBarVisibility="Disabled"
-                     IsReadOnly="True"
-                     IsTabStop="False"
-                     PreviewMouseLeftButtonDown="rtb_PreviewMouseLeftButtonDown"
-                     PreviewMouseLeftButtonUp="rtb_PreviewMouseLeftButtonUp"
-                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                     ScrollViewer.VerticalScrollBarVisibility="Auto"
-                     Style="{DynamicResource TextEditorStyle1}"
-                     SyntaxHighlighting="Custom Highlighting"
-                     VerticalScrollBarVisibility="Auto"
-                     WordWrap="True" />
-
-                <!--  SyntaxHighlighting="Custom Highlighting"  -->
-
-                <!--<RichTextBox x:Name="rtb"
-                     Padding="5,0,5,15"
-                     AcceptsReturn="False"
-                     AutoWordSelection="True"
-                     Block.LineHeight="1"
-                     Cursor="Arrow"
-                     FontFamily="Consolas"
-                     FontSize="15"
-                     IsDocumentEnabled="True"
-                     IsReadOnly="True"
-                     IsTabStop="False"
-                     IsUndoEnabled="False"
-                     MouseMove="Rtb_OnMouseMove"
-                     RenderOptions.ClearTypeHint="Enabled"
-                     Style="{DynamicResource RichTextBoxStyle2}"
-                     UndoLimit="0"
-                     UseLayoutRounding="True"
-                     VerticalScrollBarVisibility="Auto" />-->
-                <controls:RoundedProgressBarControl x:Name="waitProgress"
-                     Width="70"
-                     Height="70"
-                     Margin="0,0,0,30"
-                     HorizontalAlignment="Center"
-                     VerticalAlignment="Bottom"
-                     HorizontalContentAlignment="Center"
-                     VerticalContentAlignment="Center"
-                     Foreground="{x:Null}" />
+                <avalonedit:TextEditor x:Name="rtb" Padding="10,5,10,10" Background="{x:Null}" BorderBrush="#FF454C56" BorderThickness="0.51,0,0.51,0.51" Cursor="Arrow" Foreground="#FFCCCCCC" HorizontalScrollBarVisibility="Disabled" IsReadOnly="True" IsTabStop="False" PreviewMouseLeftButtonDown="rtb_PreviewMouseLeftButtonDown" PreviewMouseLeftButtonUp="rtb_PreviewMouseLeftButtonUp" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" Style="{DynamicResource TextEditorStyle1}" SyntaxHighlighting="Custom Highlighting" VerticalScrollBarVisibility="Auto" WordWrap="True" />
+                <controls:RoundedProgressBarControl x:Name="waitProgress" Width="70" Height="70" Margin="0,0,0,30" HorizontalAlignment="Center" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="{x:Null}" />
                 <Grid x:Name="tbox">
-                    <TextBox x:Name="textBox"
-                         Height="30"
-                         Margin="0,0,0,-45"
-                         Padding="0,0,0,1"
-                         VerticalAlignment="Bottom"
-                         HorizontalContentAlignment="Center"
-                         VerticalContentAlignment="Center"
-                         Background="{x:Null}"
-                         CaretBrush="White"
-                         FontSize="18"
-                         KeyDown="TextBox_OnKeyDownKeyDown"
-                         MaxLength="20"
-                         Template="{StaticResource TextBoxTemplate1}">
+                    <TextBox x:Name="textBox" Height="30" Margin="0,0,0,-45" Padding="0,0,0,1" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="{x:Null}" CaretBrush="White" FontSize="18" KeyDown="TextBox_OnKeyDownKeyDown" MaxLength="40" Template="{StaticResource TextBoxTemplate1}" TextChanged="textBox_TextChanged">
                         <TextBox.Effect>
                             <DropShadowEffect BlurRadius="10" Direction="90" Opacity="0.5" RenderingBias="Quality" ShadowDepth="5" />
                         </TextBox.Effect>
                     </TextBox>
+                    <TextBlock x:Name="tlabel" Margin="0,0,10,35" HorizontalAlignment="Center" VerticalAlignment="Bottom" Background="{x:Null}" FontFamily="Consolas" FontSize="14" Foreground="Tomato" Opacity="0.8">
+                        <TextBlock.Triggers>
+                            <EventTrigger RoutedEvent="TextBlock.Loaded">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation AutoReverse="True" RepeatBehavior="Forever" Storyboard.TargetName="tlabel" Storyboard.TargetProperty="(TextBlock.Opacity)" From="1.0" To="0.7" Duration="0:0:0.5" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </TextBlock.Triggers>
+                        <TextBlock.Effect>
+                            <DropShadowEffect ShadowDepth="2.3" />
+                        </TextBlock.Effect>
+                    </TextBlock>
+
                 </Grid>
                 <controls:SlidePanelsControl x:Name="MenuMain" Margin="0,0,0,0" VerticalAlignment="Top" IsEnabled="True" />
-
-
-                <!-- <controls:FluidProgressBar x:Name="fluidProgressBar" Height="25" VerticalAlignment="Bottom" DotHeight="5" DotRadiusX="4" DotRadiusY="4" DotWidth="5" Foreground="White" TotalDuration="00:00:03" /> -->
             </Grid>
-            <Border x:Name="BotderTittle"
-                 Grid.Row="0"
-                 Background="{DynamicResource ResourceKey=Tittle.Background.Color}"
-                 BorderBrush="{DynamicResource ResourceKey=Tittle.Border.Color}"
-                 BorderThickness="0.6,0.6,0.6,0"
-                 CornerRadius="8,8,0,0">
+            <Border x:Name="BotderTittle" Grid.Row="0" Background="{DynamicResource ResourceKey=Tittle.Background.Color}" BorderBrush="{DynamicResource ResourceKey=Tittle.Border.Color}" BorderThickness="0.6,0.6,0.6,0" CornerRadius="8,8,0,0">
                 <Border.Effect>
-                    <DropShadowEffect BlurRadius="10"
-                         Direction="270"
-                         Opacity="0.3"
-                         RenderingBias="Quality"
-                         ShadowDepth="5"
-                         Color="Black" />
+                    <DropShadowEffect BlurRadius="10" Direction="270" Opacity="0.3" RenderingBias="Quality" ShadowDepth="5" Color="Black" />
                 </Border.Effect>
                 <Grid x:Name="GridTittle" Height="30" UseLayoutRounding="False">
 
                     <controls:ProgressBarControl x:Name="pb" Height="30" VerticalAlignment="Top" IsTabStop="False" />
-                    <StackPanel x:Name="ControlButtons"
-                         Height="30"
-                         Margin="0,0,0,1"
-                         HorizontalAlignment="Right"
-                         VerticalAlignment="Stretch"
-                         Orientation="Horizontal"
-                         UseLayoutRounding="True">
-                        <!-- <Button x:Name="ThemeButton" Click="ThemeButton_OnClick" Content="&#xEDAB;" FontFamily="Segoe MDL2 Assets" FontSize="11" MouseLeave="MouseLeave" Style="{DynamicResource ButtonStyleTest}" TextOptions.TextRenderingMode="Aliased" ToolTip="Theme" WindowChrome.IsHitTestVisibleInChrome="True" /> -->
-                        <Button x:Name="MinimizeButton"
-                             Command="{x:Static SystemCommands.MinimizeWindowCommand}"
-                             Content="&#xE921;"
-                             Focusable="False"
-                             FontFamily="Segoe MDL2 Assets"
-                             IsTabStop="False"
-                             MouseLeave="MouseLeave"
-                             MouseEnter="MouseOver" 
-                             Style="{DynamicResource ButtonStyleTest}"
-                             TextOptions.TextRenderingMode="Aliased"
-                             ToolTip="Minimize"
-                             WindowChrome.IsHitTestVisibleInChrome="True" />
-                        <Button x:Name="RestoreButton"
-                             Command="{x:Static SystemCommands.RestoreWindowCommand}"
-                             Content="&#xE923;"
-                             Focusable="False"
-                             FontFamily="Segoe MDL2 Assets"
-                             IsTabStop="False"
-                             MouseLeave="MouseLeave"
-                             MouseEnter="MouseOver" 
-                             Style="{StaticResource ButtonStyleTest}"
-                             TextOptions.TextRenderingMode="Aliased"
-                             ToolTip="Restore"
-                             Visibility="Collapsed"
-                             WindowChrome.IsHitTestVisibleInChrome="True" />
-                        <Button x:Name="MaximizeButton"
-                             Command="{x:Static SystemCommands.MaximizeWindowCommand}"
-                             Content="&#xE922;"
-                             Focusable="False"
-                             FontFamily="Segoe MDL2 Assets"
-                             IsTabStop="False"
-                             MouseLeave="MouseLeave"
-                             MouseEnter="MouseOver" 
-                             Style="{DynamicResource ButtonStyleTest}"
-                             TextOptions.TextRenderingMode="Aliased"
-                             ToolTip="Maximize"
-                             Visibility="Visible"
-                             WindowChrome.IsHitTestVisibleInChrome="True" />
-                        <Button x:Name="CloseButton"
-                             Command="{x:Static SystemCommands.CloseWindowCommand}"
-                             Content="&#xE8BB; "
-                             Focusable="False"
-                             FontFamily="Segoe MDL2 Assets"
-                             FontSize="10"
-                             IsTabStop="False"
-                             MouseLeave="MouseLeave"
-                             MouseEnter="MouseOver" 
-                             RenderOptions.ClearTypeHint="Enabled"
-                             Style="{DynamicResource CloseButtonStyle2}"
-                             TextOptions.TextRenderingMode="Aliased"
-                             ToolTip="Close"
-                             WindowChrome.IsHitTestVisibleInChrome="True">
+                    <StackPanel x:Name="ControlButtons" Height="30" Margin="0,0,0,1" HorizontalAlignment="Right" VerticalAlignment="Stretch" Orientation="Horizontal" UseLayoutRounding="True">
+                        <Button x:Name="MinimizeButton" Command="{x:Static SystemCommands.MinimizeWindowCommand}" Content="&#xE921;" Focusable="False" FontFamily="Segoe MDL2 Assets" IsTabStop="False" MouseEnter="MouseOver" MouseLeave="MouseLeave" Style="{DynamicResource ButtonStyleTest}" TextOptions.TextRenderingMode="Aliased" ToolTip="Minimize" WindowChrome.IsHitTestVisibleInChrome="True" />
+                        <Button x:Name="RestoreButton" Command="{x:Static SystemCommands.RestoreWindowCommand}" Content="&#xE923;" Focusable="False" FontFamily="Segoe MDL2 Assets" IsTabStop="False" MouseEnter="MouseOver" MouseLeave="MouseLeave" Style="{StaticResource ButtonStyleTest}" TextOptions.TextRenderingMode="Aliased" ToolTip="Restore" Visibility="Collapsed" WindowChrome.IsHitTestVisibleInChrome="True" />
+                        <Button x:Name="MaximizeButton" Command="{x:Static SystemCommands.MaximizeWindowCommand}" Content="&#xE922;" Focusable="False" FontFamily="Segoe MDL2 Assets" IsTabStop="False" MouseEnter="MouseOver" MouseLeave="MouseLeave" Style="{DynamicResource ButtonStyleTest}" TextOptions.TextRenderingMode="Aliased" ToolTip="Maximize" Visibility="Visible" WindowChrome.IsHitTestVisibleInChrome="True" />
+                        <Button x:Name="CloseButton" Command="{x:Static SystemCommands.CloseWindowCommand}" Content="&#xE8BB; " Focusable="False" FontFamily="Segoe MDL2 Assets" FontSize="10" IsTabStop="False" MouseEnter="MouseOver" MouseLeave="MouseLeave" RenderOptions.ClearTypeHint="Enabled" Style="{DynamicResource CloseButtonStyle2}" TextOptions.TextRenderingMode="Aliased" ToolTip="Close" WindowChrome.IsHitTestVisibleInChrome="True">
                             <Button.Resources>
                                 <Style TargetType="{x:Type Border}">
                                     <Setter Property="CornerRadius" Value="0,7,0,0" />
@@ -227,24 +117,15 @@
                         </Button>
                     </StackPanel>
                     <temp:tempControl x:Name="tempButtons" HorizontalAlignment="Left" />
-                    <Label x:Name="labelVer"
-                         Margin="3,0,0,0"
-                         HorizontalAlignment="Left"
-                         Content="InstallEAS v7.0"
-                         FontFamily="Microsoft YaHei UI"
-                         FontSize="11"
-                         IsHitTestVisible="True"
-                         MouseLeftButtonDown="LabelVer_OnMouseLeftButtonDown"
-                         Style="{DynamicResource LabelStyle1}"
-                         ToolTip="Change color theme"
-                         ToolTipOpening="LabelVer_OnToolTipOpening"
-                         WindowChrome.IsHitTestVisibleInChrome="True">
+                    <Label x:Name="labelVer" Margin="3,0,0,0" HorizontalAlignment="Left" Content="InstallEAS v7.0" FontFamily="Microsoft YaHei UI" FontSize="11" IsHitTestVisible="True" MouseLeftButtonDown="LabelVer_OnMouseLeftButtonDown" Style="{DynamicResource LabelStyle1}" ToolTip="Change color theme" ToolTipOpening="LabelVer_OnToolTipOpening" WindowChrome.IsHitTestVisibleInChrome="True">
                         <Label.Effect>
                             <DropShadowEffect Opacity="0.5" ShadowDepth="2" />
                         </Label.Effect>
                     </Label>
                 </Grid>
+
             </Border>
+
         </Grid>
     </Border>
 </Window>

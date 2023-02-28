@@ -34,6 +34,7 @@
         <GradientStop Color="#FF22272b" />
         <GradientStop Offset="1" Color="#AF32373b" />
     </LinearGradientBrush>
+    <SolidColorBrush x:Key="Menu.Selector" Color="#FF343a41" />
     <LinearGradientBrush x:Key="ProgressBar.Color" Opacity="0.8" StartPoint="0.5,0" EndPoint="0.5,1">
         <GradientStop Offset="0" Color="#FF545a61" />
         <GradientStop Offset="0.5" Color="#FF646a71" />

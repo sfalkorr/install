@@ -13,13 +13,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
-                        <ContentPresenter x:Name="contentPresenter"
-                             Margin="{TemplateBinding Padding}"
-                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                             VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                             Focusable="False"
-                             RecognizesAccessKey="True"
-                             SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        <ContentPresenter x:Name="contentPresenter" Margin="{TemplateBinding Padding}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Focusable="False" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsPressed" Value="true">
@@ -46,12 +40,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
-                        <ContentPresenter x:Name="contentPresenter"
-                             Margin="{TemplateBinding Padding}"
-                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                             VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                             Focusable="False"
-                             RecognizesAccessKey="True" />
+                        <ContentPresenter x:Name="contentPresenter" Margin="{TemplateBinding Padding}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Focusable="False" RecognizesAccessKey="True" />
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsPressed" Value="true">
@@ -73,15 +62,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
                     <Grid x:Name="Grid" Width="7" Background="Transparent" Opacity="0.6">
-                        <Border x:Name="ScrollBarRectangle"
-                             Width="Auto"
-                             Height="Auto"
-                             HorizontalAlignment="Stretch"
-                             VerticalAlignment="Stretch"
-                             Background="{DynamicResource ResourceKey=ScrollBarThumbKey.Color}"
-                             CornerRadius="3"
-                             Focusable="True"
-                             Opacity="0.6" />
+                        <Border x:Name="ScrollBarRectangle" Width="Auto" Height="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="{DynamicResource ResourceKey=ScrollBarThumbKey.Color}" CornerRadius="3" Focusable="True" Opacity="0.6" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsFocused" Value="True" />
@@ -128,20 +109,10 @@
                                 </Thumb>
                             </Track.Thumb>
                             <Track.IncreaseRepeatButton>
-                                <RepeatButton x:Name="PageUp"
-                                     Background="Transparent"
-                                     BorderThickness="0"
-                                     Command="ScrollBar.PageDownCommand"
-                                     Focusable="True"
-                                     Opacity="0" />
+                                <RepeatButton x:Name="PageUp" Background="Transparent" BorderThickness="0" Command="ScrollBar.PageDownCommand" Focusable="True" Opacity="0" />
                             </Track.IncreaseRepeatButton>
                             <Track.DecreaseRepeatButton>
-                                <RepeatButton x:Name="PageDown"
-                                     Background="Transparent"
-                                     BorderThickness="0"
-                                     Command="ScrollBar.PageUpCommand"
-                                     Focusable="True"
-                                     Opacity="0" />
+                                <RepeatButton x:Name="PageDown" Background="Transparent" BorderThickness="0" Command="ScrollBar.PageUpCommand" Focusable="True" Opacity="0" />
                             </Track.DecreaseRepeatButton>
                         </Track>
                     </Grid>
@@ -178,21 +149,8 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type avalonedit:TextEditor}">
-                    <Border x:Name="border"
-                         Background="{DynamicResource ResourceKey=Editor.Background.Color}"
-                         BorderBrush="{DynamicResource ResourceKey=Tittle.Border.Color}"
-                         BorderThickness="0.51,0,0.51,0.51"
-                         CornerRadius="0,0,8,8"
-                         SnapsToDevicePixels="True">
-                        <ScrollViewer x:Name="PART_ScrollViewer"
-                             Padding="{TemplateBinding Padding}"
-                             HorizontalContentAlignment="Left"
-                             VerticalContentAlignment="Top"
-                             CanContentScroll="True"
-                             Content="{Binding TextArea, RelativeSource={RelativeSource TemplatedParent}}"
-                             Focusable="False"
-                             HorizontalScrollBarVisibility="{TemplateBinding HorizontalScrollBarVisibility}"
-                             VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}" />
+                    <Border x:Name="border" Background="{DynamicResource ResourceKey=Editor.Background.Color}" BorderBrush="{DynamicResource ResourceKey=Tittle.Border.Color}" BorderThickness="0.51,0,0.51,0.51" CornerRadius="0,0,8,8" SnapsToDevicePixels="True">
+                        <ScrollViewer x:Name="PART_ScrollViewer" Padding="{TemplateBinding Padding}" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" CanContentScroll="True" Content="{Binding TextArea, RelativeSource={RelativeSource TemplatedParent}}" Focusable="False" HorizontalScrollBarVisibility="{TemplateBinding HorizontalScrollBarVisibility}" VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}" />
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="WordWrap" Value="False">

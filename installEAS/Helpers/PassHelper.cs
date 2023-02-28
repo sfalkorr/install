@@ -52,68 +52,49 @@ internal static class Password
         }
     }
 
-    public static bool ValidatePass(string password)
+    public static bool ttt()
     {
-        var hasNumberChar = new Regex(@"[0-9]");
-        var hasUpperChar  = new Regex(@"[A-Z]");
-        var hasMinMaxChar = new Regex(@".{10,25}");
-        var hasLowerChar  = new Regex(@"[a-z]");
-        var hasSymbChar   = new Regex(@"[!@#$%^&*()_+=?-]");
-        var hasSpaceChars = new Regex(@"[\s]");
+        
+
+        return false;
+    }
+    public static string ValidatePassold(string password)
+    {
+        var hasNumberChar = new Regex("[0-9]");
+        var hasUpperChar  = new Regex("[A-Z]");
+        var hasMinMaxChar = new Regex(".{10,25}");
+        var hasLowerChar  = new Regex("[a-z]");
+        var hasSymbChar   = new Regex("[!@#$%^&*()_+=?-]");
+        var hasSpaceChars = new Regex("[\\s]");
         var hasRepeatChar = new Regex($"([a-zA-Z0-9!@#$%^&*()_+=?-])\\1{{{3 - 1}}}");
-        var hasNonEnChar  = new Regex("([а-яА-Я])");
+        var hasNonEnChar  = new Regex("[а-яА-Я]");
 
-        if (!hasMinMaxChar.IsMatch(password))
-        {
-            log($"{password} не соответствует политике. Пароль должен быть не менее 10 символов");
-            return false;
-        }
-
-        if (hasSpaceChars.IsMatch(password))
-        {
-            log($"{password} не соответствует политике. Пароль не должен содержать пробелы или быть пустым");
-            return false;
-        }
-
-        if (!hasLowerChar.IsMatch(password))
-        {
-            log($"{password} не соответствует политике. Пароль должен содержать как минимум один прописной символ");
-            return false;
-        }
-
-        if (!hasUpperChar.IsMatch(password))
-        {
-            log($"{password} не соответствует политике. Пароль должен содержать как минимум один заглавный символ");
-            return false;
-        }
-
-        if (!hasNumberChar.IsMatch(password))
-        {
-            log($"{password} не соответствует политике. Пароль должен содержать как минимум одну цифру");
-            return false;
-        }
-
-        if (!hasSymbChar.IsMatch(password))
-        {
-            log($"{password} не соответствует политике. Пароль должен содержать как минимум один специальный символ из перечисленных: !@#$%^&*()_+=?-");
-            return false;
-        }
-
-        if (hasRepeatChar.IsMatch(password))
-        {
-            log($"{password} не соответствует политике. Пароль не должен содержать более двух повторений одинаковых символов подряд");
-            return false;
-        }
-
-        if (hasNonEnChar.IsMatch(password))
-        {
-            log($"{password} не соответствует политике. Пароль не должен содержать кирилических символов");
-            return false;
-        }
-
-        return true;
+        if (password == "") return "Пароль не может быть пустым";
+        if (hasNonEnChar.IsMatch(password)) return "Пароль не должен содержать кирилических символов";
+        if (hasSpaceChars.IsMatch(password)) return "Пароль не должен содержать пробелы";
+        if (!hasLowerChar.IsMatch(password)) return "Пароль должен содержать как минимум один прописной символ";
+        if (!hasUpperChar.IsMatch(password)) return "Пароль должен содержать как минимум один заглавный символ";
+        if (!hasNumberChar.IsMatch(password)) return "Пароль должен содержать как минимум одну цифру";
+        if (!hasSymbChar.IsMatch(password)) return "Пароль должен содержать минимум один специальный символ: !@#$%^&*()_+=?-";
+        if (hasRepeatChar.IsMatch(password)) return "Пароль не должен содержать более двух одинаковых символов подряд";
+        return !hasMinMaxChar.IsMatch(password) ? "Пароль должен быть не менее 10 символов" : "Пароль корректен";
     }
 
+    
+    public static string ValidatePass(string password)
+    {
+        if (password == "") return "Пароль не может быть пустым";
+        if ( new Regex("[а-яА-Я]").IsMatch(password)) return "Пароль не должен содержать кирилических символов";
+        if (new Regex("[\\s]").IsMatch(password)) return "Пароль не должен содержать пробелы";
+        if (!new Regex("[a-z]").IsMatch(password)) return "Пароль должен содержать как минимум один прописной символ";
+        if (!new Regex("[A-Z]").IsMatch(password)) return "Пароль должен содержать как минимум один заглавный символ";
+        if (!new Regex("[0-9]").IsMatch(password)) return "Пароль должен содержать как минимум одну цифру";
+        if (!new Regex("[!@#$%^&*()_+=?-]").IsMatch(password)) return "Пароль должен содержать минимум один специальный символ: !@#$%^&*()_+=?-";
+        if (new Regex($"([a-zA-Z0-9!@#$%^&*()_+=?-])\\1{{{3 - 1}}}").IsMatch(password)) return "Пароль не должен содержать более двух одинаковых символов подряд";
+        return !new Regex(".{10,25}").IsMatch(password) ? "Пароль должен быть не менее 10 символов" : "Пароль корректен";
+    }
+    
+    
     public static bool ValidateGenPass(string password)
     {
         var validateChars = new Regex("^(?=.*?[A-Z]).{3,}(?=.*?[a-z])(?=.*?[0-9])(?!.*?[\\s])(?!.*?[а-яА-Я])(?=.*?[!@#$%^&*()_+=?-]).{10,}$");
