@@ -146,16 +146,17 @@ public partial class MainWindow
         //}
 
         //if (e.Key != Enter || MainFrame.textBox.Text == "") tlabel.Text = "Пароль не может быть пустым";
-        if (ValidatePass(textBox.Text) == "Пароль корректен" && e.Key == Enter)
-        {
-            log(MainFrame.textBox.Text);
-            tlabel.Visibility           = Visibility.Collapsed;
-            MainFrame.textBox.IsEnabled = false;
-            MainFrame.textBox.Clear();
-            MainFrame.textBoxClos.Begin(MainFrame.textBox);
-            sqlpass = textBox.Text;
-        }
+
+        if ((ValidatePass(textBox.Text) != "Пароль корректен" && textBox.Text != "new") || e.Key != Enter) return;
+        log(newpass);
+        tlabel.Visibility           = Visibility.Collapsed;
+        MainFrame.textBox.IsEnabled = false;
+        MainFrame.textBox.Clear();
+        MainFrame.textBoxClos.Begin(MainFrame.textBox);
+        sqlpass = textBox.Text;
     }
+
+    public string newpass;
 
     private void textBox_TextChanged(object sender, TextChangedEventArgs e)
     {
@@ -167,6 +168,14 @@ public partial class MainWindow
             tlabel.Foreground = Brushes.GreenYellow;
             tlabel.Text       = ValidatePass(textBox.Text);
         }
+        else if (textBox.Text == "new")
+        {
+            newpass            = GeneratePass(3, 3, 3, 1);
+            tlabel.Foreground  = Brushes.GreenYellow;
+            tlabel.Text        = $"Сгенерирован пароль {newpass} Нажмите Enter для подтверждения или введите new еще раз для генерации нового";
+            //textBox.Text       = newpass;
+            //textBox.CaretIndex = textBox.Text.Length;
+        }
         else
         {
             tlabel.Foreground = Brushes.OrangeRed;
@@ -177,15 +186,9 @@ public partial class MainWindow
 
     public static string sqlpass;
 
-    public static void CloseMain()
-    {
-        SystemCommands.CloseWindow(MainFrame);
-    }
+    public static void CloseMain() { SystemCommands.CloseWindow(MainFrame); }
 
-    public void CommandBinding_Executed_Close(object sender, ExecutedRoutedEventArgs e)
-    {
-        SystemCommands.CloseWindow(this);
-    }
+    public void CommandBinding_Executed_Close(object sender, ExecutedRoutedEventArgs e) { SystemCommands.CloseWindow(this); }
 
     public void CommandBinding_Executed_Maximize(object sender, ExecutedRoutedEventArgs e)
     {
@@ -409,8 +412,5 @@ public partial class MainWindow
         if (textBox.IsEnabled) textBox.Focus();
     }
 
-    private void LabelVer_OnToolTipOpening(object sender, ToolTipEventArgs e)
-    {
-        log("Тултип");
-    }
+    private void LabelVer_OnToolTipOpening(object sender, ToolTipEventArgs e) { log("Тултип"); }
 }
