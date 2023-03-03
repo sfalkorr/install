@@ -37,10 +37,7 @@ public static class Variables
         return null;
     }
 
-    public static bool IsServer()
-    {
-        return SQLRegParameters != null;
-    }
+    public static bool IsServer() { return SQLRegParameters != null; }
 
     public static bool IsComputernameCorrect()
     {
@@ -84,11 +81,13 @@ public static class Variables
     //public static string DBOPSName   { get; } = "DB" + Computername.Split('-')[1];
     //public static string DBOPSName      { get; }      = "DB160024";
     public static string SqlInitcatalog { get; set; } = "master";
-    public static string SqlPass        { get; set; } = "QWEasd123*";
+    public static string SqlPass        { get; set; }
     public static string SQLServername  { get; set; } = "C01-160024-N";
     public static string SQLUsername    { get; set; } = "sa";
     public static string SQLInstance    { get; set; } = "MSSQLSERVER";
     public static int    SQLTimeout     { get; set; } = 5;
+    public static string NewSqlPass     { get; set; }
+
 
 
     public static string meta_num { get; set; }

@@ -18,6 +18,7 @@ using static installEAS.Variables;
 using static installEAS.Helpers.Animate;
 using static installEAS.MainWindow;
 using static installEAS.Helpers.Log;
+using static installEAS.Helpers.Sql;
 using static installEAS.Helpers.Functions;
 using static installEAS.Controls.SlidePanelsControl;
 using Timer = System.Timers.Timer;
@@ -30,15 +31,14 @@ public partial class tempControl
     public static void CreatetempControlInstance()
     {
         var variablesInstance = CreatetempControlInstance;
-        Console.WriteLine( variablesInstance.Method );
+        Console.WriteLine(variablesInstance.Method);
     }
 
-    public tempControl()
-    {
-        InitializeComponent();
-    }
+    public tempControl() { InitializeComponent(); }
 
-    private void Btn1_OnClick( object sender, RoutedEventArgs e )
+
+
+    private void Btn1_OnClick(object sender, RoutedEventArgs e)
     {
         //if (MainFrame.textBox.Text == "") MainFrame.tlabel.Text = "Пароль не может быть пустым";
         //MainFrame.tlabel.Visibility = Visibility.Visible;
@@ -46,18 +46,8 @@ public partial class tempControl
         //MainFrame.textBox.IsEnabled = true;
         //MainFrame.textBox.Focus();
 
-
-        MainFrame.textBoxOpen.Completed += ( _, _ ) =>
-        {
-            
-            MainFrame.tlabel.Visibility = Visibility.Visible;
-            MainFrame.textBox.IsEnabled = true;
-            MainFrame.textBox.Focus();
-            if (MainFrame.textBox.Text == "") MainFrame.tlabel.Text = "Пароль не может быть пустым";
-        };
-        MainFrame.textBoxOpen.Begin( MainFrame.textBox );
-
-
+        var res = MainFrame.userInput(inputType.AskNewSqlPassword);
+        Console.WriteLine(res);
         //Console.WriteLine(sqlpass);
         //Replica.ReplicaSqlPackageStartAsync();
         //Console.WriteLine(EnvCheck.NameCheck(1, "R12-123456-N"));
@@ -80,14 +70,19 @@ public partial class tempControl
     }
 
 
-    private void Btn2_OnClick( object sender, RoutedEventArgs e )
+    private void Btn2_OnClick(object sender, RoutedEventArgs e)
     {
+        var res = MainFrame.userInput(inputType.AskCurrentSqlPassword);
+        Console.WriteLine(res);
+        //log(NewSqlPass);
         //Password.SaveSqlPassToReg("QWEasd123*");
         //MainFrame.pb.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.progressBar.SetPercentDuration(99, 3000); });
     }
 
-    private void Btn3_OnClick( object sender, RoutedEventArgs e )
+    private void Btn3_OnClick(object sender, RoutedEventArgs e)
     {
+        Console.WriteLine(IsSqlPasswordOK("QWEasd123*"));
+        //MainFrame.userInput(inputType.Empty);
         //var line = MainFrame.rtb.Document.Lines.Count;
         //MainFrame.rtb.Document.Lines.Remove(line);
         //MainFrame.pb.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.progressBar.SetPercentDuration(0, 3000); });
@@ -95,19 +90,19 @@ public partial class tempControl
     }
 
 
-    private void Btn4_OnClick( object sender, RoutedEventArgs e )
+    private void Btn4_OnClick(object sender, RoutedEventArgs e)
     {
-        MainFrame.rtb.AppendText( "Инициализация... Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)\n\n" );
+        MainFrame.rtb.AppendText("Инициализация... Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)\n\n");
         MainFrame.rtb.ScrollToEnd();
-        MainFrame.rtb.AppendColorLine( " Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)\n\n", Brushes.Coral );
+        MainFrame.rtb.AppendColorLine(" Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)\n\n", Brushes.Coral);
         MainFrame.rtb.ScrollToEnd();
-        MainFrame.rtb.AppendColorLine( " Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)\n\n", Brushes.Bisque );
+        MainFrame.rtb.AppendColorLine(" Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)\n\n", Brushes.Bisque);
         MainFrame.rtb.ScrollToEnd();
-        MainFrame.rtb.AppendColorLine( " Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)\n", Brushes.YellowGreen );
+        MainFrame.rtb.AppendColorLine(" Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)\n", Brushes.YellowGreen);
         MainFrame.rtb.ScrollToEnd();
-        MainFrame.rtb.AppendColorLine( " Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)\n", Brushes.Tomato );
+        MainFrame.rtb.AppendColorLine(" Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)\n", Brushes.Tomato);
         MainFrame.rtb.ScrollToEnd();
-        MainFrame.rtb.AppendColorLine( " Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)\n", Brushes.Yellow );
+        MainFrame.rtb.AppendColorLine(" Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)\n", Brushes.Yellow);
         MainFrame.rtb.ScrollToEnd();
 
         //log("Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)", Brushes.OrangeRed);
@@ -116,30 +111,24 @@ public partial class tempControl
     }
 
 
-    private void Btn5_OnClick( object sender, RoutedEventArgs e )
+    private void Btn5_OnClick(object sender, RoutedEventArgs e)
     {
-        ToEventLog( sender.ToString(), $"Хуйня случилась", Level.Error );
-        ToEventLog( sender.ToString(), $"Нехуйня случилась", Level.Warning );
-        ToEventLog( sender.ToString(), $"случилась", Level.Information );
+        ToEventLog(sender.ToString(), $"Хуйня случилась", Level.Error);
+        ToEventLog(sender.ToString(), $"Нехуйня случилась", Level.Warning);
+        ToEventLog(sender.ToString(), $"случилась", Level.Information);
 
         //MainFrame.rtb.Document.Blocks.Clear();
     }
 
 
-    private void Btn6_OnClick( object sender, RoutedEventArgs e )
-    {
-        log( GetEmbeddedResource( "installEAS", "CustomHighlighting.xshd" ) );
-    }
+    private void Btn6_OnClick(object sender, RoutedEventArgs e) { log(GetEmbeddedResource("installEAS", "CustomHighlighting.xshd")); }
 
 
-    private void Btn7_OnClick( object sender, RoutedEventArgs e )
+    private void Btn7_OnClick(object sender, RoutedEventArgs e)
     {
         //var result = CustomMessageBox.Show("Действительно закрыть приложение?", "Подтверждение выхода", MessageBoxButton.OKCancel, MessageBoxImage.Question);
         Replica.ReplicaSqlPackageStartAsync();
     }
 
-    private void Btn8_OnClick( object sender, RoutedEventArgs e )
-    {
-        ProcessTools.StartElevated( "notepad", null );
-    }
+    private void Btn8_OnClick(object sender, RoutedEventArgs e) { ProcessTools.StartElevated("notepad", null); }
 }

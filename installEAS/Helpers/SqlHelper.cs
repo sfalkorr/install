@@ -76,17 +76,15 @@ public static class Sql
         }
     }
 
-    public static bool IsPasswordOK(string password)
+    public static bool IsSqlPasswordOK(string password)
     {
         var connectionString = string.Format($"Data Source={SQLServername};Initial Catalog={SqlInitcatalog};User ID={SQLUsername};Password={password};Timeout={10}");
         var connection       = new SqlConnection(connectionString);
-        log("Connecting...", false);
         try
         {
             connection.Open();
             return true;
         }
         catch { return false; }
-        finally { log("OK", Brushes.GreenYellow); }
     }
 }

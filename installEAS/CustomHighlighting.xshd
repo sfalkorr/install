@@ -27,22 +27,25 @@
         <!--        </Keywords>-->
 
         <Keywords foreground="YellowGreen">
-            <Word>хуй</Word>
+
             <Word>OK</Word>
         </Keywords>
 
-        <Keywords foreground="Yellow" background="Green">
-            <Word>>></Word>
-        </Keywords>
+        <!--        <Keywords foreground="Yellow" background="Green">-->
+        <!--            -->
+        <!--        </Keywords>-->
 
-        <Keywords foreground="White">
-            <Word>пароль</Word>
-        </Keywords>
+        <!--        <Keywords foreground="White">-->
+        <!--            -->
+        <!--        </Keywords>-->
 
-        <Keywords fontWeight="bold" foreground="White">
+        <Keywords  foreground="White">
             <Word>пароль</Word>
-            <Word>new</Word>
+            <Word>паролей</Word>
+            <Word>Enter</Word>
+            <Word>Ctrl</Word>
             <Word>sa</Word>
+            <Word>F12</Word>
 
         </Keywords>
 

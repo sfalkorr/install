@@ -28,6 +28,7 @@ using installEAS.Themes;
 using installEAS.Controls;
 using static installEAS.Themes.ThemesController;
 using static installEAS.Helpers.Log;
+using static installEAS.Helpers.Sql;
 using static installEAS.Helpers.Password;
 using static installEAS.Helpers.Animate;
 using static installEAS.Helpers.Functions;
@@ -131,6 +132,57 @@ public partial class MainWindow
         textBox.Background                       = Brushes.Red;
     }
 
+    public enum inputType
+    {
+        Empty,
+        AskNewSqlPassword,
+        AskCurrentSqlPassword,
+        AskMachinename,
+        AskConfirmation
+    }
+
+    public inputType AskType = inputType.Empty;
+
+    public bool userInput(inputType type)
+    {
+        AskType = type;
+
+        switch (AskType)
+        {
+            case inputType.AskNewSqlPassword:
+                log("Задайте новый пароль для пользователя sa в SQL и подтвердите ввод клавишей Enter\nИли нажимайте клавишу F12 для генерации случайных паролей, подтвердив ввод клавишей Enter");
+                MainFrame.textBoxOpen.Completed += (_, _) =>
+                {
+                    MainFrame.tlabel.Visibility = Visibility.Visible;
+                    MainFrame.textBox.IsEnabled = true;
+                    MainFrame.textBox.Focus();
+                    if (MainFrame.textBox.Text == "") MainFrame.tlabel.Text = "Пароль не может быть пустым";
+                };
+                MainFrame.textBoxOpen.Begin(MainFrame.textBox);
+                return true;
+
+            case inputType.AskCurrentSqlPassword:
+                log("Введите текущий пароль для пользователя sa в SQL и нажмите Enter");
+                MainFrame.textBoxOpen.Completed += (_, _) =>
+                {
+                    MainFrame.tlabel.Visibility = Visibility.Visible;
+                    MainFrame.textBox.IsEnabled = true;
+                    MainFrame.textBox.Focus();
+                    if (MainFrame.textBox.Text == "") MainFrame.tlabel.Text = "Пароль не может быть пустым";
+                };
+                MainFrame.textBoxOpen.Begin(MainFrame.textBox);
+                return true;
+
+            case inputType.AskMachinename:
+                Console.WriteLine();
+                return true;
+            case inputType.AskConfirmation:
+                Console.WriteLine();
+                return true;
+            default:
+                return false;
+        }
+    }
 
     private void TextBox_OnKeyDownKeyDown(object sender, KeyEventArgs e)
     {
@@ -144,47 +196,94 @@ public partial class MainWindow
         //    MainFrame.textBoxClos.Begin(MainFrame.textBox);
         //    sqlpass = textBox.Text;
         //}
-
         //if (e.Key != Enter || MainFrame.textBox.Text == "") tlabel.Text = "Пароль не может быть пустым";
+        // if ((ValidatePass(textBox.Text) != "Пароль корректен" && textBox.Text != "new") || e.Key != Enter) return;
+        // log(newpass);
+        // tlabel.Visibility           = Visibility.Collapsed;
+        // MainFrame.textBox.IsEnabled = false;
+        // MainFrame.textBox.Clear();
+        // MainFrame.textBoxClos.Begin(MainFrame.textBox);
+        // sqlpass = textBox.Text;
 
-        if ((ValidatePass(textBox.Text) != "Пароль корректен" && textBox.Text != "new") || e.Key != Enter) return;
-        log(newpass);
-        tlabel.Visibility           = Visibility.Collapsed;
-        MainFrame.textBox.IsEnabled = false;
-        MainFrame.textBox.Clear();
-        MainFrame.textBoxClos.Begin(MainFrame.textBox);
-        sqlpass = textBox.Text;
+        switch (AskType)
+        {
+            case inputType.AskNewSqlPassword when !MainFrame.textBox.IsEnabled:
+                return;
+
+            case inputType.AskNewSqlPassword:
+            {
+                if (Keyboard.IsKeyDown(F12))
+                {
+                    MainFrame.textBox.Text       = GeneratePass(3, 3, 3, 1);
+                    MainFrame.textBox.CaretIndex = textBox.Text.Length;
+                }
+
+                if (ValidatePass(textBox.Text) != "Пароль корректен" || !Keyboard.IsKeyDown(Enter)) return;
+                tlabel.Visibility = Visibility.Collapsed;
+                NewSqlPass        = textBox.Text;
+                MainFrame.textBoxClos.Completed += (_, _) =>
+                {
+                    MainFrame.textBox.IsEnabled = false;
+                    MainFrame.textBox.Clear();
+                    AskType = inputType.Empty;
+                };
+                MainFrame.textBoxClos.Begin(MainFrame.textBox);
+                break;
+            }
+
+            case inputType.AskCurrentSqlPassword:
+
+                if (tlabel.Text != "Пароль принят" || !Keyboard.IsKeyDown(Enter)) return;
+                tlabel.Visibility = Visibility.Collapsed;
+                SqlPass           = textBox.Text;
+                MainFrame.textBoxClos.Completed += (_, _) =>
+                {
+                    MainFrame.textBox.IsEnabled = false;
+                    MainFrame.textBox.Clear();
+                    AskType = inputType.Empty;
+                };
+                MainFrame.textBoxClos.Begin(MainFrame.textBox);
+                break;
+            case inputType.AskMachinename:
+                Console.WriteLine();
+                break;
+            case inputType.AskConfirmation:
+                Console.WriteLine();
+                break;
+        }
     }
-
-    public string newpass;
 
     private void textBox_TextChanged(object sender, TextChangedEventArgs e)
     {
-        //tlabel.Text = MainFrame.textBox.Text != "" ? !Regex.IsMatch(MainFrame.textBox.Text, "^[0-9A-Z!@#$%^&*()_+=?-]+$", RegexOptions.IgnoreCase) ? "Недопустимые символы" : "" : "";
-        //tlabel.Visibility = Visibility.Visible;
-
-        if (ValidatePass(textBox.Text) == "Пароль корректен")
+        switch (AskType)
         {
-            tlabel.Foreground = Brushes.GreenYellow;
-            tlabel.Text       = ValidatePass(textBox.Text);
-        }
-        else if (textBox.Text == "new")
-        {
-            newpass            = GeneratePass(3, 3, 3, 1);
-            tlabel.Foreground  = Brushes.GreenYellow;
-            tlabel.Text        = $"Сгенерирован пароль {newpass} Нажмите Enter для подтверждения или введите new еще раз для генерации нового";
-            //textBox.Text       = newpass;
-            //textBox.CaretIndex = textBox.Text.Length;
-        }
-        else
-        {
-            tlabel.Foreground = Brushes.OrangeRed;
-            tlabel.Text       = ValidatePass(textBox.Text);
+            //tlabel.Text = MainFrame.textBox.Text != "" ? !Regex.IsMatch(MainFrame.textBox.Text, "^[0-9A-Z!@#$%^&*()_+=?-]+$", RegexOptions.IgnoreCase) ? "Недопустимые символы" : "" : "";
+            //tlabel.Visibility = Visibility.Visible;
+            case inputType.AskNewSqlPassword when ValidatePass(textBox.Text) == "Пароль корректен":
+                tlabel.Foreground = Brushes.GreenYellow;
+                tlabel.Text       = ValidatePass(textBox.Text);
+                break;
+            case inputType.AskNewSqlPassword:
+                tlabel.Foreground = Brushes.OrangeRed;
+                tlabel.Text       = ValidatePass(textBox.Text);
+                break;
+            case inputType.AskCurrentSqlPassword when IsSqlPasswordOK(textBox.Text) && !Regex.Match( textBox.Text, "[\\s]" ).Success:
+                tlabel.Foreground = Brushes.GreenYellow;
+                tlabel.Text       = "Пароль принят";
+                break;
+            case inputType.AskCurrentSqlPassword:
+                tlabel.Foreground = Brushes.OrangeRed;
+                tlabel.Text       = "Неверный пароль";
+                break;
+            case inputType.AskMachinename:
+                Console.WriteLine();
+                break;
+            case inputType.AskConfirmation:
+                Console.WriteLine();
+                break;
         }
     }
 
-
-    public static string sqlpass;
 
     public static void CloseMain() { SystemCommands.CloseWindow(MainFrame); }
 
