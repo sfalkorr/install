@@ -40,8 +40,8 @@ internal static class Password
     public static string ValidatePass(string password)
     {
         if (password == "") return "Пароль не может быть пустым";
-        if (new Regex("[а-яА-Я]").IsMatch(password)) return "Пароль не должен содержать кирилических символов";
-        if (new Regex("[\\s]").IsMatch(password)) return "Пароль не должен содержать пробелы";
+        if (new Regex("[а-яА-Я]").IsMatch(password)) return "Пароль не может содержать кирилических символов";
+        if (new Regex("[\\s]").IsMatch(password)) return "Пароль не может содержать пробелы";
         if (!new Regex("[a-z]").IsMatch(password)) return "Пароль должен содержать как минимум один прописной символ";
         if (!new Regex("[A-Z]").IsMatch(password)) return "Пароль должен содержать как минимум один заглавный символ";
         if (!new Regex("[0-9]").IsMatch(password)) return "Пароль должен содержать как минимум одну цифру";

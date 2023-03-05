@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Documents;
 using System.Windows.Media;
@@ -54,21 +55,6 @@ public static class Log
                 MainFrame.rtb.AppendText(text);
                 MainFrame.rtb.ScrollToEnd();
             });
-    }
-
-    public static Task mLogAsync(string text, bool newline = true)
-    {
-        if (text != null)
-            MainFrame.Dispatcher.BeginInvoke(() =>
-            {
-                //TextRange tr = new(MainFrame.rtb.Document.ContentEnd, MainFrame.rtb.Document.ContentEnd) { Text = newline ? text + Environment.NewLine : text + " " };
-                //tr.ApplyPropertyValue(TextElement.ForegroundProperty, MainFrame.rtb.Foreground);
-                ////MainFrame.sv.ScrollToEnd();
-                ////MainFrame.sv.Focus();
-                //MainFrame.rtb.ScrollToEnd();
-            });
-
-        return Task.CompletedTask;
     }
 
 

@@ -2,7 +2,10 @@ using System.Data.SqlClient;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
@@ -59,22 +62,6 @@ public static class Sql
         catch (Exception ex) { log(ex.Message); }
     }
 
-    public static bool IsServerConnected()
-    {
-        var connectionString = string.Format($"Data Source={SQLServername};Initial Catalog={SqlInitcatalog};User ID={SQLUsername};Password={SqlPass};Timeout={10}");
-        var connection       = new SqlConnection(connectionString);
-
-        try
-        {
-            connection.Open();
-            return true;
-        }
-        catch (SqlException e)
-        {
-            log(e.Message);
-            return false;
-        }
-    }
 
     public static bool IsSqlPasswordOK(string password)
     {

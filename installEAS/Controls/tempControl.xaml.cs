@@ -37,7 +37,6 @@ public partial class tempControl
     public tempControl() { InitializeComponent(); }
 
 
-
     private void Btn1_OnClick(object sender, RoutedEventArgs e)
     {
         //if (MainFrame.textBox.Text == "") MainFrame.tlabel.Text = "Пароль не может быть пустым";
@@ -79,16 +78,19 @@ public partial class tempControl
         //MainFrame.pb.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.progressBar.SetPercentDuration(99, 3000); });
     }
 
+    //public static int temperror { get; set; }
+
     private void Btn3_OnClick(object sender, RoutedEventArgs e)
     {
-        Console.WriteLine(IsSqlPasswordOK("QWEasd123*"));
-        //MainFrame.userInput(inputType.Empty);
-        //var line = MainFrame.rtb.Document.Lines.Count;
-        //MainFrame.rtb.Document.Lines.Remove(line);
-        //MainFrame.pb.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.progressBar.SetPercentDuration(0, 3000); });
-        //log(Password.ReadSqlPassFromReg());
-    }
+        //IsSqlConnectionAsync2();
 
+        //await Task.Run(async () => temperror = await TestSqlConnectionAsync().ConfigureAwait(true));
+        //Console.WriteLine(temperror);
+        //var accountTask  = Task.Run(async () => Console.WriteLine(await TestSqlConnectionAsync("QWEasd123**").ConfigureAwait(false)));
+        //Console.WriteLine(accountTask.GetAwaiter());
+        //Console.WriteLine(TestSqlConnectionAsync("QWEasd123*"));
+        //Task.WhenAll(accountTask);
+    }
 
     private void Btn4_OnClick(object sender, RoutedEventArgs e)
     {
@@ -121,7 +123,7 @@ public partial class tempControl
     }
 
 
-    private void Btn6_OnClick(object sender, RoutedEventArgs e) { log(GetEmbeddedResource("installEAS", "CustomHighlighting.xshd")); }
+    private void Btn6_OnClick(object sender, RoutedEventArgs e) { MainFrame.rtb.TextArea.TextView.CurrentLineBackground = Brushes.Crimson; }
 
 
     private void Btn7_OnClick(object sender, RoutedEventArgs e)

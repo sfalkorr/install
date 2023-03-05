@@ -179,6 +179,7 @@ public partial class MainWindow
             case inputType.AskConfirmation:
                 Console.WriteLine();
                 return true;
+            case inputType.Empty:
             default:
                 return false;
         }
@@ -250,6 +251,10 @@ public partial class MainWindow
             case inputType.AskConfirmation:
                 Console.WriteLine();
                 break;
+            case inputType.Empty:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
     }
 
@@ -267,7 +272,7 @@ public partial class MainWindow
                 tlabel.Foreground = Brushes.OrangeRed;
                 tlabel.Text       = ValidatePass(textBox.Text);
                 break;
-            case inputType.AskCurrentSqlPassword when IsSqlPasswordOK(textBox.Text) && !Regex.Match( textBox.Text, "[\\s]" ).Success:
+            case inputType.AskCurrentSqlPassword when IsSqlPasswordOK(textBox.Text) && !Regex.Match(textBox.Text, "[\\s]").Success:
                 tlabel.Foreground = Brushes.GreenYellow;
                 tlabel.Text       = "Пароль принят";
                 break;
@@ -281,6 +286,10 @@ public partial class MainWindow
             case inputType.AskConfirmation:
                 Console.WriteLine();
                 break;
+            case inputType.Empty:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
     }
 

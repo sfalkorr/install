@@ -39,20 +39,8 @@ public static class Variables
 
     public static bool IsServer() { return SQLRegParameters != null; }
 
-    public static bool IsComputernameCorrect()
-    {
-        switch (IsServer())
-        {
-            case false:
-                if (Regex.Match(Computername, "(?<B>R|C)(\\d{2})-(\\d{6})-([W])(\\d{2}$)").Success) return true;
-                break;
-            case true:
-                if (Regex.Match(Computername, "(?<B>R|C)(\\d{2})-(\\d{6})-([N]$)").Success) return true;
-                break;
-        }
+    public static bool IsComputernameCorrect() { return Regex.Match(Computername, "(?<B>R|C)(\\d{2})-(\\d{6})-([W])(\\d{2}$)").Success || Regex.Match(Computername, "(?<B>R|C)(\\d{2})-(\\d{6})-([N]$)").Success; }
 
-        return false;
-    }
 
     public static string AppVersion       => "7.0";
     public static string Username         => Environment.UserName;
@@ -81,13 +69,12 @@ public static class Variables
     //public static string DBOPSName   { get; } = "DB" + Computername.Split('-')[1];
     //public static string DBOPSName      { get; }      = "DB160024";
     public static string SqlInitcatalog { get; set; } = "master";
-    public static string SqlPass        { get; set; }
+    public static string SqlPass        { get; set; } = "QWEasd123*";
     public static string SQLServername  { get; set; } = "C01-160024-N";
     public static string SQLUsername    { get; set; } = "sa";
     public static string SQLInstance    { get; set; } = "MSSQLSERVER";
     public static int    SQLTimeout     { get; set; } = 5;
     public static string NewSqlPass     { get; set; }
-
 
 
     public static string meta_num { get; set; }

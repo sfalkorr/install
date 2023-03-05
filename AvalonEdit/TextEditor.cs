@@ -31,9 +31,7 @@ public sealed class TextEditor : Control, ITextEditorComponent, IWeakEventListen
         FocusableProperty.OverrideMetadata(typeof(TextEditor), new FrameworkPropertyMetadata(Boxes.True));
     }
 
-    public TextEditor() : this(new TextArea())
-    {
-    }
+    public TextEditor() : this(new TextArea()) { }
 
     private TextEditor(TextArea textArea)
     {
@@ -47,10 +45,7 @@ public sealed class TextEditor : Control, ITextEditorComponent, IWeakEventListen
 
     #endregion
 
-    protected override AutomationPeer OnCreateAutomationPeer()
-    {
-        return null;
-    }
+    protected override AutomationPeer OnCreateAutomationPeer() { return null; }
 
     protected override void OnGotKeyboardFocus(KeyboardFocusChangedEventArgs e)
     {
@@ -68,15 +63,9 @@ public sealed class TextEditor : Control, ITextEditorComponent, IWeakEventListen
 
     public event EventHandler DocumentChanged;
 
-    private void OnDocumentChanged(EventArgs e)
-    {
-        DocumentChanged?.Invoke(this, e);
-    }
+    private void OnDocumentChanged(EventArgs e) { DocumentChanged?.Invoke(this, e); }
 
-    private static void OnDocumentChanged(DependencyObject dp, DependencyPropertyChangedEventArgs e)
-    {
-        ((TextEditor)dp).OnDocumentChanged((TextDocument)e.OldValue, (TextDocument)e.NewValue);
-    }
+    private static void OnDocumentChanged(DependencyObject dp, DependencyPropertyChangedEventArgs e) { ((TextEditor)dp).OnDocumentChanged((TextDocument)e.OldValue, (TextDocument)e.NewValue); }
 
     private void OnDocumentChanged(TextDocument oldValue, TextDocument newValue)
     {
@@ -99,15 +88,9 @@ public sealed class TextEditor : Control, ITextEditorComponent, IWeakEventListen
 
     public event PropertyChangedEventHandler OptionChanged;
 
-    private void OnOptionChanged(PropertyChangedEventArgs e)
-    {
-        OptionChanged?.Invoke(this, e);
-    }
+    private void OnOptionChanged(PropertyChangedEventArgs e) { OptionChanged?.Invoke(this, e); }
 
-    private static void OnOptionsChanged(DependencyObject dp, DependencyPropertyChangedEventArgs e)
-    {
-        ((TextEditor)dp).OnOptionsChanged((TextEditorOptions)e.OldValue, (TextEditorOptions)e.NewValue);
-    }
+    private static void OnOptionsChanged(DependencyObject dp, DependencyPropertyChangedEventArgs e) { ((TextEditor)dp).OnOptionsChanged((TextEditorOptions)e.OldValue, (TextEditorOptions)e.NewValue); }
 
     private void OnOptionsChanged(INotifyPropertyChanged oldValue, TextEditorOptions newValue)
     {
@@ -130,10 +113,7 @@ public sealed class TextEditor : Control, ITextEditorComponent, IWeakEventListen
         return true;
     }
 
-    bool IWeakEventListener.ReceiveWeakEvent(Type managerType, object sender, EventArgs e)
-    {
-        return ReceiveWeakEvent(managerType, sender, e);
-    }
+    bool IWeakEventListener.ReceiveWeakEvent(Type managerType, object sender, EventArgs e) { return ReceiveWeakEvent(managerType, sender, e); }
 
     #endregion
 
@@ -155,7 +135,7 @@ public sealed class TextEditor : Control, ITextEditorComponent, IWeakEventListen
         }
     }
 
-    private TextDocument GetDocument()
+    public TextDocument GetDocument()
     {
         var document = Document;
         if (document == null) throw ThrowUtil.NoDocumentAssigned();
@@ -164,10 +144,7 @@ public sealed class TextEditor : Control, ITextEditorComponent, IWeakEventListen
 
     public event EventHandler TextChanged;
 
-    private void OnTextChanged(EventArgs e)
-    {
-        TextChanged?.Invoke(this, e);
-    }
+    private void OnTextChanged(EventArgs e) { TextChanged?.Invoke(this, e); }
 
     #endregion
 
@@ -183,10 +160,7 @@ public sealed class TextEditor : Control, ITextEditorComponent, IWeakEventListen
 
     internal ScrollViewer ScrollViewer { get; private set; }
 
-    private void Execute(RoutedCommand command)
-    {
-        command.Execute(null, TextArea);
-    }
+    private void Execute(RoutedCommand command) { command.Execute(null, TextArea); }
 
     #endregion
 
@@ -199,10 +173,7 @@ public sealed class TextEditor : Control, ITextEditorComponent, IWeakEventListen
 
     private IVisualLineTransformer colorizer;
 
-    private static void OnSyntaxHighlightingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-    {
-        ((TextEditor)d).OnSyntaxHighlightingChanged(e.NewValue as IHighlightingDefinition);
-    }
+    private static void OnSyntaxHighlightingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) { ((TextEditor)d).OnSyntaxHighlightingChanged(e.NewValue as IHighlightingDefinition); }
 
     private void OnSyntaxHighlightingChanged(IHighlightingDefinition newValue)
     {
@@ -313,13 +284,11 @@ public sealed class TextEditor : Control, ITextEditorComponent, IWeakEventListen
         document.Insert(document.TextLength, textData);
     }
 
-    public void AppendColorLine(string textData, Brush LineColor, DependencyObject d = default)
+    public void AppendColorLine(string textData, Brush LineColor)
     {
-        d = this;
-        var editor       = (TextEditor)d;
-        var setlinecolor = new LineColorizer(editor.LineCount) { LineColor = LineColor };
-        editor.TextArea.TextView.LineTransformers.Add(setlinecolor);
-        editor.AppendText(textData);
+        var setlinecolor = new LineColorizer(LineCount) { LineColor = LineColor };
+        TextArea.TextView.LineTransformers.Add(setlinecolor);
+        AppendText(textData);
     }
 
 
@@ -347,10 +316,7 @@ public sealed class TextEditor : Control, ITextEditorComponent, IWeakEventListen
         ScrollViewer?.ScrollToVerticalOffset(offset);
     }
 
-    public void SelectAll()
-    {
-        Execute(ApplicationCommands.SelectAll);
-    }
+    public void SelectAll() { Execute(ApplicationCommands.SelectAll); }
 
     #endregion
 
@@ -403,10 +369,7 @@ public sealed class TextEditor : Control, ITextEditorComponent, IWeakEventListen
         }
     }
 
-    public void Clear()
-    {
-        Text = string.Empty;
-    }
+    public void Clear() { Text = string.Empty; }
 
     public void ToClipSelection()
     {
@@ -471,10 +434,7 @@ public sealed class TextEditor : Control, ITextEditorComponent, IWeakEventListen
 
     #endregion
 
-    object IServiceProvider.GetService(Type serviceType)
-    {
-        return TextArea.GetService(serviceType);
-    }
+    object IServiceProvider.GetService(Type serviceType) { return TextArea.GetService(serviceType); }
 
     public TextViewPosition? GetPositionFromPoint(Point point)
     {
@@ -483,10 +443,7 @@ public sealed class TextEditor : Control, ITextEditorComponent, IWeakEventListen
         return textView.GetPosition(TranslatePoint(point, textView) + textView.ScrollOffset);
     }
 
-    public void ScrollToLine(int line)
-    {
-        ScrollTo(line, -1);
-    }
+    public void ScrollToLine(int line) { ScrollTo(line, -1); }
 
     public void ScrollTo(int line, int column)
     {
