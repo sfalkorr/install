@@ -9,7 +9,7 @@
  x:Name="MainWin"
  Title="InstallEASApp"
  Width="1000"
- Height="850"
+ Height="750"
  MinWidth="500"
  MinHeight="350"
  Activated="MainWindow_OnActivated"

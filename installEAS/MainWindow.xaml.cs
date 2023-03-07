@@ -150,7 +150,7 @@ public partial class MainWindow
         switch (AskType)
         {
             case inputType.AskNewSqlPassword:
-                log("Задайте новый пароль для пользователя sa в SQL и подтвердите ввод клавишей Enter\nИли нажимайте клавишу F12 для генерации случайных паролей, подтвердив ввод клавишей Enter");
+                log("\nЗадайте новый пароль для пользователя sa в SQL и подтвердите ввод клавишей Enter\nИли нажимайте клавишу F12 для генерации случайных паролей, подтвердив ввод клавишей Enter\n\n");
                 MainFrame.textBoxOpen.Completed += (_, _) =>
                 {
                     MainFrame.tlabel.Visibility = Visibility.Visible;
@@ -162,7 +162,7 @@ public partial class MainWindow
                 return true;
 
             case inputType.AskCurrentSqlPassword:
-                log("Введите текущий пароль для пользователя sa в SQL и нажмите Enter");
+                log("\nВведите текущий пароль для пользователя sa в SQL и нажмите Enter\n\n");
                 MainFrame.textBoxOpen.Completed += (_, _) =>
                 {
                     MainFrame.tlabel.Visibility = Visibility.Visible;
