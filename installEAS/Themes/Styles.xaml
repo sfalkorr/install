@@ -6,7 +6,7 @@
         <Setter Property="BorderThickness" Value="0.51,0,0,0.51" />
         <Setter Property="FontSize" Value="10" />
         <Setter Property="Foreground" Value="#FFBBBBBB" />
-        <Setter Property="Height" Value="22" />
+        <Setter Property="Height" Value="23" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="Padding" Value="1" />
         <Setter Property="Template">
@@ -33,7 +33,7 @@
         <Setter Property="BorderBrush" Value="{DynamicResource ResourceKey=Tittle.Border.Color}" />
         <Setter Property="BorderThickness" Value="0.51,0,0,0.51" />
         <Setter Property="Foreground" Value="{DynamicResource ResourceKey=Button.Close.Foreground.Color}" />
-        <Setter Property="Height" Value="22" />
+        <Setter Property="Height" Value="23" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="Template">

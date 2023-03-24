@@ -25,24 +25,6 @@ public class InClassName
 
 public abstract class Animate
 {
-    private static Func<string, object> _convertFromString;
-    public static  string               controlFrom, controlTo, closeFrom, closeTo;
-
-    public static void ColorAnimation(InClassName inClassName)
-    {
-        _convertFromString = ColorConverter.ConvertFromString;
-        var from = (Color)_convertFromString(inClassName.From);
-        var to   = (Color)_convertFromString(inClassName.To);
-        {
-            ColorAnimation animation = new() { From = from, To = to, Duration = new Duration(TimeSpan.FromMilliseconds(inClassName.Msecond)) };
-            Storyboard.SetTargetProperty(animation, new PropertyPath("(Grid.Background).(SolidColorBrush.Color)", null!));
-            var storyboard = new Storyboard();
-            storyboard.Children.Add(animation);
-            storyboard.Begin(inClassName.Obj);
-        }
-    }
-
-
     public static Task AnimateFrameworkElement(FrameworkElement Target, int Duration)
     {
         var sb = new Storyboard();

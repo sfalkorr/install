@@ -94,13 +94,13 @@ public partial class tempControl
 
     private void Btn4_OnClick(object sender, RoutedEventArgs e)
     {
-        MainFrame.rtb.AppendText("Инициализация... Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)\n\n");
+        MainFrame.rtb.AppendText(" Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)\n");
         MainFrame.rtb.ScrollToEnd();
-        MainFrame.rtb.AppendColorLine(" Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)\n\n", Brushes.Coral);
+        MainFrame.rtb.AppendColorLine(" Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)\n", Brushes.Aqua);
         MainFrame.rtb.ScrollToEnd();
-        MainFrame.rtb.AppendColorLine(" Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)\n\n", Brushes.Bisque);
+        MainFrame.rtb.AppendColorLine(" Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)\n", Brushes.Bisque);
         MainFrame.rtb.ScrollToEnd();
-        MainFrame.rtb.AppendColorLine(" Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)\n", Brushes.YellowGreen);
+        MainFrame.rtb.AppendColorLine(" Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)\n", Brushes.GreenYellow);
         MainFrame.rtb.ScrollToEnd();
         MainFrame.rtb.AppendColorLine(" Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)\n", Brushes.Tomato);
         MainFrame.rtb.ScrollToEnd();
@@ -115,9 +115,11 @@ public partial class tempControl
 
     private void Btn5_OnClick(object sender, RoutedEventArgs e)
     {
-        ToEventLog(sender.ToString(), $"Хуйня случилась", Level.Error);
-        ToEventLog(sender.ToString(), $"Нехуйня случилась", Level.Warning);
-        ToEventLog(sender.ToString(), $"случилась", Level.Information);
+        var color1 = (SolidColorBrush)Application.Current.Resources["Tittle.Border.Color"];
+        Console.WriteLine(color1);
+        //ToEventLog(sender.ToString(), $"Хуйня случилась", Level.Error);
+        //ToEventLog(sender.ToString(), $"Нехуйня случилась", Level.Warning);
+        //ToEventLog(sender.ToString(), $"случилась", Level.Information);
 
         //MainFrame.rtb.Document.Blocks.Clear();
     }
@@ -129,7 +131,7 @@ public partial class tempControl
     private void Btn7_OnClick(object sender, RoutedEventArgs e)
     {
         //var result = CustomMessageBox.Show("Действительно закрыть приложение?", "Подтверждение выхода", MessageBoxButton.OKCancel, MessageBoxImage.Question);
-        Replica.ReplicaSqlPackageStartAsync();
+        //Replica.ReplicaSqlPackageStartAsync();
     }
 
     private void Btn8_OnClick(object sender, RoutedEventArgs e) { ProcessTools.StartElevated("notepad", null); }

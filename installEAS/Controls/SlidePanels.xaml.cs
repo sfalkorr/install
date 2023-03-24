@@ -59,15 +59,6 @@ public partial class SlidePanelsControl
         CloseMain();
     }
 
-    [STAThread]
-    private new void MouseLeave(object sender, MouseEventArgs e)
-    {
-        Dispatcher.InvokeAsync(() =>
-        {
-            var element = (FrameworkElement)sender;
-            ColorAnimation(new InClassName(element, controlFrom, controlTo, 120));
-        }, DispatcherPriority.Normal);
-    }
 
     private void BtnMenuAdd0_OnClick(object sender, RoutedEventArgs e)
     {

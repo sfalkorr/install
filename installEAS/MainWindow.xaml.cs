@@ -68,42 +68,11 @@ public partial class MainWindow
         Top          =  5;
         StateChanged += MainWindowStateChangeRaised;
         SizeChanged  += MainWin_SizeChanged;
-        CurrentTheme =  ThemeTypes.ColorBlue;
-        switch (CurrentTheme)
-        {
-            case ThemeTypes.ColorDark:
-            {
-                controlFrom = "#FF242A31";
-                controlTo   = "#00242A31";
-                closeFrom   = "#FF902020";
-                closeTo     = "#00902020";
-                break;
-            }
-            case ThemeTypes.ColorBlue:
-            {
-                controlFrom = "#FF496785";
-                controlTo   = "#00496785";
-                closeFrom   = "#FF902020";
-                closeTo     = "#00496785";
-                break;
-            }
-            case ThemeTypes.ColorGray:
-            {
-                controlFrom = "#FA5A5F64";
-                controlTo   = "#005A5F64";
-                closeFrom   = "#FF902020";
-                closeTo     = "#005A5F64";
-                break;
-            }
-
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
-
-        MainOpen    = new DoubleAnimation { From = 0.1, To  = 0.97, Duration = new Duration(TimeSpan.FromMilliseconds(500)) };
-        MainClos    = new DoubleAnimation { From = 0.97, To = 0.1, Duration  = new Duration(TimeSpan.FromMilliseconds(500)) };
-        textBoxOpen = Resources["OpenTextBox"] as Storyboard;
-        textBoxClos = Resources["CloseTextBox"] as Storyboard;
+        CurrentTheme =  ThemeTypes.ColorGray;
+        MainOpen     =  new DoubleAnimation { From = 0.1, To  = 0.97, Duration = new Duration(TimeSpan.FromMilliseconds(500)) };
+        MainClos     =  new DoubleAnimation { From = 0.97, To = 0.1, Duration  = new Duration(TimeSpan.FromMilliseconds(700)) };
+        textBoxOpen  =  Resources["OpenTextBox"] as Storyboard;
+        textBoxClos  =  Resources["CloseTextBox"] as Storyboard;
 
         textBox.IsEnabled                            = false;
         waitProgress.sprocketControl.IsIndeterminate = false;
@@ -417,11 +386,12 @@ public partial class MainWindow
     private void MainWindow_OnClosing(object sender, CancelEventArgs e)
     {
         //TODO Раскоментить в релизе
-        // e.Cancel = true;
-        // var result = CustomMessageBox.Show("Действительно закрыть приложение?", "Подтверждение выхода", MessageBoxButton.YesNo, MessageBoxImage.Question);
-        // if (result.ToString() != "Yes") return;
-        // MainClos.Completed += (_, _) => Process.GetCurrentProcess().Kill();
-        // BeginAnimation(OpacityProperty, MainClos);
+        e.Cancel = true;
+        var result = CustomMessageBox.Show("Действительно закрыть приложение?", "Подтверждение выхода", MessageBoxButton.YesNo, MessageBoxImage.Question);
+        if (result.ToString() != "Yes") return;
+        AnimateFrameworkElement(MenuMain.PanelTopMain, 500).ConfigureAwait(true);
+        MainClos.Completed += (_, _) => Process.GetCurrentProcess().Kill();
+        BeginAnimation(OpacityProperty, MainClos);
     }
 
     private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
@@ -431,15 +401,15 @@ public partial class MainWindow
         CreatetempControlInstance();
 
         //TODO раскоментить в релизе
-        // MainOpen.Completed += async (_, _) =>
-        // {
-        //      log("Инициализация...", false);
-        //     
-        //      await Task.Delay(1).ConfigureAwait(true);
-        //      log("OK");
-        //      await AnimateFrameworkElement(MenuMain.PanelTopMain, 600).ConfigureAwait(true);
-        // };
-        // BeginAnimation(OpacityProperty, MainOpen);
+        MainOpen.Completed += async (_, _) =>
+        {
+            //log("Инициализация...", false);
+
+            await Task.Delay(200).ConfigureAwait(true);
+            //log("OK");
+            await AnimateFrameworkElement(MenuMain.PanelTopMain, 500).ConfigureAwait(true);
+        };
+        BeginAnimation(OpacityProperty, MainOpen);
     }
 
     private void MainWindow_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -464,17 +434,6 @@ public partial class MainWindow
         }
     }
 
-    private new void MouseLeave(object sender, MouseEventArgs e)
-    {
-        var element = (FrameworkElement)sender;
-        ColorAnimation(element.Name == "CloseButton" ? new InClassName(element, closeFrom, closeTo, 150) : new InClassName(element, controlFrom, controlTo, 120));
-    }
-
-    private void MouseOver(object sender, MouseEventArgs e)
-    {
-        var element = (FrameworkElement)sender;
-        ColorAnimation(element.Name == "CloseButton" ? new InClassName(element, closeTo, closeFrom, 150) : new InClassName(element, controlTo, controlFrom, 120));
-    }
 
     public static string InputText { get; set; }
 
@@ -519,6 +478,4 @@ public partial class MainWindow
         if (e.LeftButton == MouseButtonState.Released && Sel != "") rtb.ToClipSelection();
         if (textBox.IsEnabled) textBox.Focus();
     }
-
-    private void LabelVer_OnToolTipOpening(object sender, ToolTipEventArgs e) { log("Тултип"); }
 }

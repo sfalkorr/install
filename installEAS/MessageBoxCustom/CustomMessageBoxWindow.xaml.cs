@@ -11,6 +11,9 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using installEAS.Helpers;
+using static installEAS.Helpers.Animate;
+using static installEAS.Themes.ThemesController;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 
 namespace installEAS.MessageBoxCustom;
@@ -23,18 +26,19 @@ internal partial class CustomMessageBoxWindow
 
     internal string Message { get => TextBlock_Message.Text; set => TextBlock_Message.Text = value; }
 
-    internal string OkButtonText { get => Label_Ok.Content.ToString(); set => Label_Ok.Content = value.TryAddKeyboardAccellerator(); }
+    internal string OkButtonText { get => Button_OK.Content.ToString(); set => Button_OK.Content = value.TryAddKeyboardAccellerator(); }
 
-    internal string CancelButtonText { get => Label_Cancel.Content.ToString(); set => Label_Cancel.Content = value.TryAddKeyboardAccellerator(); }
+    internal string CancelButtonText { get => Button_Cancel.Content.ToString(); set => Button_Cancel.Content = value.TryAddKeyboardAccellerator(); }
 
-    internal string YesButtonText { get => Label_Yes.Content.ToString(); set => Label_Yes.Content = value.TryAddKeyboardAccellerator(); }
+    internal string YesButtonText { get => Button_Yes.Content.ToString(); set => Button_Yes.Content = value.TryAddKeyboardAccellerator(); }
 
-    internal string NoButtonText { get => Label_No.Content.ToString(); set => Label_No.Content = value.TryAddKeyboardAccellerator(); }
+    internal string NoButtonText { get => Button_No.Content.ToString(); set => Button_No.Content = value.TryAddKeyboardAccellerator(); }
 
     public MessageBoxResult Result { get; set; }
 
     public static DoubleAnimation Open;
     public static DoubleAnimation Clos;
+
 
     internal CustomMessageBoxWindow(string message, string caption, MessageBoxButton button, MessageBoxImage image)
     {
@@ -152,15 +156,9 @@ internal partial class CustomMessageBoxWindow
         BeginAnimation(OpacityProperty, Clos);
     }
 
-    private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-        DragMove();
-    }
+    private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) { DragMove(); }
 
-    private void CustomMessageBoxWindow_OnLoaded(object sender, RoutedEventArgs e)
-    {
-        BeginAnimation(OpacityProperty, Open);
-    }
+    private void CustomMessageBoxWindow_OnLoaded(object sender, RoutedEventArgs e) { BeginAnimation(OpacityProperty, Open); }
 }
 
 internal class MessageBoxData

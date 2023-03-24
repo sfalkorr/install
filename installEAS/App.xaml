@@ -3,7 +3,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
 
-                <ResourceDictionary x:Name="ColorGray" Source="/Themes/ColorBlue.xaml" />
+                <ResourceDictionary x:Name="ColorGray" Source="/Themes/ColorGray.xaml" />
                 <ResourceDictionary x:Name="Styles" Source="/Themes/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

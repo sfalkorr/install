@@ -52,10 +52,10 @@
             <!-- </Grid.Effect> -->
             <Border x:Name="PanelBorderMain" Background="{DynamicResource ResourceKey=Menu.Background}" BorderBrush="{DynamicResource ResourceKey=Tittle.Border.Color}" BorderThickness="1,0,1,1" CornerRadius="0,0,7,7" />
             <StackPanel Name="sPanelTopMain" Width="430" Margin="0,10,0,5">
-                <Button Name="btnMenu1" Click="btnMainMenu1_OnClick" Content="1 - Полная настройка сервера (начальник)" MouseLeave="MouseLeave" Style="{DynamicResource ButtonMenuStyle1}" />
-                <Button Name="btnMenu2" Click="BtnMainMenu2_OnClick" Content="2 - Полная настройка клиента (окно оператора)" MouseLeave="MouseLeave" Style="{DynamicResource ButtonMenuStyle1}" />
-                <Button Name="btnMenu3" Click="btnMainMenu3_OnClick" Content="3 - Дополнительные функции (опционально)" MouseLeave="MouseLeave" Style="{DynamicResource ButtonMenuStyle1}" />
-                <Button Name="btnMenu4" Click="BtnMainMenu4_OnClick" Content="4 - Выход из приложения" MouseLeave="MouseLeave" Style="{DynamicResource ButtonMenuStyle1}" />
+                <Button Name="btnMenu1" Click="btnMainMenu1_OnClick" Content="1 - Полная настройка сервера (начальник)" Style="{DynamicResource ButtonMenuStyle1}" />
+                <Button Name="btnMenu2" Click="BtnMainMenu2_OnClick" Content="2 - Полная настройка клиента (окно оператора)" Style="{DynamicResource ButtonMenuStyle1}" />
+                <Button Name="btnMenu3" Click="btnMainMenu3_OnClick" Content="3 - Дополнительные функции (опционально)"  Style="{DynamicResource ButtonMenuStyle1}" />
+                <Button Name="btnMenu4" Click="BtnMainMenu4_OnClick" Content="4 - Выход из приложения"  Style="{DynamicResource ButtonMenuStyle1}" />
             </StackPanel>
 
         </Grid>
@@ -66,16 +66,16 @@
             <Border x:Name="PanelBorder" Background="{DynamicResource ResourceKey=Menu.Background}" BorderBrush="{DynamicResource ResourceKey=Tittle.Border.Color}" BorderThickness="1,0,1,1" CornerRadius="0,0,7,7" />
             <StackPanel Name="sPanelTop" Width="490" Margin="0,10,0,5">
 
-                <Button Name="btnMenuAdd1" Content="1 - Только настройка плагинов" MouseLeave="MouseLeave" Style="{DynamicResource ButtonMenuStyle1}" />
-                <Button Name="btnMenuAdd2" Content="2 - Выгрузка нулевой реплики" MouseLeave="MouseLeave" Style="{DynamicResource ButtonMenuStyle1}" />
-                <Button Name="btnMenuAdd3" Content="3 - Создание резервной копии базы данных отделения" MouseLeave="MouseLeave" Style="{DynamicResource ButtonMenuStyle1}" />
-                <Button Name="btnMenuAdd4" Content="4 - Запись версии в БД после ручного обновления ЕАС" MouseLeave="MouseLeave" Style="{DynamicResource ButtonMenuStyle1}" />
-                <Button Name="btnMenuAdd5" Content="5 - Переустановка ЗПТО" MouseLeave="MouseLeave" Style="{DynamicResource ButtonMenuStyle1}" />
-                <Button Name="btnMenuAdd6" Content="6 - Утилита обновления пользователя easops__operator" MouseLeave="MouseLeave" Style="{DynamicResource ButtonMenuStyle1}" />
-                <Button Name="btnMenuAdd7" Content="7 - Перенос настроек в другую учетную запись" MouseLeave="MouseLeave" Style="{DynamicResource ButtonMenuStyle1}" />
-                <Button Name="btnMenuAdd8" Content="8 - Совершенно непонятно зачем этот пункт меню" MouseLeave="MouseLeave" Style="{DynamicResource ButtonMenuStyle1}" />
-                <Button Name="btnMenuAdd9" Content="9 - Запасная кнопка никогда не помешает" MouseLeave="MouseLeave" Style="{DynamicResource ButtonMenuStyle1}" />
-                <Button Name="btnMenuAdd0" Click="BtnMenuAdd0_OnClick" Content="0 - Выход из меню" MouseLeave="MouseLeave" Style="{DynamicResource ButtonMenuStyle1}" />
+                <Button Name="btnMenuAdd1" Content="1 - Только настройка плагинов"  Style="{DynamicResource ButtonMenuStyle1}" />
+                <Button Name="btnMenuAdd2" Content="2 - Выгрузка нулевой реплики"  Style="{DynamicResource ButtonMenuStyle1}" />
+                <Button Name="btnMenuAdd3" Content="3 - Создание резервной копии базы данных отделения"  Style="{DynamicResource ButtonMenuStyle1}" />
+                <Button Name="btnMenuAdd4" Content="4 - Запись версии в БД после ручного обновления ЕАС"  Style="{DynamicResource ButtonMenuStyle1}" />
+                <Button Name="btnMenuAdd5" Content="5 - Переустановка ЗПТО"  Style="{DynamicResource ButtonMenuStyle1}" />
+                <Button Name="btnMenuAdd6" Content="6 - Утилита обновления пользователя easops__operator"  Style="{DynamicResource ButtonMenuStyle1}" />
+                <Button Name="btnMenuAdd7" Content="7 - Перенос настроек в другую учетную запись"  Style="{DynamicResource ButtonMenuStyle1}" />
+                <Button Name="btnMenuAdd8" Content="8 - Совершенно непонятно зачем этот пункт меню"  Style="{DynamicResource ButtonMenuStyle1}" />
+                <Button Name="btnMenuAdd9" Content="9 - Запасная кнопка никогда не помешает"  Style="{DynamicResource ButtonMenuStyle1}" />
+                <Button Name="btnMenuAdd0" Click="BtnMenuAdd0_OnClick" Content="0 - Выход из меню"  Style="{DynamicResource ButtonMenuStyle1}" />
 
             </StackPanel>
 
