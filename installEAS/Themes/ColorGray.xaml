@@ -105,7 +105,7 @@
                             <VisualStateGroup Name="CommonStates">
                                 <VisualState Name="MouseOver">
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetName="BorderColor" Storyboard.TargetProperty="Color" To="#FF992929" Duration="0:0:0.150" />
+                                        <ColorAnimation Storyboard.TargetName="BorderColor" Storyboard.TargetProperty="Color" To="#FF9E2E2E" Duration="0:0:0.150" />
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState Name="Normal">

@@ -73,17 +73,17 @@
                             <VisualStateGroup Name="CommonStates">
                                 <VisualState Name="MouseOver">
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetName="BorderColor" Storyboard.TargetProperty="Color" To="#FA60656A" Duration="0:0:0.150" />
+                                        <ColorAnimation Storyboard.TargetName="BorderColor" Storyboard.TargetProperty="Color" To="#FF496785" Duration="0:0:0.150" />
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState Name="Normal">
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetName="BorderColor" Storyboard.TargetProperty="Color" To="#0060656A" Duration="0:0:0.150" />
+                                        <ColorAnimation Storyboard.TargetName="BorderColor" Storyboard.TargetProperty="Color" To="#00496785" Duration="0:0:0.150" />
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState Name="Pressed">
                                     <Storyboard>
-                                        <ColorAnimation AutoReverse="False" FillBehavior="HoldEnd" Storyboard.TargetName="BorderColor" Storyboard.TargetProperty="Color" To="#FA50555A" Duration="0:0:0:0.005" />
+                                        <ColorAnimation AutoReverse="False" FillBehavior="HoldEnd" Storyboard.TargetName="BorderColor" Storyboard.TargetProperty="Color" To="#FF3C5A78" Duration="0:0:0:0.005" />
                                     </Storyboard>
                                 </VisualState>
                             </VisualStateGroup>
