@@ -1,25 +1,16 @@
-using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Security;
-using System.Threading;
-using System.Windows;
-
 #pragma warning disable CS0649
 
 namespace installEAS.Helpers;
 
 public static class ProcessTools
 {
-    public static int  TokenDuplicate        { get; } = 2;
-    public static uint MaximumAllowed        { get; } = 33554432;
-    public static int  CreateNewConsole      { get; } = 16;
-    public static int  IdlePriorityClass     { get; } = 64;
-    public static int  NormalPriorityClass   { get; } = 32;
-    public static int  HighPriorityClass     { get; } = 128;
-    public static int  RealtimePriorityClass { get; } = 256;
+    public static int TokenDuplicate { get; } = 2;
+    public static uint MaximumAllowed { get; } = 33554432;
+    public static int CreateNewConsole { get; } = 16;
+    public static int IdlePriorityClass { get; } = 64;
+    public static int NormalPriorityClass { get; } = 32;
+    public static int HighPriorityClass { get; } = 128;
+    public static int RealtimePriorityClass { get; } = 256;
 
     [DllImport("kernel32.dll", SetLastError = true)]
     private static extern bool CloseHandle(IntPtr hSnapshot);
@@ -28,7 +19,8 @@ public static class ProcessTools
     private static extern uint WTSGetActiveConsoleSessionId();
 
     [DllImport("advapi32.dll", CharSet = CharSet.Ansi, CallingConvention = CallingConvention.StdCall, SetLastError = true)]
-    private static extern bool CreateProcessAsUser(IntPtr hToken, string lpApplicationName, string lpCommandLine, ref SECURITY_ATTRIBUTES lpProcessAttributes, ref SECURITY_ATTRIBUTES lpThreadAttributes, bool bInheritHandle, int dwCreationFlags, IntPtr lpEnvironment, string lpCurrentDirectory, ref STARTUPINFO lpStartupInfo, out PROCESS_INFORMATION lpProcessInformation);
+    private static extern bool CreateProcessAsUser(IntPtr hToken, string lpApplicationName, string lpCommandLine, ref SECURITY_ATTRIBUTES lpProcessAttributes, ref SECURITY_ATTRIBUTES lpThreadAttributes,
+        bool bInheritHandle, int dwCreationFlags, IntPtr lpEnvironment, string lpCurrentDirectory, ref STARTUPINFO lpStartupInfo, out PROCESS_INFORMATION lpProcessInformation);
 
     [DllImport("kernel32.dll")]
     private static extern bool ProcessIdToSessionId(uint dwProcessId, ref uint pSessionId);
@@ -49,9 +41,9 @@ public static class ProcessTools
         var zero2 = IntPtr.Zero;
         var zero3 = IntPtr.Zero;
         procInfo = new PROCESS_INFORMATION();
-        var  consoleSessionId = WTSGetActiveConsoleSessionId();
-        var  processName      = "";
-        uint dwProcessId      = 0;
+        var consoleSessionId = WTSGetActiveConsoleSessionId();
+        var processName = "";
+        uint dwProcessId = 0;
         switch (IS)
         {
             case ImpersonalizationSource.Winlogon:
@@ -87,10 +79,10 @@ public static class ProcessTools
         }
 
         var lpStartupInfo = new STARTUPINFO();
-        lpStartupInfo.cb        = Marshal.SizeOf((object)lpStartupInfo);
+        lpStartupInfo.cb = Marshal.SizeOf((object)lpStartupInfo);
         lpStartupInfo.lpDesktop = "winsta0\\default";
         var dwCreationFlags = 48;
-        var processAsUser   = CreateProcessAsUser(zero1, null, CommandLine, ref structure, ref structure, false, dwCreationFlags, IntPtr.Zero, null, ref lpStartupInfo, out procInfo);
+        var processAsUser = CreateProcessAsUser(zero1, null, CommandLine, ref structure, ref structure, false, dwCreationFlags, IntPtr.Zero, null, ref lpStartupInfo, out procInfo);
         CloseHandle(num);
         CloseHandle(zero2);
         CloseHandle(zero1);
@@ -116,7 +108,7 @@ public static class ProcessTools
 
     public static Process StartHidden(string FileName, string Arguments, bool Elevated = false)
     {
-        var startInfo                = new ProcessStartInfo { FileName = FileName, Arguments = Arguments };
+        var startInfo = new ProcessStartInfo { FileName = FileName, Arguments = Arguments };
         if (Elevated) startInfo.Verb = "RunAs";
         startInfo.WindowStyle = ProcessWindowStyle.Hidden;
         Process process = null;
@@ -134,8 +126,8 @@ public static class ProcessTools
 
     public static Process StartElevated(string FileName, string Arguments)
     {
-        var     startInfo = new ProcessStartInfo { FileName = FileName, Arguments = Arguments, Verb = "RunAs" };
-        Process process   = null;
+        var startInfo = new ProcessStartInfo { FileName = FileName, Arguments = Arguments, Verb = "RunAs" };
+        Process process = null;
         try
         {
             process = Process.Start(startInfo);
@@ -162,27 +154,27 @@ public static class ProcessTools
 
     private struct SECURITY_ATTRIBUTES
     {
-        public int    Length;
+        public int Length;
         public IntPtr LpSecurityDescriptor { get; }
-        public bool   BInheritHandle       { get; }
+        public bool BInheritHandle { get; }
     }
 
     private struct STARTUPINFO
     {
-        public int    cb;
+        public int cb;
         public string lpReserved;
         public string lpDesktop;
         public string lpTitle;
-        public uint   dwX;
-        public uint   dwY;
-        public uint   dwXSize;
-        public uint   dwYSize;
-        public uint   dwXCountChars;
-        public uint   dwYCountChars;
-        public uint   dwFillAttribute;
-        public uint   dwFlags;
-        public short  wShowWindow;
-        public short  cbReserved2;
+        public uint dwX;
+        public uint dwY;
+        public uint dwXSize;
+        public uint dwYSize;
+        public uint dwXCountChars;
+        public uint dwYCountChars;
+        public uint dwFillAttribute;
+        public uint dwFlags;
+        public short wShowWindow;
+        public short cbReserved2;
         public IntPtr lpReserved2;
         public IntPtr hStdInput;
         public IntPtr hStdOutput;
@@ -191,15 +183,15 @@ public static class ProcessTools
 
     private struct PROCESS_INFORMATION
     {
-        public IntPtr HProcess    { get; }
-        public IntPtr HThread     { get; }
-        public uint   DwProcessId { get; }
-        public uint   DwThreadId  { get; }
+        public IntPtr HProcess { get; }
+        public IntPtr HThread { get; }
+        public uint DwProcessId { get; }
+        public uint DwThreadId { get; }
     }
 
     private enum TOKEN_TYPE
     {
-        TokenPrimary       = 1,
+        TokenPrimary = 1,
         TokenImpersonation = 2
     }
 
@@ -213,8 +205,8 @@ public static class ProcessTools
 
     private enum ImpersonalizationSource
     {
-        Winlogon       = 1,
-        Explorer       = 2,
+        Winlogon = 1,
+        Explorer = 2,
         CurrentProcess = 3
     }
 }

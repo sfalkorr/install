@@ -1,5 +1,3 @@
-using System;
-
 namespace installEAS.Helpers;
 
 public static class ArrayHelper

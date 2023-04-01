@@ -1,26 +1,19 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Threading;
-
-namespace installEAS.Helpers;
+﻿namespace installEAS.Helpers;
 
 public class InClassName
 {
     public InClassName(FrameworkElement Obj, string From, string To, int msecond)
     {
-        this.Obj  = Obj;
+        this.Obj = Obj;
         this.From = From;
-        this.To   = To;
-        Msecond   = msecond;
+        this.To = To;
+        Msecond = msecond;
     }
 
-    public FrameworkElement Obj     { get; }
-    public string           From    { get; }
-    public string           To      { get; }
-    public int              Msecond { get; }
+    public FrameworkElement Obj { get; }
+    public string From { get; }
+    public string To { get; }
+    public int Msecond { get; }
 }
 
 public abstract class Animate
@@ -30,24 +23,24 @@ public abstract class Animate
         var sb = new Storyboard();
         var ta = new ThicknessAnimation
         {
-            BeginTime         = new TimeSpan(0),
-            Duration          = new Duration(TimeSpan.FromMilliseconds(Duration)),
+            BeginTime = new TimeSpan(0),
+            Duration = new Duration(TimeSpan.FromMilliseconds(Duration)),
             DecelerationRatio = 0.9,
             AccelerationRatio = 0,
-            SpeedRatio        = 0.8,
-            IsCumulative      = false,
-            IsAdditive        = true
+            SpeedRatio = 0.8,
+            IsCumulative = false,
+            IsAdditive = true
         };
         switch (Target.IsEnabled)
         {
             case false:
-                ta.To            = new Thickness(0, 0, 0, 0);
-                Target.Opacity   = 1;
+                ta.To = new Thickness(0, 0, 0, 0);
+                Target.Opacity = 1;
                 Target.IsEnabled = true;
                 break;
             case true:
-                ta.To            = new Thickness(0, -Target.ActualHeight - 30, 0, 0);
-                Target.Opacity   = 1;
+                ta.To = new Thickness(0, -Target.ActualHeight - 30, 0, 0);
+                Target.Opacity = 1;
                 Target.IsEnabled = false;
                 break;
         }

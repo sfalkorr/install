@@ -1,5 +1,3 @@
-using Microsoft.Win32;
-
 namespace installEAS.Helpers;
 
 public static class RegistryTools
@@ -117,7 +115,7 @@ public static class RegistryTools
     public static void ParseKey(string FullPath, out string RootKey, out string SubKey)
     {
         RootKey = "";
-        SubKey  = "";
+        SubKey = "";
         var strArray = FullPath.Split('\\');
         RootKey = ExpandRooKeyName(strArray[0]);
         if (RootKey.Length <= 0 || strArray.Length <= 1) return;
@@ -129,13 +127,13 @@ public static class RegistryTools
         ParseKey(FullPath, out var RootKey, out var SubKey);
         if (RootKey.Length <= 0) return null;
         var registryKey2 = RootKey switch
-                           {
-                               "HKEY_CLASSES_ROOT"  => Registry.ClassesRoot,
-                               "HKEY_CURRENT_USER"  => Registry.CurrentUser,
-                               "HKEY_LOCAL_MACHINE" => Registry.LocalMachine,
-                               "HKEY_USERS"         => Registry.Users,
-                               _                    => null
-                           };
+        {
+            "HKEY_CLASSES_ROOT" => Registry.ClassesRoot,
+            "HKEY_CURRENT_USER" => Registry.CurrentUser,
+            "HKEY_LOCAL_MACHINE" => Registry.LocalMachine,
+            "HKEY_USERS" => Registry.Users,
+            _ => null
+        };
         var registryKey1 = registryKey2;
         if (SubKey.Length > 0)
             if (registryKey1 != null)
@@ -156,7 +154,7 @@ public static class RegistryTools
     public static void ParseKeyToExistedPart(string FullPath, out string RootKey, out string SubKey)
     {
         RootKey = "";
-        SubKey  = "";
+        SubKey = "";
         var strArray = FullPath.Split('\\');
         RootKey = ExpandRooKeyName(strArray[0]);
         if (RootKey.Length <= 0) return;

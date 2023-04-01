@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Timers;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Threading;
+using Point = System.Windows.Point;
+using Size = System.Windows.Size;
 
 namespace installEAS.Controls;
 
@@ -22,14 +17,14 @@ public partial class RoundedProgressBarControl
     public static void Start()
     {
         RoundedProgressBarControlRounded.sprocketControl.IsIndeterminate = true;
-        RoundedProgressBarControlRounded.IsEnabled                       = true;
+        RoundedProgressBarControlRounded.IsEnabled = true;
     }
 
     [STAThread]
     public static void Stop()
     {
         RoundedProgressBarControlRounded.sprocketControl.IsIndeterminate = false;
-        RoundedProgressBarControlRounded.IsEnabled                       = false;
+        RoundedProgressBarControlRounded.IsEnabled = false;
     }
 }
 
@@ -37,25 +32,25 @@ public class SprocketControl : Control, IDisposable
 {
     #region Constants
 
-    private const           double DEFAULT_INTERVAL   = 60;
-    private static readonly Color  DEFAULT_TICK_COLOR = Color.FromArgb(100, 180, 180, 180);
-    private const           double DEFAULT_TICK_WIDTH = 3;
-    private const           int    DEFAULT_TICK_COUNT = 12;
+    private const double DEFAULT_INTERVAL = 60;
+    private static readonly Color DEFAULT_TICK_COLOR = Color.FromArgb(100, 180, 180, 180);
+    private const double DEFAULT_TICK_WIDTH = 3;
+    private const int DEFAULT_TICK_COUNT = 12;
 
     private readonly Size MINIMUM_CONTROL_SIZE = new(28, 28);
 
     //private const double MINIMUM_PEN_WIDTH = 2;
-    private const double DEFAULT_START_ANGLE         = 270;
+    private const double DEFAULT_START_ANGLE = 270;
     private const double MINIMUM_INNER_RADIUS_FACTOR = 0.175;
     private const double MINIMUM_OUTER_RADIUS_FACTOR = 0.3125;
 
     // The Lower limit of the Alpha value (The spokes will be shown in 
     // alpha values ranging from 255 to m_AlphaLowerLimit)
-    private const int    ALPHA_UPPER_LIMIT                 = 250;
-    private const int    ALPHA_LOWER_LIMIT                 = 0;
+    private const int ALPHA_UPPER_LIMIT = 250;
+    private const int ALPHA_LOWER_LIMIT = 0;
     private const double ALPHA_TICK_PERCENTAGE_LOWER_LIMIT = 10;
-    private const double DEFAULT_PROGRESS_ALPHA            = 10;
-    private const double DEFAULT_PROGRESS                  = 0.0;
+    private const double DEFAULT_PROGRESS_ALPHA = 10;
+    private const double DEFAULT_PROGRESS = 0.0;
 
     #endregion
 
@@ -85,7 +80,7 @@ public class SprocketControl : Control, IDisposable
         public Spoke(Point pt1, Point pt2)
         {
             StartPoint = pt1;
-            EndPoint   = pt2;
+            EndPoint = pt2;
         }
     }
 
@@ -93,13 +88,13 @@ public class SprocketControl : Control, IDisposable
 
     #region Fields
 
-    private Point       _centerPoint;
-    private double      _innerRadius;
-    private double      _outerRadius;
-    private double      _alphaChange;
-    private double      _angleIncrement;
-    private double      _renderStartAngle;
-    private Timer       renderTimer;
+    private Point _centerPoint;
+    private double _innerRadius;
+    private double _outerRadius;
+    private double _alphaChange;
+    private double _angleIncrement;
+    private double _renderStartAngle;
+    private Timer renderTimer;
     private List<Spoke> _spokes;
 
     #endregion
@@ -111,21 +106,26 @@ public class SprocketControl : Control, IDisposable
     /// <summary>
     ///     AlphaTicksPercentage Dependency Property
     /// </summary>
-    public static readonly DependencyProperty AlphaTicksPercentageProperty = DependencyProperty.Register(nameof(AlphaTicksPercentage), typeof(double), typeof(SprocketControl), new FrameworkPropertyMetadata(100.0, OnAlphaTicksPercentageChanged, CoerceAlphaTicksPercentage));
+    public static readonly DependencyProperty AlphaTicksPercentageProperty = DependencyProperty.Register(nameof(AlphaTicksPercentage), typeof(double), typeof(SprocketControl),
+        new FrameworkPropertyMetadata(100.0, OnAlphaTicksPercentageChanged, CoerceAlphaTicksPercentage));
 
     /// <summary>
     ///     Gets or sets the AlphaTicksPercentage property. This dependency property
     ///     indicates the percentage of total ticks which must be considered for step by step reduction
     ///     of the alpha value. The remaining ticks remain at the LowestAlpha value.
     /// </summary>
-    public double AlphaTicksPercentage { get => (double)GetValue(AlphaTicksPercentageProperty); set => SetValue(AlphaTicksPercentageProperty, value); }
+    public double AlphaTicksPercentage
+    {
+        get => (double)GetValue(AlphaTicksPercentageProperty);
+        set => SetValue(AlphaTicksPercentageProperty, value);
+    }
 
     /// <summary>
     ///     Handles changes to the AlphaTicksPercentage property.
     /// </summary>
     private static void OnAlphaTicksPercentageChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var sprocket                = (SprocketControl)d;
+        var sprocket = (SprocketControl)d;
         var oldAlphaTicksPercentage = (double)e.OldValue;
         var newAlphaTicksPercentage = sprocket.AlphaTicksPercentage;
         OnAlphaTicksPercentageChanged(oldAlphaTicksPercentage, newAlphaTicksPercentage);
@@ -145,7 +145,7 @@ public class SprocketControl : Control, IDisposable
     {
         var desiredAlphaTicksPercentage = (double)value;
 
-        if (desiredAlphaTicksPercentage > 100.0) desiredAlphaTicksPercentage                                  = 100.0;
+        if (desiredAlphaTicksPercentage > 100.0) desiredAlphaTicksPercentage = 100.0;
         else if (desiredAlphaTicksPercentage < ALPHA_TICK_PERCENTAGE_LOWER_LIMIT) desiredAlphaTicksPercentage = ALPHA_TICK_PERCENTAGE_LOWER_LIMIT;
 
         return desiredAlphaTicksPercentage;
@@ -164,7 +164,11 @@ public class SprocketControl : Control, IDisposable
     ///     Gets or sets the Interval property. This dependency property
     ///     indicates duration at which the timer for rotation should fire.
     /// </summary>
-    public double Interval { get => (double)GetValue(IntervalProperty); set => SetValue(IntervalProperty, value); }
+    public double Interval
+    {
+        get => (double)GetValue(IntervalProperty);
+        set => SetValue(IntervalProperty, value);
+    }
 
     /// <summary>
     ///     Handles changes to the Interval property.
@@ -173,7 +177,7 @@ public class SprocketControl : Control, IDisposable
     /// <param name="e">DependencyProperty changed event arguments</param>
     private static void OnIntervalChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var sprocket    = (SprocketControl)d;
+        var sprocket = (SprocketControl)d;
         var oldInterval = (double)e.OldValue;
         var newInterval = sprocket.Interval;
         sprocket.OnIntervalChanged(oldInterval, newInterval);
@@ -188,9 +192,9 @@ public class SprocketControl : Control, IDisposable
     {
         if (renderTimer == null) return;
         var isEnabled = renderTimer.Enabled;
-        renderTimer.Enabled  = false;
+        renderTimer.Enabled = false;
         renderTimer.Interval = newInterval;
-        renderTimer.Enabled  = isEnabled;
+        renderTimer.Enabled = isEnabled;
     }
 
     #endregion
@@ -200,13 +204,18 @@ public class SprocketControl : Control, IDisposable
     /// <summary>
     ///     IsIndeterminate Dependency Property
     /// </summary>
-    public static readonly DependencyProperty IsIndeterminateProperty = DependencyProperty.Register(nameof(IsIndeterminate), typeof(bool), typeof(SprocketControl), new FrameworkPropertyMetadata(true, OnIsIndeterminateChanged));
+    public static readonly DependencyProperty IsIndeterminateProperty =
+        DependencyProperty.Register(nameof(IsIndeterminate), typeof(bool), typeof(SprocketControl), new FrameworkPropertyMetadata(true, OnIsIndeterminateChanged));
 
     /// <summary>
     ///     Gets or sets the IsIndeterminate property. This dependency property
     ///     indicates whether the SprocketControl's progress is indeterminate or not.
     /// </summary>
-    public bool IsIndeterminate { get => (bool)GetValue(IsIndeterminateProperty); set => SetValue(IsIndeterminateProperty, value); }
+    public bool IsIndeterminate
+    {
+        get => (bool)GetValue(IsIndeterminateProperty);
+        set => SetValue(IsIndeterminateProperty, value);
+    }
 
     /// <summary>
     ///     Handles changes to the IsIndeterminate property.
@@ -215,7 +224,7 @@ public class SprocketControl : Control, IDisposable
     /// <param name="e">DependencyProperty changed event arguments</param>
     private static void OnIsIndeterminateChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var target             = (SprocketControl)d;
+        var target = (SprocketControl)d;
         var oldIsIndeterminate = (bool)e.OldValue;
         var newIsIndeterminate = target.IsIndeterminate;
         target.OnIsIndeterminateChanged(oldIsIndeterminate, newIsIndeterminate);
@@ -250,20 +259,25 @@ public class SprocketControl : Control, IDisposable
     /// <summary>
     ///     InnerRadius Dependency Property
     /// </summary>
-    public static readonly DependencyProperty InnerRadiusProperty = DependencyProperty.Register(nameof(InnerRadius), typeof(double), typeof(SprocketControl), new FrameworkPropertyMetadata(MINIMUM_INNER_RADIUS_FACTOR, OnInnerRadiusChanged, CoerceInnerRadius));
+    public static readonly DependencyProperty InnerRadiusProperty = DependencyProperty.Register(nameof(InnerRadius), typeof(double), typeof(SprocketControl),
+        new FrameworkPropertyMetadata(MINIMUM_INNER_RADIUS_FACTOR, OnInnerRadiusChanged, CoerceInnerRadius));
 
     /// <summary>
     ///     Gets or sets the InnerRadius property. This dependency property
     ///     indicates the ratio of the Inner Radius to the Width of the SprocketControl.
     /// </summary>
-    public double InnerRadius { get => (double)GetValue(InnerRadiusProperty); set => SetValue(InnerRadiusProperty, value); }
+    public double InnerRadius
+    {
+        get => (double)GetValue(InnerRadiusProperty);
+        set => SetValue(InnerRadiusProperty, value);
+    }
 
     /// <summary>
     ///     Handles changes to the InnerRadius property.
     /// </summary>
     private static void OnInnerRadiusChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var sprocket       = (SprocketControl)d;
+        var sprocket = (SprocketControl)d;
         var oldInnerRadius = (double)e.OldValue;
         var newInnerRadius = sprocket.InnerRadius;
         sprocket.OnInnerRadiusChanged(oldInnerRadius, newInnerRadius);
@@ -283,7 +297,7 @@ public class SprocketControl : Control, IDisposable
     /// </summary>
     private static object CoerceInnerRadius(DependencyObject d, object value)
     {
-        var _                  = (SprocketControl)d;
+        var _ = (SprocketControl)d;
         var desiredInnerRadius = (double)value;
 
         return desiredInnerRadius;
@@ -296,20 +310,25 @@ public class SprocketControl : Control, IDisposable
     /// <summary>
     ///     LowestAlpha Dependency Property
     /// </summary>
-    public static readonly DependencyProperty LowestAlphaProperty = DependencyProperty.Register(nameof(LowestAlpha), typeof(int), typeof(SprocketControl), new FrameworkPropertyMetadata(ALPHA_LOWER_LIMIT, OnLowestAlphaChanged, CoerceLowestAlpha));
+    public static readonly DependencyProperty LowestAlphaProperty =
+        DependencyProperty.Register(nameof(LowestAlpha), typeof(int), typeof(SprocketControl), new FrameworkPropertyMetadata(ALPHA_LOWER_LIMIT, OnLowestAlphaChanged, CoerceLowestAlpha));
 
     /// <summary>
     ///     Gets or sets the LowestAlpha property. This dependency property
     ///     indicates the lowest Opacity value that must be used while rendering the SprocketControl's spokes.
     /// </summary>
-    public int LowestAlpha { get => (int)GetValue(LowestAlphaProperty); set => SetValue(LowestAlphaProperty, value); }
+    public int LowestAlpha
+    {
+        get => (int)GetValue(LowestAlphaProperty);
+        set => SetValue(LowestAlphaProperty, value);
+    }
 
     /// <summary>
     ///     Handles changes to the LowestAlpha property.
     /// </summary>
     private static void OnLowestAlphaChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var sprocket       = (SprocketControl)d;
+        var sprocket = (SprocketControl)d;
         var oldLowestAlpha = (int)e.OldValue;
         var newLowestAlpha = sprocket.LowestAlpha;
         sprocket.OnLowestAlphaChanged(oldLowestAlpha, newLowestAlpha);
@@ -330,11 +349,11 @@ public class SprocketControl : Control, IDisposable
         var desiredLowestAlpha = (int)value;
 
         desiredLowestAlpha = desiredLowestAlpha switch
-                             {
-                                 < ALPHA_LOWER_LIMIT => ALPHA_LOWER_LIMIT,
-                                 > ALPHA_UPPER_LIMIT => ALPHA_UPPER_LIMIT,
-                                 _                   => desiredLowestAlpha
-                             };
+        {
+            < ALPHA_LOWER_LIMIT => ALPHA_LOWER_LIMIT,
+            > ALPHA_UPPER_LIMIT => ALPHA_UPPER_LIMIT,
+            _ => desiredLowestAlpha
+        };
 
         return desiredLowestAlpha;
     }
@@ -346,20 +365,25 @@ public class SprocketControl : Control, IDisposable
     /// <summary>
     ///     OuterRadius Dependency Property
     /// </summary>
-    public static readonly DependencyProperty OuterRadiusProperty = DependencyProperty.Register(nameof(OuterRadius), typeof(double), typeof(SprocketControl), new FrameworkPropertyMetadata(MINIMUM_OUTER_RADIUS_FACTOR, OnOuterRadiusChanged, CoerceOuterRadius));
+    public static readonly DependencyProperty OuterRadiusProperty = DependencyProperty.Register(nameof(OuterRadius), typeof(double), typeof(SprocketControl),
+        new FrameworkPropertyMetadata(MINIMUM_OUTER_RADIUS_FACTOR, OnOuterRadiusChanged, CoerceOuterRadius));
 
     /// <summary>
     ///     Gets or sets the OuterRadius property. This dependency property
     ///     indicates the ratio of the Outer Width to the width of the SprocketControl.
     /// </summary>
-    public double OuterRadius { get => (double)GetValue(OuterRadiusProperty); set => SetValue(OuterRadiusProperty, value); }
+    public double OuterRadius
+    {
+        get => (double)GetValue(OuterRadiusProperty);
+        set => SetValue(OuterRadiusProperty, value);
+    }
 
     /// <summary>
     ///     Handles changes to the OuterRadius property.
     /// </summary>
     private static void OnOuterRadiusChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var sprocket       = (SprocketControl)d;
+        var sprocket = (SprocketControl)d;
         var oldOuterRadius = (double)e.OldValue;
         var newOuterRadius = sprocket.OuterRadius;
         sprocket.OnOuterRadiusChanged(oldOuterRadius, newOuterRadius);
@@ -379,7 +403,7 @@ public class SprocketControl : Control, IDisposable
     /// </summary>
     private static object CoerceOuterRadius(DependencyObject d, object value)
     {
-        var _                  = (SprocketControl)d;
+        var _ = (SprocketControl)d;
         var desiredOuterRadius = (double)value;
 
         return desiredOuterRadius;
@@ -392,13 +416,18 @@ public class SprocketControl : Control, IDisposable
     /// <summary>
     ///     Progress Dependency Property
     /// </summary>
-    public static readonly DependencyProperty ProgressProperty = DependencyProperty.Register(nameof(Progress), typeof(double), typeof(SprocketControl), new FrameworkPropertyMetadata(DEFAULT_PROGRESS, OnProgressChanged, CoerceProgress));
+    public static readonly DependencyProperty ProgressProperty =
+        DependencyProperty.Register(nameof(Progress), typeof(double), typeof(SprocketControl), new FrameworkPropertyMetadata(DEFAULT_PROGRESS, OnProgressChanged, CoerceProgress));
 
     /// <summary>
     ///     Gets or sets the Progress property. This dependency property
     ///     indicates the progress percentage.
     /// </summary>
-    public double Progress { get => (double)GetValue(ProgressProperty); set => SetValue(ProgressProperty, value); }
+    public double Progress
+    {
+        get => (double)GetValue(ProgressProperty);
+        set => SetValue(ProgressProperty, value);
+    }
 
     /// <summary>
     ///     Coerces the Progress value so that it stays in the range 0-100
@@ -422,7 +451,7 @@ public class SprocketControl : Control, IDisposable
     /// <param name="e">DependencyProperty changed event arguments</param>
     private static void OnProgressChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var sprocket    = (SprocketControl)d;
+        var sprocket = (SprocketControl)d;
         var oldProgress = (double)e.OldValue;
         var newProgress = sprocket.Progress;
         sprocket.OnProgressChanged(oldProgress, newProgress);
@@ -445,13 +474,18 @@ public class SprocketControl : Control, IDisposable
     /// <summary>
     ///     Rotation Dependency Property
     /// </summary>
-    public static readonly DependencyProperty RotationProperty = DependencyProperty.Register(nameof(Rotation), typeof(Direction), typeof(SprocketControl), new FrameworkPropertyMetadata(Direction.CLOCKWISE, OnRotationChanged));
+    public static readonly DependencyProperty RotationProperty =
+        DependencyProperty.Register(nameof(Rotation), typeof(Direction), typeof(SprocketControl), new FrameworkPropertyMetadata(Direction.CLOCKWISE, OnRotationChanged));
 
     /// <summary>
     ///     Gets or sets the Rotation property. This dependency property
     ///     indicates the direction of Rotation of the SprocketControl.
     /// </summary>
-    public Direction Rotation { get => (Direction)GetValue(RotationProperty); set => SetValue(RotationProperty, value); }
+    public Direction Rotation
+    {
+        get => (Direction)GetValue(RotationProperty);
+        set => SetValue(RotationProperty, value);
+    }
 
     /// <summary>
     ///     Handles changes to the Rotation property.
@@ -460,7 +494,7 @@ public class SprocketControl : Control, IDisposable
     /// <param name="e">DependencyProperty changed event arguments</param>
     private static void OnRotationChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var sprocket    = (SprocketControl)d;
+        var sprocket = (SprocketControl)d;
         var oldRotation = (Direction)e.OldValue;
         var newRotation = sprocket.Rotation;
         sprocket.OnRotationChanged(oldRotation, newRotation);
@@ -484,7 +518,8 @@ public class SprocketControl : Control, IDisposable
     /// <summary>
     ///     StartAngle Dependency Property
     /// </summary>
-    public static readonly DependencyProperty StartAngleProperty = DependencyProperty.Register(nameof(StartAngle), typeof(double), typeof(SprocketControl), new FrameworkPropertyMetadata(DEFAULT_START_ANGLE, OnStartAngleChanged));
+    public static readonly DependencyProperty StartAngleProperty =
+        DependencyProperty.Register(nameof(StartAngle), typeof(double), typeof(SprocketControl), new FrameworkPropertyMetadata(DEFAULT_START_ANGLE, OnStartAngleChanged));
 
     /// <summary>
     ///     Gets or sets the StartAngle property. This dependency property
@@ -504,7 +539,7 @@ public class SprocketControl : Control, IDisposable
     /// <param name="e">DependencyProperty changed event arguments</param>
     private static void OnStartAngleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var sprocket      = (SprocketControl)d;
+        var sprocket = (SprocketControl)d;
         var oldStartAngle = (double)e.OldValue;
         var newStartAngle = sprocket.StartAngle;
         sprocket.OnStartAngleChanged(oldStartAngle, newStartAngle);
@@ -528,13 +563,18 @@ public class SprocketControl : Control, IDisposable
     /// <summary>
     ///     TickColor Dependency Property
     /// </summary>
-    public static readonly DependencyProperty TickColorProperty = DependencyProperty.Register(nameof(TickColor), typeof(Color), typeof(SprocketControl), new FrameworkPropertyMetadata(DEFAULT_TICK_COLOR, OnTickColorChanged));
+    public static readonly DependencyProperty TickColorProperty =
+        DependencyProperty.Register(nameof(TickColor), typeof(Color), typeof(SprocketControl), new FrameworkPropertyMetadata(DEFAULT_TICK_COLOR, OnTickColorChanged));
 
     /// <summary>
     ///     Gets or sets the TickColor property. This dependency property
     ///     indicates the color of the Spokes in the SprocketControl.
     /// </summary>
-    public Color TickColor { get => (Color)GetValue(TickColorProperty); set => SetValue(TickColorProperty, value); }
+    public Color TickColor
+    {
+        get => (Color)GetValue(TickColorProperty);
+        set => SetValue(TickColorProperty, value);
+    }
 
     /// <summary>
     ///     Handles changes to the TickColor property.
@@ -543,7 +583,7 @@ public class SprocketControl : Control, IDisposable
     /// <param name="e">DependencyProperty changed event arguments</param>
     private static void OnTickColorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var sprocket     = (SprocketControl)d;
+        var sprocket = (SprocketControl)d;
         var oldTickColor = (Color)e.OldValue;
         var newTickColor = sprocket.TickColor;
         sprocket.OnTickColorChanged(oldTickColor, newTickColor);
@@ -566,13 +606,18 @@ public class SprocketControl : Control, IDisposable
     /// <summary>
     ///     TickCount Dependency Property
     /// </summary>
-    public static readonly DependencyProperty TickCountProperty = DependencyProperty.Register(nameof(TickCount), typeof(int), typeof(SprocketControl), new FrameworkPropertyMetadata(DEFAULT_TICK_COUNT, OnTickCountChanged, CoerceTickCount));
+    public static readonly DependencyProperty TickCountProperty =
+        DependencyProperty.Register(nameof(TickCount), typeof(int), typeof(SprocketControl), new FrameworkPropertyMetadata(DEFAULT_TICK_COUNT, OnTickCountChanged, CoerceTickCount));
 
     /// <summary>
     ///     Gets or sets the TickCount property. This dependency property
     ///     indicates the number of spokes of the SprocketControl.
     /// </summary>
-    public int TickCount { get => (int)GetValue(TickCountProperty); set => SetValue(TickCountProperty, value); }
+    public int TickCount
+    {
+        get => (int)GetValue(TickCountProperty);
+        set => SetValue(TickCountProperty, value);
+    }
 
     /// <summary>
     ///     Coerces the TickCount value to an acceptable value
@@ -592,7 +637,7 @@ public class SprocketControl : Control, IDisposable
     /// <param name="e">DependencyProperty changed event arguments</param>
     private static void OnTickCountChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var sprocket     = (SprocketControl)d;
+        var sprocket = (SprocketControl)d;
         var oldTickCount = (int)e.OldValue;
         var newTickCount = sprocket.TickCount;
         sprocket.OnTickCountChanged(oldTickCount, newTickCount);
@@ -616,13 +661,18 @@ public class SprocketControl : Control, IDisposable
     /// <summary>
     ///     TickStyle Dependency Property
     /// </summary>
-    public static readonly DependencyProperty TickStyleProperty = DependencyProperty.Register(nameof(TickStyle), typeof(PenLineCap), typeof(SprocketControl), new FrameworkPropertyMetadata(PenLineCap.Round, OnTickStyleChanged));
+    public static readonly DependencyProperty TickStyleProperty =
+        DependencyProperty.Register(nameof(TickStyle), typeof(PenLineCap), typeof(SprocketControl), new FrameworkPropertyMetadata(PenLineCap.Round, OnTickStyleChanged));
 
     /// <summary>
     ///     Gets or sets the TickStyle property. This dependency property
     ///     indicates the style of the ends of each tick.
     /// </summary>
-    public PenLineCap TickStyle { get => (PenLineCap)GetValue(TickStyleProperty); set => SetValue(TickStyleProperty, value); }
+    public PenLineCap TickStyle
+    {
+        get => (PenLineCap)GetValue(TickStyleProperty);
+        set => SetValue(TickStyleProperty, value);
+    }
 
     /// <summary>
     ///     Handles changes to the TickStyle property.
@@ -631,7 +681,7 @@ public class SprocketControl : Control, IDisposable
     /// <param name="e">DependencyProperty changed event arguments</param>
     private static void OnTickStyleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var sprocket     = (SprocketControl)d;
+        var sprocket = (SprocketControl)d;
         var oldTickStyle = (PenLineCap)e.OldValue;
         var newTickStyle = sprocket.TickStyle;
         sprocket.OnTickStyleChanged(oldTickStyle, newTickStyle);
@@ -654,7 +704,8 @@ public class SprocketControl : Control, IDisposable
     /// <summary>
     ///     TickWidth Dependency Property
     /// </summary>
-    public static readonly DependencyProperty TickWidthProperty = DependencyProperty.Register(nameof(TickWidth), typeof(double), typeof(SprocketControl), new FrameworkPropertyMetadata(DEFAULT_TICK_WIDTH, OnTickWidthChanged, CoerceTickWidth));
+    public static readonly DependencyProperty TickWidthProperty =
+        DependencyProperty.Register(nameof(TickWidth), typeof(double), typeof(SprocketControl), new FrameworkPropertyMetadata(DEFAULT_TICK_WIDTH, OnTickWidthChanged, CoerceTickWidth));
 
     private DispatcherOperation _dispatcherOperation;
 
@@ -662,7 +713,11 @@ public class SprocketControl : Control, IDisposable
     ///     Gets or sets the TickWidth property. This dependency property
     ///     indicates the width of each spoke in the SprocketControl.
     /// </summary>
-    public double TickWidth { get => (double)GetValue(TickWidthProperty); set => SetValue(TickWidthProperty, value); }
+    public double TickWidth
+    {
+        get => (double)GetValue(TickWidthProperty);
+        set => SetValue(TickWidthProperty, value);
+    }
 
     /// <summary>
     ///     Coerces the TickWidth value so that it stays above 0.
@@ -682,7 +737,7 @@ public class SprocketControl : Control, IDisposable
     /// <param name="e">DependencyProperty changed event arguments</param>
     private static void OnTickWidthChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var target       = (SprocketControl)d;
+        var target = (SprocketControl)d;
         var oldTickWidth = (double)e.OldValue;
         var newTickWidth = target.TickWidth;
         target.OnTickWidthChanged(oldTickWidth, newTickWidth);
@@ -709,7 +764,7 @@ public class SprocketControl : Control, IDisposable
     /// </summary>
     public SprocketControl()
     {
-        renderTimer         =  new Timer(Interval);
+        renderTimer = new Timer(Interval);
         renderTimer.Elapsed += OnRenderTimerElapsed;
 
         // Set the minimum size of the SprocketControl
@@ -746,8 +801,8 @@ public class SprocketControl : Control, IDisposable
         if (renderTimer == null || renderTimer.Enabled) return;
 
         renderTimer.Interval = Interval;
-        Opacity              = 1;
-        renderTimer.Enabled  = true;
+        Opacity = 1;
+        renderTimer.Enabled = true;
     }
 
     /// <summary>
@@ -756,7 +811,7 @@ public class SprocketControl : Control, IDisposable
     private void Stop()
     {
         if (renderTimer == null) return;
-        Opacity             = 0;
+        Opacity = 0;
         renderTimer.Enabled = false;
     }
 
@@ -859,10 +914,10 @@ public class SprocketControl : Control, IDisposable
             if (!IsIndeterminate)
             {
                 if (progressSpokes > 0) alpha = (byte)(i < progressSpokes ? 255 : DEFAULT_PROGRESS_ALPHA);
-                else alpha                    = (byte)DEFAULT_PROGRESS_ALPHA;
+                else alpha = (byte)DEFAULT_PROGRESS_ALPHA;
             }
 
-            var p                         = new Pen(new SolidColorBrush(Color.FromArgb(alpha, TickColor.R, TickColor.G, TickColor.B)), TickWidth);
+            var p = new Pen(new SolidColorBrush(Color.FromArgb(alpha, TickColor.R, TickColor.G, TickColor.B)), TickWidth);
             p.StartLineCap = p.EndLineCap = TickStyle;
             dc.DrawLine(p, _spokes[i].StartPoint, _spokes[i].EndPoint);
 

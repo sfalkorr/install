@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Documents;
-
-namespace installEAS.Helpers;
+﻿namespace installEAS.Helpers;
 
 internal abstract class Files
 {
@@ -14,11 +6,11 @@ internal abstract class Files
     {
         var returnarray = Directory.GetFiles(path, Partname, Option);
         return returnarray.Length switch
-               {
-                   1   => returnarray[0],
-                   > 1 => string.Join("\n", returnarray.Select(p => p.ToString()).ToArray()),
-                   _   => null
-               };
+        {
+            1 => returnarray[0],
+            > 1 => Join("\n", returnarray.Select(p => p.ToString()).ToArray()),
+            _ => null
+        };
     }
 
     public static string ReadFilesToString(string path)
@@ -49,8 +41,8 @@ internal abstract class Files
     public static string RtfToPlainText(string rtf)
     {
         var flowDocument = new FlowDocument();
-        var textRange    = new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd);
-        var stream       = new MemoryStream(Encoding.UTF8.GetBytes(rtf ?? string.Empty));
+        var textRange = new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd);
+        var stream = new MemoryStream(Encoding.UTF8.GetBytes(rtf ?? Empty));
         {
             textRange.Load(stream, DataFormats.Rtf);
         }
@@ -64,7 +56,7 @@ internal abstract class Files
 
     public static void CreateBackupFile(string path)
     {
-        if (string.IsNullOrEmpty(path) || !File.Exists(path)) return;
+        if (IsNullOrEmpty(path) || !File.Exists(path)) return;
         File.Copy(path, path + ".bak", true);
     }
 

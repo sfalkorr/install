@@ -1,16 +1,4 @@
-﻿using System;
-using System.Drawing;
-using System.Windows.Media;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media.Animation;
-using System.Windows.Threading;
-using installEAS.Helpers;
-using static installEAS.MainWindow;
-using static installEAS.Helpers.Animate;
-
-namespace installEAS.Controls;
+﻿namespace installEAS.Controls;
 
 public partial class SlidePanelsControl
 {
@@ -24,9 +12,8 @@ public partial class SlidePanelsControl
     {
         InitializeComponent();
         PanelTopMain.IsEnabled = false;
-        PanelTopAdd.IsEnabled  = false;
+        PanelTopAdd.IsEnabled = false;
     }
-
 
     private void btnMainMenu1_OnClick(object sender, RoutedEventArgs e)
     {
@@ -38,9 +25,7 @@ public partial class SlidePanelsControl
 
     private void BtnMainMenu2_OnClick(object sender, RoutedEventArgs e)
     {
-
     }
-
 
     private void btnMainMenu3_OnClick(object sender, RoutedEventArgs e)
     {
@@ -58,7 +43,6 @@ public partial class SlidePanelsControl
     {
         CloseMain();
     }
-
 
     private void BtnMenuAdd0_OnClick(object sender, RoutedEventArgs e)
     {

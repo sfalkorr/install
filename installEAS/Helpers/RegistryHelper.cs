@@ -1,25 +1,20 @@
-﻿using System;
-using System.Windows.Media;
-using Microsoft.Win32;
-using static installEAS.Helpers.Log;
-
-namespace installEAS.Helpers;
+﻿namespace installEAS.Helpers;
 
 public static class Reg
 {
     private static RegistryKey registry;
-    private static string      _regHive, _regPath;
+    private static string _regHive, _regPath;
 
     public static object Read(string inpPath, string inpKey = null)
     {
         _regHive = inpPath.Split(':')[0];
         _regPath = inpPath.Split(':')[1].Trim('\\');
         registry = _regHive switch
-                   {
-                       "HKLM" => RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64),
-                       "HKCU" => RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Registry64),
-                       _      => registry
-                   };
+        {
+            "HKLM" => RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64),
+            "HKCU" => RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Registry64),
+            _ => registry
+        };
 
         try
         {
@@ -30,7 +25,10 @@ public static class Reg
             log(inpPath + " " + "Key: " + inpKey + " " + e.Message, Brushes.Red);
             return null;
         }
-        finally { registry.Close(); }
+        finally
+        {
+            registry.Close();
+        }
     }
 
     public static void Write(string inpPath, string inpKey = null, object inpValue = default, RegistryValueKind Type = default)
@@ -38,18 +36,24 @@ public static class Reg
         _regHive = inpPath.Split(':')[0];
         _regPath = inpPath.Split(':')[1].Trim('\\');
         registry = _regHive switch
-                   {
-                       "HKLM" => RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64),
-                       "HKCU" => RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Registry64),
-                       _      => registry
-                   };
+        {
+            "HKLM" => RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64),
+            "HKCU" => RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Registry64),
+            _ => registry
+        };
         try
         {
             if (inpKey == null) registry.CreateSubKey(_regPath, true);
             else if (inpValue != null) registry.CreateSubKey(_regPath, true).SetValue(inpKey, inpValue, Type);
         }
-        catch (Exception e) { log(inpPath + " " + "Key: " + inpKey + " " + e.Message, Brushes.Red); }
-        finally { registry.Close(); }
+        catch (Exception e)
+        {
+            log(inpPath + " " + "Key: " + inpKey + " " + e.Message, Brushes.Red);
+        }
+        finally
+        {
+            registry.Close();
+        }
     }
 
     public static void WriteMultistring(string inpPath, string inpKey = null, object[] inpValue = default, RegistryValueKind Type = RegistryValueKind.MultiString)
@@ -57,18 +61,24 @@ public static class Reg
         _regHive = inpPath.Split(':')[0];
         _regPath = inpPath.Split(':')[1].Trim('\\');
         registry = _regHive switch
-                   {
-                       "HKLM" => RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64),
-                       "HKCU" => RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Registry64),
-                       _      => registry
-                   };
+        {
+            "HKLM" => RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64),
+            "HKCU" => RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Registry64),
+            _ => registry
+        };
         try
         {
             if (inpKey == null) registry.CreateSubKey(_regPath, true);
             else if (inpValue != null) registry.CreateSubKey(_regPath, RegistryKeyPermissionCheck.ReadWriteSubTree)?.SetValue(inpKey, inpValue, Type);
         }
-        catch (Exception e) { log(inpPath + " " + "Key: " + inpKey + " " + e.Message, Brushes.Red); }
-        finally { registry.Close(); }
+        catch (Exception e)
+        {
+            log(inpPath + " " + "Key: " + inpKey + " " + e.Message, Brushes.Red);
+        }
+        finally
+        {
+            registry.Close();
+        }
     }
 
     public static void Remove(string inpPath, string inpKey = null)
@@ -76,31 +86,36 @@ public static class Reg
         _regHive = inpPath.Split(':')[0];
         _regPath = inpPath.Split(':')[1].Trim('\\');
         registry = _regHive switch
-                   {
-                       "HKLM" => RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64),
-                       "HKCU" => RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Registry64),
-                       _      => registry
-                   };
+        {
+            "HKLM" => RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64),
+            "HKCU" => RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Registry64),
+            _ => registry
+        };
         try
         {
             if (inpKey == null) registry.DeleteSubKeyTree(_regPath);
             else registry.OpenSubKey(_regPath, true)?.DeleteValue(inpKey, true);
         }
-        catch (Exception e) { log(inpPath + " " + "Key: " + inpKey + " " + e.Message, Brushes.Red); }
-        finally { registry.Close(); }
+        catch (Exception e)
+        {
+            log(inpPath + " " + "Key: " + inpKey + " " + e.Message, Brushes.Red);
+        }
+        finally
+        {
+            registry.Close();
+        }
     }
-
 
     public static bool TestRegPath(string inpPath, string inpKey = null)
     {
         _regHive = inpPath.Split(':')[0];
         _regPath = inpPath.Split(':')[1].Trim('\\');
         registry = _regHive switch
-                   {
-                       "HKLM" => RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64),
-                       "HKCU" => RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Registry64),
-                       _      => registry
-                   };
+        {
+            "HKLM" => RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64),
+            "HKCU" => RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Registry64),
+            _ => registry
+        };
 
         try
         {
@@ -111,7 +126,10 @@ public static class Reg
         {
             return false;
         }
-        finally { registry.Close(); }
+        finally
+        {
+            registry.Close();
+        }
 
         return false;
     }
