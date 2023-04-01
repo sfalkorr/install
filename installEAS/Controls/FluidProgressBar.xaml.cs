@@ -1,10 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media.Animation;
-
 namespace installEAS.Controls;
 
 /// <summary>
@@ -16,8 +9,8 @@ internal partial class FluidProgressBar : IDisposable
 
     private class KeyFrameDetails
     {
-        public KeyTime              KeyFrameTime { get; set; }
-        public List<DoubleKeyFrame> KeyFrames    { get; set; }
+        public KeyTime KeyFrameTime { get; set; }
+        public List<DoubleKeyFrame> KeyFrames { get; set; }
     }
 
     #endregion
@@ -25,13 +18,15 @@ internal partial class FluidProgressBar : IDisposable
     #region Fields
 
     private Dictionary<int, KeyFrameDetails> _keyFrameMap;
+
     private Dictionary<int, KeyFrameDetails> _opKeyFrameMap;
+
     //KeyTime keyA = KeyTime.FromTimeSpan(TimeSpan.FromSeconds(0));
     //KeyTime keyB = KeyTime.FromTimeSpan(TimeSpan.FromSeconds(0.5));
     //KeyTime keyC = KeyTime.FromTimeSpan(TimeSpan.FromSeconds(2.0));
     //KeyTime keyD = KeyTime.FromTimeSpan(TimeSpan.FromSeconds(2.5));
     private Storyboard sb;
-    private bool       isStoryboardRunning;
+    private bool isStoryboardRunning;
 
     #endregion
 
@@ -42,13 +37,18 @@ internal partial class FluidProgressBar : IDisposable
     /// <summary>
     /// Delay Dependency Property
     /// </summary>
-    public static readonly DependencyProperty DelayProperty = DependencyProperty.Register(nameof(Delay), typeof(Duration), typeof(FluidProgressBar), new FrameworkPropertyMetadata(new Duration(TimeSpan.FromMilliseconds(100)), OnDelayChanged));
+    public static readonly DependencyProperty DelayProperty =
+        DependencyProperty.Register(nameof(Delay), typeof(Duration), typeof(FluidProgressBar), new FrameworkPropertyMetadata(new Duration(TimeSpan.FromMilliseconds(100)), OnDelayChanged));
 
     /// <summary>
     /// Gets or sets the Delay property. This dependency property 
     /// indicates the delay between adjacent animation timelines.
     /// </summary>
-    public Duration Delay { get => (Duration)GetValue(DelayProperty); set => SetValue(DelayProperty, value); }
+    public Duration Delay
+    {
+        get => (Duration)GetValue(DelayProperty);
+        set => SetValue(DelayProperty, value);
+    }
 
     /// <summary>
     /// Handles changes to the Delay property.
@@ -57,7 +57,7 @@ internal partial class FluidProgressBar : IDisposable
     /// <param name="e">DependencyProperty changed event arguments</param>
     private static void OnDelayChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var pBar     = (FluidProgressBar)d;
+        var pBar = (FluidProgressBar)d;
         var oldDelay = (Duration)e.OldValue;
         var newDelay = pBar.Delay;
         pBar.OnDelayChanged(oldDelay, newDelay);
@@ -91,7 +91,11 @@ internal partial class FluidProgressBar : IDisposable
     /// Gets or sets the DotWidth property. This dependency property 
     /// indicates the width of each of the dots.
     /// </summary>
-    public double DotWidth { get => (double)GetValue(DotWidthProperty); set => SetValue(DotWidthProperty, value); }
+    public double DotWidth
+    {
+        get => (double)GetValue(DotWidthProperty);
+        set => SetValue(DotWidthProperty, value);
+    }
 
     /// <summary>
     /// Handles changes to the DotWidth property.
@@ -100,7 +104,7 @@ internal partial class FluidProgressBar : IDisposable
     /// <param name="e">DependencyProperty changed event arguments</param>
     private static void OnDotWidthChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var pBar        = (FluidProgressBar)d;
+        var pBar = (FluidProgressBar)d;
         var oldDotWidth = (double)e.OldValue;
         var newDotWidth = pBar.DotWidth;
         pBar.OnDotWidthChanged(oldDotWidth, newDotWidth);
@@ -129,7 +133,11 @@ internal partial class FluidProgressBar : IDisposable
     /// Gets or sets the DotHeight property. This dependency property 
     /// indicates the height of each of the dots.
     /// </summary>
-    public double DotHeight { get => (double)GetValue(DotHeightProperty); set => SetValue(DotHeightProperty, value); }
+    public double DotHeight
+    {
+        get => (double)GetValue(DotHeightProperty);
+        set => SetValue(DotHeightProperty, value);
+    }
 
     /// <summary>
     /// Handles changes to the DotHeight property.
@@ -138,7 +146,7 @@ internal partial class FluidProgressBar : IDisposable
     /// <param name="e">DependencyProperty changed event arguments</param>
     private static void OnDotHeightChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var pBar         = (FluidProgressBar)d;
+        var pBar = (FluidProgressBar)d;
         var oldDotHeight = (double)e.OldValue;
         var newDotHeight = pBar.DotHeight;
         pBar.OnDotHeightChanged(oldDotHeight, newDotHeight);
@@ -167,7 +175,11 @@ internal partial class FluidProgressBar : IDisposable
     /// Gets or sets the DotRadiusX property. This dependency property 
     /// indicates the corner radius width of each of the dot.
     /// </summary>
-    public double DotRadiusX { get => (double)GetValue(DotRadiusXProperty); set => SetValue(DotRadiusXProperty, value); }
+    public double DotRadiusX
+    {
+        get => (double)GetValue(DotRadiusXProperty);
+        set => SetValue(DotRadiusXProperty, value);
+    }
 
     /// <summary>
     /// Handles changes to the DotRadiusX property.
@@ -176,7 +188,7 @@ internal partial class FluidProgressBar : IDisposable
     /// <param name="e">DependencyProperty changed event arguments</param>
     private static void OnDotRadiusXChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var pBar          = (FluidProgressBar)d;
+        var pBar = (FluidProgressBar)d;
         var oldDotRadiusX = (double)e.OldValue;
         var newDotRadiusX = pBar.DotRadiusX;
         pBar.OnDotRadiusXChanged(oldDotRadiusX, newDotRadiusX);
@@ -205,7 +217,11 @@ internal partial class FluidProgressBar : IDisposable
     /// Gets or sets the DotRadiusY property. This dependency property 
     /// indicates the corner height of each of the dots.
     /// </summary>
-    public double DotRadiusY { get => (double)GetValue(DotRadiusYProperty); set => SetValue(DotRadiusYProperty, value); }
+    public double DotRadiusY
+    {
+        get => (double)GetValue(DotRadiusYProperty);
+        set => SetValue(DotRadiusYProperty, value);
+    }
 
     /// <summary>
     /// Handles changes to the DotRadiusY property.
@@ -214,7 +230,7 @@ internal partial class FluidProgressBar : IDisposable
     /// <param name="e">DependencyProperty changed event arguments</param>
     private static void OnDotRadiusYChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var pBar          = (FluidProgressBar)d;
+        var pBar = (FluidProgressBar)d;
         var oldDotRadiusY = (double)e.OldValue;
         var newDotRadiusY = pBar.DotRadiusY;
         pBar.OnDotRadiusYChanged(oldDotRadiusY, newDotRadiusY);
@@ -237,13 +253,18 @@ internal partial class FluidProgressBar : IDisposable
     /// <summary>
     /// DurationA Dependency Property
     /// </summary>
-    public static readonly DependencyProperty DurationAProperty = DependencyProperty.Register(nameof(DurationA), typeof(Duration), typeof(FluidProgressBar), new FrameworkPropertyMetadata(new Duration(TimeSpan.FromSeconds(0.5)), OnDurationAChanged));
+    public static readonly DependencyProperty DurationAProperty =
+        DependencyProperty.Register(nameof(DurationA), typeof(Duration), typeof(FluidProgressBar), new FrameworkPropertyMetadata(new Duration(TimeSpan.FromSeconds(0.5)), OnDurationAChanged));
 
     /// <summary>
     /// Gets or sets the DurationA property. This dependency property 
     /// indicates the duration of the animation from the start point till KeyFrameA.
     /// </summary>
-    public Duration DurationA { get => (Duration)GetValue(DurationAProperty); set => SetValue(DurationAProperty, value); }
+    public Duration DurationA
+    {
+        get => (Duration)GetValue(DurationAProperty);
+        set => SetValue(DurationAProperty, value);
+    }
 
     /// <summary>
     /// Handles changes to the DurationA property.
@@ -252,7 +273,7 @@ internal partial class FluidProgressBar : IDisposable
     /// <param name="e">DependencyProperty changed event arguments</param>
     private static void OnDurationAChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var pBar         = (FluidProgressBar)d;
+        var pBar = (FluidProgressBar)d;
         var oldDurationA = (Duration)e.OldValue;
         var newDurationA = pBar.DurationA;
         pBar.OnDurationAChanged(oldDurationA, newDurationA);
@@ -280,13 +301,18 @@ internal partial class FluidProgressBar : IDisposable
     /// <summary>
     /// DurationB Dependency Property
     /// </summary>
-    public static readonly DependencyProperty DurationBProperty = DependencyProperty.Register(nameof(DurationB), typeof(Duration), typeof(FluidProgressBar), new FrameworkPropertyMetadata(new Duration(TimeSpan.FromSeconds(1.5)), OnDurationBChanged));
+    public static readonly DependencyProperty DurationBProperty =
+        DependencyProperty.Register(nameof(DurationB), typeof(Duration), typeof(FluidProgressBar), new FrameworkPropertyMetadata(new Duration(TimeSpan.FromSeconds(1.5)), OnDurationBChanged));
 
     /// <summary>
     /// Gets or sets the DurationB property. This dependency property 
     /// indicates the duration of the animation from the KeyFrameA till KeyFrameB.
     /// </summary>
-    public Duration DurationB { get => (Duration)GetValue(DurationBProperty); set => SetValue(DurationBProperty, value); }
+    public Duration DurationB
+    {
+        get => (Duration)GetValue(DurationBProperty);
+        set => SetValue(DurationBProperty, value);
+    }
 
     /// <summary>
     /// Handles changes to the DurationB property.
@@ -295,7 +321,7 @@ internal partial class FluidProgressBar : IDisposable
     /// <param name="e">DependencyProperty changed event arguments</param>
     private static void OnDurationBChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var pBar         = (FluidProgressBar)d;
+        var pBar = (FluidProgressBar)d;
         var oldDurationB = (Duration)e.OldValue;
         var newDurationB = pBar.DurationB;
         pBar.OnDurationBChanged(oldDurationB, newDurationB);
@@ -323,13 +349,18 @@ internal partial class FluidProgressBar : IDisposable
     /// <summary>
     /// DurationC Dependency Property
     /// </summary>
-    public static readonly DependencyProperty DurationCProperty = DependencyProperty.Register(nameof(DurationC), typeof(Duration), typeof(FluidProgressBar), new FrameworkPropertyMetadata(new Duration(TimeSpan.FromSeconds(0.5)), OnDurationCChanged));
+    public static readonly DependencyProperty DurationCProperty =
+        DependencyProperty.Register(nameof(DurationC), typeof(Duration), typeof(FluidProgressBar), new FrameworkPropertyMetadata(new Duration(TimeSpan.FromSeconds(0.5)), OnDurationCChanged));
 
     /// <summary>
     /// Gets or sets the DurationC property. This dependency property 
     /// indicates the duration of the animation from KeyFrameB till the end point.
     /// </summary>
-    public Duration DurationC { get => (Duration)GetValue(DurationCProperty); set => SetValue(DurationCProperty, value); }
+    public Duration DurationC
+    {
+        get => (Duration)GetValue(DurationCProperty);
+        set => SetValue(DurationCProperty, value);
+    }
 
     /// <summary>
     /// Handles changes to the DurationC property.
@@ -338,7 +369,7 @@ internal partial class FluidProgressBar : IDisposable
     /// <param name="e">DependencyProperty changed event arguments</param>
     private static void OnDurationCChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var pBar         = (FluidProgressBar)d;
+        var pBar = (FluidProgressBar)d;
         var oldDurationC = (Duration)e.OldValue;
         var newDurationC = pBar.DurationC;
         pBar.OnDurationCChanged(oldDurationC, newDurationC);
@@ -372,7 +403,11 @@ internal partial class FluidProgressBar : IDisposable
     /// Gets or sets the KeyFrameA property. This dependency property 
     /// indicates the first KeyFrame position after the initial keyframe.
     /// </summary>
-    public double KeyFrameA { get => (double)GetValue(KeyFrameAProperty); set => SetValue(KeyFrameAProperty, value); }
+    public double KeyFrameA
+    {
+        get => (double)GetValue(KeyFrameAProperty);
+        set => SetValue(KeyFrameAProperty, value);
+    }
 
     /// <summary>
     /// Handles changes to the KeyFrameA property.
@@ -381,7 +416,7 @@ internal partial class FluidProgressBar : IDisposable
     /// <param name="e">DependencyProperty changed event arguments</param>
     private static void OnKeyFrameAChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var pBar         = (FluidProgressBar)d;
+        var pBar = (FluidProgressBar)d;
         var oldKeyFrameA = (double)e.OldValue;
         var newKeyFrameA = pBar.KeyFrameA;
         pBar.OnKeyFrameAChanged(oldKeyFrameA, newKeyFrameA);
@@ -410,7 +445,11 @@ internal partial class FluidProgressBar : IDisposable
     /// Gets or sets the KeyFrameB property. This dependency property 
     /// indicates the second KeyFrame position after the initial keyframe.
     /// </summary>
-    public double KeyFrameB { get => (double)GetValue(KeyFrameBProperty); set => SetValue(KeyFrameBProperty, value); }
+    public double KeyFrameB
+    {
+        get => (double)GetValue(KeyFrameBProperty);
+        set => SetValue(KeyFrameBProperty, value);
+    }
 
     /// <summary>
     /// Handles changes to the KeyFrameB property.
@@ -419,7 +458,7 @@ internal partial class FluidProgressBar : IDisposable
     /// <param name="e">DependencyProperty changed event arguments</param>
     private static void OnKeyFrameBChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var pBar         = (FluidProgressBar)d;
+        var pBar = (FluidProgressBar)d;
         var oldKeyFrameB = (double)e.OldValue;
         var newKeyFrameB = pBar.KeyFrameB;
         pBar.OnKeyFrameBChanged(oldKeyFrameB, newKeyFrameB);
@@ -448,7 +487,11 @@ internal partial class FluidProgressBar : IDisposable
     /// Gets or sets the Oscillate property. This dependency property 
     /// indicates whether the animation should oscillate.
     /// </summary>
-    public bool Oscillate { get => (bool)GetValue(OscillateProperty); set => SetValue(OscillateProperty, value); }
+    public bool Oscillate
+    {
+        get => (bool)GetValue(OscillateProperty);
+        set => SetValue(OscillateProperty, value);
+    }
 
     /// <summary>
     /// Handles changes to the Oscillate property.
@@ -457,7 +500,7 @@ internal partial class FluidProgressBar : IDisposable
     /// <param name="e">DependencyProperty changed event arguments</param>
     private static void OnOscillateChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var pBar         = (FluidProgressBar)d;
+        var pBar = (FluidProgressBar)d;
         var oldOscillate = (bool)e.OldValue;
         var newOscillate = pBar.Oscillate;
         pBar.OnOscillateChanged(oldOscillate, newOscillate);
@@ -474,7 +517,7 @@ internal partial class FluidProgressBar : IDisposable
 
         StopFluidAnimation();
         sb.AutoReverse = newOscillate;
-        sb.Duration    = newOscillate ? ReverseDuration : TotalDuration;
+        sb.Duration = newOscillate ? ReverseDuration : TotalDuration;
         StartFluidAnimation();
     }
 
@@ -485,13 +528,18 @@ internal partial class FluidProgressBar : IDisposable
     /// <summary>
     /// ReverseDuration Dependency Property
     /// </summary>
-    public static readonly DependencyProperty ReverseDurationProperty = DependencyProperty.Register(nameof(ReverseDuration), typeof(Duration), typeof(FluidProgressBar), new FrameworkPropertyMetadata(new Duration(TimeSpan.FromSeconds(2.9)), OnReverseDurationChanged));
+    public static readonly DependencyProperty ReverseDurationProperty = DependencyProperty.Register(nameof(ReverseDuration), typeof(Duration), typeof(FluidProgressBar),
+        new FrameworkPropertyMetadata(new Duration(TimeSpan.FromSeconds(2.9)), OnReverseDurationChanged));
 
     /// <summary>
     /// Gets or sets the ReverseDuration property. This dependency property 
     /// indicates the duration of the total animation in reverse.
     /// </summary>
-    public Duration ReverseDuration { get => (Duration)GetValue(ReverseDurationProperty); set => SetValue(ReverseDurationProperty, value); }
+    public Duration ReverseDuration
+    {
+        get => (Duration)GetValue(ReverseDurationProperty);
+        set => SetValue(ReverseDurationProperty, value);
+    }
 
     /// <summary>
     /// Handles changes to the ReverseDuration property.
@@ -500,7 +548,7 @@ internal partial class FluidProgressBar : IDisposable
     /// <param name="e">DependencyProperty changed event arguments</param>
     private static void OnReverseDurationChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var pBar               = (FluidProgressBar)d;
+        var pBar = (FluidProgressBar)d;
         var oldReverseDuration = (Duration)e.OldValue;
         var newReverseDuration = pBar.ReverseDuration;
         pBar.OnReverseDurationChanged(oldReverseDuration, newReverseDuration);
@@ -526,13 +574,18 @@ internal partial class FluidProgressBar : IDisposable
     /// <summary>
     /// TotalDuration Dependency Property
     /// </summary>
-    public static readonly DependencyProperty TotalDurationProperty = DependencyProperty.Register(nameof(TotalDuration), typeof(Duration), typeof(FluidProgressBar), new FrameworkPropertyMetadata(new Duration(TimeSpan.FromSeconds(4.4)), OnTotalDurationChanged));
+    public static readonly DependencyProperty TotalDurationProperty = DependencyProperty.Register(nameof(TotalDuration), typeof(Duration), typeof(FluidProgressBar),
+        new FrameworkPropertyMetadata(new Duration(TimeSpan.FromSeconds(4.4)), OnTotalDurationChanged));
 
     /// <summary>
     /// Gets or sets the TotalDuration property. This dependency property 
     /// indicates the duration of the complete animation.
     /// </summary>
-    public Duration TotalDuration { get => (Duration)GetValue(TotalDurationProperty); set => SetValue(TotalDurationProperty, value); }
+    public Duration TotalDuration
+    {
+        get => (Duration)GetValue(TotalDurationProperty);
+        set => SetValue(TotalDurationProperty, value);
+    }
 
     /// <summary>
     /// Handles changes to the TotalDuration property.
@@ -541,7 +594,7 @@ internal partial class FluidProgressBar : IDisposable
     /// <param name="e">DependencyProperty changed event arguments</param>
     private static void OnTotalDurationChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
-        var pBar             = (FluidProgressBar)d;
+        var pBar = (FluidProgressBar)d;
         var oldTotalDuration = (Duration)e.OldValue;
         var newTotalDuration = pBar.TotalDuration;
         pBar.OnTotalDurationChanged(oldTotalDuration, newTotalDuration);
@@ -573,13 +626,13 @@ internal partial class FluidProgressBar : IDisposable
     {
         InitializeComponent();
 
-        _keyFrameMap   = new Dictionary<int, KeyFrameDetails>();
+        _keyFrameMap = new Dictionary<int, KeyFrameDetails>();
         _opKeyFrameMap = new Dictionary<int, KeyFrameDetails>();
 
         GetKeyFramesFromStoryboard();
 
-        SizeChanged      += OnSizeChanged;
-        Loaded           += OnLoaded;
+        SizeChanged += OnSizeChanged;
+        Loaded += OnLoaded;
         IsVisibleChanged += OnIsVisibleChanged;
     }
 
@@ -823,8 +876,8 @@ internal partial class FluidProgressBar : IDisposable
         {
             // The first five animations are for translation
             // The next five animations are for opacity
-            if (i == 5) nextDelay =  newDelay;
-            else nextDelay        += newDelay;
+            if (i == 5) nextDelay = newDelay;
+            else nextDelay += newDelay;
 
             var timeline = sb.Children[i] as DoubleAnimationUsingKeyFrames;
             timeline?.SetValue(Timeline.BeginTimeProperty, nextDelay.TimeSpan);
@@ -869,8 +922,8 @@ internal partial class FluidProgressBar : IDisposable
     {
         if (!disposing) return;
         // free managed resources here
-        SizeChanged      -= OnSizeChanged;
-        Loaded           -= OnLoaded;
+        SizeChanged -= OnSizeChanged;
+        Loaded -= OnLoaded;
         IsVisibleChanged -= OnIsVisibleChanged;
 
         // free native resources if there are any.			

@@ -1,60 +1,64 @@
-using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Drawing;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Threading;
-using installEAS.Helpers;
-using static installEAS.Helpers.Animate;
-using static installEAS.Themes.ThemesController;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
-
 namespace installEAS.MessageBoxCustom;
 
 internal partial class CustomMessageBoxWindow
 {
     public static CustomMessageBoxWindow CustomMainFrame;
 
-    internal string Caption { get => Title; set => Title = value; }
+    internal string Caption
+    {
+        get => Title;
+        set => Title = value;
+    }
 
-    internal string Message { get => TextBlock_Message.Text; set => TextBlock_Message.Text = value; }
+    internal string Message
+    {
+        get => TextBlock_Message.Text;
+        set => TextBlock_Message.Text = value;
+    }
 
-    internal string OkButtonText { get => Button_OK.Content.ToString(); set => Button_OK.Content = value.TryAddKeyboardAccellerator(); }
+    internal string OkButtonText
+    {
+        get => Button_OK.Content.ToString();
+        set => Button_OK.Content = value.TryAddKeyboardAccellerator();
+    }
 
-    internal string CancelButtonText { get => Button_Cancel.Content.ToString(); set => Button_Cancel.Content = value.TryAddKeyboardAccellerator(); }
+    internal string CancelButtonText
+    {
+        get => Button_Cancel.Content.ToString();
+        set => Button_Cancel.Content = value.TryAddKeyboardAccellerator();
+    }
 
-    internal string YesButtonText { get => Button_Yes.Content.ToString(); set => Button_Yes.Content = value.TryAddKeyboardAccellerator(); }
+    internal string YesButtonText
+    {
+        get => Button_Yes.Content.ToString();
+        set => Button_Yes.Content = value.TryAddKeyboardAccellerator();
+    }
 
-    internal string NoButtonText { get => Button_No.Content.ToString(); set => Button_No.Content = value.TryAddKeyboardAccellerator(); }
+    internal string NoButtonText
+    {
+        get => Button_No.Content.ToString();
+        set => Button_No.Content = value.TryAddKeyboardAccellerator();
+    }
 
     public MessageBoxResult Result { get; set; }
 
     public static DoubleAnimation Open;
     public static DoubleAnimation Clos;
 
-
     internal CustomMessageBoxWindow(string message, string caption, MessageBoxButton button, MessageBoxImage image)
     {
         InitializeComponent();
 
-        Open = new DoubleAnimation { From = 0.1, To  = 0.97, Duration = new Duration(TimeSpan.FromMilliseconds(200)) };
-        Clos = new DoubleAnimation { From = 0.97, To = 0.1, Duration  = new Duration(TimeSpan.FromMilliseconds(200)) };
+        Open = new DoubleAnimation { From = 0.1, To = 0.97, Duration = new Duration(TimeSpan.FromMilliseconds(200)) };
+        Clos = new DoubleAnimation { From = 0.97, To = 0.1, Duration = new Duration(TimeSpan.FromMilliseconds(200)) };
 
-        CustomMainFrame             = this;
-        Message                     = message;
-        Caption                     = caption;
+        CustomMainFrame = this;
+        Message = message;
+        Caption = caption;
         Image_MessageBox.Visibility = Visibility.Collapsed;
         DisplayImage(image);
         DisplayButtons(button);
     }
-
 
     private void DisplayButtons(MessageBoxButton button)
     {
@@ -64,31 +68,31 @@ internal partial class CustomMessageBoxWindow
                 Button_OK.Visibility = Visibility.Visible;
                 Button_OK.Focus();
                 Button_Cancel.Visibility = Visibility.Visible;
-                Button_Yes.Visibility    = Visibility.Collapsed;
-                Button_No.Visibility     = Visibility.Collapsed;
+                Button_Yes.Visibility = Visibility.Collapsed;
+                Button_No.Visibility = Visibility.Collapsed;
                 break;
 
             case MessageBoxButton.YesNo:
                 Button_Yes.Visibility = Visibility.Visible;
                 Button_Yes.Focus();
-                Button_No.Visibility     = Visibility.Visible;
-                Button_OK.Visibility     = Visibility.Collapsed;
+                Button_No.Visibility = Visibility.Visible;
+                Button_OK.Visibility = Visibility.Collapsed;
                 Button_Cancel.Visibility = Visibility.Collapsed;
                 break;
 
             case MessageBoxButton.YesNoCancel:
                 Button_Yes.Visibility = Visibility.Visible;
                 Button_Yes.Focus();
-                Button_No.Visibility     = Visibility.Visible;
+                Button_No.Visibility = Visibility.Visible;
                 Button_Cancel.Visibility = Visibility.Visible;
-                Button_OK.Visibility     = Visibility.Collapsed;
+                Button_OK.Visibility = Visibility.Collapsed;
                 break;
 
             default:
                 Button_OK.Visibility = Visibility.Visible;
                 Button_OK.Focus();
-                Button_Yes.Visibility    = Visibility.Collapsed;
-                Button_No.Visibility     = Visibility.Collapsed;
+                Button_Yes.Visibility = Visibility.Collapsed;
+                Button_No.Visibility = Visibility.Collapsed;
                 Button_Cancel.Visibility = Visibility.Collapsed;
                 break;
         }
@@ -124,58 +128,67 @@ internal partial class CustomMessageBoxWindow
                 break;
         }
 
-        Image_MessageBox.Source     = icon.ToImageSource();
+        Image_MessageBox.Source = icon.ToImageSource();
         Image_MessageBox.Visibility = Visibility.Visible;
     }
 
     private void Button_OK_Click(object sender, RoutedEventArgs e)
     {
-        Result         =  MessageBoxResult.OK;
+        Result = MessageBoxResult.OK;
         Clos.Completed += (_, _) => Close();
         BeginAnimation(OpacityProperty, Clos);
     }
 
     private void Button_Cancel_Click(object sender, RoutedEventArgs e)
     {
-        Result         =  MessageBoxResult.Cancel;
+        Result = MessageBoxResult.Cancel;
         Clos.Completed += (_, _) => Close();
         BeginAnimation(OpacityProperty, Clos);
     }
 
     private void Button_Yes_Click(object sender, RoutedEventArgs e)
     {
-        Result         =  MessageBoxResult.Yes;
+        Result = MessageBoxResult.Yes;
         Clos.Completed += (_, _) => Close();
         BeginAnimation(OpacityProperty, Clos);
     }
 
     private void Button_No_Click(object sender, RoutedEventArgs e)
     {
-        Result         =  MessageBoxResult.No;
+        Result = MessageBoxResult.No;
         Clos.Completed += (_, _) => Close();
         BeginAnimation(OpacityProperty, Clos);
     }
 
-    private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) { DragMove(); }
+    private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        DragMove();
+    }
 
-    private void CustomMessageBoxWindow_OnLoaded(object sender, RoutedEventArgs e) { BeginAnimation(OpacityProperty, Open); }
+    private void CustomMessageBoxWindow_OnLoaded(object sender, RoutedEventArgs e)
+    {
+        BeginAnimation(OpacityProperty, Open);
+    }
 }
 
 internal class MessageBoxData
 {
-    public string           Message             { get; set; } = "";
-    public string           Caption             { get; set; } = "Message";
-    public string           YesButtonCaption    { get; set; }
-    public string           NoButtonCaption     { get; set; }
-    public string           CancelButtonCaption { get; set; }
-    public string           OkButtonCaption     { get; set; }
-    public MessageBoxResult Result              { get; set; } = MessageBoxResult.None;
-    public MessageBoxButton Buttons             { get; set; } = MessageBoxButton.OK;
-    public MessageBoxImage  Image               { get; set; } = MessageBoxImage.None;
+    public string Message { get; set; } = "";
+    public string Caption { get; set; } = "Message";
+    public string YesButtonCaption { get; set; }
+    public string NoButtonCaption { get; set; }
+    public string CancelButtonCaption { get; set; }
+    public string OkButtonCaption { get; set; }
+    public MessageBoxResult Result { get; set; } = MessageBoxResult.None;
+    public MessageBoxButton Buttons { get; set; } = MessageBoxButton.OK;
+    public MessageBoxImage Image { get; set; } = MessageBoxImage.None;
 
     public MessageBoxResult ShowMessageBox()
     {
-        if (Thread.CurrentThread.GetApartmentState() == ApartmentState.STA) { ShowMessageBoxSTA(); }
+        if (Thread.CurrentThread.GetApartmentState() == ApartmentState.STA)
+        {
+            ShowMessageBoxSTA();
+        }
         else
         {
             var thread = new Thread(ShowMessageBoxSTA);
@@ -190,12 +203,12 @@ internal class MessageBoxData
     private void ShowMessageBoxSTA()
     {
         var msg = new CustomMessageBoxWindow(Message, Caption, Buttons, Image) { CaptionTextBlock = { Text = Caption } };
-        msg.YesButtonText         = YesButtonCaption ?? msg.YesButtonText;
-        msg.NoButtonText          = NoButtonCaption ?? msg.NoButtonText;
-        msg.CancelButtonText      = CancelButtonCaption ?? msg.CancelButtonText;
-        msg.OkButtonText          = OkButtonCaption ?? msg.OkButtonText;
+        msg.YesButtonText = YesButtonCaption ?? msg.YesButtonText;
+        msg.NoButtonText = NoButtonCaption ?? msg.NoButtonText;
+        msg.CancelButtonText = CancelButtonCaption ?? msg.CancelButtonText;
+        msg.OkButtonText = OkButtonCaption ?? msg.OkButtonText;
         msg.WindowStartupLocation = Application.Current.MainWindow?.Visibility == Visibility.Visible ? WindowStartupLocation.CenterOwner : WindowStartupLocation.CenterScreen;
-        msg.Owner                 = Application.Current.MainWindow?.Visibility == Visibility.Visible ? Application.Current.MainWindow : null;
+        msg.Owner = Application.Current.MainWindow?.Visibility == Visibility.Visible ? Application.Current.MainWindow : null;
         msg.ShowDialog();
         Result = msg.Result;
     }
@@ -268,10 +281,10 @@ public static class CustomMessageBox
     {
         var msgData = new MessageBoxData
         {
-            Message         = messageBoxText,
-            Caption         = caption,
-            Buttons         = MessageBoxButton.OK,
-            Image           = icon,
+            Message = messageBoxText,
+            Caption = caption,
+            Buttons = MessageBoxButton.OK,
+            Image = icon,
             OkButtonCaption = okButtonText
         };
         return msgData.ShowMessageBox();
@@ -281,10 +294,10 @@ public static class CustomMessageBox
     {
         var msgData = new MessageBoxData
         {
-            Message             = messageBoxText,
-            Caption             = caption,
-            Buttons             = MessageBoxButton.OKCancel,
-            OkButtonCaption     = okButtonText,
+            Message = messageBoxText,
+            Caption = caption,
+            Buttons = MessageBoxButton.OKCancel,
+            OkButtonCaption = okButtonText,
             CancelButtonCaption = cancelButtonText
         };
         return msgData.ShowMessageBox();
@@ -294,41 +307,39 @@ public static class CustomMessageBox
     {
         var msgData = new MessageBoxData
         {
-            Message             = messageBoxText,
-            Caption             = caption,
-            Buttons             = MessageBoxButton.OKCancel,
-            Image               = icon,
-            OkButtonCaption     = okButtonText,
+            Message = messageBoxText,
+            Caption = caption,
+            Buttons = MessageBoxButton.OKCancel,
+            Image = icon,
+            OkButtonCaption = okButtonText,
             CancelButtonCaption = cancelButtonText
         };
         return msgData.ShowMessageBox();
     }
 
-
     public static MessageBoxResult ShowYesNo(string messageBoxText, string caption, string yesButtonText, string noButtonText)
     {
         var msgData = new MessageBoxData
         {
-            Message          = messageBoxText,
-            Caption          = caption,
-            Buttons          = MessageBoxButton.YesNo,
+            Message = messageBoxText,
+            Caption = caption,
+            Buttons = MessageBoxButton.YesNo,
             YesButtonCaption = yesButtonText,
-            NoButtonCaption  = noButtonText
+            NoButtonCaption = noButtonText
         };
         return msgData.ShowMessageBox();
     }
-
 
     public static MessageBoxResult ShowYesNo(string messageBoxText, string caption, string yesButtonText, string noButtonText, MessageBoxImage icon)
     {
         var msgData = new MessageBoxData
         {
-            Message          = messageBoxText,
-            Caption          = caption,
-            Buttons          = MessageBoxButton.YesNo,
-            Image            = icon,
+            Message = messageBoxText,
+            Caption = caption,
+            Buttons = MessageBoxButton.YesNo,
+            Image = icon,
             YesButtonCaption = yesButtonText,
-            NoButtonCaption  = noButtonText
+            NoButtonCaption = noButtonText
         };
         return msgData.ShowMessageBox();
     }
@@ -337,11 +348,11 @@ public static class CustomMessageBox
     {
         var msgData = new MessageBoxData
         {
-            Message             = messageBoxText,
-            Caption             = caption,
-            Buttons             = MessageBoxButton.YesNoCancel,
-            YesButtonCaption    = yesButtonText,
-            NoButtonCaption     = noButtonText,
+            Message = messageBoxText,
+            Caption = caption,
+            Buttons = MessageBoxButton.YesNoCancel,
+            YesButtonCaption = yesButtonText,
+            NoButtonCaption = noButtonText,
             CancelButtonCaption = cancelButtonText
         };
         return msgData.ShowMessageBox();
@@ -351,12 +362,12 @@ public static class CustomMessageBox
     {
         var msgData = new MessageBoxData
         {
-            Message             = messageBoxText,
-            Caption             = caption,
-            Buttons             = MessageBoxButton.YesNoCancel,
-            Image               = icon,
-            YesButtonCaption    = yesButtonText,
-            NoButtonCaption     = noButtonText,
+            Message = messageBoxText,
+            Caption = caption,
+            Buttons = MessageBoxButton.YesNoCancel,
+            Image = icon,
+            YesButtonCaption = yesButtonText,
+            NoButtonCaption = noButtonText,
             CancelButtonCaption = cancelButtonText
         };
 

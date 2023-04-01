@@ -1,12 +1,3 @@
-using System;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using installEAS.Helpers;
-
 namespace installEAS.Controls;
 
 public partial class ProgressBarControl
@@ -21,7 +12,7 @@ public partial class ProgressBarControl
 public static class ProgressBarExtensions
 {
     private static ProgressBarControl _progressBarControlProgress = new();
-    public static  DoubleAnimation    animStop                    = new(0, TimeSpan.FromMilliseconds(1));
+    public static DoubleAnimation animStop = new(0, TimeSpan.FromMilliseconds(1));
 
     public static void SetPercent(this ProgressBar progressBar, double percentage, TimeSpan span)
     {
@@ -38,8 +29,8 @@ public static class ProgressBarExtensions
     [STAThread]
     public static void SetPercentDuration(this ProgressBar progressBar, double percentage, int timespan)
     {
-        MainWindow.MainFrame.pb.pbLabel.Foreground = Brushes.White;
-        MainWindow.MainFrame.pb.pbLabel.Visibility = Visibility.Visible;
+        MainFrame.pb.pbLabel.Foreground = Brushes.White;
+        MainFrame.pb.pbLabel.Visibility = Visibility.Visible;
         var span = TimeSpan.FromMilliseconds(timespan);
         var anim = new DoubleAnimation(percentage, span) { IsCumulative = false, FillBehavior = FillBehavior.Stop, IsAdditive = false };
         progressBar.Dispatcher.InvokeOrExecute(() => { progressBar.BeginAnimation(RangeBase.ValueProperty, anim); });

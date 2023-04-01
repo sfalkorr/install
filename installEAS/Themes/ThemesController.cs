@@ -1,10 +1,4 @@
-﻿using System;
-using System.Drawing;
-using System.Windows;
-using static installEAS.MainWindow;
-using static installEAS.Helpers.Animate;
-
-namespace installEAS.Themes;
+﻿namespace installEAS.Themes;
 
 public static class ThemesController
 {
@@ -17,10 +11,15 @@ public static class ThemesController
 
     public static ThemeTypes CurrentTheme { get; set; }
 
+    private static ResourceDictionary ThemeDictionary
+    {
+        set => Application.Current.Resources.MergedDictionaries[0] = value;
+    }
 
-    private static ResourceDictionary ThemeDictionary { set => Application.Current.Resources.MergedDictionaries[0] = value; }
-
-    private static void ChangeTheme(Uri uri) { ThemeDictionary = new ResourceDictionary() { Source = uri }; }
+    private static void ChangeTheme(Uri uri)
+    {
+        ThemeDictionary = new ResourceDictionary() { Source = uri };
+    }
 
     public static void SetTheme(ThemeTypes theme)
     {
@@ -29,22 +28,22 @@ public static class ThemesController
         switch (theme)
         {
             case ThemeTypes.ColorBlue:
-                themeName    = "ColorBlue";
+                themeName = "ColorBlue";
                 CurrentTheme = theme;
                 break;
             case ThemeTypes.ColorDark:
-                themeName    = "ColorDark";
+                themeName = "ColorDark";
                 CurrentTheme = theme;
                 break;
             case ThemeTypes.ColorGray:
-                themeName    = "ColorGray";
+                themeName = "ColorGray";
                 CurrentTheme = theme;
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(theme), theme, null);
         }
 
-        if (!string.IsNullOrEmpty(themeName)) ChangeTheme(new Uri($"/Themes/{themeName}.xaml", UriKind.Relative));
+        if (!IsNullOrEmpty(themeName)) ChangeTheme(new Uri($"/Themes/{themeName}.xaml", UriKind.Relative));
     }
 
     public static void ChangeTheme()

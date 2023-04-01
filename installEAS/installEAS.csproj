@@ -118,6 +118,7 @@
     <Compile Include="Controls\RoundProgressBar.xaml.cs">
       <DependentUpon>RoundProgressBar.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GlobalUsings.cs" />
     <Compile Include="Helpers\AnimateHelper.cs" />
     <Compile Include="Helpers\ArchiveHelper.cs" />
     <Compile Include="Helpers\ArrayHelper.cs" />

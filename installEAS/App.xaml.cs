@@ -1,21 +1,7 @@
-﻿using System;
-using System.Diagnostics;
-using System.Drawing;
-using System.IO;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.Windows;
-using System.Windows.Interop;
-using System.Windows.Media;
-
-
-namespace installEAS;
+﻿namespace installEAS;
 
 public partial class App
 {
-    
-    
     //[STAThread]
     [DllImport("User32")]
     private static extern int ShowWindow(IntPtr hwnd, int nCmdShow);

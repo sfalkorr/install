@@ -1,35 +1,17 @@
-using System;
-using System.Diagnostics;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Management;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Media.Imaging;
-using System.Windows.Threading;
-using Microsoft.Win32;
-
-
 namespace installEAS.Helpers;
 
 public static class Functions
 {
-
     /// <summary>
     /// path: yournamespace.resourcefolder.filename (like png) 
     /// </summary>
-    public static BitmapSource GetImageSource( string path )
+    public static BitmapSource GetImageSource(string path)
     {
         var bitmap = new BitmapImage();
         if (path == null) return null;
         bitmap.BeginInit();
-        bitmap.StreamSource = Assembly.GetExecutingAssembly().GetManifestResourceStream( path );
-        bitmap.CacheOption  = BitmapCacheOption.OnLoad;
+        bitmap.StreamSource = Assembly.GetExecutingAssembly().GetManifestResourceStream(path);
+        bitmap.CacheOption = BitmapCacheOption.OnLoad;
         bitmap.EndInit();
         return bitmap;
     }
@@ -37,11 +19,11 @@ public static class Functions
     /// <summary>
     /// path: yournamespace.resourcefolder.filename (like png) 
     /// </summary>
-    public static Icon GetPngConvertToIco( string path )
+    public static Icon GetPngConvertToIco(string path)
     {
         if (path == null) return null;
-        var bitmap = new Bitmap( Assembly.GetExecutingAssembly().GetManifestResourceStream( path ) );
-        return Icon.FromHandle( bitmap.GetHicon() );
+        var bitmap = new Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream(path));
+        return Icon.FromHandle(bitmap.GetHicon());
     }
 
     public static void ProcessKill(string processname)
@@ -54,15 +36,11 @@ public static class Functions
         return new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream($"{namespacename}.{filename}")).ReadToEnd();
     }
 
-
     public static async Task Sleep(int ms)
     {
         try
         {
-            await Task.Run(() =>
-            {
-                Thread.Sleep(ms);
-            }).ConfigureAwait(true);
+            await Task.Run(() => { Thread.Sleep(ms); }).ConfigureAwait(true);
         }
         catch (Exception exception)
         {
@@ -75,7 +53,7 @@ public static class Functions
         var key = Registry.LocalMachine;
 
         const string activeComputerName = "SYSTEM\\CurrentControlSet\\Control\\ComputerName\\ActiveComputerName";
-        var          activeCmpName      = key.CreateSubKey(activeComputerName);
+        var activeCmpName = key.CreateSubKey(activeComputerName);
         if (activeCmpName != null)
         {
             activeCmpName.SetValue("ComputerName", newName);
@@ -83,7 +61,7 @@ public static class Functions
         }
 
         const string computerName = "SYSTEM\\CurrentControlSet\\Control\\ComputerName\\ComputerName";
-        var          cmpName      = key.CreateSubKey(computerName);
+        var cmpName = key.CreateSubKey(computerName);
         if (cmpName != null)
         {
             cmpName.SetValue("ComputerName", newName);
@@ -91,7 +69,7 @@ public static class Functions
         }
 
         const string _hostName = "SYSTEM\\CurrentControlSet\\services\\Tcpip\\Parameters\\";
-        var          hostName  = key.CreateSubKey(_hostName);
+        var hostName = key.CreateSubKey(_hostName);
         if (hostName == null) return true;
         hostName.SetValue("Hostname", newName);
         hostName.SetValue("NV Hostname", newName);
@@ -100,14 +78,13 @@ public static class Functions
         return true;
     }
 
-
     public static bool SetComputerName(string Name)
     {
         const string RegLocComputerName = @"SYSTEM\CurrentControlSet\Control\ComputerName\ComputerName";
         try
         {
             var compPath = "Win32_ComputerSystem.Name='" + Environment.MachineName + "'";
-            var mo       = new ManagementObject(new ManagementPath(compPath));
+            var mo = new ManagementObject(new ManagementPath(compPath));
 
             var inputArgs = mo.GetMethodParameters("Rename");
             inputArgs["Name"] = Name;

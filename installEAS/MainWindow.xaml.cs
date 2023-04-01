@@ -1,104 +1,60 @@
-﻿using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls.Primitives;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Threading;
-using AvalonEdit;
-using AvalonEdit.Editing;
-using AvalonEdit.Utils;
-using AvalonEdit.Highlighting;
-using AvalonEdit.Highlighting.Xshd;
-using AvalonEdit.Rendering;
-using AvalonEdit.Document;
-using installEAS.Helpers;
-using installEAS.MessageBoxCustom;
-using installEAS.Themes;
-using installEAS.Controls;
-using static installEAS.Themes.ThemesController;
-using static installEAS.Helpers.Log;
-using static installEAS.Helpers.Sql;
-using static installEAS.Helpers.Password;
-using static installEAS.Helpers.Animate;
-using static installEAS.Helpers.Functions;
-using static installEAS.Variables;
-using static installEAS.Controls.SlidePanelsControl;
-using static installEAS.Controls.tempControl;
-using System.Windows.Controls;
-using System.Windows.Shapes;
-using System.Xml;
-using static System.Windows.Input.Key;
-using static AvalonEdit.Highlighting.HighlightingManager;
-
-namespace installEAS;
+﻿namespace installEAS;
 
 public partial class MainWindow
 {
-    public static   MainWindow      MainFrame;
-    public static   DoubleAnimation MainOpen;
-    public static   DoubleAnimation MainClos;
-    public readonly Storyboard      textBoxClos;
-    public readonly Storyboard      textBoxOpen;
-    public static   string          obj = "";
-
+    public static MainWindow MainFrame;
+    public static DoubleAnimation MainOpen;
+    public static DoubleAnimation MainClos;
+    public readonly Storyboard textBoxClos;
+    public readonly Storyboard textBoxOpen;
+    public static string obj = "";
 
     public MainWindow()
     {
         var s = typeof(MainWindow).Assembly.GetManifestResourceStream("installEAS.CustomHighlighting.xshd");
         if (s == null) throw new InvalidOperationException("Could not find embedded resource");
-        XmlReader reader             = new XmlTextReader(s);
-        var       customHighlighting = HighlightingLoader.Load(reader, Instance);
+        XmlReader reader = new XmlTextReader(s);
+        var customHighlighting = HighlightingLoader.Load(reader, Instance);
         Instance.RegisterHighlighting("Custom Highlighting", new[] { ".cool" }, customHighlighting);
 
         InitializeComponent();
 
-        MainFrame    =  this;
-        Left         =  5;
-        Top          =  5;
+        MainFrame = this;
+        Left = 5;
+        Top = 5;
         StateChanged += MainWindowStateChangeRaised;
-        SizeChanged  += MainWin_SizeChanged;
-        CurrentTheme =  ThemeTypes.ColorGray;
-        MainOpen     =  new DoubleAnimation { From = 0.1, To  = 0.97, Duration = new Duration(TimeSpan.FromMilliseconds(500)) };
-        MainClos     =  new DoubleAnimation { From = 0.97, To = 0.1, Duration  = new Duration(TimeSpan.FromMilliseconds(700)) };
-        textBoxOpen  =  Resources["OpenTextBox"] as Storyboard;
-        textBoxClos  =  Resources["CloseTextBox"] as Storyboard;
+        SizeChanged += MainWin_SizeChanged;
+        CurrentTheme = ThemeTypes.ColorGray;
+        MainOpen = new DoubleAnimation { From = 0.1, To = 0.97, Duration = new Duration(TimeSpan.FromMilliseconds(500)) };
+        MainClos = new DoubleAnimation { From = 0.97, To = 0.1, Duration = new Duration(TimeSpan.FromMilliseconds(700)) };
+        textBoxOpen = Resources["OpenTextBox"] as Storyboard;
+        textBoxClos = Resources["CloseTextBox"] as Storyboard;
 
-        textBox.IsEnabled                            = false;
+        textBox.IsEnabled = false;
         waitProgress.sprocketControl.IsIndeterminate = false;
-        waitProgress.IsEnabled                       = false;
-        labelVer.Content                             = $"InstallEAS v{AppVersion}";
+        waitProgress.IsEnabled = false;
+        labelVer.Content = $"InstallEAS v{AppVersion}";
 
         var SelectionBorder = new Pen { Brush = new SolidColorBrush(Colors.Wheat) };
-        SelectionBorder.Brush.Opacity            = 0.5;
-        rtb.TextArea.Cursor                      = Cursors.Arrow;
-        rtb.IsReadOnly                           = true;
-        rtb.TextArea.MouseSelectionMode          = MouseSelectionMode.WholeWord;
-        rtb.TextArea.Caret.CaretBrush            = Brushes.Transparent;
-        rtb.TextArea.SelectionForeground         = Brushes.White;
-        rtb.TextArea.SelectionCornerRadius       = 5;
-        rtb.TextArea.SelectionBorder             = SelectionBorder;
-        rtb.Options.InheritWordWrapIndentation   = false;
-        rtb.TextArea.SelectionBrush              = new SolidColorBrush(Color.FromArgb(100, 100, 100, 150));
-        rtb.Options.EnableTextDragDrop           = false;
-        rtb.Options.AllowScrollBelowDocument     = false;
-        rtb.Options.HighlightCurrentLine         = false;
-        rtb.Options.EnableRectangularSelection   = true;
-        rtb.Options.ShowBoxForControlCharacters  = false;
-        rtb.TextArea.OverstrikeMode              = false;
+        SelectionBorder.Brush.Opacity = 0.5;
+        rtb.TextArea.Cursor = Cursors.Arrow;
+        rtb.IsReadOnly = true;
+        rtb.TextArea.MouseSelectionMode = MouseSelectionMode.WholeWord;
+        rtb.TextArea.Caret.CaretBrush = Brushes.Transparent;
+        rtb.TextArea.SelectionForeground = Brushes.White;
+        rtb.TextArea.SelectionCornerRadius = 5;
+        rtb.TextArea.SelectionBorder = SelectionBorder;
+        rtb.Options.InheritWordWrapIndentation = false;
+        rtb.TextArea.SelectionBrush = new SolidColorBrush(Color.FromArgb(100, 100, 100, 150));
+        rtb.Options.EnableTextDragDrop = false;
+        rtb.Options.AllowScrollBelowDocument = false;
+        rtb.Options.HighlightCurrentLine = false;
+        rtb.Options.EnableRectangularSelection = true;
+        rtb.Options.ShowBoxForControlCharacters = false;
+        rtb.TextArea.OverstrikeMode = false;
         rtb.TextArea.Options.WordWrapIndentation = double.MaxValue;
-        rtb.TextArea.Options.EnableImeSupport    = false;
-        textBox.Background                       = Brushes.Red;
+        rtb.TextArea.Options.EnableImeSupport = false;
+        textBox.Background = Brushes.Red;
     }
 
     public enum inputType
@@ -184,19 +140,14 @@ public partial class MainWindow
             {
                 if (Keyboard.IsKeyDown(F12))
                 {
-                    MainFrame.textBox.Text       = GeneratePass(3, 3, 3, 1);
+                    MainFrame.textBox.Text = GeneratePass(3, 3, 3, 1);
                     MainFrame.textBox.CaretIndex = textBox.Text.Length;
                 }
 
                 if (ValidatePass(textBox.Text) != "Пароль корректен" || !Keyboard.IsKeyDown(Enter)) return;
                 tlabel.Visibility = Visibility.Collapsed;
-                NewSqlPass        = textBox.Text;
-                MainFrame.textBoxClos.Completed += (_, _) =>
-                {
-                    MainFrame.textBox.IsEnabled = false;
-                    MainFrame.textBox.Clear();
-                    AskType = inputType.Empty;
-                };
+                NewSqlPass = textBox.Text;
+                MainFrame.textBoxClos.Completed += OnTextBoxClosOnCompleted;
                 MainFrame.textBoxClos.Begin(MainFrame.textBox);
                 break;
             }
@@ -205,13 +156,8 @@ public partial class MainWindow
 
                 if (tlabel.Text != "Пароль принят" || !Keyboard.IsKeyDown(Enter)) return;
                 tlabel.Visibility = Visibility.Collapsed;
-                SqlPass           = textBox.Text;
-                MainFrame.textBoxClos.Completed += (_, _) =>
-                {
-                    MainFrame.textBox.IsEnabled = false;
-                    MainFrame.textBox.Clear();
-                    AskType = inputType.Empty;
-                };
+                SqlPass = textBox.Text;
+                MainFrame.textBoxClos.Completed += OnTextBoxClosOnCompleted;
                 MainFrame.textBoxClos.Begin(MainFrame.textBox);
                 break;
             case inputType.AskMachinename:
@@ -225,6 +171,13 @@ public partial class MainWindow
             default:
                 throw new ArgumentOutOfRangeException();
         }
+    }
+
+    private void OnTextBoxClosOnCompleted(object o, EventArgs eventArgs)
+    {
+        MainFrame.textBox.IsEnabled = false;
+        MainFrame.textBox.Clear();
+        AskType = inputType.Empty;
     }
 
     private void textBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -235,19 +188,19 @@ public partial class MainWindow
             //tlabel.Visibility = Visibility.Visible;
             case inputType.AskNewSqlPassword when ValidatePass(textBox.Text) == "Пароль корректен":
                 tlabel.Foreground = Brushes.GreenYellow;
-                tlabel.Text       = ValidatePass(textBox.Text);
+                tlabel.Text = ValidatePass(textBox.Text);
                 break;
             case inputType.AskNewSqlPassword:
                 tlabel.Foreground = Brushes.OrangeRed;
-                tlabel.Text       = ValidatePass(textBox.Text);
+                tlabel.Text = ValidatePass(textBox.Text);
                 break;
             case inputType.AskCurrentSqlPassword when IsSqlPasswordOK(textBox.Text) && !Regex.Match(textBox.Text, "[\\s]").Success:
                 tlabel.Foreground = Brushes.GreenYellow;
-                tlabel.Text       = "Пароль принят";
+                tlabel.Text = "Пароль принят";
                 break;
             case inputType.AskCurrentSqlPassword:
                 tlabel.Foreground = Brushes.OrangeRed;
-                tlabel.Text       = "Неверный пароль";
+                tlabel.Text = "Неверный пароль";
                 break;
             case inputType.AskMachinename:
                 Console.WriteLine();
@@ -262,10 +215,15 @@ public partial class MainWindow
         }
     }
 
+    public static void CloseMain()
+    {
+        SystemCommands.CloseWindow(MainFrame);
+    }
 
-    public static void CloseMain() { SystemCommands.CloseWindow(MainFrame); }
-
-    public void CommandBinding_Executed_Close(object sender, ExecutedRoutedEventArgs e) { SystemCommands.CloseWindow(this); }
+    public void CommandBinding_Executed_Close(object sender, ExecutedRoutedEventArgs e)
+    {
+        SystemCommands.CloseWindow(this);
+    }
 
     public void CommandBinding_Executed_Maximize(object sender, ExecutedRoutedEventArgs e)
     {
@@ -284,7 +242,6 @@ public partial class MainWindow
         if (textBox.IsEnabled) textBox.Focus();
         SystemCommands.RestoreWindow(this);
     }
-
 
     public static string ololo;
 
@@ -423,20 +380,18 @@ public partial class MainWindow
         if (WindowState == WindowState.Maximized)
         {
             MainWindowBorder.BorderThickness = new Thickness(7);
-            RestoreButton.Visibility         = Visibility.Visible;
-            MaximizeButton.Visibility        = Visibility.Collapsed;
+            RestoreButton.Visibility = Visibility.Visible;
+            MaximizeButton.Visibility = Visibility.Collapsed;
         }
         else
         {
             MainWindowBorder.BorderThickness = new Thickness(0);
-            RestoreButton.Visibility         = Visibility.Collapsed;
-            MaximizeButton.Visibility        = Visibility.Visible;
+            RestoreButton.Visibility = Visibility.Collapsed;
+            MaximizeButton.Visibility = Visibility.Visible;
         }
     }
 
-
     public static string InputText { get; set; }
-
 
     private void LabelVer_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
@@ -444,24 +399,26 @@ public partial class MainWindow
         if (textBox.IsEnabled) textBox.Focus();
     }
 
-
     public static bool IsEmpty;
 
     [SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
     private void rtb_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-        var pt                  = e.GetPosition((UIElement)sender);
-        var result              = VisualTreeHelper.HitTest(this, pt);
+        var pt = e.GetPosition((UIElement)sender);
+        var result = VisualTreeHelper.HitTest(this, pt);
         if (result != null) obj = result.VisualHit.ToString();
 
         try
         {
-            var PosCol       = rtb.GetPositionFromPoint(e.GetPosition(rtb)).Value.Column;
+            var PosCol = rtb.GetPositionFromPoint(e.GetPosition(rtb)).Value.Column;
             var PosVisualCol = rtb.GetPositionFromPoint(e.GetPosition(rtb)).Value.VisualColumn;
 
             if (PosCol == 1 && PosVisualCol == 0) IsEmpty = true;
         }
-        catch (Exception) { IsEmpty = true; }
+        catch (Exception)
+        {
+            IsEmpty = true;
+        }
 
         if (e.LeftButton != MouseButtonState.Pressed) return;
         if (obj != "AvalonEdit.Rendering.TextView" || !IsEmpty) return;
@@ -470,7 +427,6 @@ public partial class MainWindow
 
         if (textBox.IsEnabled) textBox.Focus();
     }
-
 
     private void rtb_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
     {
