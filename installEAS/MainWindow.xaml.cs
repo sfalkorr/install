@@ -1,60 +1,119 @@
 ﻿namespace installEAS;
 
+[SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
 public partial class MainWindow
 {
-    public static MainWindow MainFrame;
-    public static DoubleAnimation MainOpen;
-    public static DoubleAnimation MainClos;
-    public readonly Storyboard textBoxClos;
-    public readonly Storyboard textBoxOpen;
-    public static string obj = "";
+    public static   MainWindow      MainFrame;
+    public static   DoubleAnimation MainOpen;
+    public static   DoubleAnimation MainClos;
+    public readonly Storyboard      textBoxClos;
+    public readonly Storyboard      textBoxOpen;
+    public static   string          obj = "";
+
+    protected override void OnSourceInitialized(EventArgs e)
+    {
+        base.OnSourceInitialized(e);
+
+        var source = PresentationSource.FromVisual(this) as HwndSource;
+        source?.AddHook(WndProc);
+    }
+
+    private const int WM_ENTERSIZEMOVE = 0x0231;
+    private const int WM_EXITSIZEMOVE  = 0x0232;
+
+    private Rect _windowRect;
+
+    private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+    {
+        switch (msg)
+        {
+            case WM_ENTERSIZEMOVE:
+                _windowRect = GetWindowRect(this);
+                break;
+
+            case WM_EXITSIZEMOVE:
+                if (_windowRect.Size != GetWindowRect(this).Size)
+                {
+                    Console.WriteLine("RESIZED");
+                    rtb.ScrollToEnd();
+                }
+
+                break;
+        }
+
+        return IntPtr.Zero;
+    }
+
+    private static Rect GetWindowRect(Window window)
+    {
+        var handle = new WindowInteropHelper(window).Handle;
+        return GetWindowRect(handle, out var rect) ? rect : default;
+    }
+
+    [DllImport("User32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool GetWindowRect(
+        IntPtr   hWnd,
+        out RECT lpRect);
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct RECT
+    {
+        private readonly int left;
+        private readonly int top;
+        private readonly int right;
+        private readonly int bottom;
+
+        public static implicit operator Rect(RECT rect) =>
+            new Rect(rect.left, rect.top, (rect.right - rect.left), (rect.bottom - rect.top));
+    }
 
     public MainWindow()
     {
         var s = typeof(MainWindow).Assembly.GetManifestResourceStream("installEAS.CustomHighlighting.xshd");
         if (s == null) throw new InvalidOperationException("Could not find embedded resource");
-        XmlReader reader = new XmlTextReader(s);
-        var customHighlighting = HighlightingLoader.Load(reader, Instance);
+        XmlReader reader             = new XmlTextReader(s);
+        var       customHighlighting = HighlightingLoader.Load(reader, Instance);
         Instance.RegisterHighlighting("Custom Highlighting", new[] { ".cool" }, customHighlighting);
 
         InitializeComponent();
 
-        MainFrame = this;
-        Left = 5;
-        Top = 5;
+        MainFrame    =  this;
+        Left         =  5;
+        Top          =  5;
         StateChanged += MainWindowStateChangeRaised;
-        SizeChanged += MainWin_SizeChanged;
-        CurrentTheme = ThemeTypes.ColorGray;
-        MainOpen = new DoubleAnimation { From = 0.1, To = 0.97, Duration = new Duration(TimeSpan.FromMilliseconds(500)) };
-        MainClos = new DoubleAnimation { From = 0.97, To = 0.1, Duration = new Duration(TimeSpan.FromMilliseconds(700)) };
-        textBoxOpen = Resources["OpenTextBox"] as Storyboard;
-        textBoxClos = Resources["CloseTextBox"] as Storyboard;
+        SizeChanged  += MainWin_SizeChanged;
+        CurrentTheme =  ThemeTypes.ColorGray;
+        MainOpen     =  new DoubleAnimation { From = 0.1, To  = 0.97, Duration = new Duration(TimeSpan.FromMilliseconds(500)) };
+        MainClos     =  new DoubleAnimation { From = 0.97, To = 0.1, Duration  = new Duration(TimeSpan.FromMilliseconds(700)) };
+        textBoxOpen  =  Resources["OpenTextBox"] as Storyboard;
+        textBoxClos  =  Resources["CloseTextBox"] as Storyboard;
 
-        textBox.IsEnabled = false;
+        textBox.IsEnabled                            = false;
         waitProgress.sprocketControl.IsIndeterminate = false;
-        waitProgress.IsEnabled = false;
-        labelVer.Content = $"InstallEAS v{AppVersion}";
+        waitProgress.IsEnabled                       = false;
+        labelVer.Content                             = $"InstallEAS v{AppVersion}";
 
         var SelectionBorder = new Pen { Brush = new SolidColorBrush(Colors.Wheat) };
-        SelectionBorder.Brush.Opacity = 0.5;
-        rtb.TextArea.Cursor = Cursors.Arrow;
-        rtb.IsReadOnly = true;
-        rtb.TextArea.MouseSelectionMode = MouseSelectionMode.WholeWord;
-        rtb.TextArea.Caret.CaretBrush = Brushes.Transparent;
-        rtb.TextArea.SelectionForeground = Brushes.White;
-        rtb.TextArea.SelectionCornerRadius = 5;
-        rtb.TextArea.SelectionBorder = SelectionBorder;
-        rtb.Options.InheritWordWrapIndentation = false;
-        rtb.TextArea.SelectionBrush = new SolidColorBrush(Color.FromArgb(100, 100, 100, 150));
-        rtb.Options.EnableTextDragDrop = false;
-        rtb.Options.AllowScrollBelowDocument = false;
-        rtb.Options.HighlightCurrentLine = false;
-        rtb.Options.EnableRectangularSelection = true;
-        rtb.Options.ShowBoxForControlCharacters = false;
-        rtb.TextArea.OverstrikeMode = false;
+        SelectionBorder.Brush.Opacity            = 0.5;
+        rtb.TextArea.Cursor                      = Cursors.Arrow;
+        rtb.IsReadOnly                           = true;
+        rtb.TextArea.MouseSelectionMode          = MouseSelectionMode.WholeWord;
+        rtb.TextArea.Caret.CaretBrush            = Brushes.Transparent;
+        rtb.TextArea.SelectionForeground         = Brushes.White;
+        rtb.TextArea.SelectionCornerRadius       = 5;
+        rtb.TextArea.SelectionBorder             = SelectionBorder;
+        rtb.Options.InheritWordWrapIndentation   = false;
+        rtb.TextArea.SelectionBrush              = new SolidColorBrush(Color.FromArgb(100, 100, 100, 150));
+        rtb.Options.EnableTextDragDrop           = false;
+        rtb.Options.AllowScrollBelowDocument     = false;
+        rtb.Options.HighlightCurrentLine         = false;
+        rtb.Options.EnableRectangularSelection   = true;
+        rtb.Options.ShowBoxForControlCharacters  = false;
+        rtb.TextArea.OverstrikeMode              = false;
         rtb.TextArea.Options.WordWrapIndentation = double.MaxValue;
-        rtb.TextArea.Options.EnableImeSupport = false;
-        textBox.Background = Brushes.Red;
+        rtb.TextArea.Options.EnableImeSupport    = false;
+        textBox.Background                       = Brushes.Red;
     }
 
     public enum inputType
@@ -140,13 +199,13 @@ public partial class MainWindow
             {
                 if (Keyboard.IsKeyDown(F12))
                 {
-                    MainFrame.textBox.Text = GeneratePass(3, 3, 3, 1);
+                    MainFrame.textBox.Text       = GeneratePass(3, 3, 3, 1);
                     MainFrame.textBox.CaretIndex = textBox.Text.Length;
                 }
 
                 if (ValidatePass(textBox.Text) != "Пароль корректен" || !Keyboard.IsKeyDown(Enter)) return;
-                tlabel.Visibility = Visibility.Collapsed;
-                NewSqlPass = textBox.Text;
+                tlabel.Visibility               =  Visibility.Collapsed;
+                NewSqlPass                      =  textBox.Text;
                 MainFrame.textBoxClos.Completed += OnTextBoxClosOnCompleted;
                 MainFrame.textBoxClos.Begin(MainFrame.textBox);
                 break;
@@ -155,8 +214,8 @@ public partial class MainWindow
             case inputType.AskCurrentSqlPassword:
 
                 if (tlabel.Text != "Пароль принят" || !Keyboard.IsKeyDown(Enter)) return;
-                tlabel.Visibility = Visibility.Collapsed;
-                SqlPass = textBox.Text;
+                tlabel.Visibility               =  Visibility.Collapsed;
+                SqlPass                         =  textBox.Text;
                 MainFrame.textBoxClos.Completed += OnTextBoxClosOnCompleted;
                 MainFrame.textBoxClos.Begin(MainFrame.textBox);
                 break;
@@ -188,19 +247,19 @@ public partial class MainWindow
             //tlabel.Visibility = Visibility.Visible;
             case inputType.AskNewSqlPassword when ValidatePass(textBox.Text) == "Пароль корректен":
                 tlabel.Foreground = Brushes.GreenYellow;
-                tlabel.Text = ValidatePass(textBox.Text);
+                tlabel.Text       = ValidatePass(textBox.Text);
                 break;
             case inputType.AskNewSqlPassword:
                 tlabel.Foreground = Brushes.OrangeRed;
-                tlabel.Text = ValidatePass(textBox.Text);
+                tlabel.Text       = ValidatePass(textBox.Text);
                 break;
             case inputType.AskCurrentSqlPassword when IsSqlPasswordOK(textBox.Text) && !Regex.Match(textBox.Text, "[\\s]").Success:
                 tlabel.Foreground = Brushes.GreenYellow;
-                tlabel.Text = "Пароль принят";
+                tlabel.Text       = "Пароль принят";
                 break;
             case inputType.AskCurrentSqlPassword:
                 tlabel.Foreground = Brushes.OrangeRed;
-                tlabel.Text = "Неверный пароль";
+                tlabel.Text       = "Неверный пароль";
                 break;
             case inputType.AskMachinename:
                 Console.WriteLine();
@@ -380,14 +439,14 @@ public partial class MainWindow
         if (WindowState == WindowState.Maximized)
         {
             MainWindowBorder.BorderThickness = new Thickness(7);
-            RestoreButton.Visibility = Visibility.Visible;
-            MaximizeButton.Visibility = Visibility.Collapsed;
+            RestoreButton.Visibility         = Visibility.Visible;
+            MaximizeButton.Visibility        = Visibility.Collapsed;
         }
         else
         {
             MainWindowBorder.BorderThickness = new Thickness(0);
-            RestoreButton.Visibility = Visibility.Collapsed;
-            MaximizeButton.Visibility = Visibility.Visible;
+            RestoreButton.Visibility         = Visibility.Collapsed;
+            MaximizeButton.Visibility        = Visibility.Visible;
         }
     }
 
@@ -401,16 +460,15 @@ public partial class MainWindow
 
     public static bool IsEmpty;
 
-    [SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
     private void rtb_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-        var pt = e.GetPosition((UIElement)sender);
-        var result = VisualTreeHelper.HitTest(this, pt);
+        var pt                  = e.GetPosition((UIElement)sender);
+        var result              = VisualTreeHelper.HitTest(this, pt);
         if (result != null) obj = result.VisualHit.ToString();
 
         try
         {
-            var PosCol = rtb.GetPositionFromPoint(e.GetPosition(rtb)).Value.Column;
+            var PosCol       = rtb.GetPositionFromPoint(e.GetPosition(rtb)).Value.Column;
             var PosVisualCol = rtb.GetPositionFromPoint(e.GetPosition(rtb)).Value.VisualColumn;
 
             if (PosCol == 1 && PosVisualCol == 0) IsEmpty = true;
@@ -434,4 +492,5 @@ public partial class MainWindow
         if (e.LeftButton == MouseButtonState.Released && Sel != "") rtb.ToClipSelection();
         if (textBox.IsEnabled) textBox.Focus();
     }
+ 
 }
