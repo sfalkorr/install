@@ -234,8 +234,8 @@
     <Style x:Key="TextEditorStyle1" TargetType="{x:Type avalonedit:TextEditor}">
         <Setter Property="Background" Value="{DynamicResource ResourceKey=Editor.Background.Color}" />
         <Setter Property="BorderBrush" Value="{DynamicResource ResourceKey=Tittle.Border.Color}" />
-        <Setter Property="FontFamily" Value="Segue UI" />
-        <Setter Property="FontSize" Value="16" />
+        <Setter Property="FontFamily" Value="Consolas" />
+        <Setter Property="FontSize" Value="15" />
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
         <Setter Property="Template">
             <Setter.Value>

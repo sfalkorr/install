@@ -103,6 +103,7 @@
                     IsTabStop="False"
                     PreviewMouseLeftButtonDown="rtb_PreviewMouseLeftButtonDown"
                     PreviewMouseLeftButtonUp="rtb_PreviewMouseLeftButtonUp"
+                    PreviewMouseWheel="Rtb_OnPreviewMouseWheel"
                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                     ScrollViewer.VerticalScrollBarVisibility="Auto"
                     Style="{DynamicResource TextEditorStyle1}"

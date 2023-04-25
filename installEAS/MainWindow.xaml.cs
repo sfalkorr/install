@@ -28,7 +28,10 @@ public partial class MainWindow
         switch (msg)
         {
             case WM_ENTERSIZEMOVE:
+            {
                 _windowRect = GetWindowRect(this);
+                Console.WriteLine("res");
+            }
                 break;
 
             case WM_EXITSIZEMOVE:
@@ -52,9 +55,7 @@ public partial class MainWindow
 
     [DllImport("User32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool GetWindowRect(
-        IntPtr   hWnd,
-        out RECT lpRect);
+    private static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
 
     [StructLayout(LayoutKind.Sequential)]
     private struct RECT
@@ -64,8 +65,10 @@ public partial class MainWindow
         private readonly int right;
         private readonly int bottom;
 
-        public static implicit operator Rect(RECT rect) =>
-            new Rect(rect.left, rect.top, (rect.right - rect.left), (rect.bottom - rect.top));
+        public static implicit operator Rect(RECT rect)
+        {
+            return new Rect(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
+        }
     }
 
     public MainWindow()
@@ -306,15 +309,7 @@ public partial class MainWindow
 
     public static string yolka
     {
-        get =>
-            // MainFrame.textBoxClos.Completed += (_, _) =>
-            // {
-            //     
-            //     MainFrame.textBox.IsEnabled = false;
-            //     MainFrame.textBox.Clear();
-            // };
-            // MainFrame.textBoxClos.Begin(MainFrame.textBox);
-            ololo = "dfdf";
+        get => ololo = "dfdf";
         set
         {
             MainFrame.textBoxClos.Completed += (_, _) =>
@@ -419,10 +414,7 @@ public partial class MainWindow
         //TODO раскоментить в релизе
         MainOpen.Completed += async (_, _) =>
         {
-            //log("Инициализация...", false);
-
-            await Task.Delay(200).ConfigureAwait(true);
-            //log("OK");
+            await Task.Delay(500).ConfigureAwait(true);
             await AnimateFrameworkElement(MenuMain.PanelTopMain, 500).ConfigureAwait(true);
         };
         BeginAnimation(OpacityProperty, MainOpen);
@@ -492,5 +484,32 @@ public partial class MainWindow
         if (e.LeftButton == MouseButtonState.Released && Sel != "") rtb.ToClipSelection();
         if (textBox.IsEnabled) textBox.Focus();
     }
- 
+    private const double FONT_MAX_SIZE = 24d;
+    private const double FONT_MIN_SIZE = 10d;
+    
+    public void UpdateFontSize(bool increase)
+    {
+        var currentSize = rtb.FontSize;
+
+        if (increase)
+        {
+            if (!(currentSize < FONT_MAX_SIZE)) return;
+            var newSize = Math.Min(FONT_MAX_SIZE, currentSize + 1);
+            rtb.FontSize = newSize;
+        }
+        else
+        {
+            if (!(currentSize > FONT_MIN_SIZE)) return;
+            var newSize = Math.Max(FONT_MIN_SIZE, currentSize - 1);
+            rtb.FontSize = newSize;
+        }
+    }
+    
+    private void Rtb_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
+    {
+        var ctrl = Keyboard.Modifiers == ModifierKeys.Control;
+        if (!ctrl) return;
+        UpdateFontSize(e.Delta > 0);
+        e.Handled = true;
+    }
 }
