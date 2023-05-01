@@ -22,7 +22,8 @@ internal static class Password
 
             return shuffle(rand);
         }
-
+        
+    
         string RandomStringCap(int length)
         {
             return new string(Enumerable.Repeat("ABCDEFGHIJKLMNOPQRSTUVWXYZ", length).Select(s => s[random.Next(s.Length)]).ToArray());

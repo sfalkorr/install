@@ -26,7 +26,7 @@
     </LinearGradientBrush>
     <LinearGradientBrush x:Key="Menu.Background" StartPoint="0.5,0" EndPoint="0.5,1">
         <GradientStop Offset="0" Color="#FA50555A" />
-        <GradientStop Offset="1" Color="#9040454A" />
+        <GradientStop Offset="1" Color="#9030353A" />
     </LinearGradientBrush>
     <SolidColorBrush x:Key="Menu.Selector" Color="#FA60656A" />
 
@@ -188,7 +188,7 @@
                         BorderThickness="{TemplateBinding BorderThickness}"
                         CornerRadius="5">
                         <Border.Background>
-                            <SolidColorBrush x:Name="BorderColor" Color="#0060656A" />
+                            <SolidColorBrush x:Name="BorderColor" Color="Transparent" />
                         </Border.Background>
                         <ContentControl
                             Margin="{TemplateBinding Padding}"
@@ -202,7 +202,98 @@
                                         <ColorAnimation
                                             Storyboard.TargetName="BorderColor"
                                             Storyboard.TargetProperty="Color"
-                                            To="{StaticResource ResourceKey=Button.MouseOver}"
+                                            To="#FA60656A"
+                                            Duration="0:0:0.001" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState Name="Normal">
+                                    <Storyboard>
+                                        <ColorAnimation
+                                            Storyboard.TargetName="BorderColor"
+                                            Storyboard.TargetProperty="Color"
+                                            From="#FA60656A"
+                                            To="#0060656A"
+                                            Duration="0:0:0.100" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState Name="Pressed">
+                                    <Storyboard>
+                                        <ColorAnimation
+                                            Storyboard.TargetName="BorderColor"
+                                            Storyboard.TargetProperty="Color"
+                                            To="#8060656A"
+                                            Duration="0:0:0:0.005" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Trigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation
+                                Storyboard.TargetProperty="(Foreground).(SolidColorBrush.Color)"
+                                To="#FFFFFFFF"
+                                Duration="0:0:0.100" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation
+                                Storyboard.TargetProperty="(Foreground).(SolidColorBrush.Color)"
+                                To="#FFCCCCCC"
+                                Duration="0:0:0.100" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.ExitActions>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="MessageboxStyle1" TargetType="Button">
+        <Setter Property="Background" Value="#0060656A" />
+        <Setter Property="BorderThickness" Value="0.6" />
+        <Setter Property="BorderBrush" Value="#FA50555A" />
+        <Setter Property="FontFamily" Value="Segue UI" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="Foreground" Value="#FFBBBBBB" />
+        <Setter Property="Height" Value="30" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="Margin" Value="7,0,7,10" />
+        <Setter Property="MaxWidth" Value="160" />
+        <Setter Property="MinWidth" Value="90" />
+        <Setter Property="Padding" Value="0,2,0,0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="5">
+                        <Border.Background>
+                            <SolidColorBrush x:Name="BorderColor" Color="Transparent" />
+                        </Border.Background>
+                        <ContentControl
+                            Margin="{TemplateBinding Padding}"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Content="{TemplateBinding Content}" />
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup Name="CommonStates">
+                                <VisualState Name="MouseOver">
+                                    <Storyboard>
+                                        <ColorAnimation
+                                            Storyboard.TargetName="BorderColor"
+                                            Storyboard.TargetProperty="Color"
+                                            To="#FA60656A"
                                             Duration="0:0:0.001" />
                                     </Storyboard>
                                 </VisualState>

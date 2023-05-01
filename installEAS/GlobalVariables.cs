@@ -26,12 +26,13 @@ public static class Variables
 
         return null;
     }
-
+ 
     public static bool IsServer()
     {
         return SQLRegParameters != null;
     }
 
+    
     public static bool IsComputernameCorrect()
     {
         return Regex.Match(Computername, "(?<B>R|C)(\\d{2})-(\\d{6})-([W])(\\d{2}$)").Success || Regex.Match(Computername, "(?<B>R|C)(\\d{2})-(\\d{6})-([N]$)").Success;

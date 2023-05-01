@@ -81,8 +81,8 @@ public static class ProcessTools
         var lpStartupInfo = new STARTUPINFO();
         lpStartupInfo.cb = Marshal.SizeOf((object)lpStartupInfo);
         lpStartupInfo.lpDesktop = "winsta0\\default";
-        var dwCreationFlags = 48;
-        var processAsUser = CreateProcessAsUser(zero1, null, CommandLine, ref structure, ref structure, false, dwCreationFlags, IntPtr.Zero, null, ref lpStartupInfo, out procInfo);
+        const int dwCreationFlags = 48;
+        var       processAsUser   = CreateProcessAsUser(zero1, null, CommandLine, ref structure, ref structure, false, dwCreationFlags, IntPtr.Zero, null, ref lpStartupInfo, out procInfo);
         CloseHandle(num);
         CloseHandle(zero2);
         CloseHandle(zero1);

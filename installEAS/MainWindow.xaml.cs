@@ -47,6 +47,8 @@ public partial class MainWindow
         return IntPtr.Zero;
     }
 
+    
+    
     private static Rect GetWindowRect(Window window)
     {
         var handle = new WindowInteropHelper(window).Handle;
@@ -501,10 +503,14 @@ public partial class MainWindow
         {
             if (!(currentSize > FONT_MIN_SIZE)) return;
             var newSize = Math.Max(FONT_MIN_SIZE, currentSize - 1);
+            
             rtb.FontSize = newSize;
         }
     }
     
+        
+            
+                
     private void Rtb_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
     {
         var ctrl = Keyboard.Modifiers == ModifierKeys.Control;
