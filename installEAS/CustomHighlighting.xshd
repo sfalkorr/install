@@ -29,6 +29,7 @@
         <Keywords foreground="YellowGreen">
 
             <Word>OK</Word>
+            <Word>грипп</Word>
         </Keywords>
 
         <!--        <Keywords foreground="Yellow" background="Green">-->
@@ -39,7 +40,7 @@
         <!--            -->
         <!--        </Keywords>-->
 
-        <Keywords  foreground="White">
+        <Keywords foreground="White">
             <Word>пароль</Word>
             <Word>паролей</Word>
             <Word>Enter</Word>

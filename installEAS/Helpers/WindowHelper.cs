@@ -1,6 +1,6 @@
 namespace installEAS.Helpers;
 
-public static class WindowHelper
+public abstract class WindowHelper
 {
     /// <summary>
     /// Moves a specified Window to the center of a monitor where the cursor locates.
@@ -9,7 +9,7 @@ public static class WindowHelper
     /// <returns>
     /// This should be called before Loaded event such as ArrangeOverride method.
     /// </returns>
-    public static bool MoveToCenter(Window window)
+    public bool MoveToCenter(Window window)
     {
         if (window.WindowStartupLocation != WindowStartupLocation.CenterScreen)
             return false;
@@ -45,7 +45,6 @@ public static class WindowHelper
         return SetWindowPlacement(windowHandle, ref windowPlacement);
     }
 
-
     [DllImport("User32.dll", SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static extern bool GetCursorPos(out POINT lpPoint);
@@ -67,10 +66,10 @@ public static class WindowHelper
     [StructLayout(LayoutKind.Sequential)]
     private struct MONITORINFO
     {
-        public uint cbSize;
-        public RECT rcMonitor;
-        public RECT rcWork;
-        public uint dwFlags;
+        public           uint cbSize;
+        private readonly RECT rcMonitor;
+        public readonly  RECT rcWork;
+        private readonly uint dwFlags;
     }
 
     [DllImport("User32.dll", SetLastError = true)]
@@ -84,28 +83,28 @@ public static class WindowHelper
     [StructLayout(LayoutKind.Sequential)]
     private struct WINDOWPLACEMENT
     {
-        public uint  length;
-        public uint  flags;
-        public uint  showCmd;
-        public POINT ptMinPosition;
-        public POINT ptMaxPosition;
-        public RECT  rcNormalPosition;
+        private readonly uint  length;
+        private readonly uint  flags;
+        private readonly uint  showCmd;
+        private readonly POINT ptMinPosition;
+        private readonly POINT ptMaxPosition;
+        public           RECT  rcNormalPosition;
     }
 
     [StructLayout(LayoutKind.Sequential)]
     private struct POINT
     {
-        public int x;
-        public int y;
+        private readonly int x;
+        private readonly int y;
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    private struct RECT
+    private readonly struct RECT
     {
-        public int left;
-        public int top;
-        public int right;
-        public int bottom;
+        public readonly  int left;
+        public readonly  int top;
+        private readonly int right;
+        private readonly int bottom;
 
         public int Width  => right - left;
         public int Height => bottom - top;
@@ -118,8 +117,4 @@ public static class WindowHelper
             bottom = y + height;
         }
     }
-
-    
-    
-    
 }

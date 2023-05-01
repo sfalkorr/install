@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Threading;
+
 using AvalonEdit.Document;
 using AvalonEdit.Rendering;
 using AvalonEdit.Utils;
@@ -71,11 +72,23 @@ public sealed class Caret
 
     internal TextViewPosition NonValidatedPosition => position;
 
-    public TextLocation Location { get => position.Location; set => Position = new TextViewPosition(value); }
+    public TextLocation Location
+    {
+        get => position.Location;
+        set => Position = new TextViewPosition(value);
+    }
 
-    public int Line { get => position.Line; set => Position = new TextViewPosition(value, position.Column); }
+    public int Line
+    {
+        get => position.Line;
+        set => Position = new TextViewPosition(value, position.Column);
+    }
 
-    public int Column { get => position.Column; set => Position = new TextViewPosition(position.Line, value); }
+    public int Column
+    {
+        get => position.Column;
+        set => Position = new TextViewPosition(position.Line, value);
+    }
 
     public int VisualColumn
     {
@@ -367,5 +380,9 @@ public sealed class Caret
     {
     }
 
-    public Brush CaretBrush { get => caretAdorner.CaretBrush; set => caretAdorner.CaretBrush = value; }
+    public Brush CaretBrush
+    {
+        get => caretAdorner.CaretBrush;
+        set => caretAdorner.CaretBrush = value;
+    }
 }

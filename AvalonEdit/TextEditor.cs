@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Shapes;
+
 using AvalonEdit.Document;
 using AvalonEdit.Editing;
 using AvalonEdit.Highlighting;
@@ -20,7 +21,8 @@ using AvalonEdit.Utils;
 
 namespace AvalonEdit;
 
-[Localizability(LocalizationCategory.Text)] [ContentProperty("Text")]
+[Localizability(LocalizationCategory.Text)]
+[ContentProperty("Text")]
 public sealed class TextEditor : Control, ITextEditorComponent, IWeakEventListener
 {
     #region Constructors
@@ -31,7 +33,9 @@ public sealed class TextEditor : Control, ITextEditorComponent, IWeakEventListen
         FocusableProperty.OverrideMetadata(typeof(TextEditor), new FrameworkPropertyMetadata(Boxes.True));
     }
 
-    public TextEditor() : this(new TextArea()) { }
+    public TextEditor() : this(new TextArea())
+    {
+    }
 
     private TextEditor(TextArea textArea)
     {
@@ -45,7 +49,10 @@ public sealed class TextEditor : Control, ITextEditorComponent, IWeakEventListen
 
     #endregion
 
-    protected override AutomationPeer OnCreateAutomationPeer() { return null; }
+    protected override AutomationPeer OnCreateAutomationPeer()
+    {
+        return null;
+    }
 
     protected override void OnGotKeyboardFocus(KeyboardFocusChangedEventArgs e)
     {
@@ -59,13 +66,23 @@ public sealed class TextEditor : Control, ITextEditorComponent, IWeakEventListen
 
     public static readonly DependencyProperty DocumentProperty = TextView.DocumentProperty.AddOwner(typeof(TextEditor), new FrameworkPropertyMetadata(OnDocumentChanged));
 
-    public TextDocument Document { get => (TextDocument)GetValue(DocumentProperty); set => SetValue(DocumentProperty, value); }
+    public TextDocument Document
+    {
+        get => (TextDocument)GetValue(DocumentProperty);
+        set => SetValue(DocumentProperty, value);
+    }
 
     public event EventHandler DocumentChanged;
 
-    private void OnDocumentChanged(EventArgs e) { DocumentChanged?.Invoke(this, e); }
+    private void OnDocumentChanged(EventArgs e)
+    {
+        DocumentChanged?.Invoke(this, e);
+    }
 
-    private static void OnDocumentChanged(DependencyObject dp, DependencyPropertyChangedEventArgs e) { ((TextEditor)dp).OnDocumentChanged((TextDocument)e.OldValue, (TextDocument)e.NewValue); }
+    private static void OnDocumentChanged(DependencyObject dp, DependencyPropertyChangedEventArgs e)
+    {
+        ((TextEditor)dp).OnDocumentChanged((TextDocument)e.OldValue, (TextDocument)e.NewValue);
+    }
 
     private void OnDocumentChanged(TextDocument oldValue, TextDocument newValue)
     {
@@ -84,13 +101,23 @@ public sealed class TextEditor : Control, ITextEditorComponent, IWeakEventListen
 
     public static readonly DependencyProperty OptionsProperty = TextView.OptionsProperty.AddOwner(typeof(TextEditor), new FrameworkPropertyMetadata(OnOptionsChanged));
 
-    public TextEditorOptions Options { get => (TextEditorOptions)GetValue(OptionsProperty); set => SetValue(OptionsProperty, value); }
+    public TextEditorOptions Options
+    {
+        get => (TextEditorOptions)GetValue(OptionsProperty);
+        set => SetValue(OptionsProperty, value);
+    }
 
     public event PropertyChangedEventHandler OptionChanged;
 
-    private void OnOptionChanged(PropertyChangedEventArgs e) { OptionChanged?.Invoke(this, e); }
+    private void OnOptionChanged(PropertyChangedEventArgs e)
+    {
+        OptionChanged?.Invoke(this, e);
+    }
 
-    private static void OnOptionsChanged(DependencyObject dp, DependencyPropertyChangedEventArgs e) { ((TextEditor)dp).OnOptionsChanged((TextEditorOptions)e.OldValue, (TextEditorOptions)e.NewValue); }
+    private static void OnOptionsChanged(DependencyObject dp, DependencyPropertyChangedEventArgs e)
+    {
+        ((TextEditor)dp).OnOptionsChanged((TextEditorOptions)e.OldValue, (TextEditorOptions)e.NewValue);
+    }
 
     private void OnOptionsChanged(INotifyPropertyChanged oldValue, TextEditorOptions newValue)
     {
@@ -113,13 +140,17 @@ public sealed class TextEditor : Control, ITextEditorComponent, IWeakEventListen
         return true;
     }
 
-    bool IWeakEventListener.ReceiveWeakEvent(Type managerType, object sender, EventArgs e) { return ReceiveWeakEvent(managerType, sender, e); }
+    bool IWeakEventListener.ReceiveWeakEvent(Type managerType, object sender, EventArgs e)
+    {
+        return ReceiveWeakEvent(managerType, sender, e);
+    }
 
     #endregion
 
     #region Text property
 
-    [Localizability(LocalizationCategory.Text)] [DefaultValue("")]
+    [Localizability(LocalizationCategory.Text)]
+    [DefaultValue("")]
     public string Text
     {
         get
@@ -144,7 +175,10 @@ public sealed class TextEditor : Control, ITextEditorComponent, IWeakEventListen
 
     public event EventHandler TextChanged;
 
-    private void OnTextChanged(EventArgs e) { TextChanged?.Invoke(this, e); }
+    private void OnTextChanged(EventArgs e)
+    {
+        TextChanged?.Invoke(this, e);
+    }
 
     #endregion
 
@@ -160,20 +194,30 @@ public sealed class TextEditor : Control, ITextEditorComponent, IWeakEventListen
 
     internal ScrollViewer ScrollViewer { get; private set; }
 
-    private void Execute(RoutedCommand command) { command.Execute(null, TextArea); }
+    private void Execute(RoutedCommand command)
+    {
+        command.Execute(null, TextArea);
+    }
 
     #endregion
 
     #region Syntax highlighting
 
-    public static readonly DependencyProperty SyntaxHighlightingProperty = DependencyProperty.Register(nameof(SyntaxHighlighting), typeof(IHighlightingDefinition), typeof(TextEditor), new FrameworkPropertyMetadata(OnSyntaxHighlightingChanged));
+    public static readonly DependencyProperty SyntaxHighlightingProperty =
+        DependencyProperty.Register(nameof(SyntaxHighlighting), typeof(IHighlightingDefinition), typeof(TextEditor), new FrameworkPropertyMetadata(OnSyntaxHighlightingChanged));
 
-
-    public IHighlightingDefinition SyntaxHighlighting { get => (IHighlightingDefinition)GetValue(SyntaxHighlightingProperty); set => SetValue(SyntaxHighlightingProperty, value); }
+    public IHighlightingDefinition SyntaxHighlighting
+    {
+        get => (IHighlightingDefinition)GetValue(SyntaxHighlightingProperty);
+        set => SetValue(SyntaxHighlightingProperty, value);
+    }
 
     private IVisualLineTransformer colorizer;
 
-    private static void OnSyntaxHighlightingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) { ((TextEditor)d).OnSyntaxHighlightingChanged(e.NewValue as IHighlightingDefinition); }
+    private static void OnSyntaxHighlightingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        ((TextEditor)d).OnSyntaxHighlightingChanged(e.NewValue as IHighlightingDefinition);
+    }
 
     private void OnSyntaxHighlightingChanged(IHighlightingDefinition newValue)
     {
@@ -200,7 +244,11 @@ public sealed class TextEditor : Control, ITextEditorComponent, IWeakEventListen
 
     public static readonly DependencyProperty WordWrapProperty = DependencyProperty.Register(nameof(WordWrap), typeof(bool), typeof(TextEditor), new FrameworkPropertyMetadata(Boxes.False));
 
-    public bool WordWrap { get => (bool)GetValue(WordWrapProperty); set => SetValue(WordWrapProperty, Boxes.Box(value)); }
+    public bool WordWrap
+    {
+        get => (bool)GetValue(WordWrapProperty);
+        set => SetValue(WordWrapProperty, Boxes.Box(value));
+    }
 
     #endregion
 
@@ -208,7 +256,12 @@ public sealed class TextEditor : Control, ITextEditorComponent, IWeakEventListen
 
     public static readonly DependencyProperty IsReadOnlyProperty = DependencyProperty.Register(nameof(IsReadOnly), typeof(bool), typeof(TextEditor), new FrameworkPropertyMetadata(Boxes.False, OnIsReadOnlyChanged));
 
-    public bool IsReadOnly { get => (bool)GetValue(IsReadOnlyProperty); set => SetValue(IsReadOnlyProperty, Boxes.Box(value)); }
+    [DefaultValue(true)]
+    public bool IsReadOnly
+    {
+        get => (bool)GetValue(IsReadOnlyProperty);
+        set => SetValue(IsReadOnlyProperty, Boxes.Box(value));
+    }
 
     private static void OnIsReadOnlyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
@@ -223,7 +276,11 @@ public sealed class TextEditor : Control, ITextEditorComponent, IWeakEventListen
 
     public static readonly DependencyProperty IsModifiedProperty = DependencyProperty.Register(nameof(IsModified), typeof(bool), typeof(TextEditor), new FrameworkPropertyMetadata(Boxes.False, OnIsModifiedChanged));
 
-    public bool IsModified { get => (bool)GetValue(IsModifiedProperty); set => SetValue(IsModifiedProperty, Boxes.Box(value)); }
+    public bool IsModified
+    {
+        get => (bool)GetValue(IsModifiedProperty);
+        set => SetValue(IsModifiedProperty, Boxes.Box(value));
+    }
 
     private static void OnIsModifiedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
@@ -245,9 +302,14 @@ public sealed class TextEditor : Control, ITextEditorComponent, IWeakEventListen
 
     #region ShowLineNumbers
 
-    public static readonly DependencyProperty ShowLineNumbersProperty = DependencyProperty.Register(nameof(ShowLineNumbers), typeof(bool), typeof(TextEditor), new FrameworkPropertyMetadata(Boxes.False, OnShowLineNumbersChanged));
+    public static readonly DependencyProperty ShowLineNumbersProperty =
+        DependencyProperty.Register(nameof(ShowLineNumbers), typeof(bool), typeof(TextEditor), new FrameworkPropertyMetadata(Boxes.False, OnShowLineNumbersChanged));
 
-    public bool ShowLineNumbers { get => (bool)GetValue(ShowLineNumbersProperty); set => SetValue(ShowLineNumbersProperty, Boxes.Box(value)); }
+    public bool ShowLineNumbers
+    {
+        get => (bool)GetValue(ShowLineNumbersProperty);
+        set => SetValue(ShowLineNumbersProperty, Boxes.Box(value));
+    }
 
     private static void OnShowLineNumbersChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
@@ -265,9 +327,14 @@ public sealed class TextEditor : Control, ITextEditorComponent, IWeakEventListen
 
     #region LineNumbersForeground
 
-    public static readonly DependencyProperty LineNumbersForegroundProperty = DependencyProperty.Register(nameof(LineNumbersForeground), typeof(Brush), typeof(TextEditor), new FrameworkPropertyMetadata(Brushes.Gray, OnLineNumbersForegroundChanged));
+    public static readonly DependencyProperty LineNumbersForegroundProperty =
+        DependencyProperty.Register(nameof(LineNumbersForeground), typeof(Brush), typeof(TextEditor), new FrameworkPropertyMetadata(Brushes.Gray, OnLineNumbersForegroundChanged));
 
-    public Brush LineNumbersForeground { get => (Brush)GetValue(LineNumbersForegroundProperty); set => SetValue(LineNumbersForegroundProperty, value); }
+    public Brush LineNumbersForeground
+    {
+        get => (Brush)GetValue(LineNumbersForegroundProperty);
+        set => SetValue(LineNumbersForegroundProperty, value);
+    }
 
     private static void OnLineNumbersForegroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
@@ -290,7 +357,6 @@ public sealed class TextEditor : Control, ITextEditorComponent, IWeakEventListen
         TextArea.TextView.LineTransformers.Add(setlinecolor);
         AppendText(textData);
     }
-
 
     public void ScrollToEnd()
     {
@@ -316,7 +382,10 @@ public sealed class TextEditor : Control, ITextEditorComponent, IWeakEventListen
         ScrollViewer?.ScrollToVerticalOffset(offset);
     }
 
-    public void SelectAll() { Execute(ApplicationCommands.SelectAll); }
+    public void SelectAll()
+    {
+        Execute(ApplicationCommands.SelectAll);
+    }
 
     #endregion
 
@@ -342,13 +411,25 @@ public sealed class TextEditor : Control, ITextEditorComponent, IWeakEventListen
     }
 
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public int CaretOffset { get => TextArea.Caret.Offset; set => TextArea.Caret.Offset = value; }
+    public int CaretOffset
+    {
+        get => TextArea.Caret.Offset;
+        set => TextArea.Caret.Offset = value;
+    }
 
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public int SelectionStart { get => TextArea.Selection.IsEmpty ? TextArea.Caret.Offset : TextArea.Selection.SurroundingSegment.Offset; set => Select(value, SelectionLength); }
+    public int SelectionStart
+    {
+        get => TextArea.Selection.IsEmpty ? TextArea.Caret.Offset : TextArea.Selection.SurroundingSegment.Offset;
+        set => Select(value, SelectionLength);
+    }
 
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public int SelectionLength { get => !TextArea.Selection.IsEmpty ? TextArea.Selection.SurroundingSegment.Length : 0; set => Select(SelectionStart, value); }
+    public int SelectionLength
+    {
+        get => !TextArea.Selection.IsEmpty ? TextArea.Selection.SurroundingSegment.Length : 0;
+        set => Select(SelectionStart, value);
+    }
 
     public void Select(int start, int length)
     {
@@ -369,7 +450,10 @@ public sealed class TextEditor : Control, ITextEditorComponent, IWeakEventListen
         }
     }
 
-    public void Clear() { Text = string.Empty; }
+    public void Clear()
+    {
+        Text = string.Empty;
+    }
 
     public void ToClipSelection()
     {
@@ -385,7 +469,11 @@ public sealed class TextEditor : Control, ITextEditorComponent, IWeakEventListen
     public static readonly DependencyProperty EncodingProperty = DependencyProperty.Register(nameof(Encoding), typeof(Encoding), typeof(TextEditor));
 
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-    public Encoding Encoding { get => (Encoding)GetValue(EncodingProperty); set => SetValue(EncodingProperty, value); }
+    public Encoding Encoding
+    {
+        get => (Encoding)GetValue(EncodingProperty);
+        set => SetValue(EncodingProperty, value);
+    }
 
     public void Save(Stream stream)
     {
@@ -406,35 +494,62 @@ public sealed class TextEditor : Control, ITextEditorComponent, IWeakEventListen
 
     public static readonly RoutedEvent MouseHoverEvent = TextView.MouseHoverEvent.AddOwner(typeof(TextEditor));
 
-
     public static readonly RoutedEvent PreviewMouseHoverStoppedEvent = TextView.PreviewMouseHoverStoppedEvent.AddOwner(typeof(TextEditor));
 
     public static readonly RoutedEvent MouseHoverStoppedEvent = TextView.MouseHoverStoppedEvent.AddOwner(typeof(TextEditor));
 
+    public event MouseEventHandler PreviewMouseHover
+    {
+        add => AddHandler(PreviewMouseHoverEvent, value);
+        remove => RemoveHandler(PreviewMouseHoverEvent, value);
+    }
 
-    public event MouseEventHandler PreviewMouseHover { add => AddHandler(PreviewMouseHoverEvent, value); remove => RemoveHandler(PreviewMouseHoverEvent, value); }
+    public event MouseEventHandler MouseHover
+    {
+        add => AddHandler(MouseHoverEvent, value);
+        remove => RemoveHandler(MouseHoverEvent, value);
+    }
 
-    public event MouseEventHandler MouseHover { add => AddHandler(MouseHoverEvent, value); remove => RemoveHandler(MouseHoverEvent, value); }
+    public event MouseEventHandler PreviewMouseHoverStopped
+    {
+        add => AddHandler(PreviewMouseHoverStoppedEvent, value);
+        remove => RemoveHandler(PreviewMouseHoverStoppedEvent, value);
+    }
 
-    public event MouseEventHandler PreviewMouseHoverStopped { add => AddHandler(PreviewMouseHoverStoppedEvent, value); remove => RemoveHandler(PreviewMouseHoverStoppedEvent, value); }
-
-    public event MouseEventHandler MouseHoverStopped { add => AddHandler(MouseHoverStoppedEvent, value); remove => RemoveHandler(MouseHoverStoppedEvent, value); }
+    public event MouseEventHandler MouseHoverStopped
+    {
+        add => AddHandler(MouseHoverStoppedEvent, value);
+        remove => RemoveHandler(MouseHoverStoppedEvent, value);
+    }
 
     #endregion
 
     #region ScrollBarVisibility
 
-    public static readonly DependencyProperty HorizontalScrollBarVisibilityProperty = ScrollViewer.HorizontalScrollBarVisibilityProperty.AddOwner(typeof(TextEditor), new FrameworkPropertyMetadata(ScrollBarVisibility.Visible));
+    public static readonly DependencyProperty HorizontalScrollBarVisibilityProperty =
+        ScrollViewer.HorizontalScrollBarVisibilityProperty.AddOwner(typeof(TextEditor), new FrameworkPropertyMetadata(ScrollBarVisibility.Visible));
 
-    public ScrollBarVisibility HorizontalScrollBarVisibility { get => (ScrollBarVisibility)GetValue(HorizontalScrollBarVisibilityProperty); set => SetValue(HorizontalScrollBarVisibilityProperty, value); }
+    public ScrollBarVisibility HorizontalScrollBarVisibility
+    {
+        get => (ScrollBarVisibility)GetValue(HorizontalScrollBarVisibilityProperty);
+        set => SetValue(HorizontalScrollBarVisibilityProperty, value);
+    }
 
-    public static readonly DependencyProperty VerticalScrollBarVisibilityProperty = ScrollViewer.VerticalScrollBarVisibilityProperty.AddOwner(typeof(TextEditor), new FrameworkPropertyMetadata(ScrollBarVisibility.Visible));
+    public static readonly DependencyProperty VerticalScrollBarVisibilityProperty =
+        ScrollViewer.VerticalScrollBarVisibilityProperty.AddOwner(typeof(TextEditor), new FrameworkPropertyMetadata(ScrollBarVisibility.Visible));
 
-    public ScrollBarVisibility VerticalScrollBarVisibility { get => (ScrollBarVisibility)GetValue(VerticalScrollBarVisibilityProperty); set => SetValue(VerticalScrollBarVisibilityProperty, value); }
+    public ScrollBarVisibility VerticalScrollBarVisibility
+    {
+        get => (ScrollBarVisibility)GetValue(VerticalScrollBarVisibilityProperty);
+        set => SetValue(VerticalScrollBarVisibilityProperty, value);
+    }
 
     #endregion
 
-    object IServiceProvider.GetService(Type serviceType) { return TextArea.GetService(serviceType); }
+    object IServiceProvider.GetService(Type serviceType)
+    {
+        return TextArea.GetService(serviceType);
+    }
 
     public TextViewPosition? GetPositionFromPoint(Point point)
     {
@@ -443,7 +558,10 @@ public sealed class TextEditor : Control, ITextEditorComponent, IWeakEventListen
         return textView.GetPosition(TranslatePoint(point, textView) + textView.ScrollOffset);
     }
 
-    public void ScrollToLine(int line) { ScrollTo(line, -1); }
+    public void ScrollToLine(int line)
+    {
+        ScrollTo(line, -1);
+    }
 
     public void ScrollTo(int line, int column)
     {
@@ -486,6 +604,28 @@ public sealed class TextEditor : Control, ITextEditorComponent, IWeakEventListen
         else
         {
             ScrollViewer.ScrollToHorizontalOffset(0);
+        }
+    }
+
+    private const double FONT_MAX_SIZE = 24d;
+    private const double FONT_MIN_SIZE = 10d;
+
+    public void FontSizeWheel(bool increase)
+    {
+        var currentSize = FontSize;
+
+        if (increase)
+        {
+            if (!(currentSize < FONT_MAX_SIZE)) return;
+            var newSize = Math.Min(FONT_MAX_SIZE, currentSize + 1);
+            FontSize = newSize;
+        }
+        else
+        {
+            if (!(currentSize > FONT_MIN_SIZE)) return;
+            var newSize = Math.Max(FONT_MIN_SIZE, currentSize - 1);
+
+            FontSize = newSize;
         }
     }
 }

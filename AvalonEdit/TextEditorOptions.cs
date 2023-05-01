@@ -27,8 +27,7 @@ public class TextEditorOptions : INotifyPropertyChanged
 
     #region PropertyChanged handling
 
-    [field: NonSerialized]
-    public event PropertyChangedEventHandler PropertyChanged;
+    [field: NonSerialized] public event PropertyChangedEventHandler PropertyChanged;
 
     protected void OnPropertyChanged(string propertyName)
     {
@@ -90,7 +89,7 @@ public class TextEditorOptions : INotifyPropertyChanged
 
     private bool showBoxForControlCharacters = true;
 
-    [DefaultValue(true)]
+    [DefaultValue(false)]
     public virtual bool ShowBoxForControlCharacters
     {
         get => showBoxForControlCharacters;
@@ -227,7 +226,7 @@ public class TextEditorOptions : INotifyPropertyChanged
 
     private double wordWrapIndentation;
 
-    [DefaultValue(10.0)]
+    [DefaultValue(double.MaxValue)]
     public virtual double WordWrapIndentation
     {
         get => wordWrapIndentation;
@@ -242,7 +241,7 @@ public class TextEditorOptions : INotifyPropertyChanged
 
     private bool inheritWordWrapIndentation = true;
 
-    [DefaultValue(true)]
+    [DefaultValue(false)]
     public virtual bool InheritWordWrapIndentation
     {
         get => inheritWordWrapIndentation;
@@ -270,7 +269,7 @@ public class TextEditorOptions : INotifyPropertyChanged
 
     private bool enableTextDragDrop = true;
 
-    [DefaultValue(true)]
+    [DefaultValue(false)]
     public bool EnableTextDragDrop
     {
         get => enableTextDragDrop;
@@ -298,7 +297,7 @@ public class TextEditorOptions : INotifyPropertyChanged
 
     private bool enableImeSupport = true;
 
-    [DefaultValue(true)]
+    [DefaultValue(false)]
     public virtual bool EnableImeSupport
     {
         get => enableImeSupport;

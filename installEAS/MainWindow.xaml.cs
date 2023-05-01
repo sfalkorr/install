@@ -10,6 +10,8 @@ public partial class MainWindow
     public readonly Storyboard      textBoxOpen;
     public static   string          obj = "";
 
+    #region Detect start and end resize window
+
     protected override void OnSourceInitialized(EventArgs e)
     {
         base.OnSourceInitialized(e);
@@ -28,19 +30,12 @@ public partial class MainWindow
         switch (msg)
         {
             case WM_ENTERSIZEMOVE:
-            {
                 _windowRect = GetWindowRect(this);
-                Console.WriteLine("res");
-            }
                 break;
 
             case WM_EXITSIZEMOVE:
                 if (_windowRect.Size != GetWindowRect(this).Size)
-                {
-                    Console.WriteLine("RESIZED");
                     rtb.ScrollToEnd();
-                }
-
                 break;
         }
 
@@ -71,6 +66,8 @@ public partial class MainWindow
         }
     }
 
+    #endregion
+
     public MainWindow()
     {
         var s = typeof(MainWindow).Assembly.GetManifestResourceStream("installEAS.CustomHighlighting.xshd");
@@ -98,25 +95,14 @@ public partial class MainWindow
         labelVer.Content                             = $"InstallEAS v{AppVersion}";
 
         var SelectionBorder = new Pen { Brush = new SolidColorBrush(Colors.Wheat) };
-        SelectionBorder.Brush.Opacity            = 0.5;
-        rtb.TextArea.Cursor                      = Cursors.Arrow;
-        rtb.IsReadOnly                           = true;
-        rtb.TextArea.MouseSelectionMode          = MouseSelectionMode.WholeWord;
-        rtb.TextArea.Caret.CaretBrush            = Brushes.Transparent;
-        rtb.TextArea.SelectionForeground         = Brushes.White;
-        rtb.TextArea.SelectionCornerRadius       = 5;
-        rtb.TextArea.SelectionBorder             = SelectionBorder;
-        rtb.Options.InheritWordWrapIndentation   = false;
-        rtb.TextArea.SelectionBrush              = new SolidColorBrush(Color.FromArgb(100, 100, 100, 150));
-        rtb.Options.EnableTextDragDrop           = false;
-        rtb.Options.AllowScrollBelowDocument     = false;
-        rtb.Options.HighlightCurrentLine         = false;
-        rtb.Options.EnableRectangularSelection   = true;
-        rtb.Options.ShowBoxForControlCharacters  = false;
-        rtb.TextArea.OverstrikeMode              = false;
-        rtb.TextArea.Options.WordWrapIndentation = double.MaxValue;
-        rtb.TextArea.Options.EnableImeSupport    = false;
-        textBox.Background                       = Brushes.Red;
+        SelectionBorder.Brush.Opacity      = 0.5;
+        rtb.TextArea.Cursor                = Cursors.Arrow;
+        rtb.TextArea.Caret.CaretBrush      = Brushes.Transparent;
+        rtb.TextArea.SelectionForeground   = Brushes.White;
+        rtb.TextArea.SelectionCornerRadius = 5;
+        rtb.TextArea.SelectionBorder       = SelectionBorder;
+        rtb.TextArea.SelectionBrush        = new SolidColorBrush(Color.FromArgb(100, 100, 100, 150));
+        textBox.Background                 = Brushes.Red;
     }
 
     public enum inputType
@@ -305,41 +291,6 @@ public partial class MainWindow
         SystemCommands.RestoreWindow(this);
     }
 
-    public static string ololo;
-
-    public static string yolka
-    {
-        get => ololo = "dfdf";
-        set
-        {
-            MainFrame.textBoxClos.Completed += (_, _) =>
-            {
-                MainFrame.textBox.IsEnabled = false;
-                MainFrame.textBox.Clear();
-                value = MainFrame.textBox.Text;
-            };
-            MainFrame.textBoxClos.Begin(MainFrame.textBox);
-        }
-    }
-
-    public static double length;
-
-    public static double Penis
-    {
-        get => length;
-        set
-        {
-            if (value > 20) length = value;
-            else err();
-        }
-    }
-
-    public static void err()
-    {
-        Console.WriteLine(Penis);
-        log(@"Ошибко!", Brushes.Red);
-    }
-
     private void MainWin_KeyDown(object sender, KeyEventArgs e)
     {
         if (Keyboard.IsKeyDown(F1)) tempButtons.btn1.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
@@ -396,7 +347,6 @@ public partial class MainWindow
 
     private void MainWindow_OnClosing(object sender, CancelEventArgs e)
     {
-        //TODO Раскоментить в релизе
         e.Cancel = true;
         var result = CustomMessageBox.Show("Действительно закрыть приложение?", "Подтверждение выхода", MessageBoxButton.YesNo, MessageBoxImage.Question);
         if (result.ToString() != "Yes") return;
@@ -411,7 +361,6 @@ public partial class MainWindow
         CreateSlidePanelsInstance();
         CreatetempControlInstance();
 
-        //TODO раскоментить в релизе
         MainOpen.Completed += async (_, _) =>
         {
             await Task.Delay(500).ConfigureAwait(true);
@@ -485,33 +434,11 @@ public partial class MainWindow
         if (textBox.IsEnabled) textBox.Focus();
     }
 
-    private const double FONT_MAX_SIZE = 24d;
-    private const double FONT_MIN_SIZE = 10d;
-
-    public void UpdateFontSize(bool increase)
-    {
-        var currentSize = rtb.FontSize;
-
-        if (increase)
-        {
-            if (!(currentSize < FONT_MAX_SIZE)) return;
-            var newSize = Math.Min(FONT_MAX_SIZE, currentSize + 1);
-            rtb.FontSize = newSize;
-        }
-        else
-        {
-            if (!(currentSize > FONT_MIN_SIZE)) return;
-            var newSize = Math.Max(FONT_MIN_SIZE, currentSize - 1);
-
-            rtb.FontSize = newSize;
-        }
-    }
-
     private void Rtb_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
     {
         var ctrl = Keyboard.Modifiers == ModifierKeys.Control;
         if (!ctrl) return;
-        UpdateFontSize(e.Delta > 0);
+        rtb.FontSizeWheel(e.Delta > 0);
         e.Handled = true;
     }
 }

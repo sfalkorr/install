@@ -12,6 +12,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+
 using AvalonEdit.Document;
 using AvalonEdit.Rendering;
 using AvalonEdit.Utils;
@@ -114,8 +115,7 @@ public class TextArea : Control, IScrollInfo, IWeakEventListener, ITextEditorCom
                 oldHandler           = StackedInputHandlers.Peek();
                 StackedInputHandlers = StackedInputHandlers.Pop();
                 oldHandler.Detach();
-            }
-            while (oldHandler != inputHandler);
+            } while (oldHandler != inputHandler);
         }
     }
 
@@ -125,7 +125,11 @@ public class TextArea : Control, IScrollInfo, IWeakEventListener, ITextEditorCom
 
     public static readonly DependencyProperty DocumentProperty = TextView.DocumentProperty.AddOwner(typeof(TextArea), new FrameworkPropertyMetadata(OnDocumentChanged));
 
-    public TextDocument Document { get => (TextDocument)GetValue(DocumentProperty); set => SetValue(DocumentProperty, value); }
+    public TextDocument Document
+    {
+        get => (TextDocument)GetValue(DocumentProperty);
+        set => SetValue(DocumentProperty, value);
+    }
 
     public event EventHandler DocumentChanged;
 
@@ -165,7 +169,11 @@ public class TextArea : Control, IScrollInfo, IWeakEventListener, ITextEditorCom
 
     public static readonly DependencyProperty OptionsProperty = TextView.OptionsProperty.AddOwner(typeof(TextArea), new FrameworkPropertyMetadata(OnOptionsChanged));
 
-    public TextEditorOptions Options { get => (TextEditorOptions)GetValue(OptionsProperty); set => SetValue(OptionsProperty, value); }
+    public TextEditorOptions Options
+    {
+        get => (TextEditorOptions)GetValue(OptionsProperty);
+        set => SetValue(OptionsProperty, value);
+    }
 
     public event PropertyChangedEventHandler OptionChanged;
 
@@ -318,23 +326,39 @@ public class TextArea : Control, IScrollInfo, IWeakEventListener, ITextEditorCom
         Selection = emptySelection;
     }
 
-
     public static readonly DependencyProperty SelectionBrushProperty = DependencyProperty.Register(nameof(SelectionBrush), typeof(Brush), typeof(TextArea));
 
-    public Brush SelectionBrush { get => (Brush)GetValue(SelectionBrushProperty); set => SetValue(SelectionBrushProperty, value); }
+    public Brush SelectionBrush
+    {
+        get => (Brush)GetValue(SelectionBrushProperty);
+        set => SetValue(SelectionBrushProperty, value);
+    }
 
     public static readonly DependencyProperty SelectionForegroundProperty = DependencyProperty.Register(nameof(SelectionForeground), typeof(Brush), typeof(TextArea));
 
-    public Brush SelectionForeground { get => (Brush)GetValue(SelectionForegroundProperty); set => SetValue(SelectionForegroundProperty, value); }
+    public Brush SelectionForeground
+    {
+        get => (Brush)GetValue(SelectionForegroundProperty);
+        set => SetValue(SelectionForegroundProperty, value);
+    }
 
     public static readonly DependencyProperty SelectionBorderProperty = DependencyProperty.Register(nameof(SelectionBorder), typeof(Pen), typeof(TextArea));
 
-    public Pen SelectionBorder { get => (Pen)GetValue(SelectionBorderProperty); set => SetValue(SelectionBorderProperty, value); }
+    public Pen SelectionBorder
+    {
+        get => (Pen)GetValue(SelectionBorderProperty);
+        set => SetValue(SelectionBorderProperty, value);
+    }
 
     public static readonly DependencyProperty SelectionCornerRadiusProperty = DependencyProperty.Register(nameof(SelectionCornerRadius), typeof(double), typeof(TextArea), new FrameworkPropertyMetadata(3.0));
 
-    public double SelectionCornerRadius { get => (double)GetValue(SelectionCornerRadiusProperty); set => SetValue(SelectionCornerRadiusProperty, value); }
+    public double SelectionCornerRadius
+    {
+        get => (double)GetValue(SelectionCornerRadiusProperty);
+        set => SetValue(SelectionCornerRadiusProperty, value);
+    }
 
+    [DefaultValue(MouseSelectionMode.WholeWord)]
     public MouseSelectionMode MouseSelectionMode
     {
         get
@@ -611,7 +635,6 @@ public class TextArea : Control, IScrollInfo, IWeakEventListener, ITextEditorCom
         e.Handled = true;
     }
 
-
     public void PerformTextInput(TextCompositionEventArgs e)
     {
         if (e == null) throw new ArgumentNullException(nameof(e));
@@ -747,7 +770,12 @@ public class TextArea : Control, IScrollInfo, IWeakEventListener, ITextEditorCom
 
     public static readonly DependencyProperty OverstrikeModeProperty = DependencyProperty.Register(nameof(OverstrikeMode), typeof(bool), typeof(TextArea), new FrameworkPropertyMetadata(Boxes.False));
 
-    public bool OverstrikeMode { get => (bool)GetValue(OverstrikeModeProperty); set => SetValue(OverstrikeModeProperty, value); }
+    [DefaultValue(false)]
+    public bool OverstrikeMode
+    {
+        get => (bool)GetValue(OverstrikeModeProperty);
+        set => SetValue(OverstrikeModeProperty, value);
+    }
 
     #endregion
 
