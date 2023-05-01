@@ -67,7 +67,7 @@ public partial class MainWindow
     }
 
     #endregion
-
+     
     public MainWindow()
     {
         var s = typeof(MainWindow).Assembly.GetManifestResourceStream("installEAS.CustomHighlighting.xshd");
