@@ -7,11 +7,12 @@
         <GradientStop Offset="0.180" Color="#FF365472" />
     </LinearGradientBrush>
     <SolidColorBrush x:Key="Tittle.Border.Color" Color="#FF202020" />
-    <SolidColorBrush x:Key="Panel.Background.Color" Color="#FF274763" />
+
     <SolidColorBrush x:Key="ControlButton.Text.Color" Color="#FFDDDDDD" />
     <SolidColorBrush x:Key="ControlButton.MouseOver.Color" Color="#FF496785" />
     <SolidColorBrush x:Key="ControlButton.MouseLeave.Color" Color="#00496785" />
     <SolidColorBrush x:Key="ControlButton.IsPressed.Color" Color="#FF3C5A78" />
+
     <SolidColorBrush x:Key="MessageBox.Button.Default" Color="#FF496785" />
     <SolidColorBrush x:Key="MessageBox.Button.Over" Color="#FF395979" />
 
@@ -60,45 +61,31 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="0,0,0,0">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="0,0,0,0">
                         <Border.Background>
                             <SolidColorBrush x:Name="BorderColor" Color="#00496785" />
                         </Border.Background>
-                        <ContentControl
-                            Margin="{TemplateBinding Padding}"
-                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                            Content="{TemplateBinding Content}" />
+                        <ContentControl Margin="{TemplateBinding Padding}"
+                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                        Content="{TemplateBinding Content}" />
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup Name="CommonStates">
                                 <VisualState Name="MouseOver">
                                     <Storyboard>
-                                        <ColorAnimation
-                                            Storyboard.TargetName="BorderColor"
-                                            Storyboard.TargetProperty="Color"
-                                            To="#FF496785"
-                                            Duration="0:0:0.150" />
+                                        <ColorAnimation Storyboard.TargetName="BorderColor" Storyboard.TargetProperty="Color" To="#FF496785" Duration="0:0:0.150" />
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState Name="Normal">
                                     <Storyboard>
-                                        <ColorAnimation
-                                            Storyboard.TargetName="BorderColor"
-                                            Storyboard.TargetProperty="Color"
-                                            To="#00496785"
-                                            Duration="0:0:0.150" />
+                                        <ColorAnimation Storyboard.TargetName="BorderColor" Storyboard.TargetProperty="Color" To="#00496785" Duration="0:0:0.150" />
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState Name="Pressed">
                                     <Storyboard>
-                                        <ColorAnimation
-                                            Storyboard.TargetName="BorderColor"
-                                            Storyboard.TargetProperty="Color"
-                                            To="#FF3C5A78"
-                                            Duration="0:0:0:0.005" />
+                                        <ColorAnimation Storyboard.TargetName="BorderColor" Storyboard.TargetProperty="Color" To="#FF3C5A78" Duration="0:0:0:0.005" />
                                     </Storyboard>
                                 </VisualState>
                             </VisualStateGroup>
@@ -123,45 +110,31 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="0,7.7,0,0">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="0,7.7,0,0">
                         <Border.Background>
                             <SolidColorBrush x:Name="BorderColor" Color="#00952525" />
                         </Border.Background>
-                        <ContentControl
-                            Margin="{TemplateBinding Padding}"
-                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                            Content="{TemplateBinding Content}" />
+                        <ContentControl Margin="{TemplateBinding Padding}"
+                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                        Content="{TemplateBinding Content}" />
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup Name="CommonStates">
                                 <VisualState Name="MouseOver">
                                     <Storyboard>
-                                        <ColorAnimation
-                                            Storyboard.TargetName="BorderColor"
-                                            Storyboard.TargetProperty="Color"
-                                            To="#FF992929"
-                                            Duration="0:0:0.150" />
+                                        <ColorAnimation Storyboard.TargetName="BorderColor" Storyboard.TargetProperty="Color" To="#FF992929" Duration="0:0:0.150" />
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState Name="Normal">
                                     <Storyboard>
-                                        <ColorAnimation
-                                            Storyboard.TargetName="BorderColor"
-                                            Storyboard.TargetProperty="Color"
-                                            To="#00952525"
-                                            Duration="0:0:0.150" />
+                                        <ColorAnimation Storyboard.TargetName="BorderColor" Storyboard.TargetProperty="Color" To="#00952525" Duration="0:0:0.150" />
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState Name="Pressed">
                                     <Storyboard>
-                                        <ColorAnimation
-                                            Storyboard.TargetName="BorderColor"
-                                            Storyboard.TargetProperty="Color"
-                                            To="#FF801010"
-                                            Duration="0:0:0:0.005" />
+                                        <ColorAnimation Storyboard.TargetName="BorderColor" Storyboard.TargetProperty="Color" To="#FF801010" Duration="0:0:0:0.005" />
                                     </Storyboard>
                                 </VisualState>
                             </VisualStateGroup>
@@ -176,7 +149,8 @@
     </Style>
 
     <Style x:Key="ButtonMenuStyle1" TargetType="Button">
-        <Setter Property="Background" Value="#0060656A" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="FontFamily" Value="Microsoft YaHei UI" />
         <Setter Property="FontSize" Value="16" />
@@ -189,46 +163,32 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="5">
+                    <Border BorderBrush="Transparent"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="3">
                         <Border.Background>
                             <SolidColorBrush x:Name="BorderColor" Color="Transparent" />
                         </Border.Background>
-                        <ContentControl
-                            Margin="{TemplateBinding Padding}"
-                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                            Content="{TemplateBinding Content}" />
+                        <ContentControl Margin="{TemplateBinding Padding}"
+                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                        Content="{TemplateBinding Content}" />
+
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup Name="CommonStates">
                                 <VisualState Name="MouseOver">
                                     <Storyboard>
-                                        <ColorAnimation
-                                            Storyboard.TargetName="BorderColor"
-                                            Storyboard.TargetProperty="Color"
-                                            To="#FF496785"
-                                            Duration="0:0:0.001" />
+                                        <ColorAnimation Storyboard.TargetName="BorderColor" Storyboard.TargetProperty="Color" From="#00496785" To="#FF496785" Duration="0:0:0.001" />
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState Name="Normal">
                                     <Storyboard>
-                                        <ColorAnimation
-                                            Storyboard.TargetName="BorderColor"
-                                            Storyboard.TargetProperty="Color"
-                                            From="#FF496785"
-                                            To="#00496785"
-                                            Duration="0:0:0.100" />
+                                        <ColorAnimation Storyboard.TargetName="BorderColor" Storyboard.TargetProperty="Color" From="#FF496785" To="#00496785" Duration="0:0:0.100" />
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState Name="Pressed">
                                     <Storyboard>
-                                        <ColorAnimation
-                                            Storyboard.TargetName="BorderColor"
-                                            Storyboard.TargetProperty="Color"
-                                            To="#FF3C5A78"
-                                            Duration="0:0:0:0.005" />
+                                        <ColorAnimation Storyboard.TargetName="BorderColor" Storyboard.TargetProperty="Color" From="#FF496785" To="#FF3C5A78" Duration="0:0:0:0.005" />
                                     </Storyboard>
                                 </VisualState>
                             </VisualStateGroup>
@@ -242,20 +202,14 @@
                 <Trigger.EnterActions>
                     <BeginStoryboard>
                         <Storyboard>
-                            <ColorAnimation
-                                Storyboard.TargetProperty="(Foreground).(SolidColorBrush.Color)"
-                                To="#FFFFFFFF"
-                                Duration="0:0:0.100" />
+                            <ColorAnimation Storyboard.TargetProperty="(Foreground).(SolidColorBrush.Color)" To="#FFFFFFFF" Duration="0:0:0.100" />
                         </Storyboard>
                     </BeginStoryboard>
                 </Trigger.EnterActions>
                 <Trigger.ExitActions>
                     <BeginStoryboard>
                         <Storyboard>
-                            <ColorAnimation
-                                Storyboard.TargetProperty="(Foreground).(SolidColorBrush.Color)"
-                                To="#FFCCCCCC"
-                                Duration="0:0:0.100" />
+                            <ColorAnimation Storyboard.TargetProperty="(Foreground).(SolidColorBrush.Color)" To="#FFCCCCCC" Duration="0:0:0.100" />
                         </Storyboard>
                     </BeginStoryboard>
                 </Trigger.ExitActions>
@@ -280,46 +234,34 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="5">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="5">
                         <Border.Background>
-                            <SolidColorBrush x:Name="BorderColor" Color="Transparent" />
+                            <SolidColorBrush x:Name="BorderColor" />
                         </Border.Background>
-                        <ContentControl
-                            Margin="{TemplateBinding Padding}"
-                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                            Content="{TemplateBinding Content}" />
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="10" Direction="0" Opacity="0.5" ShadowDepth="1" />
+                        </Border.Effect>
+                        <ContentControl Margin="{TemplateBinding Padding}"
+                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                        Content="{TemplateBinding Content}" />
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup Name="CommonStates">
                                 <VisualState Name="MouseOver">
                                     <Storyboard>
-                                        <ColorAnimation
-                                            Storyboard.TargetName="BorderColor"
-                                            Storyboard.TargetProperty="Color"
-                                            To="#FF496785"
-                                            Duration="0:0:0.001" />
+                                        <ColorAnimation Storyboard.TargetName="BorderColor" Storyboard.TargetProperty="Color" To="#FF496785" Duration="0:0:0.001" />
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState Name="Normal">
                                     <Storyboard>
-                                        <ColorAnimation
-                                            Storyboard.TargetName="BorderColor"
-                                            Storyboard.TargetProperty="Color"
-                                            From="#FF496785"
-                                            To="#00496785"
-                                            Duration="0:0:0.100" />
+                                        <ColorAnimation Storyboard.TargetName="BorderColor" Storyboard.TargetProperty="Color" From="#FF496785" To="#00496785" Duration="0:0:0.100" />
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState Name="Pressed">
                                     <Storyboard>
-                                        <ColorAnimation
-                                            Storyboard.TargetName="BorderColor"
-                                            Storyboard.TargetProperty="Color"
-                                            To="#FF3C5A78"
-                                            Duration="0:0:0:0.005" />
+                                        <ColorAnimation Storyboard.TargetName="BorderColor" Storyboard.TargetProperty="Color" To="#FF3C5A78" Duration="0:0:0:0.005" />
                                     </Storyboard>
                                 </VisualState>
                             </VisualStateGroup>
@@ -333,24 +275,20 @@
                 <Trigger.EnterActions>
                     <BeginStoryboard>
                         <Storyboard>
-                            <ColorAnimation
-                                Storyboard.TargetProperty="(Foreground).(SolidColorBrush.Color)"
-                                To="#FFFFFFFF"
-                                Duration="0:0:0.100" />
+                            <ColorAnimation Storyboard.TargetProperty="(Foreground).(SolidColorBrush.Color)" To="#FFFFFFFF" Duration="0:0:0.100" />
                         </Storyboard>
                     </BeginStoryboard>
                 </Trigger.EnterActions>
                 <Trigger.ExitActions>
                     <BeginStoryboard>
                         <Storyboard>
-                            <ColorAnimation
-                                Storyboard.TargetProperty="(Foreground).(SolidColorBrush.Color)"
-                                To="#FFCCCCCC"
-                                Duration="0:0:0.100" />
+                            <ColorAnimation Storyboard.TargetProperty="(Foreground).(SolidColorBrush.Color)" To="#FFCCCCCC" Duration="0:0:0.100" />
                         </Storyboard>
                     </BeginStoryboard>
                 </Trigger.ExitActions>
             </Trigger>
         </Style.Triggers>
     </Style>
+
+
 </ResourceDictionary>

@@ -16,7 +16,7 @@ public static class ThemesController
         set => Application.Current.Resources.MergedDictionaries[0] = value;
     }
 
-    private static void ChangeTheme(Uri uri)
+    private static void ChangeThemeUri(Uri uri)
     {
         ThemeDictionary = new ResourceDictionary() { Source = uri };
     }
@@ -28,22 +28,22 @@ public static class ThemesController
         switch (theme)
         {
             case ThemeTypes.ColorBlue:
-                themeName = "ColorBlue";
+                themeName    = "ColorBlue";
                 CurrentTheme = theme;
                 break;
             case ThemeTypes.ColorDark:
-                themeName = "ColorDark";
+                themeName    = "ColorDark";
                 CurrentTheme = theme;
                 break;
             case ThemeTypes.ColorGray:
-                themeName = "ColorGray";
+                themeName    = "ColorGray";
                 CurrentTheme = theme;
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(theme), theme, null);
         }
 
-        if (!IsNullOrEmpty(themeName)) ChangeTheme(new Uri($"/Themes/{themeName}.xaml", UriKind.Relative));
+        if (!IsNullOrEmpty(themeName)) ChangeThemeUri(new Uri($"/Themes/{themeName}.xaml", UriKind.Relative));
     }
 
     public static void ChangeTheme()

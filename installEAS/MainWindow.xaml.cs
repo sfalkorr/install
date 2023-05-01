@@ -47,8 +47,6 @@ public partial class MainWindow
         return IntPtr.Zero;
     }
 
-    
-    
     private static Rect GetWindowRect(Window window)
     {
         var handle = new WindowInteropHelper(window).Handle;
@@ -486,9 +484,10 @@ public partial class MainWindow
         if (e.LeftButton == MouseButtonState.Released && Sel != "") rtb.ToClipSelection();
         if (textBox.IsEnabled) textBox.Focus();
     }
+
     private const double FONT_MAX_SIZE = 24d;
     private const double FONT_MIN_SIZE = 10d;
-    
+
     public void UpdateFontSize(bool increase)
     {
         var currentSize = rtb.FontSize;
@@ -503,14 +502,11 @@ public partial class MainWindow
         {
             if (!(currentSize > FONT_MIN_SIZE)) return;
             var newSize = Math.Max(FONT_MIN_SIZE, currentSize - 1);
-            
+
             rtb.FontSize = newSize;
         }
     }
-    
-        
-            
-                
+
     private void Rtb_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
     {
         var ctrl = Keyboard.Modifiers == ModifierKeys.Control;

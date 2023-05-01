@@ -50,9 +50,9 @@ public abstract class Replica
     public static void ReplicaMetaParse(string path)
     {
         var readedmeta = ReadFilesToString(path);
-        var dstid = Regex.Match(readedmeta, "dstid(.*)", RegexOptions.IgnorePatternWhitespace);
-        var dbVer = Regex.Match(readedmeta, "dbVersion(.*)", RegexOptions.IgnorePatternWhitespace);
-        var secw2 = Regex.Match(readedmeta, "securityword(.*)", RegexOptions.IgnorePatternWhitespace);
+        var dstid      = Regex.Match(readedmeta, "dstid(.*)", RegexOptions.IgnorePatternWhitespace);
+        var dbVer      = Regex.Match(readedmeta, "dbVersion(.*)", RegexOptions.IgnorePatternWhitespace);
+        var secw2      = Regex.Match(readedmeta, "securityword(.*)", RegexOptions.IgnorePatternWhitespace);
         if (dstid.Success) meta_num = dstid.Value.Split('"')[1];
         else log($"Ошибка получения dstid из {path}", Brushes.Tomato);
         if (dbVer.Success) meta_ver = dbVer.Value.Split('"')[1];
@@ -103,19 +103,19 @@ public abstract class Replica
                 process.StartInfo.FileName = GetFilesEx(SqlPackTemp, "SqlPackage.exe");
                 process.StartInfo.Arguments =
                     $"/Action:Publish /SourceFile:{dacpath} /TargetServerName:{Computername} /TargetDatabaseName:{DBOPSName} /TargetUser:sa /TargetPassword:{SqlPass} /p:BlockOnPossibleDataLoss=False /p:DropObjectsNotInSource=False /p:IncludeTransactionalScripts=True /p:RegisterDataTierApplication=true /p:ScriptRefreshModule=False /p:BlockWhenDriftDetected=False /p:IgnoreWhitespace=False /p:BackupDatabaseBeforeChanges=True /p:IgnorePermissions=True /p:IncludeCompositeObjects=True /p:IgnoreRoleMembership=True /p:DeployDatabaseInSingleUserMode=True";
-                process.StartInfo.ErrorDialog = false;
-                process.StartInfo.UseShellExecute = false;
-                process.StartInfo.CreateNoWindow = true;
-                process.StartInfo.RedirectStandardError = true;
-                process.StartInfo.RedirectStandardInput = false;
+                process.StartInfo.ErrorDialog            = false;
+                process.StartInfo.UseShellExecute        = false;
+                process.StartInfo.CreateNoWindow         = true;
+                process.StartInfo.RedirectStandardError  = true;
+                process.StartInfo.RedirectStandardInput  = false;
                 process.StartInfo.RedirectStandardOutput = true;
                 process.StartInfo.StandardOutputEncoding = Encoding.GetEncoding(866);
-                process.StartInfo.StandardErrorEncoding = Encoding.GetEncoding(866);
+                process.StartInfo.StandardErrorEncoding  = Encoding.GetEncoding(866);
 
                 process.OutputDataReceived += (_, args) =>
                 {
                     if (args.Data is not { Length: > 0 }) return;
-                    str = args.Data.ToString();
+                    str  = args.Data.ToString();
                     perc = Math.Round(num / 68354 * 100, 0);
                     num++;
                     perc2 = Math.Round(num++ / 68354 * 100, 0);
@@ -140,7 +140,7 @@ public abstract class Replica
                     MainFrame.pb.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.progressBar.SetPercentDuration(0, 1); });
                     MainFrame.pb.pbLabel.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.pbLabel.Foreground = Brushes.Transparent; });
                     var err = e.Data;
-                    log("err", Brushes.Tomato);
+                    log(err, Brushes.Tomato);
                 };
                 process.Start();
                 process.BeginOutputReadLine();
