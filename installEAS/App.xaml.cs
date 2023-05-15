@@ -15,6 +15,7 @@ public partial class App
 
     protected override void OnStartup(StartupEventArgs e)
     {
+        
         if (Singleton.WaitOne(TimeSpan.FromMilliseconds(0), true)) return;
         var handle = FindWindow(null, "installEASApp");
         if (handle == IntPtr.Zero) return;
@@ -23,4 +24,6 @@ public partial class App
         ShowWindow(handle, 9);
         Process.GetCurrentProcess().Kill();
     }
+    
+    
 }

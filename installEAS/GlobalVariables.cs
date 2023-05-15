@@ -2,6 +2,7 @@
 
 public static class Variables
 {
+    
     public static void CreateVariablesInstance()
     {
         var variablesInstance = CreateVariablesInstance;
@@ -38,29 +39,30 @@ public static class Variables
         return Regex.Match(Computername, "(?<B>R|C)(\\d{2})-(\\d{6})-([W])(\\d{2}$)").Success || Regex.Match(Computername, "(?<B>R|C)(\\d{2})-(\\d{6})-([N]$)").Success;
     }
 
-    public static string AppVersion => "7.0";
-    public static string Username => Environment.UserName;
-    public static string Domainname => Environment.UserDomainName;
-    public static string Computername => Environment.MachineName;
+    public static string AppVersion       => "7.0";
+    public static string Username         => Environment.UserName;
+    public static string Domainname       => Environment.UserDomainName;
+    public static string Computername     => Environment.MachineName;
     public static object SQLRegParameters => Reg.Read(@"HKLM:\SOFTWARE\Microsoft\Microsoft SQL Server\MSSQL11.MSSQLSERVER\MSSQLServer\Parameters");
-    public static string OPSNum => IsComputernameCorrect() ? Regex.Match(Computername, "\\d{6}").ToString() : null;
-    public static string DBOPSName => IsComputernameCorrect() ? "DB" + Regex.Match(Computername, "\\d{6}") : null;
-    public static object SevenZReg => GetRegValue(@"HKLM:\SOFTWARE\7-Zip", "Path");
-    public static string SevenZgPath => GetVarPath(SevenZReg + "7zG.exe");
-    public static string SevenZPath => GetVarPath(SevenZReg + "7z.exe");
-    public static string AppExe => Process.GetCurrentProcess().MainModule?.FileName;
-    public static string AppPath => Environment.CurrentDirectory;
-    public static string TempPath => Path.GetTempPath();
-    public static string AppRegPath => @"HKLM:\SOFTWARE\Microsoft\Sharp";
-    public static string ImportPath => GetVarPath(AppPath + @"\import");
-    public static string EsppPath => GetVarPath(AppPath + @"\Espp");
-    public static string CertsPath => GetVarPath(AppPath + @"\Certs");
-    public static string SqlPackPath => GetVarPath(AppPath + @"\SqlPackage");
-    public static string SqlPackLib => GetVarPath(AppPath + @"\SqlPackageLib");
-    public static string SqlPackTemp => TempPath + "sqlpackage";
-    public static object POSRegPath => GetRegValue(@"HKLM:\SOFTWARE\Wow6432Node\GMCS\POS", "InstallDir");
-    public static object POSVer => GetRegValue(@"HKLM:\SOFTWARE\Wow6432Node\GMCS\POS", "Version");
-    public static string POSPath => GetVarPath(POSRegPath.ToString());
+    public static string OPSNum           => IsComputernameCorrect() ? Regex.Match(Computername, "\\d{6}").ToString() : null;
+    public static string DBOPSName        => IsComputernameCorrect() ? "DB" + Regex.Match(Computername, "\\d{6}") : null;
+    public static object SevenZReg        => GetRegValue(@"HKLM:\SOFTWARE\7-Zip", "Path");
+    public static string SevenZgPath      => GetVarPath(SevenZReg + "7zG.exe");
+    public static string SevenZPath       => GetVarPath(SevenZReg + "7z.exe");
+    public static string AppExe           => Process.GetCurrentProcess().MainModule?.FileName;
+    public static string AppPath          => Environment.CurrentDirectory;
+    public static string TempPath         => Path.GetTempPath();
+    public static string AppRegPath       => @"HKLM:\SOFTWARE\Microsoft\Sharp";
+    public static string ImportPath       => GetVarPath(AppPath + @"\import");
+
+    public static string EsppPath         => GetVarPath(AppPath + @"\Espp");
+    public static string CertsPath        => GetVarPath(AppPath + @"\Certs");
+    public static string SqlPackPath      => GetVarPath(AppPath + @"\SqlPackage");
+    public static string SqlPackLib       => GetVarPath(AppPath + @"\SqlPackageLib");
+    public static string SqlPackTemp      => TempPath + "sqlpackage";
+    public static object POSRegPath       => GetRegValue(@"HKLM:\SOFTWARE\Wow6432Node\GMCS\POS", "InstallDir");
+    public static object POSVer           => GetRegValue(@"HKLM:\SOFTWARE\Wow6432Node\GMCS\POS", "Version");
+    public static string POSPath          => GetVarPath(POSRegPath.ToString());
 
     public static string POSConfig => GetVarPath(POSRegPath + "POS.exe.config");
 

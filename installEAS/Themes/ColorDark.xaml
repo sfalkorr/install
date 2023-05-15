@@ -38,9 +38,9 @@
     </LinearGradientBrush>
     <SolidColorBrush x:Key="Menu.Selector" Color="#FF343a41" />
     <LinearGradientBrush x:Key="ProgressBar.Color" Opacity="0.8" StartPoint="0.5,0" EndPoint="0.5,1">
-        <GradientStop Offset="0" Color="#FF545a61" />
-        <GradientStop Offset="0.5" Color="#FF646a71" />
-        <GradientStop Offset="0" Color="#FF545a61" />
+        <GradientStop Offset="0" Color="#50808080" />
+        <GradientStop Offset="0.5" Color="#90909090" />
+        <GradientStop Offset="1" Color="#50808080" />
     </LinearGradientBrush>
     <LinearGradientBrush x:Key="Textbox.Color" Opacity="0.5" StartPoint="0.5,0" EndPoint="0.5,1">
         <GradientStop Offset="1" Color="#FF444a51" />
@@ -178,7 +178,7 @@
                             <VisualStateGroup Name="CommonStates">
                                 <VisualState Name="MouseOver">
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetName="BorderColor" Storyboard.TargetProperty="Color" To="#FF404040" Duration="0:0:0.001" />
+                                        <ColorAnimation Storyboard.TargetName="BorderColor" Storyboard.TargetProperty="Color" To="#FF404040" Duration="0:0:0.100" />
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState Name="Normal">
@@ -219,8 +219,8 @@
 
     <Style x:Key="MessageboxStyle1" TargetType="Button">
         <Setter Property="Background" Value="#0060656A" />
-        <Setter Property="BorderBrush" Value="#FF303030" />
-        <Setter Property="BorderThickness" Value="0.6" />
+        <Setter Property="BorderThickness" Value="0.8" />
+        <Setter Property="BorderBrush" Value="#FF454545" />
         <Setter Property="FontFamily" Value="Segue UI" />
         <Setter Property="FontSize" Value="16" />
         <Setter Property="Foreground" Value="#FFBBBBBB" />
@@ -240,9 +240,9 @@
                         <Border.Background>
                             <SolidColorBrush x:Name="BorderColor" />
                         </Border.Background>
-                        <Border.Effect>
-                            <DropShadowEffect BlurRadius="10" Direction="0" Opacity="0.5" ShadowDepth="1" />
-                        </Border.Effect>
+                        <!-- <Border.Effect> -->
+                        <!--     <DropShadowEffect BlurRadius="5" Direction="0" Opacity="0.4" ShadowDepth="1" /> -->
+                        <!-- </Border.Effect> -->
                         <ContentControl Margin="{TemplateBinding Padding}"
                                         HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                         VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
@@ -251,12 +251,12 @@
                             <VisualStateGroup Name="CommonStates">
                                 <VisualState Name="MouseOver">
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetName="BorderColor" Storyboard.TargetProperty="Color" From="#0060656A" To="#FF404040" Duration="0:0:0.001" />
+                                        <ColorAnimation Storyboard.TargetName="BorderColor" Storyboard.TargetProperty="Color" From="#90404040" To="#FF505050" Duration="0:0:0.001" />
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState Name="Normal">
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetName="BorderColor" Storyboard.TargetProperty="Color" From="#FF404040" To="#00404040" Duration="0:0:0.100" />
+                                        <ColorAnimation Storyboard.TargetName="BorderColor" Storyboard.TargetProperty="Color" From="#FF404040" To="#90404040" Duration="0:0:0.100" />
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState Name="Pressed">

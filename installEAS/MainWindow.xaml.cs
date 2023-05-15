@@ -67,7 +67,7 @@ public partial class MainWindow
     }
 
     #endregion
-     
+
     public MainWindow()
     {
         var s = typeof(MainWindow).Assembly.GetManifestResourceStream("installEAS.CustomHighlighting.xshd");
@@ -102,6 +102,7 @@ public partial class MainWindow
         rtb.TextArea.SelectionCornerRadius = 5;
         rtb.TextArea.SelectionBorder       = SelectionBorder;
         rtb.TextArea.SelectionBrush        = new SolidColorBrush(Color.FromArgb(100, 100, 100, 150));
+        rtb.WordWrap                       = false;
         textBox.Background                 = Brushes.Red;
     }
 
@@ -350,17 +351,37 @@ public partial class MainWindow
         e.Cancel = true;
         var result = CustomMessageBox.Show("Действительно закрыть приложение?", "Подтверждение выхода", MessageBoxButton.YesNo, MessageBoxImage.Question);
         if (result.ToString() != "Yes") return;
-        AnimateFrameworkElement(MenuMain.PanelTopMain, 500).ConfigureAwait(true);
+        if (MenuMain.PanelTopMain.IsEnabled) AnimateFrameworkElement(MenuMain.PanelTopMain, 500).ConfigureAwait(true);
+
         MainClos.Completed += (_, _) => Process.GetCurrentProcess().Kill();
         BeginAnimation(OpacityProperty, MainClos);
     }
 
+    public void ListX()
+    {
+        var variablesInstance = CreateVariablesInstance;
+        int n                 = 0;
+        Console.WriteLine("Current list:");
+        foreach (var l in variablesInstance.GetInvocationList())
+        {
+            foreach (var property in l.GetType().GetProperties())
+            {
+                Console.WriteLine("List[{0}].{1} = {2}", n, property.Name, property.GetValue(l));
+            }
+            n++;
+        }
+    }
+    
     private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
     {
-        CreateVariablesInstance();
-        CreateSlidePanelsInstance();
-        CreatetempControlInstance();
-
+        var variablesInstance = CreateVariablesInstance;
+        //Console.WriteLine(variablesInstance.GetObjectData(info:));
+        Console.WriteLine(variablesInstance.Method);
+        ListX();
+        //CreateVariablesInstance();
+        //CreateSlidePanelsInstance();
+        //CreatetempControlInstance();
+        
         MainOpen.Completed += async (_, _) =>
         {
             await Task.Delay(500).ConfigureAwait(true);

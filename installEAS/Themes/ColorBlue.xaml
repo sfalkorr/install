@@ -38,9 +38,12 @@
     <SolidColorBrush x:Key="Button.Close.Pressed.Color" Color="#FF801010" />
 
     <LinearGradientBrush x:Key="ProgressBar.Color" Opacity="0.8" StartPoint="0.5,0" EndPoint="0.5,1">
-        <GradientStop Offset="1" Color="#FF557595" />
-        <GradientStop Offset="0.180" Color="#FF6585A5" />
+        <GradientStop Offset="0" Color="#50557595" />
+        <GradientStop Offset="0.5" Color="#906585A5" />
+        <GradientStop Offset="1" Color="#50557595" />
     </LinearGradientBrush>
+
+
     <LinearGradientBrush x:Key="Textbox.Color" Opacity="0.5" StartPoint="0.5,0" EndPoint="0.5,1">
         <GradientStop Offset="1" Color="#FF396689" />
         <GradientStop Offset="0" Color="#FF1E466E" />
@@ -178,7 +181,7 @@
                             <VisualStateGroup Name="CommonStates">
                                 <VisualState Name="MouseOver">
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetName="BorderColor" Storyboard.TargetProperty="Color" From="#00496785" To="#FF496785" Duration="0:0:0.001" />
+                                        <ColorAnimation Storyboard.TargetName="BorderColor" Storyboard.TargetProperty="Color" To="#FF496785" Duration="0:0:0.100" />
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState Name="Normal">
@@ -188,7 +191,7 @@
                                 </VisualState>
                                 <VisualState Name="Pressed">
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetName="BorderColor" Storyboard.TargetProperty="Color" From="#FF496785" To="#FF3C5A78" Duration="0:0:0:0.005" />
+                                        <ColorAnimation Storyboard.TargetName="BorderColor" Storyboard.TargetProperty="Color" From="#FF496785" To="#FA3C5A78" Duration="0:0:0:0.005" />
                                     </Storyboard>
                                 </VisualState>
                             </VisualStateGroup>
@@ -219,7 +222,7 @@
 
     <Style x:Key="MessageboxStyle1" TargetType="Button">
         <Setter Property="Background" Value="#0060656A" />
-        <Setter Property="BorderThickness" Value="0.6" />
+        <Setter Property="BorderThickness" Value="0.8" />
         <Setter Property="BorderBrush" Value="#FF202020" />
         <Setter Property="FontFamily" Value="Segue UI" />
         <Setter Property="FontSize" Value="16" />
@@ -240,9 +243,9 @@
                         <Border.Background>
                             <SolidColorBrush x:Name="BorderColor" />
                         </Border.Background>
-                        <Border.Effect>
-                            <DropShadowEffect BlurRadius="10" Direction="0" Opacity="0.5" ShadowDepth="1" />
-                        </Border.Effect>
+                        <!-- <Border.Effect> -->
+                        <!--     <DropShadowEffect BlurRadius="5" Direction="0" Opacity="0.4" ShadowDepth="1" /> -->
+                        <!-- </Border.Effect> -->
                         <ContentControl Margin="{TemplateBinding Padding}"
                                         HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                         VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
@@ -251,12 +254,12 @@
                             <VisualStateGroup Name="CommonStates">
                                 <VisualState Name="MouseOver">
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetName="BorderColor" Storyboard.TargetProperty="Color" To="#FF496785" Duration="0:0:0.001" />
+                                        <ColorAnimation Storyboard.TargetName="BorderColor" Storyboard.TargetProperty="Color" From="#80496785" To="#FF597795" Duration="0:0:0.001" />
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState Name="Normal">
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetName="BorderColor" Storyboard.TargetProperty="Color" From="#FF496785" To="#00496785" Duration="0:0:0.100" />
+                                        <ColorAnimation Storyboard.TargetName="BorderColor" Storyboard.TargetProperty="Color" From="#FF496785" To="#90496785" Duration="0:0:0.100" />
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState Name="Pressed">

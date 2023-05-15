@@ -17,9 +17,9 @@ internal partial class FluidProgressBar : IDisposable
 
     #region Fields
 
-    private Dictionary<int, KeyFrameDetails> _keyFrameMap;
+    private readonly Dictionary<int, KeyFrameDetails> _keyFrameMap;
 
-    private Dictionary<int, KeyFrameDetails> _opKeyFrameMap;
+    private readonly Dictionary<int, KeyFrameDetails> _opKeyFrameMap;
 
     //KeyTime keyA = KeyTime.FromTimeSpan(TimeSpan.FromSeconds(0));
     //KeyTime keyB = KeyTime.FromTimeSpan(TimeSpan.FromSeconds(0.5));

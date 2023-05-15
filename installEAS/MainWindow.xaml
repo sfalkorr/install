@@ -115,6 +115,7 @@
 
                     <controls:ProgressBarControl x:Name="pb"
                                                  Height="30"
+                                                 
                                                  VerticalAlignment="Top"
                                                  IsTabStop="False" />
                     <StackPanel x:Name="ControlButtons"
@@ -148,7 +149,7 @@
                             </Button.Resources>
                         </Button>
                     </StackPanel>
-                    <temp:tempControl x:Name="tempButtons" HorizontalAlignment="Left" />
+                    <temp:tempControl x:Name="tempButtons" HorizontalAlignment="Left"  />
                     <Label x:Name="labelVer"
                            Margin="3,0,0,0" HorizontalAlignment="Left"
                            Content="InstallEAS v7.0" FontFamily="Microsoft YaHei UI" FontSize="11" IsHitTestVisible="True" MouseLeftButtonDown="LabelVer_OnMouseLeftButtonDown"
