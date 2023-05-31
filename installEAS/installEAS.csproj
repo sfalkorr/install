@@ -124,6 +124,7 @@
     <Compile Include="Helpers\ArrayHelper.cs" />
     <Compile Include="Helpers\CryptpHelper.cs" />
     <Compile Include="Helpers\DispatcherEx.cs" />
+    <Compile Include="Helpers\DownloadHelper.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="GlobalVariables.cs" />
     <Compile Include="Helpers\Functions.cs" />

@@ -5,7 +5,7 @@ public partial class tempControl
     public static void CreatetempControlInstance()
     {
         var variablesInstance = CreatetempControlInstance;
-        Console.WriteLine( variablesInstance.Method );
+        Console.WriteLine(variablesInstance.Method);
     }
 
     public tempControl()
@@ -13,7 +13,7 @@ public partial class tempControl
         InitializeComponent();
     }
 
-    private void Btn1_OnClick( object sender, RoutedEventArgs e )
+    private void Btn1_OnClick(object sender, RoutedEventArgs e)
     {
         //if (MainFrame.textBox.Text == "") MainFrame.tlabel.Text = "Пароль не может быть пустым";
         //MainFrame.tlabel.Visibility = Visibility.Visible;
@@ -22,7 +22,7 @@ public partial class tempControl
         //MainFrame.textBox.Focus();
 
         var res = MainFrame.userInput(inputType.AskNewSqlPassword);
-        Console.WriteLine( res );
+        Console.WriteLine(res);
         //Console.WriteLine(sqlpass);
         //Replica.ReplicaSqlPackageStartAsync();
         //Console.WriteLine(EnvCheck.NameCheck(1, "R12-123456-N"));
@@ -44,10 +44,10 @@ public partial class tempControl
         //Console.WriteLine(RegistryTools.KeyExists(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SQL Server\MSSQL11.MSSQLSERVER\MSSQLServer\Parameters"));
     }
 
-    private void Btn2_OnClick( object sender, RoutedEventArgs e )
+    private void Btn2_OnClick(object sender, RoutedEventArgs e)
     {
         var res = MainFrame.userInput(inputType.AskCurrentSqlPassword);
-        Console.WriteLine( res );
+        Console.WriteLine(res);
         //log(NewSqlPass);
         //Password.SaveSqlPassToReg("QWEasd123*");
         //MainFrame.pb.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.progressBar.SetPercentDuration(99, 3000); });
@@ -55,9 +55,9 @@ public partial class tempControl
 
     //public static int temperror { get; set; }
 
-    private void Btn3_OnClick( object sender, RoutedEventArgs e )
+    private void Btn3_OnClick(object sender, RoutedEventArgs e)
     {
-        WindowHelper.MoveToCenterBase( MainFrame );
+        WindowHelper.MoveToCenterBase(MainFrame);
         //IsSqlConnectionAsync2();
 
         //await Task.Run(async () => temperror = await TestSqlConnectionAsync().ConfigureAwait(true));
@@ -68,7 +68,7 @@ public partial class tempControl
         //Task.WhenAll(accountTask);
     }
 
-    private void Btn4_OnClick( object sender, RoutedEventArgs e )
+    private void Btn4_OnClick(object sender, RoutedEventArgs e)
     {
         // MainFrame.rtb.AppendText(" Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)\n");
         // MainFrame.rtb.ScrollToEnd();
@@ -88,14 +88,14 @@ public partial class tempControl
         //                               Brushes.Yellow);
         // MainFrame.rtb.ScrollToEnd();
 
-        MainFrame.rtb.AppendText( " Что касается сохранения денег от инфляции, есть единственная вещь, которая за всю историю являлась дефляционным активом - это редкоземельные металлы. Да, в слитках, у тебя под кроватью в сейфе или ячейках. Конечно, бывали и затяжные даунтренды, это нормально, но на дистанции в 5-10-15 лет и более а так же в будущем это единственное спасение от инфляции. Пузыри раздуваются и лопаются, компании взлетают и превращаются в пыль, но интерес на металлы в ближайшие несколько сот лет как минимум будет всегда.\n\n" );
+        MainFrame.rtb.AppendText(" Что касается сохранения денег от инфляции, есть единственная вещь, которая за всю историю являлась дефляционным активом - это редкоземельные металлы. Да, в слитках, у тебя под кроватью в сейфе или ячейках. Конечно, бывали и затяжные даунтренды, это нормально, но на дистанции в 5-10-15 лет и более а так же в будущем это единственное спасение от инфляции. Пузыри раздуваются и лопаются, компании взлетают и превращаются в пыль, но интерес на металлы в ближайшие несколько сот лет как минимум будет всегда.\n\n");
         MainFrame.rtb.ScrollToEnd();
         //log("Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)", Brushes.OrangeRed);
         //log("Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)");
         //log("Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)", Brushes.GreenYellow);
     }
 
-    private void Btn5_OnClick( object sender, RoutedEventArgs e )
+    private void Btn5_OnClick(object sender, RoutedEventArgs e)
     {
         //var color1 = (SolidColorBrush)Application.Current.Resources["Tittle.Border.Color"];
         //Console.WriteLine(color1);
@@ -104,26 +104,25 @@ public partial class tempControl
         //ToEventLog(sender.ToString(), $"случилась", Level.Information);
 
         //MainFrame.rtb.Document.Blocks.Clear();
-        MainFrame.pb.Dispatcher.InvokeOrExecute( () => { MainFrame.pb.progressBar.SetPercentDuration( 100, 10000 ); } );
 
+        MainFrame.pb.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.progressBar.SetPercentDuration(100, 10000); });
     }
 
-    private void Btn6_OnClick( object sender, RoutedEventArgs e )
+    private void Btn6_OnClick(object sender, RoutedEventArgs e)
     {
         //MainFrame.rtb.TextArea.TextView.CurrentLineBackground = Brushes.Crimson;
-        RoundedProgressBarControl.RoundedProgressBarControlRounded.Dispatcher.InvokeOrExecute( RoundedProgressBarControl.Start );
-
+        RoundedProgressBarControl.RoundedProgressBarControlRounded.Dispatcher.InvokeOrExecute(RoundedProgressBarControl.Start);
     }
 
-    private void Btn7_OnClick( object sender, RoutedEventArgs e )
+    private void Btn7_OnClick(object sender, RoutedEventArgs e)
     {
-        RoundedProgressBarControl.RoundedProgressBarControlRounded.Dispatcher.InvokeOrExecute( RoundedProgressBarControl.Stop );
+        RoundedProgressBarControl.RoundedProgressBarControlRounded.Dispatcher.InvokeOrExecute(RoundedProgressBarControl.Stop);
         //var result = CustomMessageBox.Show("Действительно закрыть приложение?", "Подтверждение выхода", MessageBoxButton.OKCancel, MessageBoxImage.Question);
         //Replica.ReplicaSqlPackageStartAsync();
     }
 
-    private void Btn8_OnClick( object sender, RoutedEventArgs e )
+    private void Btn8_OnClick(object sender, RoutedEventArgs e)
     {
-        ProcessTools.StartElevated( "notepad", null );
+        ProcessTools.StartElevated("notepad", null);
     }
 }

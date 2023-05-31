@@ -83,7 +83,7 @@ public partial class MainWindow
         Top          =  5;
         StateChanged += MainWindowStateChangeRaised;
         SizeChanged  += MainWin_SizeChanged;
-        CurrentTheme =  ThemeTypes.ColorGray;
+        CurrentTheme =  ThemeTypes.ColorBlue;
         MainOpen     =  new DoubleAnimation { From = 0.1, To  = 0.97, Duration = new Duration(TimeSpan.FromMilliseconds(500)) };
         MainClos     =  new DoubleAnimation { From = 0.97, To = 0.1, Duration  = new Duration(TimeSpan.FromMilliseconds(700)) };
         textBoxOpen  =  Resources["OpenTextBox"] as Storyboard;
@@ -103,7 +103,8 @@ public partial class MainWindow
         rtb.TextArea.SelectionBorder       = SelectionBorder;
         rtb.TextArea.SelectionBrush        = new SolidColorBrush(Color.FromArgb(100, 100, 100, 150));
         rtb.WordWrap                       = false;
-        textBox.Background                 = Brushes.Red;
+        rtb.HorizontalScrollBarVisibility  = ScrollBarVisibility.Visible;
+        Console.WriteLine(ImportPath);
     }
 
     public enum inputType
@@ -360,18 +361,16 @@ public partial class MainWindow
     public void ListX()
     {
         var variablesInstance = CreateVariablesInstance;
-        int n                 = 0;
+        var n                 = 0;
         Console.WriteLine("Current list:");
         foreach (var l in variablesInstance.GetInvocationList())
         {
-            foreach (var property in l.GetType().GetProperties())
-            {
-                Console.WriteLine("List[{0}].{1} = {2}", n, property.Name, property.GetValue(l));
-            }
+            foreach (var property in l.GetType().GetProperties()) Console.WriteLine("List[{0}].{1} = {2}", n, property.Name, property.GetValue(l));
+
             n++;
         }
     }
-    
+
     private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
     {
         var variablesInstance = CreateVariablesInstance;
@@ -381,7 +380,7 @@ public partial class MainWindow
         //CreateVariablesInstance();
         //CreateSlidePanelsInstance();
         //CreatetempControlInstance();
-        
+
         MainOpen.Completed += async (_, _) =>
         {
             await Task.Delay(500).ConfigureAwait(true);
@@ -413,12 +412,6 @@ public partial class MainWindow
     }
 
     public static string InputText { get; set; }
-
-    private void LabelVer_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-        ChangeTheme();
-        if (textBox.IsEnabled) textBox.Focus();
-    }
 
     public static bool IsEmpty;
 
@@ -461,5 +454,20 @@ public partial class MainWindow
         if (!ctrl) return;
         rtb.FontSizeWheel(e.Delta > 0);
         e.Handled = true;
+    }
+
+    private void labelVer_MouseEnter(object sender, MouseEventArgs e)
+    {
+        MainFrame.Dispatcher.InvokeAsync(() =>
+        {
+            var _ = AnimateFrameworkElement(MenuMain.PanelTopLabel, 400);
+        }, DispatcherPriority.Send);
+    }
+
+    private void LabelVer_OnMouseLeave(object sender, MouseEventArgs e)
+    {
+        Console.WriteLine(MenuMain.PanelTopLabel.IsFocused);
+        
+
     }
 }

@@ -33,10 +33,11 @@ public static class ProgressBarExtensions
         MainFrame.pb.pbLabel.Visibility = Visibility.Visible;
         var span = TimeSpan.FromMilliseconds(timespan);
         var anim = new DoubleAnimation(percentage, span) { IsCumulative = false, FillBehavior = FillBehavior.Stop, IsAdditive = false };
-
-        progressBar.Dispatcher.InvokeOrExecute(() => { progressBar.BeginAnimation(RangeBase.ValueProperty, anim); });
-        //if (MainFrame.pb.pbLabel.Text == "0%")
-          //  MainFrame.pb.pbLabel.Visibility = Visibility.Hidden;
+        progressBar.Dispatcher.InvokeOrExecute(() =>
+        {
+            anim.Completed += (_, _) => { MainFrame.pb.pbLabel.Visibility = Visibility.Hidden; };
+            progressBar.BeginAnimation(RangeBase.ValueProperty, anim);
+        });
     }
 }
 

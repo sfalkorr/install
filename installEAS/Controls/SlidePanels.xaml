@@ -11,7 +11,7 @@
             <Border x:Name="PanelBorderMain"
                     Background="{DynamicResource ResourceKey=Menu.Background}"
                     BorderBrush="{DynamicResource ResourceKey=Tittle.Border.Color}"
-                    BorderThickness="1,0,1,1" CornerRadius="0,0,7,7" />
+                    BorderThickness="1,0,1,1" CornerRadius="0,0,8,8" />
             <StackPanel Name="sPanelTopMain"
                         Width="430"
                         Margin="0,10,0,5">
@@ -35,7 +35,7 @@
             <Border x:Name="PanelBorder"
                     Background="{DynamicResource ResourceKey=Menu.Background}"
                     BorderBrush="{DynamicResource ResourceKey=Tittle.Border.Color}"
-                    BorderThickness="1,0,1,1" CornerRadius="0,0,7,7" />
+                    BorderThickness="1,0,1,1" CornerRadius="0,0,8,8" />
             <StackPanel Name="sPanelTop"
                         Width="490"
                         Margin="0,10,0,5">
@@ -73,6 +73,26 @@
 
             </StackPanel>
 
+
+        </Grid>
+        <Grid x:Name="PanelTopLabel"
+              Margin="0,-100,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"
+              IsEnabled="False" MouseLeave="PanelTopLabel_OnMouseLeave">
+            <Border x:Name="PanelBorderLabel"
+                    Background="{DynamicResource ResourceKey=Menu.Background}"
+                    BorderBrush="{DynamicResource ResourceKey=Tittle.Border.Color}"
+                    BorderThickness="1,0,1,1" CornerRadius="0,0,8,0" />
+            <StackPanel Name="sPanelBorderLabel"
+                        Width="180"
+                        Margin="0,10,0,5">
+                <Button Name="btnLabel1"
+                        Click="btnLabel1_Click" Content="Цветовая схема"
+                        Style="{DynamicResource ButtonMenuStyle1}" />
+                <Button Name="btnLabel2"
+                        Click="btnLabel2_Click" Content="О программе"
+                        Style="{DynamicResource ButtonMenuStyle1}" />
+
+            </StackPanel>
 
         </Grid>
     </Grid>
