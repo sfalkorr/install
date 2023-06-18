@@ -130,7 +130,7 @@ public abstract class Replica
                     log("Successfully published database", Brushes.GreenYellow);
                     MainFrame.pb.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.progressBar.SetPercentDuration(perc2, 500); });
                     Task.Delay(1000);
-                    MainFrame.pb.pbLabel.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.pbLabel.Foreground = Brushes.Transparent; });
+                    //MainFrame.pb.pbLabel.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.pbLabel.Foreground = Brushes.Transparent; });
                     RoundedProgressBarControl.RoundedProgressBarControlRounded.Dispatcher.InvokeOrExecute(RoundedProgressBarControl.Stop);
                 };
 
@@ -138,7 +138,7 @@ public abstract class Replica
                 {
                     RoundedProgressBarControl.RoundedProgressBarControlRounded.Dispatcher.InvokeOrExecute(RoundedProgressBarControl.Stop);
                     MainFrame.pb.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.progressBar.SetPercentDuration(0, 1); });
-                    MainFrame.pb.pbLabel.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.pbLabel.Foreground = Brushes.Transparent; });
+                    //MainFrame.pb.pbLabel.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.pbLabel.Foreground = Brushes.Transparent; });
                     var err = e.Data;
                     log(err, Brushes.Tomato);
                 };
@@ -151,7 +151,7 @@ public abstract class Replica
             {
                 RoundedProgressBarControl.RoundedProgressBarControlRounded.Dispatcher.InvokeOrExecute(RoundedProgressBarControl.Stop);
                 MainFrame.pb.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.progressBar.SetPercentDuration(0, 1); });
-                MainFrame.pb.pbLabel.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.pbLabel.Foreground = Brushes.Transparent; });
+                //MainFrame.pb.pbLabel.Dispatcher.InvokeOrExecute(() => { MainFrame.pb.pbLabel.Foreground = Brushes.Transparent; });
                 log(ex.Message, Brushes.Tomato);
             }
         });

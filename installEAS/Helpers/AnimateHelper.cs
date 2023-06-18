@@ -18,7 +18,7 @@ public class InClassName
 
 public abstract class Animate
 {
-    public static Task AnimateFrameworkElement(FrameworkElement Target, int Duration)
+    public static Task AnimateFrameworkElementAsync(FrameworkElement Target, int Duration)
     {
         var sb = new Storyboard();
         var ta = new ThicknessAnimation

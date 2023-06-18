@@ -19,7 +19,7 @@ public partial class SlidePanelsControl
     {
         Dispatcher.InvokeOrExecute(() =>
         {
-            var unused = AnimateFrameworkElement(MenuMain.PanelTopMain, 400);
+            var unused = AnimateFrameworkElementAsync(MenuMain.PanelTopMain, 400);
         }, DispatcherPriority.Send);
     }
 
@@ -31,11 +31,11 @@ public partial class SlidePanelsControl
     {
         Dispatcher.InvokeOrExecute(() =>
         {
-            var unused = AnimateFrameworkElement(MenuMain.PanelTopMain, 300);
+            var unused = AnimateFrameworkElementAsync(MenuMain.PanelTopMain, 300);
         }, DispatcherPriority.Background);
         Dispatcher.InvokeOrExecute(() =>
         {
-            var unused = AnimateFrameworkElement(MenuMain.PanelTopAdd, 300);
+            var unused = AnimateFrameworkElementAsync(MenuMain.PanelTopAdd, 300);
         }, DispatcherPriority.Send);
     }
 
@@ -48,11 +48,11 @@ public partial class SlidePanelsControl
     {
         Dispatcher.InvokeOrExecute(() =>
         {
-            var unused = AnimateFrameworkElement(MenuMain.PanelTopAdd, 300);
+            var unused = AnimateFrameworkElementAsync(MenuMain.PanelTopAdd, 300);
         }, DispatcherPriority.Background);
         Dispatcher.InvokeOrExecute(() =>
         {
-            var unused = AnimateFrameworkElement(MenuMain.PanelTopMain, 300);
+            var unused = AnimateFrameworkElementAsync(MenuMain.PanelTopMain, 300);
         }, DispatcherPriority.Send);
     }
 
@@ -74,7 +74,7 @@ public partial class SlidePanelsControl
     {
         MainFrame.Dispatcher.InvokeAsync(() =>
         {
-            var _ = AnimateFrameworkElement(MenuMain.PanelTopLabel, 400);
+            var _ = AnimateFrameworkElementAsync(MenuMain.PanelTopLabel, 400);
         }, DispatcherPriority.Send);
     }
 }

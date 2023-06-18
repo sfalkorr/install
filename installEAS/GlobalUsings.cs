@@ -38,6 +38,8 @@ global using System.Windows.Shapes;
 global using System.Windows.Threading;
 global using System.Xml;
 
+global using Microsoft.Windows.Themes;
+
 global using AvalonEdit;
 global using AvalonEdit.Document;
 global using AvalonEdit.Editing;

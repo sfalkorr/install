@@ -84,8 +84,8 @@ public partial class MainWindow
         StateChanged += MainWindowStateChangeRaised;
         SizeChanged  += MainWin_SizeChanged;
         CurrentTheme =  ThemeTypes.ColorBlue;
-        MainOpen     =  new DoubleAnimation { From = 0.1, To  = 0.97, Duration = new Duration(TimeSpan.FromMilliseconds(500)) };
-        MainClos     =  new DoubleAnimation { From = 0.97, To = 0.1, Duration  = new Duration(TimeSpan.FromMilliseconds(700)) };
+        MainOpen     =  new DoubleAnimation { From = 0.1, To  = 0.95, Duration = new Duration(TimeSpan.FromMilliseconds(500)) };
+        MainClos     =  new DoubleAnimation { From = 0.95, To = 0.1, Duration  = new Duration(TimeSpan.FromMilliseconds(700)) };
         textBoxOpen  =  Resources["OpenTextBox"] as Storyboard;
         textBoxClos  =  Resources["CloseTextBox"] as Storyboard;
 
@@ -105,6 +105,9 @@ public partial class MainWindow
         rtb.WordWrap                       = false;
         rtb.HorizontalScrollBarVisibility  = ScrollBarVisibility.Visible;
         Console.WriteLine(ImportPath);
+
+        //pb.pbControlAero.Opacity = .5;
+        //pb.pbControlAero.Content = "хуй";
     }
 
     public enum inputType
@@ -308,7 +311,7 @@ public partial class MainWindow
         if (Keyboard.IsKeyDown(OemTilde) && Keyboard.IsKeyDown(LeftAlt))
             MainFrame.Dispatcher.InvokeAsync(() =>
             {
-                var _ = AnimateFrameworkElement(MenuMain.PanelTopMain, 400);
+                var _ = AnimateFrameworkElementAsync(MenuMain.PanelTopMain, 400);
             }, DispatcherPriority.Send);
 
         if (Keyboard.IsKeyDown(OemTilde) && Keyboard.IsKeyDown(LeftCtrl))
@@ -352,7 +355,7 @@ public partial class MainWindow
         e.Cancel = true;
         var result = CustomMessageBox.Show("Действительно закрыть приложение?", "Подтверждение выхода", MessageBoxButton.YesNo, MessageBoxImage.Question);
         if (result.ToString() != "Yes") return;
-        if (MenuMain.PanelTopMain.IsEnabled) AnimateFrameworkElement(MenuMain.PanelTopMain, 500).ConfigureAwait(true);
+        if (MenuMain.PanelTopMain.IsEnabled) AnimateFrameworkElementAsync(MenuMain.PanelTopMain, 500).ConfigureAwait(true);
 
         MainClos.Completed += (_, _) => Process.GetCurrentProcess().Kill();
         BeginAnimation(OpacityProperty, MainClos);
@@ -384,7 +387,7 @@ public partial class MainWindow
         MainOpen.Completed += async (_, _) =>
         {
             await Task.Delay(500).ConfigureAwait(true);
-            await AnimateFrameworkElement(MenuMain.PanelTopMain, 500).ConfigureAwait(true);
+            await AnimateFrameworkElementAsync(MenuMain.PanelTopMain, 500).ConfigureAwait(true);
         };
         BeginAnimation(OpacityProperty, MainOpen);
     }
@@ -460,7 +463,7 @@ public partial class MainWindow
     {
         MainFrame.Dispatcher.InvokeAsync(() =>
         {
-            var _ = AnimateFrameworkElement(MenuMain.PanelTopLabel, 400);
+            var _ = AnimateFrameworkElementAsync(MenuMain.PanelTopLabel, 400);
         }, DispatcherPriority.Send);
     }
 

@@ -29,13 +29,13 @@ public static class ProgressBarExtensions
     [STAThread]
     public static void SetPercentDuration(this ProgressBar progressBar, double percentage, int timespan)
     {
-        MainFrame.pb.pbLabel.Foreground = Brushes.White;
-        MainFrame.pb.pbLabel.Visibility = Visibility.Visible;
+        //MainFrame.pb.pbLabel.Foreground = Brushes.White;
+        //MainFrame.pb.pbLabel.Visibility = Visibility.Visible;
         var span = TimeSpan.FromMilliseconds(timespan);
         var anim = new DoubleAnimation(percentage, span) { IsCumulative = false, FillBehavior = FillBehavior.Stop, IsAdditive = false };
         progressBar.Dispatcher.InvokeOrExecute(() =>
         {
-            anim.Completed += (_, _) => { MainFrame.pb.pbLabel.Visibility = Visibility.Hidden; };
+            //anim.Completed += (_, _) => { MainFrame.pb.pbLabel.Visibility = Visibility.Hidden; };
             progressBar.BeginAnimation(RangeBase.ValueProperty, anim);
         });
     }

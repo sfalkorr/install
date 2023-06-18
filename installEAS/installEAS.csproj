@@ -78,6 +78,7 @@
     <TargetZone>LocalIntranet</TargetZone>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -105,6 +106,9 @@
     <Compile Include="Common\EnvCheck.cs" />
     <Compile Include="Controls\FluidProgressBar.xaml.cs">
       <DependentUpon>FluidProgressBar.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProgressBarAero.xaml.cs">
+      <DependentUpon>ProgressBarAero.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\SlidePanels.xaml.cs">
       <DependentUpon>SlidePanels.xaml</DependentUpon>
@@ -141,6 +145,7 @@
     <Compile Include="Helpers\RegistryHelper.cs" />
     <Compile Include="Themes\ThemesController.cs" />
     <Page Include="Controls\FluidProgressBar.xaml" />
+    <Page Include="Controls\ProgressBarAero.xaml" />
     <Page Include="Controls\SlidePanels.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -161,6 +166,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="MessageBoxCustom\CustomMessageBoxWindow.xaml" />
+    <Page Include="Themes\AeroStyle.xaml" />
     <Page Include="Themes\ColorBlue.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
