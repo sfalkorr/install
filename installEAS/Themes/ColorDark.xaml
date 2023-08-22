@@ -47,13 +47,14 @@
         <GradientStop Offset="0" Color="#FF1a1f26" />
     </LinearGradientBrush>
     <SolidColorBrush x:Key="Editor.Foreground.Color" Color="#FFDDDDDD" />
-    <SolidColorBrush x:Key="Editor.Background.Color" Color="#FF0f0f12" />
+    <SolidColorBrush x:Key="Editor.Background.Color" Color="#FF101017" />
     <SolidColorBrush x:Key="ScrollBarThumbKey.Color" Color="#FFAAAAAA" />
     <SolidColorBrush x:Key="ScrollBarThumbKey.BackColor" Color="#05AAAAAA" />
 
     <Style x:Key="ControlButtonStyle1" TargetType="{x:Type Button}">
-        <Setter Property="BorderBrush" Value="{StaticResource ResourceKey=Tittle.Border.Color}" />
-        <Setter Property="BorderThickness" Value="0.6,0,0,0.6" />
+        <!-- <Setter Property="BorderBrush" Value="{StaticResource ResourceKey=Tittle.Border.Color}" /> -->
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
         <Setter Property="FontSize" Value="10" />
         <Setter Property="Foreground" Value="#FFBBBBBB" />
         <Setter Property="Height" Value="30" />
@@ -96,8 +97,9 @@
     </Style>
 
     <Style x:Key="CloseButtonStyle1" TargetType="{x:Type Button}">
-        <Setter Property="BorderBrush" Value="{StaticResource ResourceKey=Tittle.Border.Color}" />
-        <Setter Property="BorderThickness" Value="0.6,0,0,0.6" />
+        <!-- <Setter Property="BorderBrush" Value="{StaticResource ResourceKey=Tittle.Border.Color}" /> -->
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
         <Setter Property="FontSize" Value="10" />
         <Setter Property="Foreground" Value="#FFBBBBBB" />
         <Setter Property="Height" Value="30" />
@@ -143,7 +145,8 @@
         <Setter Property="Background" Value="#0060656A" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="FontFamily" Value="Microsoft YaHei UI" />
+        <Setter Property="FontFamily" Value="Microsoft Sant Serf" />
+        <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="FontSize" Value="16" />
         <Setter Property="Foreground" Value="#FFCCCCCC" />
         <Setter Property="Height" Value="27" />
@@ -359,7 +362,7 @@
         <Setter Property="Background" Value="{DynamicResource ResourceKey=Editor.Background.Color}" />
         <Setter Property="BorderBrush" Value="{DynamicResource ResourceKey=Tittle.Border.Color}" />
         <Setter Property="FontFamily" Value="Consolas" />
-        <Setter Property="FontSize" Value="15" />
+        <Setter Property="FontSize" Value="16" />
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}" />
         <Setter Property="Template">
             <Setter.Value>

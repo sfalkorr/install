@@ -102,7 +102,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Common\Replica.cs" />
+    <Compile Include="Common\Actions.cs" />
     <Compile Include="Common\EnvCheck.cs" />
     <Compile Include="Controls\FluidProgressBar.xaml.cs">
       <DependentUpon>FluidProgressBar.xaml</DependentUpon>

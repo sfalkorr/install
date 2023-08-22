@@ -41,7 +41,8 @@ public partial class SlidePanelsControl
 
     private void BtnMainMenu4_OnClick(object sender, RoutedEventArgs e)
     {
-        CloseMain();
+        //CloseMain();
+        SystemCommands.CloseWindow(MainFrame);
     }
 
     private void BtnMenuAdd0_OnClick(object sender, RoutedEventArgs e)

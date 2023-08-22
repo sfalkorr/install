@@ -4,12 +4,65 @@
 public partial class MainWindow
 {
     public static   MainWindow      MainFrame;
-    public static   DoubleAnimation MainOpen;
-    public static   DoubleAnimation MainClos;
-    public readonly Storyboard      textBoxClos;
-    public readonly Storyboard      textBoxOpen;
-    public static   string          obj = "";
+    public static   DoubleAnimation MainOpen,    MainClose;
+    public readonly Storyboard      textBoxOpen, textBoxClos;
+    public static   string          obj;
+    public          inputType       AskType = inputType.Empty;
+    public static   bool            IsEmpty;
 
+    public enum inputType
+    {
+        Empty,
+        AskNewSqlPassword,
+        AskCurrentSqlPassword,
+        AskMachinename,
+        AskConfirmation
+    }
+
+    #region Control Key Reaction
+
+    [STAThread]
+    private void MainWindow_StateChangeRaised(object sender, EventArgs e)
+    {
+        if (WindowState == WindowState.Maximized)
+        {
+            MainWindowBorder.BorderThickness = new Thickness(7);
+            RestoreButton.Visibility         = Visibility.Visible;
+            MaximizeButton.Visibility        = Visibility.Collapsed;
+        }
+        else
+        {
+            MainWindowBorder.BorderThickness = new Thickness(0);
+            RestoreButton.Visibility         = Visibility.Collapsed;
+            MaximizeButton.Visibility        = Visibility.Visible;
+        }
+    }
+
+    public void CommandBinding_Executed_Close(object sender, ExecutedRoutedEventArgs e)
+    {
+        SystemCommands.CloseWindow(this);
+    }
+
+    public void CommandBinding_Executed_Maximize(object sender, ExecutedRoutedEventArgs e)
+    {
+        if (textBox.IsEnabled) textBox.Focus();
+        SystemCommands.MaximizeWindow(this);
+    }
+
+    public void CommandBinding_Executed_Minimize(object sender, ExecutedRoutedEventArgs e)
+    {
+        if (textBox.IsEnabled) textBox.Focus();
+        SystemCommands.MinimizeWindow(this);
+    }
+
+    public void CommandBinding_Executed_Restore(object sender, ExecutedRoutedEventArgs e)
+    {
+        if (textBox.IsEnabled) textBox.Focus();
+        SystemCommands.RestoreWindow(this);
+    }
+
+    #endregion
+    
     #region Detect start and end resize window
 
     protected override void OnSourceInitialized(EventArgs e)
@@ -81,11 +134,11 @@ public partial class MainWindow
         MainFrame    =  this;
         Left         =  5;
         Top          =  5;
-        StateChanged += MainWindowStateChangeRaised;
-        SizeChanged  += MainWin_SizeChanged;
-        CurrentTheme =  ThemeTypes.ColorBlue;
+        StateChanged += MainWindow_StateChangeRaised;
+        SizeChanged  += MainWindow_OnSizeChanged;
+        CurrentTheme =  ThemeTypes.ColorDark;
         MainOpen     =  new DoubleAnimation { From = 0.1, To  = 0.95, Duration = new Duration(TimeSpan.FromMilliseconds(500)) };
-        MainClos     =  new DoubleAnimation { From = 0.95, To = 0.1, Duration  = new Duration(TimeSpan.FromMilliseconds(700)) };
+        MainClose     =  new DoubleAnimation { From = 0.95, To = 0.1, Duration  = new Duration(TimeSpan.FromMilliseconds(700)) };
         textBoxOpen  =  Resources["OpenTextBox"] as Storyboard;
         textBoxClos  =  Resources["CloseTextBox"] as Storyboard;
 
@@ -104,22 +157,7 @@ public partial class MainWindow
         rtb.TextArea.SelectionBrush        = new SolidColorBrush(Color.FromArgb(100, 100, 100, 150));
         rtb.WordWrap                       = false;
         rtb.HorizontalScrollBarVisibility  = ScrollBarVisibility.Visible;
-        Console.WriteLine(ImportPath);
-
-        //pb.pbControlAero.Opacity = .5;
-        //pb.pbControlAero.Content = "хуй";
     }
-
-    public enum inputType
-    {
-        Empty,
-        AskNewSqlPassword,
-        AskCurrentSqlPassword,
-        AskMachinename,
-        AskConfirmation
-    }
-
-    public inputType AskType = inputType.Empty;
 
     public bool userInput(inputType type)
     {
@@ -128,13 +166,13 @@ public partial class MainWindow
         switch (AskType)
         {
             case inputType.AskNewSqlPassword:
-                log("\nЗадайте новый пароль для пользователя sa в SQL и подтвердите ввод клавишей Enter\nИли нажимайте клавишу F12 для генерации случайных паролей, подтвердив ввод клавишей Enter\n\n");
+                log("\nЗадайте новый пароль для пользователя sa в SQL и подтвердите ввод клавишей Enter\nИли нажимайте клавишу F12 для генерации случайных паролей, подтвердив ввод клавишей Enter\nНе забудьте сохранить или запомнить новый пароль\n\n");
                 MainFrame.textBoxOpen.Completed += (_, _) =>
                 {
                     MainFrame.tlabel.Visibility = Visibility.Visible;
                     MainFrame.textBox.IsEnabled = true;
                     MainFrame.textBox.Focus();
-                    if (MainFrame.textBox.Text == "") MainFrame.tlabel.Text = "Пароль не может быть пустым";
+                    //if (MainFrame.textBox.Text == "") MainFrame.tlabel.Text = "Пароль не может быть пустым";
                 };
                 MainFrame.textBoxOpen.Begin(MainFrame.textBox);
                 return true;
@@ -146,7 +184,7 @@ public partial class MainWindow
                     MainFrame.tlabel.Visibility = Visibility.Visible;
                     MainFrame.textBox.IsEnabled = true;
                     MainFrame.textBox.Focus();
-                    if (MainFrame.textBox.Text == "") MainFrame.tlabel.Text = "Пароль не может быть пустым";
+                    //if (MainFrame.textBox.Text == "") MainFrame.tlabel.Text = "Пароль не может быть пустым";
                 };
                 MainFrame.textBoxOpen.Begin(MainFrame.textBox);
                 return true;
@@ -165,25 +203,6 @@ public partial class MainWindow
 
     private void TextBox_OnKeyDownKeyDown(object sender, KeyEventArgs e)
     {
-        //if (e.Key != Enter || MainFrame.textBox.Text == "") return;
-        //if (Regex.IsMatch(MainFrame.textBox.Text, "^[0-9A-Z!@#$%^&*()_+=?-]+$", RegexOptions.IgnoreCase))
-        //{
-        //    log(MainFrame.textBox.Text);
-        //    tlabel.Text                 = "";
-        //    MainFrame.textBox.IsEnabled = false;
-        //    MainFrame.textBox.Clear();
-        //    MainFrame.textBoxClos.Begin(MainFrame.textBox);
-        //    sqlpass = textBox.Text;
-        //}
-        //if (e.Key != Enter || MainFrame.textBox.Text == "") tlabel.Text = "Пароль не может быть пустым";
-        // if ((ValidatePass(textBox.Text) != "Пароль корректен" && textBox.Text != "new") || e.Key != Enter) return;
-        // log(newpass);
-        // tlabel.Visibility           = Visibility.Collapsed;
-        // MainFrame.textBox.IsEnabled = false;
-        // MainFrame.textBox.Clear();
-        // MainFrame.textBoxClos.Begin(MainFrame.textBox);
-        // sqlpass = textBox.Text;
-
         switch (AskType)
         {
             case inputType.AskNewSqlPassword when !MainFrame.textBox.IsEnabled:
@@ -198,10 +217,19 @@ public partial class MainWindow
                 }
 
                 if (ValidatePass(textBox.Text) != "Пароль корректен" || !Keyboard.IsKeyDown(Enter)) return;
-                tlabel.Visibility               =  Visibility.Collapsed;
-                NewSqlPass                      =  textBox.Text;
+                tlabel.Visibility = Visibility.Collapsed;
+                //NewSqlPass                      =  textBox.Text;
                 MainFrame.textBoxClos.Completed += OnTextBoxClosOnCompleted;
                 MainFrame.textBoxClos.Begin(MainFrame.textBox);
+                MainFrame.tlabel.Text = "";
+
+                Reg.Write(@"HKLM:\SOFTWARE\Microsoft\Script", "crc", Crypt.EncryptString(textBox.Text));
+                Crypt.EncryptString(textBox.Text);
+                var query = "alter login [sa] with check_policy = off alter login [sa] with password ='" + textBox.Text + "'";
+                ExecuteAsync2(query, "master");
+
+
+                //Sql.Exex();
                 break;
             }
 
@@ -212,6 +240,8 @@ public partial class MainWindow
                 SqlPass                         =  textBox.Text;
                 MainFrame.textBoxClos.Completed += OnTextBoxClosOnCompleted;
                 MainFrame.textBoxClos.Begin(MainFrame.textBox);
+                textBox.Text          = "";
+                MainFrame.tlabel.Text = "";
                 break;
             case inputType.AskMachinename:
                 Console.WriteLine();
@@ -230,7 +260,8 @@ public partial class MainWindow
     {
         MainFrame.textBox.IsEnabled = false;
         MainFrame.textBox.Clear();
-        AskType = inputType.Empty;
+        MainFrame.tlabel.Text = "";
+        AskType               = inputType.Empty;
     }
 
     private void textBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -247,7 +278,7 @@ public partial class MainWindow
                 tlabel.Foreground = Brushes.OrangeRed;
                 tlabel.Text       = ValidatePass(textBox.Text);
                 break;
-            case inputType.AskCurrentSqlPassword when IsSqlPasswordOK(textBox.Text) && !Regex.Match(textBox.Text, "[\\s]").Success:
+            case inputType.AskCurrentSqlPassword when IsSqlPasswordOK(textBox.Text) && !Regex.Match(textBox.Text, "\\s").Success:
                 tlabel.Foreground = Brushes.GreenYellow;
                 tlabel.Text       = "Пароль принят";
                 break;
@@ -255,6 +286,7 @@ public partial class MainWindow
                 tlabel.Foreground = Brushes.OrangeRed;
                 tlabel.Text       = "Неверный пароль";
                 break;
+
             case inputType.AskMachinename:
                 Console.WriteLine();
                 break;
@@ -268,35 +300,7 @@ public partial class MainWindow
         }
     }
 
-    public static void CloseMain()
-    {
-        SystemCommands.CloseWindow(MainFrame);
-    }
-
-    public void CommandBinding_Executed_Close(object sender, ExecutedRoutedEventArgs e)
-    {
-        SystemCommands.CloseWindow(this);
-    }
-
-    public void CommandBinding_Executed_Maximize(object sender, ExecutedRoutedEventArgs e)
-    {
-        if (textBox.IsEnabled) textBox.Focus();
-        SystemCommands.MaximizeWindow(this);
-    }
-
-    public void CommandBinding_Executed_Minimize(object sender, ExecutedRoutedEventArgs e)
-    {
-        if (textBox.IsEnabled) textBox.Focus();
-        SystemCommands.MinimizeWindow(this);
-    }
-
-    public void CommandBinding_Executed_Restore(object sender, ExecutedRoutedEventArgs e)
-    {
-        if (textBox.IsEnabled) textBox.Focus();
-        SystemCommands.RestoreWindow(this);
-    }
-
-    private void MainWin_KeyDown(object sender, KeyEventArgs e)
+    private void MainWindow_OnKeyDown(object sender, KeyEventArgs e)
     {
         if (Keyboard.IsKeyDown(F1)) tempButtons.btn1.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
         if (Keyboard.IsKeyDown(F2)) tempButtons.btn2.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
@@ -318,7 +322,8 @@ public partial class MainWindow
             switch (textBox.IsEnabled)
             {
                 case false:
-                    textBox.IsEnabled = true;
+                    textBox.IsEnabled     = true;
+                    MainFrame.tlabel.Text = "";
                     textBoxOpen.Begin(textBox);
                     textBox.Focus();
                     break;
@@ -340,7 +345,7 @@ public partial class MainWindow
     }
 
     [STAThread]
-    private void MainWin_SizeChanged(object sender, SizeChangedEventArgs e)
+    private void MainWindow_OnSizeChanged(object sender, SizeChangedEventArgs e)
     {
         if (textBox.IsEnabled) textBox.Focus();
     }
@@ -357,38 +362,24 @@ public partial class MainWindow
         if (result.ToString() != "Yes") return;
         if (MenuMain.PanelTopMain.IsEnabled) AnimateFrameworkElementAsync(MenuMain.PanelTopMain, 500).ConfigureAwait(true);
 
-        MainClos.Completed += (_, _) => Process.GetCurrentProcess().Kill();
-        BeginAnimation(OpacityProperty, MainClos);
-    }
-
-    public void ListX()
-    {
-        var variablesInstance = CreateVariablesInstance;
-        var n                 = 0;
-        Console.WriteLine("Current list:");
-        foreach (var l in variablesInstance.GetInvocationList())
-        {
-            foreach (var property in l.GetType().GetProperties()) Console.WriteLine("List[{0}].{1} = {2}", n, property.Name, property.GetValue(l));
-
-            n++;
-        }
+        MainClose.Completed += (_, _) => Process.GetCurrentProcess().Kill();
+        BeginAnimation(OpacityProperty, MainClose);
     }
 
     private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
     {
         var variablesInstance = CreateVariablesInstance;
-        //Console.WriteLine(variablesInstance.GetObjectData(info:));
         Console.WriteLine(variablesInstance.Method);
-        ListX();
         //CreateVariablesInstance();
         //CreateSlidePanelsInstance();
         //CreatetempControlInstance();
 
-        MainOpen.Completed += async (_, _) =>
-        {
-            await Task.Delay(500).ConfigureAwait(true);
-            await AnimateFrameworkElementAsync(MenuMain.PanelTopMain, 500).ConfigureAwait(true);
-        };
+        //?ToDO стартовое меню 
+        //MainOpen.Completed += async (_, _) =>
+        //{
+        //await Task.Delay(500).ConfigureAwait(true);
+        //await AnimateFrameworkElementAsync(MenuMain.PanelTopMain, 500).ConfigureAwait(true);
+        //};
         BeginAnimation(OpacityProperty, MainOpen);
     }
 
@@ -396,27 +387,6 @@ public partial class MainWindow
     {
         if (textBox.IsEnabled) textBox.Focus();
     }
-
-    [STAThread]
-    private void MainWindowStateChangeRaised(object sender, EventArgs e)
-    {
-        if (WindowState == WindowState.Maximized)
-        {
-            MainWindowBorder.BorderThickness = new Thickness(7);
-            RestoreButton.Visibility         = Visibility.Visible;
-            MaximizeButton.Visibility        = Visibility.Collapsed;
-        }
-        else
-        {
-            MainWindowBorder.BorderThickness = new Thickness(0);
-            RestoreButton.Visibility         = Visibility.Collapsed;
-            MaximizeButton.Visibility        = Visibility.Visible;
-        }
-    }
-
-    public static string InputText { get; set; }
-
-    public static bool IsEmpty;
 
     private void rtb_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
@@ -451,7 +421,7 @@ public partial class MainWindow
         if (textBox.IsEnabled) textBox.Focus();
     }
 
-    private void Rtb_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
+    private void rtb_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
     {
         var ctrl = Keyboard.Modifiers == ModifierKeys.Control;
         if (!ctrl) return;
@@ -467,10 +437,8 @@ public partial class MainWindow
         }, DispatcherPriority.Send);
     }
 
-    private void LabelVer_OnMouseLeave(object sender, MouseEventArgs e)
+    private void labelVer_OnMouseLeave(object sender, MouseEventArgs e)
     {
         Console.WriteLine(MenuMain.PanelTopLabel.IsFocused);
-        
-
     }
 }

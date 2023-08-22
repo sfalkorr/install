@@ -42,7 +42,6 @@
 
         <Keywords foreground="White">
             <Word>пароль</Word>
-            <Word>паролей</Word>
             <Word>Enter</Word>
             <Word>Ctrl</Word>
             <Word>sa</Word>

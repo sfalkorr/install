@@ -2,11 +2,6 @@ namespace installEAS.Controls;
 
 public partial class tempControl
 {
-    public static void CreatetempControlInstance()
-    {
-        var variablesInstance = CreatetempControlInstance;
-        Console.WriteLine(variablesInstance.Method);
-    }
 
     public tempControl()
     {
@@ -57,7 +52,9 @@ public partial class tempControl
 
     private void Btn3_OnClick(object sender, RoutedEventArgs e)
     {
-        WindowHelper.MoveToCenterBase(MainFrame);
+        var res = MainFrame.userInput(inputType.AskMachinename);
+        Console.WriteLine(res);
+        //WindowHelper.MoveToCenterBase(MainFrame);
         //IsSqlConnectionAsync2();
 
         //await Task.Run(async () => temperror = await TestSqlConnectionAsync().ConfigureAwait(true));
@@ -123,6 +120,7 @@ public partial class tempControl
 
     private void Btn8_OnClick(object sender, RoutedEventArgs e)
     {
-        ProcessTools.StartElevated("notepad", null);
+        //ProcessTools.StartElevated("notepad", null);
+        MainFrame.rtb.AppendText(MainFrame.tlabel.Text);
     }
 }

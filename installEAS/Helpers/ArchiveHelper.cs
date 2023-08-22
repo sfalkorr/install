@@ -2,8 +2,8 @@
 
 public abstract class Archive
 {
-    public static ProcessStartInfo _processStartInfo = new();
-    public static Match _match;
+    public static readonly ProcessStartInfo _processStartInfo = new();
+    public static          Match            _match;
 
     public static string ArchView(string source, string filenamepattern = default)
     {

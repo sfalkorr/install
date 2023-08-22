@@ -2,7 +2,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary x:Name="ColorBlue" Source="/Themes/ColorBlue.xaml" />
+                <ResourceDictionary x:Name="ColorDark" Source="/Themes/ColorDark.xaml" />
                 <!-- <ResourceDictionary x:Name="Styles" Source="/Themes/Styles.xaml" /> -->
                 <!-- <ResourceDictionary x:Name="AeroStyle" Source="/Themes/AeroStyle.xaml" /> -->
             </ResourceDictionary.MergedDictionaries>

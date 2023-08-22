@@ -1,96 +1,39 @@
-﻿<UserControl x:Class="installEAS.Controls.SlidePanelsControl"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             x:Name="MenuMain"
-             Height="350"
-             d:DesignHeight="350" d:DesignWidth="455" IsEnabled="False"
-             mc:Ignorable="d">
+﻿<UserControl x:Class="installEAS.Controls.SlidePanelsControl" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" x:Name="MenuMain" Height="350" d:DesignHeight="350" d:DesignWidth="455" IsEnabled="False" mc:Ignorable="d">
     <Grid x:Name="parentContainer">
-        <Grid x:Name="PanelTopMain"
-              Margin="0,-155,0,0" HorizontalAlignment="Center" VerticalAlignment="Top">
-            <Border x:Name="PanelBorderMain"
-                    Background="{DynamicResource ResourceKey=Menu.Background}"
-                    BorderBrush="{DynamicResource ResourceKey=Tittle.Border.Color}"
-                    BorderThickness="1,0,1,1" CornerRadius="0,0,8,8" />
-            <StackPanel Name="sPanelTopMain"
-                        Width="430"
-                        Margin="0,10,0,5">
-                <Button Name="btnMenu1"
-                        Click="btnMainMenu1_OnClick" Content="1 - Полная настройка сервера (начальник)"
-                        Style="{DynamicResource ButtonMenuStyle1}" />
-                <Button Name="btnMenu2"
-                        Click="BtnMainMenu2_OnClick" Content="2 - Полная настройка клиента (окно оператора)"
-                        Style="{DynamicResource ButtonMenuStyle1}" />
-                <Button Name="btnMenu3"
-                        Click="btnMainMenu3_OnClick" Content="3 - Дополнительные функции (опционально)"
-                        Style="{DynamicResource ButtonMenuStyle1}" />
-                <Button Name="btnMenu4"
-                        Click="BtnMainMenu4_OnClick" Content="4 - Выход из приложения"
-                        Style="{DynamicResource ButtonMenuStyle1}" />
+        <Grid x:Name="PanelTopMain" Margin="0,-155,0,0" HorizontalAlignment="Center" VerticalAlignment="Top">
+            <Border x:Name="PanelBorderMain" Background="{DynamicResource ResourceKey=Menu.Background}" BorderBrush="{DynamicResource ResourceKey=Tittle.Border.Color}" BorderThickness="1,0,1,1" CornerRadius="0,0,8,8" />
+            <StackPanel Name="sPanelTopMain" Width="430" Margin="0,10,0,5">
+                <Button Name="btnMenu1" Click="btnMainMenu1_OnClick" Content="1 - Полная настройка сервера (начальник)" Style="{DynamicResource ButtonMenuStyle1}" />
+                <Button Name="btnMenu2" Click="BtnMainMenu2_OnClick" Content="2 - Полная настройка клиента (окно оператора)" Style="{DynamicResource ButtonMenuStyle1}" />
+                <Button Name="btnMenu3" Click="btnMainMenu3_OnClick" Content="3 - Дополнительные функции (опционально)" Style="{DynamicResource ButtonMenuStyle1}" />
+                <Button Name="btnMenu4" Click="BtnMainMenu4_OnClick" Content="4 - Выход из приложения" Style="{DynamicResource ButtonMenuStyle1}" />
             </StackPanel>
 
         </Grid>
-        <Grid x:Name="PanelTopAdd"
-              Margin="0,-315,0,0" HorizontalAlignment="Center" VerticalAlignment="Top">
-            <Border x:Name="PanelBorder"
-                    Background="{DynamicResource ResourceKey=Menu.Background}"
-                    BorderBrush="{DynamicResource ResourceKey=Tittle.Border.Color}"
-                    BorderThickness="1,0,1,1" CornerRadius="0,0,8,8" />
-            <StackPanel Name="sPanelTop"
-                        Width="490"
-                        Margin="0,10,0,5">
+        <Grid x:Name="PanelTopAdd" Margin="0,-315,0,0" HorizontalAlignment="Center" VerticalAlignment="Top">
+            <Border x:Name="PanelBorder" Background="{DynamicResource ResourceKey=Menu.Background}" BorderBrush="{DynamicResource ResourceKey=Tittle.Border.Color}" BorderThickness="1,0,1,1" CornerRadius="0,0,8,8" />
+            <StackPanel Name="sPanelTop" Width="490" Margin="0,10,0,5">
 
-                <Button Name="btnMenuAdd1"
-                        Content="1 - Только настройка плагинов"
-                        Style="{DynamicResource ButtonMenuStyle1}" />
-                <Button Name="btnMenuAdd2"
-                        Content="2 - Выгрузка нулевой реплики"
-                        Style="{DynamicResource ButtonMenuStyle1}" />
-                <Button Name="btnMenuAdd3"
-                        Content="3 - Создание резервной копии базы данных отделения"
-                        Style="{DynamicResource ButtonMenuStyle1}" />
-                <Button Name="btnMenuAdd4"
-                        Content="4 - Запись версии в БД после ручного обновления ЕАС"
-                        Style="{DynamicResource ButtonMenuStyle1}" />
-                <Button Name="btnMenuAdd5"
-                        Content="5 - Переустановка ЗПТО"
-                        Style="{DynamicResource ButtonMenuStyle1}" />
-                <Button Name="btnMenuAdd6"
-                        Content="6 - Утилита обновления пользователя easops__operator"
-                        Style="{DynamicResource ButtonMenuStyle1}" />
-                <Button Name="btnMenuAdd7"
-                        Content="7 - Перенос настроек в другую учетную запись"
-                        Style="{DynamicResource ButtonMenuStyle1}" />
-                <Button Name="btnMenuAdd8"
-                        Content="8 - Совершенно непонятно зачем этот пункт меню"
-                        Style="{DynamicResource ButtonMenuStyle1}" />
-                <Button Name="btnMenuAdd9"
-                        Content="9 - Запасная кнопка никогда не помешает"
-                        Style="{DynamicResource ButtonMenuStyle1}" />
-                <Button Name="btnMenuAdd0"
-                        Click="BtnMenuAdd0_OnClick" Content="0 - Выход из меню"
-                        Style="{DynamicResource ButtonMenuStyle1}" />
+                <Button Name="btnMenuAdd1" Content="1 - Только настройка плагинов" Style="{DynamicResource ButtonMenuStyle1}" />
+                <Button Name="btnMenuAdd2" Content="2 - Выгрузка нулевой реплики" Style="{DynamicResource ButtonMenuStyle1}" />
+                <Button Name="btnMenuAdd3" Content="3 - Создание резервной копии базы данных отделения" Style="{DynamicResource ButtonMenuStyle1}" />
+                <Button Name="btnMenuAdd4" Content="4 - Запись версии в БД после ручного обновления ЕАС" Style="{DynamicResource ButtonMenuStyle1}" />
+                <Button Name="btnMenuAdd5" Content="5 - Переустановка ЗПТО" Style="{DynamicResource ButtonMenuStyle1}" />
+                <Button Name="btnMenuAdd6" Content="6 - Утилита обновления пользователя easops__operator" Style="{DynamicResource ButtonMenuStyle1}" />
+                <Button Name="btnMenuAdd7" Content="7 - Перенос настроек в другую учетную запись" Style="{DynamicResource ButtonMenuStyle1}" />
+                <Button Name="btnMenuAdd8" Content="8 - Совершенно непонятно зачем этот пункт меню" Style="{DynamicResource ButtonMenuStyle1}" />
+                <Button Name="btnMenuAdd9" Content="9 - Запасная кнопка никогда не помешает" Style="{DynamicResource ButtonMenuStyle1}" />
+                <Button Name="btnMenuAdd0" Click="BtnMenuAdd0_OnClick" Content="0 - Выход из меню" Style="{DynamicResource ButtonMenuStyle1}" />
 
             </StackPanel>
 
 
         </Grid>
-        <Grid x:Name="PanelTopLabel"
-              Margin="0,-100,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"
-              IsEnabled="False" MouseLeave="PanelTopLabel_OnMouseLeave">
-            <Border x:Name="PanelBorderLabel"
-                    Background="{DynamicResource ResourceKey=Menu.Background}"
-                    BorderBrush="{DynamicResource ResourceKey=Tittle.Border.Color}"
-                    BorderThickness="1,0,1,1" CornerRadius="0,0,8,0" />
-            <StackPanel Name="sPanelBorderLabel"
-                        Width="180"
-                        Margin="0,10,0,5">
-                <Button Name="btnLabel1"
-                        Click="btnLabel1_Click" Content="Цветовая схема"
-                        Style="{DynamicResource ButtonMenuStyle1}" />
-                <Button Name="btnLabel2"
-                        Click="btnLabel2_Click" Content="О программе"
-                        Style="{DynamicResource ButtonMenuStyle1}" />
+        <Grid x:Name="PanelTopLabel" Margin="0,-100,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" IsEnabled="False" MouseLeave="PanelTopLabel_OnMouseLeave">
+            <Border x:Name="PanelBorderLabel" Background="{DynamicResource ResourceKey=Menu.Background}" BorderBrush="{DynamicResource ResourceKey=Tittle.Border.Color}" BorderThickness="1,0,1,1" CornerRadius="0,0,8,0" />
+            <StackPanel Name="sPanelBorderLabel" Width="180" Margin="0,10,0,5">
+                <Button Name="btnLabel1" Click="btnLabel1_Click" Content="Внешний вид" Style="{DynamicResource ButtonMenuStyle1}" />
+                <Button Name="btnLabel2" Click="btnLabel2_Click" Content="О программе" Style="{DynamicResource ButtonMenuStyle1}" />
 
             </StackPanel>
 
