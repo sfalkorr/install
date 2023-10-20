@@ -4,7 +4,7 @@
     xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit" xmlns:controls="clr-namespace:installEAS.Controls" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:temp="clr-namespace:installEAS.Controls"
     x:Name="MainWin" Title="InstallEASApp"
     Width="1000" Height="750" MinWidth="500" MinHeight="350"
-    Activated="MainWindow_OnActivated" AllowsTransparency="True" Background="#01000000" BorderThickness="0.5,0.5,0.5,0.5" Closing="MainWindow_OnClosing"
+    Activated="MainWindow_OnActivated" AllowsTransparency="True" Background="#01000000" BorderThickness="0" Closing="MainWindow_OnClosing"
     Foreground="{x:Null}"
     IsHitTestVisible="True" KeyDown="MainWindow_OnKeyDown" Loaded="MainWindow_OnLoaded" MouseLeftButtonDown="MainWindow_OnMouseLeftButtonDown" Opacity="0.95" ResizeMode="CanResize" TextOptions.TextFormattingMode="Display" TextOptions.TextHintingMode="Fixed" TextOptions.TextRenderingMode="Auto" Topmost="False"
     UseLayoutRounding="True" WindowStyle="None"
@@ -42,7 +42,7 @@
         <CommandBinding Command="{x:Static SystemCommands.MinimizeWindowCommand}" Executed="CommandBinding_Executed_Minimize" />
         <CommandBinding Command="{x:Static SystemCommands.RestoreWindowCommand}" Executed="CommandBinding_Executed_Restore" />
     </Window.CommandBindings>
-    <Border x:Name="MainWindowBorder" Padding="0" Background="Transparent" BorderThickness="0.5,0.5,0.5,0.5" CornerRadius="8,8,8,8">
+    <Border x:Name="MainWindowBorder" Padding="0" Background="Transparent" BorderThickness="0" CornerRadius="8,8,8,8">
         <Border.InputBindings>
             <MouseBinding Command="{x:Static SystemCommands.MaximizeWindowCommand}" MouseAction="LeftDoubleClick" />
         </Border.InputBindings>
@@ -74,12 +74,12 @@
                             <DropShadowEffect BlurRadius="10" Direction="90" Opacity="0.5" RenderingBias="Quality" ShadowDepth="5" />
                         </TextBox.Effect>
                     </TextBox>
-                    <TextBlock x:Name="tlabel" Margin="0,0,10,35" HorizontalAlignment="Center" VerticalAlignment="Bottom" Background="{x:Null}" FontFamily="Consolas" FontSize="14" Foreground="Tomato" Opacity="0.8">
+                    <TextBlock x:Name="tlabel" Margin="0,0,10,35" HorizontalAlignment="Center" VerticalAlignment="Bottom" Background="{x:Null}" FontFamily="Consolas" FontSize="14" Foreground="Tomato" Opacity="1">
                         <TextBlock.Triggers>
                             <EventTrigger RoutedEvent="TextBlock.Loaded">
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <DoubleAnimation AutoReverse="True" RepeatBehavior="Forever" Storyboard.TargetName="tlabel" Storyboard.TargetProperty="(TextBlock.Opacity)" From="1.0" To="0.7" Duration="0:0:0.4" />
+                                        <DoubleAnimation AutoReverse="True" RepeatBehavior="Forever" Storyboard.TargetName="tlabel" Storyboard.TargetProperty="(TextBlock.Opacity)" From="1.0" To="0.8" Duration="0:0:0.4" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </EventTrigger>

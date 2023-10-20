@@ -25,26 +25,28 @@ public static class Log
         EventLog.WriteEntry(source, msg, lev);
     }
 
-    public static void log(string text, SolidColorBrush brush, bool newline = true)
+    public static async void log(string text, SolidColorBrush brush, bool newline = true)
     {
         if (text != null)
             MainFrame.Dispatcher.BeginInvoke(() =>
             {
-                if (text != null) text = newline ? text + Environment.NewLine : text;
+                if (text != null) text = newline ? Environment.NewLine + text  : text;
                 MainFrame.rtb.AppendColorLine(text, brush);
                 MainFrame.rtb.ScrollToEnd();
             });
+        await Task.Delay(0);
     }
 
-    public static void log(string text, bool newline = true)
+    public static async Task log(string text, bool newline = true)
     {
         if (text != null)
             MainFrame.Dispatcher.BeginInvoke(() =>
             {
-                if (text != null) text = newline ? text + Environment.NewLine : text;
+                if (text != null) text = newline ? Environment.NewLine + text  : text;
                 MainFrame.rtb.AppendText(text);
                 MainFrame.rtb.ScrollToEnd();
             });
+        await Task.Delay(0);
     }
 
     public static void cLog(string msg, bool newline, ConsoleColor color)

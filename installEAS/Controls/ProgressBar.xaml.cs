@@ -11,8 +11,8 @@ public partial class ProgressBarControl
 
 public static class ProgressBarExtensions
 {
-    private static ProgressBarControl _progressBarControlProgress = new();
-    public static  DoubleAnimation    animStop                    = new(0, TimeSpan.FromMilliseconds(1));
+    private static readonly ProgressBarControl _progressBarControlProgress = new();
+    public static           DoubleAnimation    animStop                    = new(0, TimeSpan.FromMilliseconds(1));
 
     public static void SetPercent(this ProgressBar progressBar, double percentage, TimeSpan span)
     {

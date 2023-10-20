@@ -1,6 +1,3 @@
-using Point = System.Windows.Point;
-using Size = System.Windows.Size;
-
 namespace installEAS.Controls;
 
 public partial class RoundedProgressBarControl
@@ -88,14 +85,14 @@ public class SprocketControl : Control, IDisposable
 
     #region Fields
 
-    private Point _centerPoint;
-    private double _innerRadius;
-    private double _outerRadius;
-    private double _alphaChange;
-    private double _angleIncrement;
-    private double _renderStartAngle;
-    private Timer renderTimer;
-    private List<Spoke> _spokes;
+    private          Point       _centerPoint;
+    private          double      _innerRadius;
+    private          double      _outerRadius;
+    private          double      _alphaChange;
+    private          double      _angleIncrement;
+    private          double      _renderStartAngle;
+    private readonly Timer       renderTimer;
+    private          List<Spoke> _spokes;
 
     #endregion
 

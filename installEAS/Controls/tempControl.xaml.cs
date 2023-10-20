@@ -1,3 +1,5 @@
+using static System.Windows.Media.Brushes;
+
 namespace installEAS.Controls;
 
 public partial class tempControl
@@ -50,10 +52,21 @@ public partial class tempControl
 
     //public static int temperror { get; set; }
 
-    private void Btn3_OnClick(object sender, RoutedEventArgs e)
+    private async void Btn3_OnClick(object sender, RoutedEventArgs e)
     {
-        var res = MainFrame.userInput(inputType.AskMachinename);
-        Console.WriteLine(res);
+        
+        await plog("Проверка доступности SQL сервера : ", false);
+        if (await Task.Run(IsSqlAvaible))
+            await plog("OK",  false);
+        else
+        {
+            await plog("Ошибка подключения", false);
+        }
+
+        //await plog("Иду вчера в пятерочку с младшим. Припарковала коляску, начинаем подниматься по ступеням Краем глаза вижу - идут мимо мальчишка лет 10 с девочкой чуть младше. В руках у мальчишки ракетки для бадминтона.", false);
+
+        //var res = MainFrame.userInput(inputType.AskMachinename);
+        //Console.WriteLine(res);
         //WindowHelper.MoveToCenterBase(MainFrame);
         //IsSqlConnectionAsync2();
 
@@ -85,11 +98,14 @@ public partial class tempControl
         //                               Brushes.Yellow);
         // MainFrame.rtb.ScrollToEnd();
 
-        MainFrame.rtb.AppendText(" Что касается сохранения денег от инфляции, есть единственная вещь, которая за всю историю являлась дефляционным активом - это редкоземельные металлы. Да, в слитках, у тебя под кроватью в сейфе или ячейках. Конечно, бывали и затяжные даунтренды, это нормально, но на дистанции в 5-10-15 лет и более а так же в будущем это единственное спасение от инфляции. Пузыри раздуваются и лопаются, компании взлетают и превращаются в пыль, но интерес на металлы в ближайшие несколько сот лет как минимум будет всегда.\n\n");
-        MainFrame.rtb.ScrollToEnd();
+        //MainFrame.rtb.AppendText(" Что касается сохранения денег от инфляции, есть единственная вещь, которая за всю историю являлась дефляционным активом - это редкоземельные металлы. Да, в слитках, у тебя под кроватью в сейфе или ячейках. Конечно, бывали и затяжные даунтренды, это нормально, но на дистанции в 5-10-15 лет и более а так же в будущем это единственное спасение от инфляции. Пузыри раздуваются и лопаются, компании взлетают и превращаются в пыль, но интерес на металлы в ближайшие несколько сот лет как минимум будет всегда.\n\n");
+        //MainFrame.rtb.ScrollToEnd();
         //log("Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)", Brushes.OrangeRed);
         //log("Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)");
         //log("Кстати грипп можно определить точно, не только симптоматически, но и с помощью ИФА методов, есть даже экспресс-тесты, как во время ковида. Сейчас такие системы должны быть распространены в поликлиниках (на момент написания статьи)", Brushes.GreenYellow);
+
+
+        //TypewriteTextblock("хкй",  TimeSpan.FromMilliseconds(1000));
     }
 
     private void Btn5_OnClick(object sender, RoutedEventArgs e)

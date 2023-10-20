@@ -6,7 +6,8 @@ public static class ThemesController
     {
         ColorBlue,
         ColorDark,
-        ColorGray
+        ColorGray,
+        ColorFlat
     }
 
     public static ThemeTypes CurrentTheme { get; set; }
@@ -39,6 +40,10 @@ public static class ThemesController
                 themeName    = "ColorGray";
                 CurrentTheme = theme;
                 break;
+            case ThemeTypes.ColorFlat:
+                themeName    = "ColorFlat";
+                CurrentTheme = theme;
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(theme), theme, null);
         }
@@ -59,6 +64,11 @@ public static class ThemesController
                 if (MainFrame.textBox.IsEnabled) MainFrame.textBox.Focus();
                 break;
             case ThemeTypes.ColorBlue:
+                SetTheme(ThemeTypes.ColorFlat);
+                if (MainFrame.textBox.IsEnabled) MainFrame.textBox.Focus();
+                break;
+            
+            case ThemeTypes.ColorFlat:
                 SetTheme(ThemeTypes.ColorGray);
                 if (MainFrame.textBox.IsEnabled) MainFrame.textBox.Focus();
                 break;

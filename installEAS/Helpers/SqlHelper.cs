@@ -24,9 +24,9 @@ public static class Sql
         }
     }
 
-    public static void Read(string DBname, string query, int timeout)
+    public static async void Read(string DBname, string query, int timeout)
     {
-        log(" > Начало запроса");
+        await log(" > Начало запроса");
         var connectionString = Format($"Data Source={SQLServername};Initial Catalog={DBname};User ID={SQLUsername};Password={SqlPass};Timeout={timeout}");
         var connection       = new SqlConnection(connectionString);
         var cmd              = connection.CreateCommand();
@@ -35,44 +35,49 @@ public static class Sql
             connection.Open();
             cmd.CommandText = query;
             var result = cmd.ExecuteNonQuery();
-            if (result == -1) log(" > Запрос выполнен успешно");
+            if (result == -1) await log(" > Запрос выполнен успешно");
 
             connection.Close();
         }
         catch (Exception ex)
         {
-            log(ex.Message);
+            await log(ex.Message);
         }
     }
 
-    public static bool IsSqlAvaible()
+    public static async Task<bool> IsSqlAvaible()
     {
         var connection = new SqlConnection(Format($"Data Source={SQLServername};Initial Catalog={SqlInitcatalog};User ID={SQLUsername};Password={SqlPass};Timeout={SQLTimeout}"));
         try
         {
+            await Task.Delay(100);
             connection.Open();
         }
         catch (SqlException ex)
         {
+            await Task.Delay(100);
             if (ex.State == 0)
                 return false;
         }
-        connection.Close();
+
+        await Task.Delay(100);
         return true;
     }
-    
-    
-    public static bool IsSqlPasswordOK(string password)
+
+    public static async Task<bool> IsSqlPasswordOK(string password)
     {
         var connectionString = Format($"Data Source={SQLServername};Initial Catalog={SqlInitcatalog};User ID={SQLUsername};Password={password};Timeout={10}");
         var connection       = new SqlConnection(connectionString);
         try
         {
             connection.Open();
+            await Task.Delay(100);
             return true;
         }
-        catch
+        catch (SqlException ex)
         {
+            await Task.Delay(100);
+            Console.WriteLine(ex.Message);
             return false;
         }
     }
@@ -110,13 +115,13 @@ public static class Sql
 
     public static async Task<int> ExecuteAsync2(string query, string database)
     {
-        var       connectionString = Format($"Data Source={SQLServername};Initial Catalog={database};User ID={SQLUsername};Password={SqlPass};Timeout={5}");
-        using var connection       = new SqlConnection(connectionString);
-        var       command          = new SqlCommand(query, connection);
+        var connectionString = Format($"Data Source={SQLServername};Initial Catalog={database};User ID={SQLUsername};Password={SqlPass};Timeout={5}");
+        using var connection = new SqlConnection(connectionString);
+        var       command    = new SqlCommand(query, connection);
         connection.Open();
         var total1 = (int)await command.ExecuteScalarAsync();
         Console.WriteLine(total1.ToString());
-        log(total1.ToString());
+        await log(total1.ToString());
         return total1;
     }
 

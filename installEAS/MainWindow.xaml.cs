@@ -1,4 +1,5 @@
-﻿namespace installEAS;
+﻿#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+namespace installEAS;
 
 [SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
 public partial class MainWindow
@@ -18,7 +19,20 @@ public partial class MainWindow
         AskMachinename,
         AskConfirmation
     }
-
+    
+    public static DriveType GetPathDriveType(string path)
+    {
+        RECT rect;
+        if (path.StartsWith(@"\\")) return DriveType.Network;
+        var info = DriveInfo.GetDrives().FirstOrDefault(i => path.StartsWith(i.Name, StringComparison.OrdinalIgnoreCase));
+        return info?.DriveType ?? DriveType.Unknown;
+    }
+    
+    public static void Log(string msg, [CallerMemberName] string mName = "", [CallerFilePath] string path = "", [CallerLineNumber] int line = 0)
+    {
+        Trace.WriteLine($"[{Path.GetFileName(path)}:{mName}({line})] {msg}");
+    }
+    
     #region Control Key Reaction
 
     [STAThread]
@@ -62,12 +76,13 @@ public partial class MainWindow
     }
 
     #endregion
-    
+
     #region Detect start and end resize window
 
     protected override void OnSourceInitialized(EventArgs e)
     {
         base.OnSourceInitialized(e);
+
 
         var source = PresentationSource.FromVisual(this) as HwndSource;
         source?.AddHook(WndProc);
@@ -101,6 +116,7 @@ public partial class MainWindow
         return GetWindowRect(handle, out var rect) ? rect : default;
     }
 
+    
     [DllImport("User32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
@@ -138,7 +154,7 @@ public partial class MainWindow
         SizeChanged  += MainWindow_OnSizeChanged;
         CurrentTheme =  ThemeTypes.ColorDark;
         MainOpen     =  new DoubleAnimation { From = 0.1, To  = 0.95, Duration = new Duration(TimeSpan.FromMilliseconds(500)) };
-        MainClose     =  new DoubleAnimation { From = 0.95, To = 0.1, Duration  = new Duration(TimeSpan.FromMilliseconds(700)) };
+        MainClose    =  new DoubleAnimation { From = 0.95, To = 0.1, Duration  = new Duration(TimeSpan.FromMilliseconds(700)) };
         textBoxOpen  =  Resources["OpenTextBox"] as Storyboard;
         textBoxClos  =  Resources["CloseTextBox"] as Storyboard;
 
@@ -256,6 +272,68 @@ public partial class MainWindow
         }
     }
 
+    public static void TypewriteTextblock(string textToAnimate, TimeSpan timeSpan)
+    {
+        var story = new Storyboard
+                    {
+                        FillBehavior = FillBehavior.HoldEnd
+                        //RepeatBehavior = RepeatBehavior.Forever
+                    };
+
+        var stringAnimationUsingKeyFrames = new StringAnimationUsingKeyFrames
+                                            {
+                                                Duration = new Duration(timeSpan)
+                                            };
+
+        var tmp = Empty;
+        foreach (var c in textToAnimate)
+        {
+            var discreteStringKeyFrame = new DiscreteStringKeyFrame
+                                         {
+                                             KeyTime = KeyTime.Paced
+                                         };
+            tmp                          += c;
+            discreteStringKeyFrame.Value =  tmp;
+            stringAnimationUsingKeyFrames.KeyFrames.Add(discreteStringKeyFrame);
+        }
+
+        Storyboard.SetTargetName(stringAnimationUsingKeyFrames, MainFrame.rtb.Text);
+        //Storyboard.SetTargetProperty(stringAnimationUsingKeyFrames, new PropertyPath(MainFrame.rtb.TextArea.TextView.Document.Text));
+        //Storyboard.SetTargetProperty( stringAnimationUsingKeyFrames, new PropertyPath( TextEditor.FlowDirectionProperty ) );
+        story.Children.Add(stringAnimationUsingKeyFrames);
+
+        story.Begin(MainFrame.rtb.TextArea);
+    }
+
+    public static async Task plog(string msg, bool newline = true)
+    {
+        foreach (var c in msg)
+        {
+            if (newline)
+                await log(c.ToString());
+            else
+                await log(c.ToString(), false);
+        }
+    }
+
+    public static async Task nlog(string text, bool newline = true)
+    {
+        if (text != null)
+            MainFrame.Dispatcher.BeginInvoke(() =>
+            {
+                if (text != null)
+                {
+                    text = newline ? Environment.NewLine + text : text;
+                    foreach (var c in text)
+                        MainFrame.rtb.AppendText(c.ToString());
+                }
+
+
+                MainFrame.rtb.ScrollToEnd();
+            });
+        await Task.Delay(0);
+    }
+
     private void OnTextBoxClosOnCompleted(object o, EventArgs eventArgs)
     {
         MainFrame.textBox.IsEnabled = false;
@@ -264,7 +342,7 @@ public partial class MainWindow
         AskType               = inputType.Empty;
     }
 
-    private void textBox_TextChanged(object sender, TextChangedEventArgs e)
+    private async void textBox_TextChanged(object sender, TextChangedEventArgs e)
     {
         switch (AskType)
         {
@@ -278,7 +356,7 @@ public partial class MainWindow
                 tlabel.Foreground = Brushes.OrangeRed;
                 tlabel.Text       = ValidatePass(textBox.Text);
                 break;
-            case inputType.AskCurrentSqlPassword when IsSqlPasswordOK(textBox.Text) && !Regex.Match(textBox.Text, "\\s").Success:
+            case inputType.AskCurrentSqlPassword when await IsSqlPasswordOK(textBox.Text) && !Regex.Match(textBox.Text, "\\s").Success:
                 tlabel.Foreground = Brushes.GreenYellow;
                 tlabel.Text       = "Пароль принят";
                 break;
@@ -310,6 +388,15 @@ public partial class MainWindow
         if (Keyboard.IsKeyDown(F6)) tempButtons.btn6.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
         if (Keyboard.IsKeyDown(F7)) tempButtons.btn7.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
         if (Keyboard.IsKeyDown(F8)) tempButtons.btn8.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
+
+
+        if (Keyboard.IsKeyDown(F11))
+        {
+            MainFrame.rtb.TextArea.TextView.Document.Text = "dfvdfvdfvfdvdfv";
+            Console.WriteLine(MainFrame.rtb.TextArea.TextView.Document.Text);
+        }
+
+        if (Keyboard.IsKeyDown(F12)) log(GetPathDriveType(@"C:\Temp").ToString());
 
         if (Keyboard.IsKeyDown(X) && Keyboard.IsKeyDown(LeftAlt)) Close();
         if (Keyboard.IsKeyDown(OemTilde) && Keyboard.IsKeyDown(LeftAlt))
@@ -398,7 +485,6 @@ public partial class MainWindow
         {
             var PosCol       = rtb.GetPositionFromPoint(e.GetPosition(rtb)).Value.Column;
             var PosVisualCol = rtb.GetPositionFromPoint(e.GetPosition(rtb)).Value.VisualColumn;
-
             if (PosCol == 1 && PosVisualCol == 0) IsEmpty = true;
         }
         catch (Exception)
@@ -424,7 +510,7 @@ public partial class MainWindow
     private void rtb_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
     {
         var ctrl = Keyboard.Modifiers == ModifierKeys.Control;
-        if (!ctrl) return;
+        if (!ctrl) return; 
         rtb.FontSizeWheel(e.Delta > 0);
         e.Handled = true;
     }

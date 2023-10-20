@@ -4,7 +4,7 @@ internal abstract class Files
 {
     public static string GetFilesEx(string path, string Partname, SearchOption Option = SearchOption.AllDirectories)
     {
-        var returnarray = Directory.GetFiles(path, Partname, Option);
+        var returnarray = GetFiles(path, Partname, Option);
         return returnarray.Length switch
         {
             1 => returnarray[0],
@@ -27,15 +27,15 @@ internal abstract class Files
 
     public static void GetAllFiles(string rootDirectory, string fileExtension, List<string> files)
     {
-        var directories = Directory.GetDirectories(rootDirectory);
-        files.AddRange(Directory.GetFiles(rootDirectory, fileExtension));
+        var directories = GetDirectories(rootDirectory);
+        files.AddRange(GetFiles(rootDirectory, fileExtension));
         foreach (var path in directories) GetAllFiles(path, fileExtension, files);
     }
 
     public static void CopyFiles(string Source, string Destination, string Extension)
     {
-        if (!Directory.Exists(Destination)) Directory.CreateDirectory(Destination);
-        foreach (var newPath in Directory.GetFiles(Source, Extension, SearchOption.AllDirectories)) File.Copy(newPath, newPath.Replace(Source, Destination), true);
+        if (!Exists(Destination)) CreateDirectory(Destination);
+        foreach (var newPath in GetFiles(Source, Extension, SearchOption.AllDirectories)) File.Copy(newPath, newPath.Replace(Source, Destination), true);
     }
 
     public static string RtfToPlainText(string rtf)
@@ -69,6 +69,6 @@ internal abstract class Files
 
     public static bool TestFilePath(string path)
     {
-        return File.Exists(path) || Directory.Exists(path);
+        return File.Exists(path) || Exists(path);
     }
 }

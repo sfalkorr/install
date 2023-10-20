@@ -56,6 +56,8 @@ global using installEAS.Themes;
 
 global using Microsoft.Win32;
 
+global using static System.Environment;
+global using static System.IO.Directory;
 global using static System.String;
 global using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 global using static System.Windows.Input.Key;
@@ -79,4 +81,6 @@ global using Brushes = System.Windows.Media.Brushes;
 global using Color = System.Windows.Media.Color;
 global using Path = System.IO.Path;
 global using Pen = System.Windows.Media.Pen;
+global using Point = System.Windows.Point;
+global using Size = System.Windows.Size;
 global using Timer = System.Timers.Timer;
